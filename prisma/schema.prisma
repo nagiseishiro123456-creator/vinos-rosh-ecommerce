@@ -14,6 +14,7 @@ enum UserRole {
 
 enum OrderStatus {
   PENDING_PAYMENT
+  PAYMENT_REVIEW
   PAID
   PREPARING
   SHIPPED
@@ -24,14 +25,17 @@ enum OrderStatus {
 
 enum PaymentStatus {
   PENDING
+  UNDER_REVIEW
   PAID
   FAILED
+  REJECTED
   REFUNDED
 }
 
 enum PaymentProvider {
   CULQI
-  TRANSFER
+  YAPE_MANUAL
+  TRANSFER_MANUAL
 }
 
 enum ReceiptType {
@@ -102,11 +106,11 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  category  Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  images    ProductImage[]
-  cartItems CartItem[]
+  category   Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  images     ProductImage[]
+  cartItems  CartItem[]
   orderItems OrderItem[]
-  reviews   Review[]
+  reviews    Review[]
 
   @@index([categoryId])
   @@index([active, featured])
@@ -151,14 +155,14 @@ model CartItem {
 }
 
 model ShippingZone {
-  id          String   @id @default(cuid())
-  department  String   @default("Lima")
-  province    String   @default("Lima")
-  district    String
-  price       Decimal  @db.Decimal(10, 2)
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  department String   @default("Lima")
+  province   String   @default("Lima")
+  district   String
+  price      Decimal  @db.Decimal(10, 2)
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@unique([department, province, district])
 }
@@ -179,8 +183,8 @@ model Order {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
-  user     User       @relation(fields: [userId], references: [id])
-  address  Address    @relation(fields: [addressId], references: [id])
+  user     User        @relation(fields: [userId], references: [id])
+  address  Address     @relation(fields: [addressId], references: [id])
   items    OrderItem[]
   payments Payment[]
   reviews  Review[]
@@ -190,13 +194,13 @@ model Order {
 }
 
 model OrderItem {
-  id           String  @id @default(cuid())
-  orderId      String
-  productId    String
-  productName  String
-  unitPrice    Decimal @db.Decimal(10, 2)
-  quantity     Int
-  subtotal     Decimal @db.Decimal(10, 2)
+  id          String  @id @default(cuid())
+  orderId     String
+  productId   String
+  productName String
+  unitPrice   Decimal @db.Decimal(10, 2)
+  quantity    Int
+  subtotal    Decimal @db.Decimal(10, 2)
 
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
@@ -214,7 +218,11 @@ model Payment {
   amount            Decimal         @db.Decimal(10, 2)
   currency          String          @default("PEN")
   externalReference String?
+  operationCode     String?
+  proofUrl          String?
+  notes             String?
   paidAt            DateTime?
+  reviewedAt        DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
@@ -222,6 +230,7 @@ model Payment {
 
   @@index([orderId])
   @@index([provider, externalReference])
+  @@index([provider, operationCode])
 }
 
 model Review {
