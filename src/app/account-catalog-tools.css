@@ -1,0 +1,457 @@
+.accountToolShell {
+  padding-top: 54px;
+  padding-bottom: 96px;
+}
+
+.accountToolShell.narrow {
+  max-width: 920px;
+}
+
+.accountToolHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.accountToolHeading h1 {
+  margin: 8px 0 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.6rem, 6vw, 4.7rem);
+  line-height: .98;
+}
+
+.accountToolHeading p:not(.eyebrow) {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.accountToolGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.accountToolGrid.single {
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, .55fr);
+}
+
+.accountToolCard,
+.accountSecurityCard {
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 14px 44px rgba(66, 31, 24, .06);
+}
+
+.accountSecurityCard {
+  display: grid;
+  gap: 10px;
+}
+
+.accountSecurityCard > strong {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+}
+
+.accountSecurityCard p:not(.eyebrow),
+.accountSecurityCard small {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.accountToolSectionHeading,
+.accountAddressManagerTop,
+.accountToolActions,
+.accountHeadingActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.accountToolSectionHeading {
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.accountToolSectionHeading h2 {
+  margin: 5px 0 0;
+  font-size: 2rem;
+}
+
+.accountToolSectionHeading > span {
+  min-width: 36px;
+  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--wine);
+  background: #f7e9eb;
+  font-weight: 800;
+}
+
+.accountToolForm {
+  display: grid;
+  gap: 16px;
+}
+
+.accountToolFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.accountToolField {
+  display: grid;
+  gap: 7px;
+}
+
+.accountToolField > span {
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+.accountToolField input,
+.accountToolField select,
+.accountToolField textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  background: #fffdfb;
+  outline: none;
+}
+
+.accountToolField input,
+.accountToolField select {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.accountToolField textarea {
+  min-height: 96px;
+  padding: 12px 13px;
+  resize: vertical;
+}
+
+.accountToolField input:focus,
+.accountToolField select:focus,
+.accountToolField textarea:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+}
+
+.accountToolField input[readonly] {
+  color: var(--muted);
+  background: #f5f1ee;
+}
+
+.accountToolField small {
+  color: var(--muted);
+  font-size: .74rem;
+  line-height: 1.45;
+}
+
+.accountCheckbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.accountCheckbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--wine);
+}
+
+.accountToolActions {
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.accountToolActions.split {
+  justify-content: space-between;
+}
+
+.accountNotice {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-radius: 13px;
+  line-height: 1.5;
+}
+
+.accountNotice.success {
+  color: #17633a;
+  border: 1px solid #bee8cb;
+  background: #edf9f1;
+}
+
+.accountNotice.error {
+  color: #84212b;
+  border: 1px solid #efc6cb;
+  background: #fff0f1;
+}
+
+.accountNotice.warning {
+  color: #77571d;
+  border: 1px solid #e4d4a9;
+  background: #fff9e8;
+}
+
+.accountAddressManagerList {
+  display: grid;
+  gap: 14px;
+}
+
+.accountAddressManagerCard {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fffdfb;
+}
+
+.accountAddressManagerTop {
+  margin-bottom: 14px;
+}
+
+.accountAddressManagerTop > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.accountAddressLabel {
+  font-weight: 850;
+}
+
+.accountDefaultBadge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #17633a;
+  background: #e7f6ec;
+  font-size: .68rem;
+  font-weight: 850;
+}
+
+.accountAddressManagerCard > p,
+.accountAddressManagerCard > small {
+  margin: 4px 0;
+  display: block;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.accountAddressManagerActions {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.accountDangerButton {
+  color: #8e2734;
+  border-color: #ebc2c7;
+  background: #fff3f4;
+}
+
+.accountEmptyState {
+  padding: 24px;
+  display: grid;
+  gap: 7px;
+  border: 1px dashed #d6c5bc;
+  border-radius: 16px;
+  color: var(--muted);
+}
+
+.accountEmptyState strong {
+  color: var(--ink);
+}
+
+.accountEmptyState p {
+  margin: 0;
+}
+
+.accountHeadingActions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.accountSectionHeading.compact {
+  align-items: center;
+}
+
+.catalogTools {
+  margin-bottom: 28px;
+}
+
+.catalogFilterForm {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.5fr) minmax(190px, .7fr) auto auto auto;
+  gap: 12px;
+  align-items: end;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 10px 34px rgba(66, 31, 24, .05);
+}
+
+.catalogSearchField,
+.catalogSelectField {
+  display: grid;
+  gap: 6px;
+}
+
+.catalogSearchField > span,
+.catalogSelectField > span {
+  font-size: .75rem;
+  font-weight: 850;
+}
+
+.catalogSearchField input,
+.catalogSelectField select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background: #fffdfb;
+  outline: none;
+}
+
+.catalogSearchField input:focus,
+.catalogSelectField select:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+}
+
+.catalogStockToggle {
+  min-height: 46px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  background: #fffdfb;
+  white-space: nowrap;
+  font-size: .82rem;
+}
+
+.catalogStockToggle input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--wine);
+}
+
+.catalogCategoryBar {
+  margin-top: 14px;
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.catalogCategoryBar a {
+  flex: 0 0 auto;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  background: #fffdfb;
+  font-size: .82rem;
+  font-weight: 750;
+}
+
+.catalogCategoryBar a.active {
+  color: white;
+  border-color: var(--wine);
+  background: var(--wine);
+}
+
+.catalogCategoryBar small {
+  margin-left: 4px;
+  opacity: .72;
+}
+
+.catalogResultsMeta {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.catalogResultsMeta strong {
+  color: var(--ink);
+}
+
+@media (max-width: 980px) {
+  .catalogFilterForm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .catalogFilterForm .button,
+  .catalogStockToggle {
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .accountToolShell {
+    padding-top: 34px;
+    padding-bottom: 74px;
+  }
+
+  .accountToolHeading,
+  .accountToolGrid,
+  .accountToolGrid.single,
+  .accountToolFormGrid,
+  .catalogFilterForm {
+    grid-template-columns: 1fr;
+  }
+
+  .accountToolHeading {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .accountToolGrid,
+  .accountToolGrid.single {
+    display: grid;
+  }
+
+  .accountToolActions.split,
+  .accountAddressManagerTop,
+  .accountHeadingActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .accountToolActions.split .button,
+  .accountAddressManagerActions form,
+  .accountAddressManagerActions button,
+  .accountHeadingActions .button,
+  .catalogFilterForm .button {
+    width: 100%;
+  }
+
+  .catalogResultsMeta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
