@@ -1,54 +1,80 @@
 # Vinos ROSH Ecommerce
 
-E-commerce de producción para Vinos ROSH, construido a partir del prototipo visual validado y de los requisitos funcionales del cliente.
+E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular sobre Next.js App Router.
 
-## Stack principal
-- Next.js + React + TypeScript
+## Stack
+- Next.js + React + TypeScript estricto
 - Tailwind CSS
 - PostgreSQL + Prisma ORM
+- Auth.js / NextAuth Credentials + bcryptjs
 - Zod
-- Auth.js (Sprint 1)
-- Cloudinary
-- Culqi (tarjetas + Yape)
-- Resend
-- Vercel
+- Cloudinary (media)
+- Resend (correo transaccional)
+- Pagos híbridos: Culqi + Yape manual + transferencia manual
 
-## Estado actual
-Sprint 0 — Fundación técnica.
+## Estado
+Sprint 0 completado y Sprint 1 en curso.
 
-Incluido:
+Ya existe:
 - estructura Next.js
-- TypeScript estricto
-- Tailwind
-- Prisma
-- esquema de dominio inicial
-- endpoint `/api/health`
-- plantilla `.env.example`
-- documentación de arquitectura
+- modelo Prisma de producción
+- PostgreSQL local automatizable con Docker Compose
+- registro de clientes
+- login y sesión JWT
+- roles `CUSTOMER` / `ADMIN`
+- carrito creado al registrar cliente
+- seed idempotente del administrador inicial
+- endpoint `/api/health` que verifica conexión real con PostgreSQL
 
-## Puesta en marcha local
-1. Instalar Node.js LTS y PostgreSQL.
-2. Clonar el repositorio.
-3. Ejecutar `npm install`.
-4. Copiar `.env.example` a `.env`.
-5. Configurar `DATABASE_URL`.
-6. Ejecutar `npx prisma generate`.
-7. Ejecutar `npx prisma migrate dev --name init`.
-8. Ejecutar `npm run dev`.
-9. Abrir `http://localhost:3000`.
+## Inicio local recomendado (Windows)
 
-## Rutas iniciales
-- `/` — storefront base
-- `/api/health` — verificación del servicio
+Requisitos:
+- Node.js LTS
+- Docker Desktop con Docker Compose
+- Git
 
-## Documentación
-Ver `docs/architecture.md`.
+Después de clonar el repositorio:
 
-## Próximo sprint
-Autenticación y usuarios:
-- registro
-- login/logout
-- sesiones
-- roles CUSTOMER/ADMIN
-- recuperación de contraseña
-- perfil y direcciones
+```powershell
+npm run setup:dev
+```
+
+Ese comando:
+1. crea `.env` local si no existe;
+2. genera secretos aleatorios para desarrollo;
+3. levanta PostgreSQL 16;
+4. instala dependencias;
+5. formatea y valida Prisma;
+6. genera Prisma Client;
+7. ejecuta la migración `init`;
+8. crea/actualiza el usuario ADMIN;
+9. ejecuta el typecheck.
+
+Al finalizar:
+
+```powershell
+npm run dev
+```
+
+Abrir:
+- `http://localhost:3000`
+- `http://localhost:3000/api/health`
+
+Prisma Studio:
+
+```powershell
+npm run prisma:studio
+```
+
+## Seguridad
+- `.env` está ignorado por Git.
+- Nunca se versionan claves reales.
+- Las contraseñas se almacenan con hash bcrypt.
+- La tienda no almacenará números completos de tarjeta ni CVV.
+- Los pagos manuales y Culqi comparten una abstracción `Payment`.
+
+## Modelo principal
+`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `Review`.
+
+## Próximo hito
+Validar localmente migración + registro + login + sesión + ADMIN y luego avanzar al catálogo real y al storefront premium basado en el prototipo aprobado.
