@@ -58,6 +58,9 @@ export default async function CartPage() {
     (sum, item) => sum + Number(item.product.price) * item.quantity,
     0,
   );
+  const hasInvalidItems = items.some(
+    (item) => !item.product.active || item.product.stock < item.quantity,
+  );
 
   return (
     <main className="cartPage">
@@ -100,6 +103,8 @@ export default async function CartPage() {
                       <span>{formatPrice(Number(item.product.price))} c/u</span>
                       {!item.product.active || item.product.stock <= 0 ? (
                         <small className="cartWarning">Este producto ya no está disponible.</small>
+                      ) : item.quantity > item.product.stock ? (
+                        <small className="cartWarning">Solo quedan {item.product.stock} unidades disponibles.</small>
                       ) : null}
                     </div>
 
@@ -137,9 +142,16 @@ export default async function CartPage() {
           <div className="summaryRow"><span>Envío</span><span>Se calcula por distrito</span></div>
           <div className="summaryTotal"><span>Total parcial</span><strong>{formatPrice(subtotal)}</strong></div>
           <p className="summaryNote">El costo de envío se confirmará antes del pago.</p>
-          <button className="button buttonDisabled fullButton" type="button" disabled={items.length === 0}>
-            Checkout en preparación
-          </button>
+
+          {items.length > 0 && !hasInvalidItems ? (
+            <Link className="button buttonPrimary fullButton" href="/checkout">
+              Continuar al checkout
+            </Link>
+          ) : (
+            <button className="button buttonDisabled fullButton" type="button" disabled>
+              {items.length === 0 ? "Agrega productos para continuar" : "Corrige el stock para continuar"}
+            </button>
+          )}
         </aside>
       </section>
     </main>
