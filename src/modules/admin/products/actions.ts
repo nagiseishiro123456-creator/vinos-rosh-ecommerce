@@ -1,6 +1,7 @@
 "use server";
 
 import { Prisma } from "@prisma/client";
+import type { Route } from "next";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -9,6 +10,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
 
 const productIdSchema = z.string().cuid();
+
+type ProductAdminPath = "/admin/productos/nuevo" | `/admin/productos/${string}`;
 
 const allowedImageHosts = new Set([
   "res.cloudinary.com",
@@ -89,8 +92,9 @@ async function resolveCategoryId(categoryName?: string) {
   return category.id;
 }
 
-function productRedirect(path: string, status: string): never {
-  redirect(`${path}?status=${encodeURIComponent(status)}`);
+function productRedirect(path: ProductAdminPath, status: string): never {
+  const destination = `${path}?status=${encodeURIComponent(status)}` as Route;
+  redirect(destination);
 }
 
 export async function createProduct(formData: FormData) {
