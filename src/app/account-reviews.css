@@ -253,6 +253,96 @@
   box-shadow: none;
 }
 
+.productReviewsSection {
+  padding-top: 12px;
+  padding-bottom: 100px;
+}
+
+.productReviewsHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.productReviewsHeading h2 {
+  margin: 8px 0 0;
+}
+
+.productReviewsScore {
+  min-width: 180px;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: end;
+  gap: 2px 7px;
+  color: var(--gold);
+}
+
+.productReviewsScore strong {
+  font-family: Georgia, serif;
+  font-size: 2rem;
+}
+
+.productReviewsScore span {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  text-align: right;
+  font-size: .78rem;
+}
+
+.publicReviewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.publicReviewCard {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 12px 36px rgba(66, 31, 24, .05);
+}
+
+.publicReviewTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.verifiedPurchase {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--success);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.publicReviewCard > p {
+  min-height: 48px;
+  margin: 18px 0;
+  color: #594e48;
+  line-height: 1.65;
+}
+
+.publicReviewCard footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.publicReviewCard footer span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
 @media (max-width: 760px) {
   .reviewFormShell,
   .accountShell {
@@ -263,14 +353,25 @@
   .accountHeading,
   .adminReviewHeader,
   .adminReviewActions,
-  .accountSectionHeading {
+  .accountSectionHeading,
+  .productReviewsHeading {
     align-items: stretch;
     flex-direction: column;
   }
 
   .accountGrid,
-  .accountStats {
+  .accountStats,
+  .publicReviewGrid {
     grid-template-columns: 1fr;
+  }
+
+  .productReviewsScore {
+    justify-content: start;
+    width: fit-content;
+  }
+
+  .productReviewsScore span {
+    text-align: left;
   }
 
   .accountHeading .button,
@@ -281,5 +382,10 @@
 
   .accountOrderRow {
     align-items: flex-start;
+  }
+
+  .publicReviewTop {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
