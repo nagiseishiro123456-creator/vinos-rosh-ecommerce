@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./checkout.css";
 import "./admin-products.css";
+import "./admin-customers.css";
 import "./account-reviews.css";
 import "./account-catalog-tools.css";
 
