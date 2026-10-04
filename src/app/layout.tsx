@@ -4,6 +4,7 @@ import "./globals.css";
 import "./checkout.css";
 import "./admin-products.css";
 import "./account-reviews.css";
+import "./account-catalog-tools.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
