@@ -4,6 +4,7 @@ import "./globals.css";
 import "./checkout.css";
 import "./admin-products.css";
 import "./admin-customers.css";
+import "./admin-dashboard.css";
 import "./account-reviews.css";
 import "./account-catalog-tools.css";
 
