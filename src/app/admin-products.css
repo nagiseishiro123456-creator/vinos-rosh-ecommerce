@@ -100,18 +100,26 @@
   font-weight: 850;
 }
 
-.adminBadge.success {
+.adminBadge.success,
+.adminBadge.status-paid,
+.adminBadge.status-preparing,
+.adminBadge.status-shipped,
+.adminBadge.status-delivered {
   color: #17633a;
   background: #e7f6ec;
 }
 
 .adminBadge.warning,
-.adminBadge.gold {
+.adminBadge.gold,
+.adminBadge.status-payment_review,
+.adminBadge.status-pending_payment {
   color: #78551d;
   background: #fbf0d8;
 }
 
-.adminBadge.danger {
+.adminBadge.danger,
+.adminBadge.status-cancelled,
+.adminBadge.status-refunded {
   color: #8e2734;
   background: #fff0f1;
 }
@@ -282,13 +290,119 @@
   box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
 }
 
+.adminOrderDetailPage {
+  max-width: 1180px;
+}
+
+.adminOrderStatusBar {
+  margin: 10px 0 24px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+}
+
+.adminOrderGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.adminOrderItems,
+.adminOrderInfoList,
+.adminOrderTimeline {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.adminOrderItems > div,
+.adminPaymentLine {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.adminOrderItems span,
+.adminPaymentLine span {
+  display: grid;
+  gap: 4px;
+}
+
+.adminOrderItems span:last-child,
+.adminPaymentLine span:last-child {
+  text-align: right;
+}
+
+.adminOrderItems small,
+.adminPaymentLine small,
+.adminOrderInfoList span,
+.adminOrderTimeline small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.adminOrderTotals {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.adminOrderTotals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.adminOrderTotals span {
+  color: var(--muted);
+}
+
+.adminOrderTotals .total {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 1.08rem;
+}
+
+.adminOrderTimeline span {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.adminOrderNote {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #6c5848;
+  background: #f8f1e7;
+  line-height: 1.55;
+}
+
+.adminOrderPayments {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 760px) {
   .adminStatsGrid {
     grid-template-columns: 1fr;
   }
 
-  .adminFormGrid {
+  .adminFormGrid,
+  .adminOrderGrid {
     grid-template-columns: 1fr;
+  }
+
+  .adminOrderPayments {
+    grid-column: auto;
   }
 
   .adminFieldWide {
@@ -298,6 +412,23 @@
   .adminTopbarActions,
   .adminTopbarActions .button {
     width: 100%;
+  }
+
+  .adminOrderStatusBar,
+  .adminOrderItems > div,
+  .adminPaymentLine {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .adminOrderStatusBar form,
+  .adminOrderStatusBar button {
+    width: 100%;
+  }
+
+  .adminOrderItems span:last-child,
+  .adminPaymentLine span:last-child {
+    text-align: left;
   }
 
   .adminTable th,
