@@ -16,49 +16,46 @@ export default async function AdminPage() {
   }
 
   const modules = [
-    ["Productos", "Catálogo, precio, imágenes y visibilidad."],
-    ["Inventario", "Stock real y alertas de disponibilidad."],
-    ["Pedidos", "Preparación, envío, entrega y cancelaciones."],
-    ["Pagos", "Culqi y revisión manual de Yape/transferencias."],
-    ["Envíos", "Tarifas administrables por distrito."],
-    ["Reseñas", "Moderación de opiniones verificadas."],
+    { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: null },
+    { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: null },
+    { title: "Pedidos", description: "Preparación, envío, entrega y cancelaciones.", href: null },
+    { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi.", href: "/admin/pagos" },
+    { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
+    { title: "Reseñas", description: "Moderación de opiniones verificadas.", href: null },
   ] as const;
 
   return (
-    <main className="shell" style={{ padding: "80px 0" }}>
+    <main className="shell adminPage">
       <span className="eyebrow wine">ADMINISTRACIÓN</span>
-      <h2>Panel Vinos ROSH</h2>
-      <p style={{ color: "#756860", maxWidth: 720, lineHeight: 1.7 }}>
-        Sesión administrativa verificada. Este panel crecerá por módulos sin exponer
-        operaciones de administración al storefront público.
+      <h1>Panel Vinos ROSH</h1>
+      <p className="adminIntro">
+        Sesión administrativa verificada. Los módulos operativos se habilitan de forma incremental sin exponer funciones internas al storefront público.
       </p>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          gap: 16,
-          marginTop: 30,
-        }}
-      >
-        {modules.map(([title, description]) => (
-          <article
-            key={title}
-            style={{
-              background: "white",
-              border: "1px solid #e7d8cf",
-              borderRadius: 16,
-              padding: 22,
-            }}
-          >
-            <strong>{title}</strong>
-            <p style={{ color: "#756860", lineHeight: 1.55 }}>{description}</p>
-          </article>
-        ))}
+      <section className="adminModuleGrid">
+        {modules.map((module) => {
+          const content = (
+            <>
+              <strong>{module.title}</strong>
+              <p>{module.description}</p>
+              <small>{module.href ? "Abrir módulo →" : "Próximo sprint"}</small>
+            </>
+          );
+
+          return module.href ? (
+            <Link className="adminModuleCard active" href={module.href} key={module.title}>
+              {content}
+            </Link>
+          ) : (
+            <article className="adminModuleCard" key={module.title}>
+              {content}
+            </article>
+          );
+        })}
       </section>
 
-      <p style={{ marginTop: 34 }}>
-        <Link className="primaryButton" href="/">
+      <p className="adminBackLink">
+        <Link className="button buttonDark" href="/">
           Ver tienda
         </Link>
       </p>
