@@ -1,0 +1,35 @@
+.adminDashboardStats {
+  margin: 0 0 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.adminDashboardStats article {
+  padding: 18px;
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(66, 31, 24, .04);
+}
+
+.adminDashboardStats article.attention {
+  border-color: #e4d4a9;
+  background: #fffaf0;
+}
+
+.adminDashboardStats span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.adminDashboardStats strong {
+  font-family: Georgia, serif;
+  font-size: 1.85rem;
+}
+
+.adminDashboardStats article.attention strong {
+  color: #78551d;
+}
