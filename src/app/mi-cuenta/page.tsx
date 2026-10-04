@@ -33,7 +33,7 @@ export default async function AccountPage() {
     redirect("/iniciar-sesion?callbackUrl=/mi-cuenta");
   }
 
-  const [user, orders] = await Promise.all([
+  const [user, orders, addressCount] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
@@ -75,6 +75,7 @@ export default async function AccountPage() {
         },
       },
     }),
+    prisma.address.count({ where: { userId: session.user.id, active: true } }),
   ]);
 
   if (!user) redirect("/iniciar-sesion");
@@ -95,12 +96,15 @@ export default async function AccountPage() {
             <h1>Hola, {user.firstName}</h1>
             <p>{user.email}</p>
           </div>
-          {session.user.role === "ADMIN" ? <Link className="button buttonPrimary" href="/admin">Ir al panel admin</Link> : null}
+          <div className="accountHeadingActions">
+            <Link className="button buttonGhostLight" href="/mi-cuenta/perfil">Editar perfil</Link>
+            {session.user.role === "ADMIN" ? <Link className="button buttonPrimary" href="/admin">Ir al panel admin</Link> : null}
+          </div>
         </div>
 
         <section className="accountStats">
-          <article><span>Pedidos</span><strong>{orders.length}</strong></article>
-          <article><span>Direcciones</span><strong>{user.addresses.length}</strong></article>
+          <article><span>Pedidos recientes</span><strong>{orders.length}</strong></article>
+          <article><span>Direcciones</span><strong>{addressCount}</strong></article>
           <article><span>Reseñas disponibles</span><strong>{deliveredPendingReview}</strong></article>
         </section>
 
@@ -138,10 +142,16 @@ export default async function AccountPage() {
           </section>
 
           <section className="adminPanel">
-            <p className="eyebrow wine">DIRECCIONES</p>
-            <h2>Entrega</h2>
+            <div className="accountSectionHeading compact">
+              <div>
+                <p className="eyebrow wine">DIRECCIONES</p>
+                <h2>Entrega</h2>
+              </div>
+              <Link className="textLink" href="/mi-cuenta/direcciones">Administrar</Link>
+            </div>
+
             {user.addresses.length === 0 ? (
-              <p className="accountMuted">Todavía no registraste una dirección. Podrás crearla durante el checkout.</p>
+              <p className="accountMuted">Todavía no registraste una dirección. Puedes crearla desde tu cuenta o durante el checkout.</p>
             ) : (
               <div className="accountAddressList">
                 {user.addresses.map((address) => (
@@ -155,10 +165,13 @@ export default async function AccountPage() {
             )}
 
             <div className="accountProfileInfo">
-              <p className="eyebrow wine">PERFIL</p>
+              <div className="accountSectionHeading compact">
+                <p className="eyebrow wine">PERFIL</p>
+                <Link className="textLink" href="/mi-cuenta/perfil">Editar</Link>
+              </div>
               <strong>{user.firstName} {user.lastName}</strong>
               <span>{user.email}</span>
-              {user.phone ? <span>{user.phone}</span> : null}
+              {user.phone ? <span>{user.phone}</span> : <span>Celular no registrado</span>}
             </div>
           </section>
         </div>
