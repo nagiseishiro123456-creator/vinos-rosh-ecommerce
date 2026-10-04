@@ -1,6 +1,6 @@
 {
   "name": "vinos-rosh-ecommerce",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,8 +9,13 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
+    "prisma:validate": "prisma validate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:seed": "tsx prisma/seed.ts",
+    "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",
@@ -36,6 +41,10 @@
     "postcss": "^8.5.0",
     "prisma": "^6.15.0",
     "tailwindcss": "^4.1.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.8.0"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
