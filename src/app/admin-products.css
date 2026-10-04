@@ -1,0 +1,307 @@
+.adminFreeMode {
+  margin: 24px 0 30px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid #cfe8d8;
+  border-radius: 16px;
+  color: #1f5f3d;
+  background: #eff9f3;
+}
+
+.adminFreeMode span {
+  color: #557165;
+  font-size: .88rem;
+  line-height: 1.55;
+}
+
+.adminTopbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.buttonGhostLight {
+  color: var(--wine-dark);
+  border-color: var(--line);
+  background: white;
+}
+
+.adminStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.adminStatsGrid article {
+  padding: 18px;
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+}
+
+.adminStatsGrid span {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.adminStatsGrid strong {
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+}
+
+.adminEmptyState,
+.adminPanel {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 14px 42px rgba(68, 34, 27, .06);
+}
+
+.adminEmptyState {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.adminEmptyState p {
+  max-width: 680px;
+  margin: 0 0 8px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.adminRowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.adminStock {
+  font-weight: 800;
+}
+
+.adminStock.low {
+  color: #9a6b18;
+}
+
+.adminBadge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 2px 6px 2px 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: .68rem;
+  font-weight: 850;
+}
+
+.adminBadge.success {
+  color: #17633a;
+  background: #e7f6ec;
+}
+
+.adminBadge.warning,
+.adminBadge.gold {
+  color: #78551d;
+  background: #fbf0d8;
+}
+
+.adminBadge.danger {
+  color: #8e2734;
+  background: #fff0f1;
+}
+
+.adminBadge.muted {
+  color: #706760;
+  background: #eee9e5;
+}
+
+.adminFormPage {
+  max-width: 1040px;
+}
+
+.adminAlert {
+  margin-bottom: 20px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  line-height: 1.5;
+}
+
+.adminAlert.success {
+  color: #17633a;
+  border: 1px solid #bee8cb;
+  background: #edf9f1;
+}
+
+.adminAlert.error {
+  color: #84212b;
+  border: 1px solid #efc6cb;
+  background: #fff0f1;
+}
+
+.adminForm {
+  display: grid;
+  gap: 22px;
+}
+
+.adminFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.adminField {
+  display: grid;
+  gap: 7px;
+}
+
+.adminFieldWide {
+  grid-column: 1 / -1;
+}
+
+.adminField > span {
+  font-size: .84rem;
+  font-weight: 800;
+}
+
+.adminField input,
+.adminField textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  background: #fffdfb;
+  outline: none;
+}
+
+.adminField input {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.adminField textarea {
+  resize: vertical;
+  padding: 12px 13px;
+  line-height: 1.55;
+}
+
+.adminField input:focus,
+.adminField textarea:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+}
+
+.adminField small {
+  color: var(--muted);
+  font-size: .74rem;
+  line-height: 1.5;
+}
+
+.adminCheckboxRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.adminCheckbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.adminCheckbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--wine);
+}
+
+.adminFormActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.adminInventoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.adminInventoryCard {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 12px 36px rgba(66, 31, 24, .05);
+}
+
+.adminInventoryCard h2 {
+  margin: 16px 0 5px;
+  font-size: 1.55rem;
+}
+
+.adminInventoryCard > p {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.inventoryForm {
+  display: grid;
+  gap: 8px;
+}
+
+.inventoryForm label {
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.inventoryForm > div {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 10px;
+}
+
+.inventoryForm input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fffdfb;
+  outline: none;
+}
+
+.inventoryForm input:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+}
+
+@media (max-width: 760px) {
+  .adminStatsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .adminFormGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .adminFieldWide {
+    grid-column: auto;
+  }
+
+  .adminTopbarActions,
+  .adminTopbarActions .button {
+    width: 100%;
+  }
+
+  .adminTable th,
+  .adminTable td {
+    white-space: nowrap;
+  }
+}
