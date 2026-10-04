@@ -60,7 +60,7 @@ jobs:
 
       - name: Verify database connectivity
         run: |
-          node -e "const { PrismaClient } = require('@prisma/client'); const p = new PrismaClient(); p.user.count().then(c => { console.log('users:', c); }).finally(() => p.$disconnect())"
+          node -e 'const { PrismaClient } = require("@prisma/client"); const p = new PrismaClient(); p.user.count().then(c => { console.log("users:", c); }).finally(() => p.$disconnect())'
 
       - name: Typecheck
         run: npm run typecheck
