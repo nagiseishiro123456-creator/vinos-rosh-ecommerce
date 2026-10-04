@@ -28,25 +28,13 @@ export default async function AdminPage() {
       </div>
 
       <section className="adminModuleGrid">
-        {modules.map((module) => {
-          const content = (
-            <>
-              <strong>{module.title}</strong>
-              <p>{module.description}</p>
-              <small>{module.href ? "Abrir módulo →" : "Próximo sprint"}</small>
-            </>
-          );
-
-          return module.href ? (
-            <Link className="adminModuleCard active" href={module.href} key={module.title}>
-              {content}
-            </Link>
-          ) : (
-            <article className="adminModuleCard" key={module.title}>
-              {content}
-            </article>
-          );
-        })}
+        {modules.map((module) => (
+          <Link className="adminModuleCard active" href={module.href} key={module.title}>
+            <strong>{module.title}</strong>
+            <p>{module.description}</p>
+            <small>Abrir módulo →</small>
+          </Link>
+        ))}
       </section>
 
       <p className="adminBackLink">
