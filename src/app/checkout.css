@@ -1,0 +1,739 @@
+.checkoutPage,
+.orderPage {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.checkoutShell,
+.paymentLayout,
+.orderStatusShell,
+.adminPage {
+  padding-top: 54px;
+  padding-bottom: 96px;
+}
+
+.checkoutHeading,
+.adminTopbar,
+.orderStatusHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+.checkoutHeading h1,
+.adminTopbar h1,
+.orderStatusHeader h1,
+.adminPage > h1 {
+  margin: 8px 0 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.55rem, 6vw, 4.6rem);
+  line-height: .98;
+}
+
+.checkoutHeading p:not(.eyebrow),
+.adminTopbar p:not(.eyebrow),
+.orderStatusHeader p,
+.adminIntro {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.checkoutContentGrid,
+.adminSplit {
+  display: grid;
+  gap: 26px;
+}
+
+.checkoutBlock,
+.adminCard,
+.paymentSection,
+.orderReviewCard,
+.checkoutSummaryCard,
+.paymentReviewCard {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 16px 52px rgba(66, 31, 24, .07);
+}
+
+.checkoutBlock,
+.adminCard,
+.paymentSection,
+.paymentReviewCard {
+  padding: 26px;
+}
+
+.checkoutBlockHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.checkoutBlockHeading h2,
+.paymentSection h2,
+.adminCard h2,
+.orderReviewCard h2 {
+  margin: 7px 0 0;
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+}
+
+.checkoutBlockHeading > span {
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.checkoutSelector {
+  display: grid;
+  gap: 22px;
+}
+
+.checkoutAddressList {
+  display: grid;
+  gap: 12px;
+}
+
+.checkoutAddressCard {
+  width: 100%;
+  padding: 18px;
+  display: grid;
+  gap: 5px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  color: var(--ink);
+  background: #fffdfb;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.checkoutAddressCard:hover {
+  transform: translateY(-1px);
+}
+
+.checkoutAddressCard.active {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107,15,26,.08);
+}
+
+.checkoutAddressCard > span:not(.checkoutAddressTopline) {
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.checkoutAddressTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.checkoutAddressTopline small {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--wine);
+  background: #f8ecee;
+  font-size: .7rem;
+  font-weight: 800;
+}
+
+.checkoutSummaryCard,
+.orderReviewCard {
+  padding: 24px;
+  align-self: start;
+}
+
+.checkoutForm {
+  display: grid;
+  gap: 16px;
+}
+
+.checkoutFormGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.formField textarea,
+.formField select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background: #fffdfb;
+  outline: none;
+}
+
+.formField select {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.formField textarea {
+  resize: vertical;
+  min-height: 92px;
+  padding: 12px 13px;
+}
+
+.formField textarea:focus,
+.formField select:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107,15,26,.08);
+}
+
+.checkboxField {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.checkboxField input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--wine);
+}
+
+.checkoutError,
+.checkoutWarningPanel,
+.adminSuccess,
+.orderCreatedBanner {
+  margin-bottom: 22px;
+  padding: 15px 17px;
+  border-radius: 14px;
+  line-height: 1.55;
+}
+
+.checkoutError {
+  color: #84212b;
+  border: 1px solid #efc6cb;
+  background: #fff0f1;
+}
+
+.checkoutWarningPanel {
+  color: #6b5225;
+  border: 1px solid #e6d5a7;
+  background: #fff9e8;
+}
+
+.checkoutWarningPanel p,
+.orderCreatedBanner span {
+  margin: 4px 0 0;
+  display: block;
+}
+
+.adminSuccess,
+.orderCreatedBanner {
+  color: #17633a;
+  border: 1px solid #bee8cb;
+  background: #edf9f1;
+}
+
+.checkoutAlert {
+  margin: 14px 0;
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: #7d2934;
+  background: #fff1f2;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+.checkoutSecurityNote {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: .76rem;
+  line-height: 1.5;
+}
+
+.checkoutEmptyAddress {
+  padding: 20px;
+  border: 1px dashed #cfbdb4;
+  border-radius: 16px;
+  color: var(--muted);
+}
+
+.checkoutEmptyAddress strong {
+  color: var(--ink);
+}
+
+.checkoutEmptyAddress p {
+  margin-bottom: 0;
+}
+
+.paymentLayout {
+  display: grid;
+  gap: 26px;
+}
+
+.paymentMain,
+.paymentForm {
+  display: grid;
+  gap: 22px;
+}
+
+.paymentOptions,
+.receiptOptions {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.paymentOption,
+.receiptOptions label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #fffdfa;
+  cursor: pointer;
+}
+
+.paymentOption.active,
+.receiptOptions label.active {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107,15,26,.07);
+}
+
+.paymentOption input,
+.receiptOptions input {
+  margin-top: 4px;
+  accent-color: var(--wine);
+}
+
+.paymentOption span,
+.receiptOptions span {
+  display: grid;
+  gap: 3px;
+}
+
+.paymentOption small,
+.receiptOptions small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.paymentInstructions {
+  margin: 18px 0;
+  padding: 18px;
+  display: grid;
+  gap: 18px;
+  border-radius: 17px;
+  color: #f8eae7;
+  background: linear-gradient(145deg, var(--wine-dark), var(--wine));
+}
+
+.paymentInstructions > div:first-child {
+  display: grid;
+  align-content: center;
+  gap: 5px;
+}
+
+.paymentInstructions > div > strong {
+  font-family: Georgia, serif;
+  font-size: 2rem;
+}
+
+.paymentInstructions p {
+  margin: 2px 0;
+}
+
+.paymentInstructions small {
+  color: #e9d6d0;
+  line-height: 1.5;
+}
+
+.paymentQr {
+  position: relative;
+  width: 176px;
+  height: 176px;
+  padding: 8px;
+  border-radius: 14px;
+  background: white;
+}
+
+.paymentQr img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.invoiceFields {
+  margin-top: 18px;
+}
+
+.orderReviewAddress {
+  margin: 18px 0 22px;
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.orderReviewAddress strong {
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.orderReviewItems {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.orderReviewItems > div,
+.summaryRow,
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.orderReviewItems span,
+.summaryRow span {
+  color: var(--muted);
+}
+
+.summaryRow {
+  padding: 8px 0;
+  font-size: .9rem;
+}
+
+.summaryTotal {
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+  font-size: 1.1rem;
+}
+
+.adminPage {
+  min-height: 100vh;
+}
+
+.adminIntro {
+  margin-bottom: 30px;
+}
+
+.adminModuleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.adminModuleCard {
+  min-height: 170px;
+  padding: 22px;
+  display: grid;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+}
+
+.adminModuleCard.active {
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.adminModuleCard.active:hover {
+  transform: translateY(-2px);
+  border-color: rgba(107,15,26,.35);
+  box-shadow: var(--shadow);
+}
+
+.adminModuleCard strong {
+  font-family: Georgia, serif;
+  font-size: 1.45rem;
+}
+
+.adminModuleCard p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.adminModuleCard small {
+  margin-top: auto;
+  color: var(--wine);
+  font-weight: 800;
+}
+
+.adminBackLink {
+  margin-top: 34px;
+}
+
+.adminWideCard {
+  min-width: 0;
+}
+
+.adminTableWrap {
+  overflow-x: auto;
+}
+
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+}
+
+.adminTable th,
+.adminTable td {
+  padding: 13px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.adminTable th {
+  color: var(--muted);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.adminTable td:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.adminTable small {
+  color: var(--muted);
+}
+
+.statusPill,
+.orderStatusPill {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.statusPill.active {
+  color: #17633a;
+  background: #e7f6ec;
+}
+
+.statusPill.inactive {
+  color: #756860;
+  background: #eee9e5;
+}
+
+.adminTextButton {
+  border: 0;
+  padding: 5px 0;
+  color: var(--wine);
+  background: transparent;
+  font-weight: 800;
+}
+
+.paymentReviewList {
+  display: grid;
+  gap: 16px;
+}
+
+.paymentReviewHeader,
+.paymentReviewActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.paymentReviewHeader > div {
+  display: grid;
+  gap: 4px;
+}
+
+.paymentReviewHeader span {
+  color: var(--wine);
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.paymentReviewHeader > strong {
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+}
+
+.paymentReviewGrid {
+  display: grid;
+  gap: 14px;
+  margin: 20px 0;
+  padding: 18px 0;
+  border-block: 1px solid var(--line);
+}
+
+.paymentReviewGrid > div {
+  display: grid;
+  gap: 4px;
+}
+
+.paymentReviewGrid small,
+.paymentReviewGrid span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.paymentReviewActions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.adminRejectButton {
+  color: var(--danger);
+  border-color: #ebc2c7;
+  background: #fff3f4;
+}
+
+.orderStatusShell {
+  max-width: 1000px;
+}
+
+.orderStatusHeader {
+  align-items: center;
+}
+
+.orderStatusPill {
+  color: var(--wine);
+  background: #f5e5e8;
+}
+
+.status-paid,
+.status-preparing,
+.status-shipped,
+.status-delivered {
+  color: #17633a;
+  background: #e7f6ec;
+}
+
+.status-cancelled,
+.status-refunded {
+  color: var(--danger);
+  background: #fff0f1;
+}
+
+.orderStatusGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.orderStatusGrid .adminCard p:not(.eyebrow) {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.orderStatusActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+@media (min-width: 760px) {
+  .checkoutFormGrid,
+  .receiptOptions,
+  .paymentReviewGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .formField.full {
+    grid-column: 1 / -1;
+  }
+
+  .paymentInstructions {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .orderStatusGrid {
+    grid-template-columns: 1.3fr 1fr;
+  }
+
+  .orderStatusGrid > :first-child {
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 980px) {
+  .checkoutContentGrid,
+  .adminSplit {
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, .85fr);
+    align-items: start;
+  }
+
+  .checkoutSelector {
+    grid-template-columns: minmax(0, 1fr) 310px;
+    align-items: start;
+  }
+
+  .checkoutSummaryCard {
+    position: sticky;
+    top: 98px;
+  }
+
+  .paymentLayout {
+    grid-template-columns: minmax(0, 1.45fr) 350px;
+    align-items: start;
+  }
+
+  .orderReviewCard {
+    position: sticky;
+    top: 98px;
+  }
+
+  .paymentReviewGrid {
+    grid-template-columns: 1.1fr .8fr 1.3fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .checkoutShell,
+  .paymentLayout,
+  .orderStatusShell,
+  .adminPage {
+    padding-top: 34px;
+    padding-bottom: 74px;
+  }
+
+  .checkoutHeading,
+  .adminTopbar,
+  .orderStatusHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .checkoutBlock,
+  .adminCard,
+  .paymentSection,
+  .paymentReviewCard,
+  .orderReviewCard,
+  .checkoutSummaryCard {
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .paymentReviewHeader,
+  .paymentReviewActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .paymentReviewActions form,
+  .paymentReviewActions button {
+    width: 100%;
+  }
+
+  .paymentQr {
+    width: 160px;
+    height: 160px;
+  }
+}
