@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ number: string }>;
-  searchParams: Promise<{ created?: string }>;
+  searchParams: Promise<{ created?: string; review?: string }>;
 };
 
 function formatPrice(value: number) {
@@ -70,6 +70,12 @@ export default async function OrderPage({ params, searchParams }: Props) {
           quantity: true,
           unitPrice: true,
           subtotal: true,
+          review: {
+            select: {
+              rating: true,
+              status: true,
+            },
+          },
         },
       },
       payments: {
@@ -102,6 +108,17 @@ export default async function OrderPage({ params, searchParams }: Props) {
           </div>
         ) : null}
 
+        {query.review === "sent" ? (
+          <div className="orderCreatedBanner">
+            <strong>Gracias por tu reseña.</strong>
+            <span>La opinión quedó registrada y pasará por moderación antes de publicarse.</span>
+          </div>
+        ) : null}
+
+        {query.review === "exists" ? (
+          <div className="checkoutWarningPanel">Este producto ya tiene una reseña asociada a esta compra.</div>
+        ) : null}
+
         <div className="orderStatusHeader">
           <div>
             <p className="eyebrow wine">PEDIDO {order.number}</p>
@@ -114,10 +131,19 @@ export default async function OrderPage({ params, searchParams }: Props) {
         <div className="orderStatusGrid">
           <section className="adminCard">
             <p className="eyebrow wine">PRODUCTOS</p>
-            <div className="orderReviewItems">
+            <div className="orderReviewItems orderItemsWithReviews">
               {order.items.map((item) => (
                 <div key={item.id}>
-                  <span>{item.quantity} × {item.productName}</span>
+                  <span>
+                    {item.quantity} × {item.productName}
+                    {order.status === "DELIVERED" ? (
+                      item.review ? (
+                        <small>Reseña: {item.review.rating} ★ · {item.review.status}</small>
+                      ) : (
+                        <Link className="textLink" href={`/resenas/${item.id}`}>Escribir reseña verificada →</Link>
+                      )
+                    ) : null}
+                  </span>
                   <strong>{formatPrice(Number(item.subtotal))}</strong>
                 </div>
               ))}
