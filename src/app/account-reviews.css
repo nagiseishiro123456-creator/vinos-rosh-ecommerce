@@ -1,0 +1,285 @@
+.reviewFormShell,
+.accountShell {
+  padding-top: 54px;
+  padding-bottom: 96px;
+}
+
+.reviewFormShell {
+  max-width: 840px;
+}
+
+.reviewFormShell h1,
+.accountHeading h1 {
+  margin: 8px 0 12px;
+  font-size: clamp(2.6rem, 6vw, 4.7rem);
+  line-height: .98;
+}
+
+.reviewFormLead,
+.accountHeading > div > p:not(.eyebrow),
+.accountMuted {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.reviewFormCard {
+  margin-top: 28px;
+  padding: 28px;
+  display: grid;
+  gap: 22px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 16px 48px rgba(68, 34, 27, .07);
+}
+
+.reviewFormCard fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.reviewFormCard legend {
+  margin-bottom: 10px;
+  font-size: .84rem;
+  font-weight: 800;
+}
+
+.reviewStarsInput {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reviewStarsInput label {
+  position: relative;
+  cursor: pointer;
+}
+
+.reviewStarsInput input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reviewStarsInput span {
+  min-height: 42px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #8a6827;
+  background: #fffdf8;
+  font-weight: 800;
+}
+
+.reviewStarsInput input:checked + span {
+  border-color: var(--gold);
+  background: #fbf0d8;
+  box-shadow: 0 0 0 3px rgba(184, 148, 93, .14);
+}
+
+.reviewModerationNote {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.55;
+}
+
+.orderItemsWithReviews > div > span:first-child {
+  display: grid;
+  gap: 5px;
+}
+
+.orderItemsWithReviews small {
+  color: var(--muted);
+}
+
+.adminReviewList {
+  display: grid;
+  gap: 16px;
+}
+
+.adminReviewCard {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 12px 36px rgba(66, 31, 24, .05);
+}
+
+.adminReviewHeader,
+.adminReviewActions,
+.adminReviewMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.adminReviewHeader > div {
+  display: grid;
+  gap: 5px;
+}
+
+.adminReviewHeader small,
+.adminReviewMeta {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.adminReviewCard > p {
+  margin: 18px 0;
+  color: #594e48;
+  line-height: 1.65;
+}
+
+.adminReviewMeta {
+  padding: 13px 0;
+  border-block: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.adminReviewActions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.accountHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.accountStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 28px 0;
+}
+
+.accountStats article {
+  padding: 18px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+}
+
+.accountStats span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.accountStats strong {
+  font-family: Georgia, serif;
+  font-size: 1.75rem;
+}
+
+.accountGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.accountSectionHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.accountSectionHeading h2 {
+  margin: 6px 0 0;
+  font-size: 2rem;
+}
+
+.accountOrderList,
+.accountAddressList,
+.accountProfileInfo {
+  display: grid;
+  gap: 12px;
+}
+
+.accountOrderRow {
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.accountOrderRow span {
+  display: grid;
+  gap: 4px;
+}
+
+.accountOrderRow span:last-child {
+  text-align: right;
+}
+
+.accountOrderRow small,
+.accountAddressList span,
+.accountProfileInfo span {
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+
+.accountAddressList article {
+  padding: 13px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fffdfb;
+}
+
+.accountProfileInfo {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.adminEmptyState.compact {
+  padding: 20px;
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  .reviewFormShell,
+  .accountShell {
+    padding-top: 34px;
+    padding-bottom: 74px;
+  }
+
+  .accountHeading,
+  .adminReviewHeader,
+  .adminReviewActions,
+  .accountSectionHeading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .accountGrid,
+  .accountStats {
+    grid-template-columns: 1fr;
+  }
+
+  .accountHeading .button,
+  .adminReviewActions form,
+  .adminReviewActions button {
+    width: 100%;
+  }
+
+  .accountOrderRow {
+    align-items: flex-start;
+  }
+}
