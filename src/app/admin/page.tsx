@@ -9,6 +9,7 @@ export default async function AdminPage() {
     { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: "/admin/productos" },
     { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: "/admin/inventario" },
     { title: "Pedidos", description: "Preparación, envío y confirmación de entrega.", href: "/admin/pedidos" },
+    { title: "Clientes", description: "Cuentas registradas, pedidos, direcciones y reseñas.", href: "/admin/clientes" },
     { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi opcional.", href: "/admin/pagos" },
     { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
     { title: "Reseñas", description: "Moderación de opiniones de compras entregadas y verificadas.", href: "/admin/resenas" },
