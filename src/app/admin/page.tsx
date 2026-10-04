@@ -8,7 +8,7 @@ export default async function AdminPage() {
   const modules = [
     { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: "/admin/productos" },
     { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: "/admin/inventario" },
-    { title: "Pedidos", description: "Preparación, envío, entrega y cancelaciones.", href: null },
+    { title: "Pedidos", description: "Preparación, envío y confirmación de entrega.", href: "/admin/pedidos" },
     { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi opcional.", href: "/admin/pagos" },
     { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
     { title: "Reseñas", description: "Moderación de opiniones verificadas.", href: null },
