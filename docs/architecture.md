@@ -1,22 +1,20 @@
-# Arquitectura inicial — Vinos ROSH
+# Arquitectura — Vinos ROSH
 
 ## Estilo arquitectónico
-Monolito modular sobre Next.js. La aplicación web, las rutas del servidor, validaciones y acceso a datos viven en un mismo proyecto, pero separados por módulos de negocio.
+Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, autenticación, validaciones y acceso a datos viven en un mismo proyecto, separados por módulos de negocio.
 
 ## Stack
-- Next.js + React + TypeScript
-- Tailwind CSS
-- shadcn/ui (se incorporará al comenzar componentes reutilizables)
+- Next.js + React + TypeScript estricto
+- Tailwind CSS + shadcn/ui + Lucide React
 - PostgreSQL
 - Prisma ORM
 - Zod
-- Auth.js (Sprint 1)
-- Cloudinary (media)
-- Culqi (tarjetas + Yape)
-- Resend (correo transaccional)
-- Vercel (despliegue)
+- Auth.js / NextAuth Credentials + bcryptjs
+- Cloudinary
+- Resend
+- Vercel/hosting compatible con Next.js
 
-## Módulos previstos
+## Módulos
 - auth
 - users
 - products
@@ -30,31 +28,47 @@ Monolito modular sobre Next.js. La aplicación web, las rutas del servidor, vali
 - reviews
 - admin
 
-## Decisiones de negocio ya cerradas
-- Registro obligatorio para completar compra.
+## Decisiones de negocio
+- Registro obligatorio antes de completar compra.
 - Un administrador inicialmente.
 - Tarifas de envío administrables por distrito.
-- Boleta y factura como opciones del checkout; integración tributaria pendiente de definir con el cliente.
+- Boleta y factura disponibles en checkout; integración tributaria pendiente de confirmación del cliente.
 - Reseñas solo para compradores verificados con pedido entregado.
-- Culqi como primera opción de pasarela; transferencia como método alternativo.
-- Yape mediante integración automatizada de la pasarela.
+- Pagos desacoplados del pedido mediante la entidad `Payment`.
+- Proveedores soportados: `CULQI`, `YAPE_MANUAL`, `TRANSFER_MANUAL`.
+- La dirección y los datos principales del producto se guardan como snapshot en el pedido para preservar historial.
+
+## Pagos híbridos
+
+### Automático
+Culqi podrá confirmar pagos mediante webhook.
+
+### Manual
+Yape/transferencia generan un pago `UNDER_REVIEW`. El administrador valida el código/comprobante y cambia el pago a `PAID` o `REJECTED`.
+
+### Regla
+Nunca se almacenarán números completos de tarjeta ni CVV.
 
 ## Seguridad
-- No se almacenarán números de tarjeta ni CVV.
-- Secretos únicamente por variables de entorno.
-- Contraseñas siempre con hash seguro cuando se implemente autenticación.
-- Autorización por rol para el panel administrativo.
-- Validación de entradas en servidor con Zod.
+- Secretos únicamente en variables de entorno.
+- Contraseñas con bcrypt.
+- Roles `CUSTOMER` y `ADMIN`.
+- Validación servidor con Zod.
+- Rutas administrativas protegidas por sesión y rol.
+- `.env` excluido de Git.
 
-## Flujo principal de compra
-1. Usuario navega catálogo.
+## Persistencia local
+Desarrollo utiliza PostgreSQL 16 mediante Docker Compose. El script `scripts/setup-dev.ps1` automatiza secretos locales, arranque de BD, migración, seed y typecheck.
+
+## Flujo de compra
+1. Cliente navega catálogo.
 2. Agrega productos al carrito persistente.
 3. Inicia sesión o se registra.
-4. Selecciona dirección y distrito.
-5. El sistema calcula la tarifa de envío.
-6. Elige boleta o factura.
-7. Selecciona pago.
-8. Culqi procesa tarjeta/Yape.
-9. Webhook confirma el resultado.
-10. Pedido pasa a PAGADO y continúa preparación/envío.
-11. Tras marcarse ENTREGADO, el cliente puede reseñar los productos comprados.
+4. Selecciona dirección/distrito.
+5. Se calcula envío.
+6. Selecciona boleta o factura.
+7. Elige método de pago.
+8. Pago automático o revisión manual.
+9. Pedido pasa a `PAID`.
+10. Preparación, envío y entrega.
+11. Solo tras `DELIVERED` se habilita la reseña verificada.
