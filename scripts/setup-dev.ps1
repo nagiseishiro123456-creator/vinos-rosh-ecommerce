@@ -76,7 +76,7 @@ try {
   $ready = $false
   for ($i = 0; $i -lt 30; $i++) {
     try {
-      docker compose exec -T db pg_isready -U vinos_rosh_dev -d vinos_rosh | Out-Null
+      docker compose exec -T db sh -c 'pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"' | Out-Null
       if ($LASTEXITCODE -eq 0) {
         $ready = $true
         break
@@ -84,6 +84,7 @@ try {
     } catch {}
     Start-Sleep -Seconds 2
   }
+
   if (-not $ready) {
     throw "PostgreSQL no respondió a tiempo. Revisa 'docker compose logs db'."
   }
@@ -104,7 +105,7 @@ try {
   Write-Host "[8/8] Verificando TypeScript..." -ForegroundColor Cyan
   npm run typecheck
 
-  Write-Host "" 
+  Write-Host ""
   Write-Host "===============================================" -ForegroundColor Green
   Write-Host "Vinos ROSH: entorno local listo." -ForegroundColor Green
   Write-Host "Inicia la app con: npm run dev" -ForegroundColor Green
