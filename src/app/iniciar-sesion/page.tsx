@@ -21,7 +21,12 @@ export default function LoginPage() {
     });
 
     if (result?.ok) {
-      window.location.href = "/mi-cuenta";
+      const params = new URLSearchParams(window.location.search);
+      const callbackUrl = params.get("callbackUrl");
+      const safeCallback = callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
+        ? callbackUrl
+        : "/mi-cuenta";
+      window.location.href = safeCallback;
       return;
     }
 
