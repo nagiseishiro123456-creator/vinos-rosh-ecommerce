@@ -4,7 +4,17 @@ import { Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  cartCount?: number;
+  isAuthenticated?: boolean;
+  isAdmin?: boolean;
+};
+
+export function SiteHeader({
+  cartCount = 0,
+  isAuthenticated = false,
+  isAdmin = false,
+}: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -25,7 +35,7 @@ export function SiteHeader() {
 
         <nav className="desktopNav" aria-label="Navegación principal">
           <Link href="/#inicio">Inicio</Link>
-          <Link href="/#productos">Productos</Link>
+          <Link href="/productos">Productos</Link>
           <Link href="/#historia">Nuestra historia</Link>
           <Link href="/#contacto">Contacto</Link>
         </nav>
@@ -34,15 +44,15 @@ export function SiteHeader() {
           <button className="iconButton desktopOnly" type="button" aria-label="Buscar">
             <Search size={19} />
           </button>
-          <Link className="iconButton desktopOnly" href="/mi-cuenta" aria-label="Mi cuenta">
+          <Link className="iconButton desktopOnly" href={isAdmin ? "/admin" : "/mi-cuenta"} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
             <UserRound size={19} />
           </Link>
-          <Link className="cartButton" href="/carrito" aria-label="Carrito de compras">
+          <Link className="cartButton" href="/carrito" aria-label={`Carrito de compras: ${cartCount} productos`}>
             <ShoppingBag size={19} />
-            <span className="cartCount" aria-label="0 productos en el carrito">0</span>
+            <span className="cartCount" aria-hidden="true">{cartCount}</span>
           </Link>
-          <Link className="headerLogin desktopOnly" href="/iniciar-sesion">
-            Iniciar sesión
+          <Link className="headerLogin desktopOnly" href={isAuthenticated ? (isAdmin ? "/admin" : "/mi-cuenta") : "/iniciar-sesion"}>
+            {isAuthenticated ? (isAdmin ? "Administrar" : "Mi cuenta") : "Iniciar sesión"}
           </Link>
           <button
             className="mobileMenuButton"
@@ -59,11 +69,12 @@ export function SiteHeader() {
       {menuOpen ? (
         <nav className="mobileNav" aria-label="Navegación móvil">
           <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
-          <Link href="/#productos" onClick={() => setMenuOpen(false)}>Productos</Link>
+          <Link href="/productos" onClick={() => setMenuOpen(false)}>Productos</Link>
           <Link href="/#historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
           <Link href="/#contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
+          {isAdmin ? <Link href="/admin" onClick={() => setMenuOpen(false)}>Administración</Link> : null}
           <Link href="/mi-cuenta" onClick={() => setMenuOpen(false)}>Mi cuenta</Link>
-          <Link href="/iniciar-sesion" onClick={() => setMenuOpen(false)}>Iniciar sesión</Link>
+          {!isAuthenticated ? <Link href="/iniciar-sesion" onClick={() => setMenuOpen(false)}>Iniciar sesión</Link> : null}
         </nav>
       ) : null}
     </header>
