@@ -2,58 +2,167 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    PENDING_PAYMENT: "Pendiente de pago",
+    PAYMENT_REVIEW: "Pago en revisión",
+    PAID: "Pagado",
+    PREPARING: "Preparando",
+    SHIPPED: "Enviado",
+    DELIVERED: "Entregado",
+    CANCELLED: "Cancelado",
+    REFUNDED: "Reembolsado",
+  };
+  return labels[status] ?? status;
+}
+
+function formatPrice(value: number) {
+  return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(value);
+}
+
+export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user) {
-    redirect("/iniciar-sesion");
+  if (!session?.user?.id) {
+    redirect("/iniciar-sesion?callbackUrl=/mi-cuenta");
   }
 
+  const [user, orders] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        addresses: {
+          where: { active: true },
+          orderBy: [{ isDefault: "desc" }, { createdAt: "desc" }],
+          take: 3,
+          select: {
+            id: true,
+            label: true,
+            addressLine1: true,
+            district: true,
+            province: true,
+            isDefault: true,
+          },
+        },
+      },
+    }),
+    prisma.order.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      select: {
+        id: true,
+        number: true,
+        status: true,
+        total: true,
+        createdAt: true,
+        items: {
+          select: {
+            id: true,
+            productName: true,
+            review: { select: { id: true, status: true } },
+          },
+        },
+      },
+    }),
+  ]);
+
+  if (!user) redirect("/iniciar-sesion");
+
+  const deliveredPendingReview = orders.reduce(
+    (count, order) => count + (order.status === "DELIVERED" ? order.items.filter((item) => !item.review).length : 0),
+    0,
+  );
+
   return (
-    <main className="shell" style={{ padding: "80px 0" }}>
-      <span className="eyebrow wine">MI CUENTA</span>
-      <h2>Hola, {session.user.name ?? "cliente ROSH"}</h2>
-      <p style={{ color: "#756860", maxWidth: 680, lineHeight: 1.7 }}>
-        Esta será tu zona privada para administrar direcciones, revisar pedidos,
-        consultar el estado de tus compras y publicar reseñas verificadas.
-      </p>
+    <main className="orderPage">
+      <div className="catalogHeaderWrap compact"><StoreHeader /></div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: 16,
-          marginTop: 30,
-        }}
-      >
-        {[
-          ["Pedidos", "Próximamente: historial y seguimiento."],
-          ["Direcciones", "Próximamente: direcciones de entrega."],
-          ["Reseñas", "Solo para compras entregadas y verificadas."],
-          ["Perfil", `Cuenta: ${session.user.email ?? ""}`],
-        ].map(([title, description]) => (
-          <article
-            key={title}
-            style={{
-              background: "white",
-              border: "1px solid #e7d8cf",
-              borderRadius: 16,
-              padding: 22,
-            }}
-          >
-            <strong>{title}</strong>
-            <p style={{ color: "#756860", lineHeight: 1.5 }}>{description}</p>
-          </article>
-        ))}
-      </div>
+      <section className="shell accountShell">
+        <div className="accountHeading">
+          <div>
+            <p className="eyebrow wine">MI CUENTA</p>
+            <h1>Hola, {user.firstName}</h1>
+            <p>{user.email}</p>
+          </div>
+          {session.user.role === "ADMIN" ? <Link className="button buttonPrimary" href="/admin">Ir al panel admin</Link> : null}
+        </div>
 
-      <p style={{ marginTop: 34 }}>
-        <Link className="primaryButton" href="/">
-          Volver a la tienda
-        </Link>
-      </p>
+        <section className="accountStats">
+          <article><span>Pedidos</span><strong>{orders.length}</strong></article>
+          <article><span>Direcciones</span><strong>{user.addresses.length}</strong></article>
+          <article><span>Reseñas disponibles</span><strong>{deliveredPendingReview}</strong></article>
+        </section>
+
+        <div className="accountGrid">
+          <section className="adminPanel accountOrdersPanel">
+            <div className="accountSectionHeading">
+              <div>
+                <p className="eyebrow wine">HISTORIAL</p>
+                <h2>Mis pedidos</h2>
+              </div>
+              <Link className="textLink" href="/productos">Seguir comprando</Link>
+            </div>
+
+            {orders.length === 0 ? (
+              <div className="adminEmptyState compact">
+                <strong>Aún no realizaste pedidos.</strong>
+                <Link className="button buttonDark" href="/productos">Ver productos</Link>
+              </div>
+            ) : (
+              <div className="accountOrderList">
+                {orders.map((order) => (
+                  <Link className="accountOrderRow" href={`/pedidos/${order.number}`} key={order.id}>
+                    <span>
+                      <strong>{order.number}</strong>
+                      <small>{order.createdAt.toLocaleDateString("es-PE")} · {order.items.length} producto(s)</small>
+                    </span>
+                    <span>
+                      <strong>{formatPrice(Number(order.total))}</strong>
+                      <small>{statusLabel(order.status)}</small>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section className="adminPanel">
+            <p className="eyebrow wine">DIRECCIONES</p>
+            <h2>Entrega</h2>
+            {user.addresses.length === 0 ? (
+              <p className="accountMuted">Todavía no registraste una dirección. Podrás crearla durante el checkout.</p>
+            ) : (
+              <div className="accountAddressList">
+                {user.addresses.map((address) => (
+                  <article key={address.id}>
+                    <strong>{address.label || "Dirección"}{address.isDefault ? " · Principal" : ""}</strong>
+                    <span>{address.addressLine1}</span>
+                    <span>{address.district}, {address.province}</span>
+                  </article>
+                ))}
+              </div>
+            )}
+
+            <div className="accountProfileInfo">
+              <p className="eyebrow wine">PERFIL</p>
+              <strong>{user.firstName} {user.lastName}</strong>
+              <span>{user.email}</span>
+              {user.phone ? <span>{user.phone}</span> : null}
+            </div>
+          </section>
+        </div>
+      </section>
     </main>
   );
 }
