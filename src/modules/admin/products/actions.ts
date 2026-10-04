@@ -10,6 +10,23 @@ import { requireAdmin } from "@/modules/admin/auth";
 
 const productIdSchema = z.string().cuid();
 
+const allowedImageHosts = new Set([
+  "res.cloudinary.com",
+  "nagiseishiro123456-creator.github.io",
+  "raw.githubusercontent.com",
+]);
+
+const imageUrlSchema = z.string().trim().refine((value) => {
+  if (!value) return true;
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && allowedImageHosts.has(url.hostname);
+  } catch {
+    return false;
+  }
+}, "La imagen debe usar HTTPS y un proveedor de imágenes permitido.");
+
 const productSchema = z.object({
   name: z.string().trim().min(2).max(120),
   slug: z.string().trim().max(140).optional(),
@@ -19,7 +36,7 @@ const productSchema = z.object({
   price: z.coerce.number().positive().max(999999),
   stock: z.coerce.number().int().min(0).max(999999),
   categoryName: z.string().trim().max(100).optional(),
-  imageUrl: z.string().trim().url().optional().or(z.literal("")),
+  imageUrl: imageUrlSchema,
 });
 
 const stockSchema = z.object({
@@ -72,7 +89,7 @@ async function resolveCategoryId(categoryName?: string) {
   return category.id;
 }
 
-function productRedirect(path: string, status: string) {
+function productRedirect(path: string, status: string): never {
   redirect(`${path}?status=${encodeURIComponent(status)}`);
 }
 
