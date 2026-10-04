@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { BadgeCheck, Star } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +19,14 @@ function formatPrice(value: number) {
     style: "currency",
     currency: "PEN",
     minimumFractionDigits: 2,
+  }).format(value);
+}
+
+function formatReviewDate(value: Date) {
+  return new Intl.DateTimeFormat("es-PE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   }).format(value);
 }
 
@@ -105,6 +113,44 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
       </div>
+
+      <section className="productReviewsSection shell" id="resenas">
+        <div className="productReviewsHeading">
+          <div>
+            <p className="eyebrow wine">OPINIONES REALES</p>
+            <h2>Reseñas verificadas</h2>
+          </div>
+          <div className="productReviewsScore">
+            <Star size={21} fill="currentColor" />
+            <strong>{product.rating ? product.rating.toFixed(1) : "—"}</strong>
+            <span>{product.reviewCount} reseña(s)</span>
+          </div>
+        </div>
+
+        {product.publicReviews.length === 0 ? (
+          <div className="reviewEmptyState">
+            <span className="stars">★★★★★</span>
+            <strong>Aún no hay reseñas publicadas.</strong>
+            <span>Solo clientes con una compra entregada pueden dejar una opinión.</span>
+          </div>
+        ) : (
+          <div className="publicReviewGrid">
+            {product.publicReviews.map((review) => (
+              <article className="publicReviewCard" key={review.id}>
+                <div className="publicReviewTop">
+                  <span className="stars">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
+                  <span className="verifiedPurchase"><BadgeCheck size={15} /> Compra verificada</span>
+                </div>
+                <p>{review.comment || "El cliente dejó una valoración sin comentario."}</p>
+                <footer>
+                  <strong>{review.firstName}</strong>
+                  <span>{formatReviewDate(review.createdAt)}</span>
+                </footer>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
 
       <WhatsAppFab />
     </main>
