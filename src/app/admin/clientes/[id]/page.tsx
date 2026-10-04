@@ -169,7 +169,7 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
                       <td>{order.items.length}</td>
                       <td><span className={`adminBadge status-${order.status.toLowerCase()}`}>{statusLabel(order.status)}</span></td>
                       <td>{formatPrice(Number(order.total))}</td>
-                      <td><Link className="adminTextButton" href={`/admin/pedidos/${order.number}`}>Ver pedido</Link></td>
+                      <td><Link className="adminTextButton" href={`/admin/pedidos/${order.id}`}>Ver pedido</Link></td>
                     </tr>
                   ))}
                 </tbody>
