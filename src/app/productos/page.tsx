@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ProductCard } from "@/components/product-card";
-import { SiteHeader } from "@/components/site-header";
+import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { getPublicProducts } from "@/modules/products/queries";
 
@@ -19,7 +19,7 @@ export default async function ProductsPage() {
   return (
     <main className="catalogPage">
       <div className="catalogHeaderWrap">
-        <SiteHeader />
+        <StoreHeader />
         <div className="catalogHero shell">
           <p className="eyebrow">CATÁLOGO ROSH</p>
           <h1>Productos</h1>
