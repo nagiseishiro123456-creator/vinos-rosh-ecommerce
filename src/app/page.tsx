@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ProductCard } from "@/components/product-card";
-import { SiteHeader } from "@/components/site-header";
+import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { siteConfig } from "@/lib/site";
 import { getFeaturedProducts } from "@/modules/products/queries";
@@ -26,7 +26,7 @@ export default async function HomePage() {
           sizes="100vw"
         />
         <div className="homeHeroOverlay" aria-hidden="true" />
-        <SiteHeader />
+        <StoreHeader />
 
         <div className="heroCopy shell">
           <p className="eyebrow">PRODUCCIÓN PROPIA · SIN ALCOHOL</p>
