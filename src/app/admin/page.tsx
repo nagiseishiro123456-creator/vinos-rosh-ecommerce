@@ -1,25 +1,15 @@
-import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { authOptions } from "@/lib/auth";
+import { requireAdmin } from "@/modules/admin/auth";
 
 export default async function AdminPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    redirect("/iniciar-sesion?callbackUrl=/admin");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/mi-cuenta");
-  }
+  await requireAdmin("/admin");
 
   const modules = [
-    { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: null },
-    { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: null },
+    { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: "/admin/productos" },
+    { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: "/admin/inventario" },
     { title: "Pedidos", description: "Preparación, envío, entrega y cancelaciones.", href: null },
-    { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi.", href: "/admin/pagos" },
+    { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi opcional.", href: "/admin/pagos" },
     { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
     { title: "Reseñas", description: "Moderación de opiniones verificadas.", href: null },
   ] as const;
@@ -31,6 +21,11 @@ export default async function AdminPage() {
       <p className="adminIntro">
         Sesión administrativa verificada. Los módulos operativos se habilitan de forma incremental sin exponer funciones internas al storefront público.
       </p>
+
+      <div className="adminFreeMode">
+        <strong>Modo sin costos activado</strong>
+        <span>El desarrollo prioriza herramientas open source y planes gratuitos. Culqi permanece opcional y desactivado hasta que el cliente decida usarlo.</span>
+      </div>
 
       <section className="adminModuleGrid">
         {modules.map((module) => {
