@@ -52,11 +52,15 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Apply schema to CI database
-        run: npx prisma db push --skip-generate
+      - name: Apply committed migrations
+        run: npx prisma migrate deploy
 
       - name: Seed initial admin
         run: npm run db:seed
+
+      - name: Verify database connectivity
+        run: |
+          node -e "const { PrismaClient } = require('@prisma/client'); const p = new PrismaClient(); p.user.count().then(c => { console.log('users:', c); }).finally(() => p.$disconnect())"
 
       - name: Typecheck
         run: npm run typecheck
