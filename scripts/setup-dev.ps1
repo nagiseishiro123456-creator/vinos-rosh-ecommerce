@@ -33,6 +33,11 @@ DATABASE_URL="postgresql://vinos_rosh_dev:$dbPassword@localhost:5432/vinos_rosh?
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="$authSecret"
+SHOW_DEMO_CATALOG="true"
+NEXT_PUBLIC_WHATSAPP_PHONE=""
+NEXT_PUBLIC_CONTACT_EMAIL=""
+NEXT_PUBLIC_GA_ID=""
+NEXT_PUBLIC_META_PIXEL_ID=""
 
 ADMIN_EMAIL="admin@vinosrosh.local"
 ADMIN_PASSWORD="$generatedAdminPassword"
@@ -96,8 +101,8 @@ try {
   Write-Host "[5/8] Generando Prisma Client..." -ForegroundColor Cyan
   npx prisma generate
 
-  Write-Host "[6/8] Ejecutando migración inicial..." -ForegroundColor Cyan
-  npx prisma migrate dev --name init
+  Write-Host "[6/8] Aplicando migraciones..." -ForegroundColor Cyan
+  npx prisma migrate dev
 
   Write-Host "[7/8] Creando/actualizando administrador inicial..." -ForegroundColor Cyan
   npm run db:seed
