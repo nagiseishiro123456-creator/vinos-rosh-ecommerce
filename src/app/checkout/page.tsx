@@ -26,6 +26,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
 
   const params = await searchParams;
   const data = await getCheckoutData(session.user.id);
+  const createCheckoutAddress = createAddress.bind(null, "checkout");
 
   if (data.items.length === 0) {
     redirect("/carrito");
@@ -96,7 +97,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
               </div>
             </div>
 
-            <form className="checkoutForm" action={createAddress}>
+            <form className="checkoutForm" action={createCheckoutAddress}>
               <div className="formField">
                 <label htmlFor="label">Nombre de la dirección</label>
                 <input id="label" name="label" placeholder="Casa, oficina..." maxLength={40} />
