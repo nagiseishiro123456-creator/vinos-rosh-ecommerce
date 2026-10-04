@@ -1,9 +1,21 @@
+import { OrderStatus, ReviewStatus, UserRole } from "@prisma/client";
 import Link from "next/link";
 
+import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   await requireAdmin("/admin");
+
+  const [activeProducts, customers, paymentReviewOrders, fulfillmentOrders, pendingReviews] = await Promise.all([
+    prisma.product.count({ where: { active: true } }),
+    prisma.user.count({ where: { role: UserRole.CUSTOMER } }),
+    prisma.order.count({ where: { status: OrderStatus.PAYMENT_REVIEW } }),
+    prisma.order.count({ where: { status: { in: [OrderStatus.PAID, OrderStatus.PREPARING, OrderStatus.SHIPPED] } } }),
+    prisma.review.count({ where: { status: ReviewStatus.PENDING } }),
+  ]);
 
   const modules = [
     { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: "/admin/productos" },
@@ -27,6 +39,14 @@ export default async function AdminPage() {
         <strong>Modo sin costos activado</strong>
         <span>El desarrollo prioriza herramientas open source y planes gratuitos. Culqi permanece opcional y desactivado hasta que el cliente decida usarlo.</span>
       </div>
+
+      <section className="adminDashboardStats">
+        <article><span>Productos visibles</span><strong>{activeProducts}</strong></article>
+        <article><span>Clientes</span><strong>{customers}</strong></article>
+        <article className={paymentReviewOrders > 0 ? "attention" : ""}><span>Pagos por revisar</span><strong>{paymentReviewOrders}</strong></article>
+        <article className={fulfillmentOrders > 0 ? "attention" : ""}><span>Pedidos en proceso</span><strong>{fulfillmentOrders}</strong></article>
+        <article className={pendingReviews > 0 ? "attention" : ""}><span>Reseñas pendientes</span><strong>{pendingReviews}</strong></article>
+      </section>
 
       <section className="adminModuleGrid">
         {modules.map((module) => (
