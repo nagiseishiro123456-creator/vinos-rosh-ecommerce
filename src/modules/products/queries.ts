@@ -14,10 +14,19 @@ export type PublicProductCard = {
   reviewCount: number;
 };
 
+export type PublicProductReview = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  firstName: string;
+  createdAt: Date;
+};
+
 export type PublicProductDetail = PublicProductCard & {
   description: string;
   sku: string | null;
   images: { id: string; url: string; alt: string | null }[];
+  publicReviews: PublicProductReview[];
 };
 
 const cardSelect = {
@@ -116,7 +125,16 @@ export async function getProductBySlug(slug: string): Promise<PublicProductDetai
         },
         reviews: {
           where: { status: ReviewStatus.APPROVED },
-          select: { rating: true },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            rating: true,
+            comment: true,
+            createdAt: true,
+            user: {
+              select: { firstName: true },
+            },
+          },
         },
       },
     });
@@ -141,6 +159,13 @@ export async function getProductBySlug(slug: string): Promise<PublicProductDetai
       images: product.images,
       rating,
       reviewCount,
+      publicReviews: product.reviews.slice(0, 8).map((review) => ({
+        id: review.id,
+        rating: review.rating,
+        comment: review.comment,
+        firstName: review.user.firstName,
+        createdAt: review.createdAt,
+      })),
     };
   } catch (error) {
     console.error("PRODUCT_DETAIL_QUERY_ERROR", error);
