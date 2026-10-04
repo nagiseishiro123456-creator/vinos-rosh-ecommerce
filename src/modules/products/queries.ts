@@ -29,6 +29,20 @@ export type PublicProductDetail = PublicProductCard & {
   publicReviews: PublicProductReview[];
 };
 
+export type PublicCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  productCount: number;
+};
+
+export type CatalogFilters = {
+  query?: string;
+  category?: string;
+  inStock?: boolean;
+  sort?: "featured" | "newest" | "price-asc" | "price-desc";
+};
+
 const cardSelect = {
   id: true,
   name: true,
@@ -91,11 +105,66 @@ export async function getFeaturedProducts(): Promise<PublicProductCard[]> {
   }
 }
 
-export async function getPublicProducts(): Promise<PublicProductCard[]> {
+export async function getPublicCategories(): Promise<PublicCategory[]> {
   try {
+    const categories = await prisma.category.findMany({
+      where: {
+        active: true,
+        products: { some: { active: true } },
+      },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        _count: {
+          select: { products: { where: { active: true } } },
+        },
+      },
+    });
+
+    return categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      slug: category.slug,
+      productCount: category._count.products,
+    }));
+  } catch (error) {
+    console.error("PUBLIC_CATEGORIES_QUERY_ERROR", error);
+    return [];
+  }
+}
+
+export async function getPublicProducts(filters: CatalogFilters = {}): Promise<PublicProductCard[]> {
+  try {
+    const query = filters.query?.trim().slice(0, 80);
+    const category = filters.category?.trim().slice(0, 140);
+    const sort = filters.sort ?? "featured";
+
     const products = await prisma.product.findMany({
-      where: { active: true },
-      orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+      where: {
+        active: true,
+        ...(filters.inStock ? { stock: { gt: 0 } } : {}),
+        ...(category ? { category: { is: { slug: category, active: true } } } : {}),
+        ...(query
+          ? {
+              OR: [
+                { name: { contains: query, mode: "insensitive" } },
+                { shortDescription: { contains: query, mode: "insensitive" } },
+                { description: { contains: query, mode: "insensitive" } },
+                { sku: { contains: query, mode: "insensitive" } },
+              ],
+            }
+          : {}),
+      },
+      orderBy:
+        sort === "price-asc"
+          ? [{ price: "asc" }, { name: "asc" }]
+          : sort === "price-desc"
+            ? [{ price: "desc" }, { name: "asc" }]
+            : sort === "newest"
+              ? [{ createdAt: "desc" }]
+              : [{ featured: "desc" }, { createdAt: "desc" }],
       select: cardSelect,
     });
 
