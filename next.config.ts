@@ -8,11 +8,19 @@ const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "off" },
 ];
 
+if (process.env.NODE_ENV === "production") {
+  securityHeaders.push({
+    key: "Strict-Transport-Security",
+    value: "max-age=31536000; includeSubDomains",
+  });
+}
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   typedRoutes: true,
   poweredByHeader: false,
   compress: true,
+  output: "standalone",
   async headers() {
     return [
       {
