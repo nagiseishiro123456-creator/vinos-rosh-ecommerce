@@ -1,0 +1,64 @@
+.analyticsConsent {
+  position: fixed;
+  z-index: 90;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  padding: 18px;
+  display: grid;
+  gap: 15px;
+  border: 1px solid rgba(184,148,93,.34);
+  border-radius: 18px;
+  color: var(--ink);
+  background: rgba(255,253,249,.98);
+  box-shadow: 0 22px 70px rgba(45,20,17,.2);
+  backdrop-filter: blur(14px);
+}
+
+.analyticsConsent strong {
+  color: var(--wine-dark);
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+}
+
+.analyticsConsent p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .86rem;
+}
+
+.analyticsConsentActions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.analyticsConsentActions .button {
+  width: 100%;
+}
+
+.analyticsReject {
+  color: var(--wine-dark);
+  border-color: var(--line);
+  background: white;
+}
+
+@media (min-width: 720px) {
+  .analyticsConsent {
+    left: auto;
+    right: 24px;
+    bottom: 24px;
+    width: min(520px, calc(100vw - 48px));
+    padding: 20px;
+  }
+
+  .analyticsConsentActions {
+    grid-template-columns: auto auto;
+    justify-content: end;
+  }
+
+  .analyticsConsentActions .button {
+    width: auto;
+  }
+}
