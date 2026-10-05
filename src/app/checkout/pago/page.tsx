@@ -26,6 +26,19 @@ function formatPrice(value: number) {
   }).format(value);
 }
 
+function errorMessage(error: string | undefined) {
+  if (error === "duplicate-operation") {
+    return "Ese código de operación ya está registrado. Verifica el número antes de continuar.";
+  }
+  if (error === "provider") {
+    return "El método seleccionado no está configurado actualmente.";
+  }
+  if (error === "too-many") {
+    return "Se detectaron demasiados intentos seguidos. Espera unos minutos antes de volver a enviar el pedido.";
+  }
+  return "Revisa los datos del pago y del comprobante.";
+}
+
 export default async function PaymentPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -120,13 +133,7 @@ export default async function PaymentPage({ searchParams }: Props) {
           </div>
 
           {params.error ? (
-            <div className="checkoutError">
-              {params.error === "duplicate-operation"
-                ? "Ese código de operación ya está registrado. Verifica el número antes de continuar."
-                : params.error === "provider"
-                  ? "El método seleccionado no está configurado actualmente."
-                  : "Revisa los datos del pago y del comprobante."}
-            </div>
+            <div className="checkoutError">{errorMessage(params.error)}</div>
           ) : null}
 
           <PaymentForm
