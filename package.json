@@ -16,6 +16,9 @@
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
     "db:seed": "prisma db seed",
+    "db:backup": "tsx scripts/backup-db.ts",
+    "db:restore": "tsx scripts/restore-db.ts",
+    "db:maintenance": "tsx scripts/maintenance.ts",
     "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1"
   },
   "dependencies": {
