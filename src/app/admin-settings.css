@@ -67,6 +67,42 @@
   accent-color: var(--wine);
 }
 
+.adminRemoveQr {
+  margin-top: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(158, 41, 55, 0.15);
+  border-radius: 12px;
+  color: var(--danger);
+  background: rgba(158, 41, 55, 0.04);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.adminRemoveQr input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--danger);
+}
+
+.adminSettingsCard input[type="file"] {
+  padding: 10px;
+  background: var(--paper);
+}
+
+.adminSettingsCard input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: var(--wine);
+  font-weight: 750;
+  cursor: pointer;
+}
+
 .adminReadiness {
   margin-top: 18px;
   padding: 12px 14px;
