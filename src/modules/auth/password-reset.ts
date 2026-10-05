@@ -7,16 +7,9 @@ import { z } from "zod";
 
 import { sendPasswordResetEmail } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
+import { passwordSchema } from "@/modules/auth/schemas";
 
 const emailSchema = z.string().trim().toLowerCase().email();
-
-export const passwordSchema = z
-  .string()
-  .min(8, "La contraseña debe tener al menos 8 caracteres")
-  .max(72, "La contraseña es demasiado larga")
-  .regex(/[A-Z]/, "Incluye al menos una mayúscula")
-  .regex(/[a-z]/, "Incluye al menos una minúscula")
-  .regex(/\d/, "Incluye al menos un número");
 
 const resetSchema = z.object({
   token: z.string().min(40).max(200),
