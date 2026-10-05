@@ -29,6 +29,7 @@ enum PaymentStatus {
   PAID
   FAILED
   REJECTED
+  CANCELLED
   REFUNDED
 }
 
@@ -84,6 +85,17 @@ model PasswordResetToken {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model RateLimitBucket {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  count     Int      @default(0)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([resetAt])
 }
 
 model Address {
@@ -291,11 +303,11 @@ model Payment {
   order      Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   reviewedBy User? @relation("PaymentReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
 
+  @@unique([provider, operationCode])
   @@index([orderId])
   @@index([status])
   @@index([provider])
   @@index([provider, externalReference])
-  @@index([provider, operationCode])
   @@index([reviewedById])
 }
 
