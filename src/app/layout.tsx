@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
+import { AnalyticsConsent } from "@/components/analytics-consent";
+
 import "./globals.css";
 import "./checkout.css";
 import "./admin-products.css";
@@ -12,6 +14,7 @@ import "./account-reviews.css";
 import "./account-catalog-tools.css";
 import "./auth-security.css";
 import "./order-security.css";
+import "./analytics-consent.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
@@ -44,7 +47,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        {children}
+        <AnalyticsConsent />
+      </body>
     </html>
   );
 }
