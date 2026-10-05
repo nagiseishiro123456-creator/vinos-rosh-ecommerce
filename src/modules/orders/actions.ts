@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  InventoryMovementType,
   OrderStatus,
   PaymentProvider,
   PaymentStatus,
@@ -187,6 +188,8 @@ export async function submitManualOrder(formData: FormData) {
 
   try {
     createdOrder = await prisma.$transaction(async (tx) => {
+      const stockAfterByProduct = new Map<string, number>();
+
       for (const item of cart.items) {
         const reserved = await tx.product.updateMany({
           where: {
@@ -202,6 +205,13 @@ export async function submitManualOrder(formData: FormData) {
         if (reserved.count !== 1) {
           throw new Error("STOCK_CHANGED");
         }
+
+        const productAfter = await tx.product.findUnique({
+          where: { id: item.product.id },
+          select: { stock: true },
+        });
+        if (!productAfter) throw new Error("STOCK_CHANGED");
+        stockAfterByProduct.set(item.product.id, productAfter.stock);
       }
 
       const order = await tx.order.create({
@@ -248,11 +258,23 @@ export async function submitManualOrder(formData: FormData) {
             },
           },
         },
-        select: { number: true },
+        select: { id: true, number: true },
+      });
+
+      await tx.inventoryMovement.createMany({
+        data: cart.items.map((item) => ({
+          productId: item.product.id,
+          orderId: order.id,
+          actorUserId: userId,
+          type: InventoryMovementType.ORDER_RESERVATION,
+          quantity: -item.quantity,
+          stockAfter: stockAfterByProduct.get(item.product.id) ?? 0,
+          note: `Reserva por pedido ${order.number}`,
+        })),
       });
 
       await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
-      return order;
+      return { number: order.number };
     });
   } catch (error) {
     if (error instanceof Error && error.message === "STOCK_CHANGED") {
@@ -272,6 +294,7 @@ export async function submitManualOrder(formData: FormData) {
   revalidatePath("/carrito");
   revalidatePath("/checkout");
   revalidatePath("/mi-cuenta");
+  revalidatePath("/admin/inventario");
   redirect(`/pedidos/${createdOrder.number}?created=1`);
 }
 
@@ -326,9 +349,22 @@ export async function cancelPendingOrder(orderNumber: string) {
 
     if (order.status === OrderStatus.PAYMENT_REVIEW) {
       for (const item of order.items) {
-        await tx.product.update({
+        const product = await tx.product.update({
           where: { id: item.productId },
           data: { stock: { increment: item.quantity } },
+          select: { stock: true },
+        });
+
+        await tx.inventoryMovement.create({
+          data: {
+            productId: item.productId,
+            orderId: order.id,
+            actorUserId: userId,
+            type: InventoryMovementType.ORDER_RELEASE,
+            quantity: item.quantity,
+            stockAfter: product.stock,
+            note: `Liberación por cancelación del pedido ${order.number}`,
+          },
         });
       }
     }
@@ -350,6 +386,7 @@ export async function cancelPendingOrder(orderNumber: string) {
   revalidatePath("/admin");
   revalidatePath("/admin/pagos");
   revalidatePath("/admin/pedidos");
+  revalidatePath("/admin/inventario");
   revalidatePath(`/pedidos/${parsed.data}`);
 
   redirect(`/pedidos/${parsed.data}?cancel=${result}`);
