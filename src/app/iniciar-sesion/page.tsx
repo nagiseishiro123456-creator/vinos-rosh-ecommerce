@@ -7,6 +7,8 @@ import { FormEvent, useState } from "react";
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const resetCompleted =
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("reset") === "success";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -56,13 +58,20 @@ export default function LoginPage() {
           <h2>Iniciar sesión</h2>
           <p>Ingresa con el correo y contraseña usados al registrarte.</p>
 
+          {resetCompleted ? (
+            <div className="authSuccess">Contraseña actualizada. Ya puedes iniciar sesión.</div>
+          ) : null}
+
           <div className="formGrid">
             <div className="formField full">
               <label htmlFor="email">Correo electrónico</label>
               <input id="email" name="email" type="email" autoComplete="email" required />
             </div>
             <div className="formField full">
-              <label htmlFor="password">Contraseña</label>
+              <div className="authFieldHeading">
+                <label htmlFor="password">Contraseña</label>
+                <Link href="/recuperar-contrasena">¿La olvidaste?</Link>
+              </div>
               <input id="password" name="password" type="password" autoComplete="current-password" required />
             </div>
           </div>
