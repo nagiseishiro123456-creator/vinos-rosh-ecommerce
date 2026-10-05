@@ -50,6 +50,13 @@ enum ReviewStatus {
   REJECTED
 }
 
+enum InventoryMovementType {
+  INITIAL_STOCK
+  MANUAL_ADJUSTMENT
+  ORDER_RESERVATION
+  ORDER_RELEASE
+}
+
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
@@ -68,6 +75,7 @@ model User {
   reviews             Review[]
   reviewedPayments    Payment[]            @relation("PaymentReviewedBy")
   passwordResetTokens PasswordResetToken[]
+  inventoryMovements  InventoryMovement[]  @relation("InventoryMovementActor")
 
   @@index([role])
   @@index([createdAt])
@@ -169,11 +177,12 @@ model Product {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  category   Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  images     ProductImage[]
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-  reviews    Review[]
+  category           Category?           @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  images             ProductImage[]
+  cartItems          CartItem[]
+  orderItems         OrderItem[]
+  reviews            Review[]
+  inventoryMovements InventoryMovement[]
 
   @@index([categoryId])
   @@index([active])
@@ -271,11 +280,12 @@ model Order {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  user     User        @relation(fields: [userId], references: [id])
-  address  Address?    @relation(fields: [addressId], references: [id], onDelete: SetNull)
-  items    OrderItem[]
-  payments Payment[]
-  reviews  Review[]
+  user               User                @relation(fields: [userId], references: [id])
+  address            Address?            @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  items              OrderItem[]
+  payments           Payment[]
+  reviews            Review[]
+  inventoryMovements InventoryMovement[]
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -352,4 +362,26 @@ model Review {
   @@index([productId, createdAt])
   @@index([userId])
   @@index([status])
+}
+
+model InventoryMovement {
+  id          String                @id @default(cuid())
+  productId   String
+  orderId     String?
+  actorUserId String?
+  type        InventoryMovementType
+  quantity    Int
+  stockAfter  Int
+  note        String?
+  createdAt   DateTime              @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order   Order?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  actor   User?   @relation("InventoryMovementActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([productId, createdAt])
+  @@index([orderId])
+  @@index([actorUserId])
+  @@index([type])
+  @@index([createdAt])
 }
