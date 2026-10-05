@@ -9,6 +9,7 @@ import "./admin-categories.css";
 import "./account-reviews.css";
 import "./account-catalog-tools.css";
 import "./auth-security.css";
+import "./order-security.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
