@@ -5,8 +5,10 @@ import "./checkout.css";
 import "./admin-products.css";
 import "./admin-customers.css";
 import "./admin-dashboard.css";
+import "./admin-categories.css";
 import "./account-reviews.css";
 import "./account-catalog-tools.css";
+import "./auth-security.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
