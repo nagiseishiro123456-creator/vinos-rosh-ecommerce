@@ -25,6 +25,22 @@ export function SiteHeader({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
   return (
     <header className={`siteHeader${scrolled ? " siteHeaderScrolled" : ""}`}>
       <div className="siteHeaderInner shell">
@@ -41,15 +57,15 @@ export function SiteHeader({
         </nav>
 
         <div className="headerActions">
-          <button className="iconButton desktopOnly" type="button" aria-label="Buscar">
-            <Search size={19} />
-          </button>
+          <Link className="iconButton desktopOnly" href="/productos" aria-label="Buscar productos">
+            <Search size={19} aria-hidden="true" />
+          </Link>
           <Link className="iconButton desktopOnly" href={isAdmin ? "/admin" : "/mi-cuenta"} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
-            <UserRound size={19} />
+            <UserRound size={19} aria-hidden="true" />
           </Link>
           <Link className="cartButton" href="/carrito" aria-label={`Carrito de compras: ${cartCount} productos`}>
-            <ShoppingBag size={19} />
-            <span className="cartCount" aria-hidden="true">{cartCount}</span>
+            <ShoppingBag size={19} aria-hidden="true" />
+            {cartCount > 0 ? <span className="cartCount" aria-hidden="true">{cartCount}</span> : null}
           </Link>
           <Link className="headerLogin desktopOnly" href={isAuthenticated ? (isAdmin ? "/admin" : "/mi-cuenta") : "/iniciar-sesion"}>
             {isAuthenticated ? (isAdmin ? "Administrar" : "Mi cuenta") : "Iniciar sesión"}
@@ -59,17 +75,18 @@ export function SiteHeader({
             type="button"
             aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMenuOpen((value) => !value)}
           >
-            {menuOpen ? <X size={23} /> : <Menu size={23} />}
+            {menuOpen ? <X size={23} aria-hidden="true" /> : <Menu size={23} aria-hidden="true" />}
           </button>
         </div>
       </div>
 
       {menuOpen ? (
-        <nav className="mobileNav" aria-label="Navegación móvil">
+        <nav id="mobile-navigation" className="mobileNav" aria-label="Navegación móvil">
           <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
-          <Link href="/productos" onClick={() => setMenuOpen(false)}>Productos</Link>
+          <Link href="/productos" onClick={() => setMenuOpen(false)}>Buscar y ver productos</Link>
           <Link href="/#historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
           <Link href="/#contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
           {isAdmin ? <Link href="/admin" onClick={() => setMenuOpen(false)}>Administración</Link> : null}
