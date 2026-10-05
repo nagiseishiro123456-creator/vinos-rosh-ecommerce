@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const resetCompleted =
-    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("reset") === "success";
+  const [resetCompleted, setResetCompleted] = useState(false);
+
+  useEffect(() => {
+    setResetCompleted(new URLSearchParams(window.location.search).get("reset") === "success");
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
