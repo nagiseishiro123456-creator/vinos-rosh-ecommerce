@@ -8,7 +8,7 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src ${scriptSources.join(" ")}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://nagiseishiro123456-creator.github.io https://res.cloudinary.com https://raw.githubusercontent.com",
+  "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self'",
   "media-src 'self'",
