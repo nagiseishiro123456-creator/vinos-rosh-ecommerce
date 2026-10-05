@@ -138,6 +138,11 @@ export async function consumeRateLimit({
   throw new Error("RATE_LIMIT_UNAVAILABLE");
 }
 
+export async function clearRateLimit(scope: string, identifier: string) {
+  const key = bucketKey(scope, identifier || "unknown");
+  await prisma.rateLimitBucket.deleteMany({ where: { key } });
+}
+
 export async function cleanupExpiredRateLimits() {
   return prisma.rateLimitBucket.deleteMany({
     where: { resetAt: { lt: new Date() } },
