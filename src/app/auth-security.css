@@ -1,0 +1,25 @@
+.authSuccess {
+  padding: 13px 15px;
+  border: 1px solid #bfe2ca;
+  border-radius: 12px;
+  color: #1f613d;
+  background: #edf8f1;
+  line-height: 1.5;
+}
+
+.authFieldHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.authFieldHeading a {
+  color: var(--wine);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.authSubmitLink {
+  text-decoration: none;
+}
