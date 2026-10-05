@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const isProduction = process.env.NODE_ENV === "production";
-const scriptSources = ["'self'", "'unsafe-inline'"];
+const scriptSources = [
+  "'self'",
+  "'unsafe-inline'",
+  "https://www.googletagmanager.com",
+  "https://connect.facebook.net",
+];
 if (!isProduction) scriptSources.push("'unsafe-eval'");
 
 const contentSecurityPolicy = [
@@ -10,7 +15,7 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com",
   "media-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
