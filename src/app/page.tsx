@@ -7,11 +7,15 @@ import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { siteConfig } from "@/lib/site";
 import { getFeaturedProducts } from "@/modules/products/queries";
+import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const products = await getFeaturedProducts();
+  const [products, commerce] = await Promise.all([
+    getFeaturedProducts(),
+    getCommerceSettings(),
+  ]);
   const showDemoCatalog = process.env.SHOW_DEMO_CATALOG === "true";
 
   return (
@@ -63,7 +67,7 @@ export default async function HomePage() {
         </article>
         <article>
           <span className="benefitIcon"><ShieldCheck size={22} /></span>
-          <div><strong>Compra segura</strong><small>Pago automático o validación manual</small></div>
+          <div><strong>Compra controlada</strong><small>Yape o transferencia con revisión</small></div>
         </article>
       </section>
 
@@ -175,18 +179,18 @@ export default async function HomePage() {
           </div>
           <div>
             <strong>Atención</strong>
-            <span>WhatsApp configurable</span>
-            <span>Envíos según cobertura</span>
-            <span>Pagos seguros</span>
+            {commerce.contactEmail ? <a href={`mailto:${commerce.contactEmail}`}>{commerce.contactEmail}</a> : <span>Correo pendiente de configurar</span>}
+            {commerce.whatsappPhone ? <span>WhatsApp disponible</span> : <span>WhatsApp pendiente de configurar</span>}
+            <span>Envíos según cobertura activa</span>
           </div>
           <div>
             <strong>Legal</strong>
-            <span>Términos y condiciones · pendiente</span>
-            <span>Privacidad · pendiente</span>
-            <span>Libro de Reclamaciones · pendiente</span>
+            <span>Términos y condiciones · pendiente de validación</span>
+            <span>Privacidad · pendiente de validación</span>
+            <span>Libro de Reclamaciones · pendiente de implementación legal</span>
           </div>
         </div>
-        <div className="footerBottom shell">© 2026 Vinos ROSH · E-commerce en construcción</div>
+        <div className="footerBottom shell">© 2026 Vinos ROSH · E-commerce en preparación</div>
       </footer>
 
       <WhatsAppFab />
