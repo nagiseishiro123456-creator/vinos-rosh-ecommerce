@@ -1,0 +1,111 @@
+.adminSettingsForm {
+  display: grid;
+  gap: 20px;
+}
+
+.adminSettingsCard {
+  padding: 24px;
+}
+
+.adminSettingsCard h2 {
+  margin: 7px 0 20px;
+  font-size: clamp(1.7rem, 4vw, 2.35rem);
+}
+
+.adminSettingsSource,
+.adminSettingsSuccess {
+  margin-bottom: 20px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 5px;
+  border-radius: 15px;
+}
+
+.adminSettingsSource {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.adminSettingsSource span,
+.adminSettingsActions span,
+.adminSettingsCard small {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.adminSettingsSuccess {
+  border: 1px solid rgba(35, 109, 70, 0.18);
+  background: rgba(35, 109, 70, 0.08);
+  color: #1d5b3b;
+  font-weight: 750;
+}
+
+.adminSettingsTitleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.adminToggle {
+  min-height: 42px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.adminToggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--wine);
+}
+
+.adminReadiness {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+.adminReadiness.ready {
+  background: rgba(35, 109, 70, 0.08);
+  color: #1d5b3b;
+}
+
+.adminReadiness.pending {
+  background: #f7f1e8;
+  color: #6a5847;
+}
+
+.adminSettingsActions {
+  padding: 6px 0 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.adminSettingsActions .button {
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .adminSettingsCard {
+    padding: 30px;
+  }
+
+  .adminSettingsActions {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .adminSettingsActions .button {
+    width: auto;
+  }
+}
