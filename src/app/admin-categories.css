@@ -1,0 +1,60 @@
+.adminCategoryGrid {
+  display: grid;
+  grid-template-columns: minmax(280px, .75fr) minmax(0, 1.25fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.adminCategoryGrid .adminPanel h2 {
+  margin: 8px 0 20px;
+  font-size: 2rem;
+}
+
+.adminForm.compact {
+  gap: 14px;
+}
+
+.adminCategoryList {
+  display: grid;
+  gap: 14px;
+}
+
+.adminCategoryCard {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 12px 36px rgba(66, 31, 24, .05);
+}
+
+.adminCategoryCardHeading,
+.adminCategoryActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.adminCategoryCardHeading {
+  margin-bottom: 16px;
+}
+
+.adminCategoryCardHeading > div {
+  display: grid;
+  gap: 4px;
+}
+
+.adminCategoryCardHeading small {
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+.adminCategoryCard > form:last-child {
+  margin-top: 10px;
+}
+
+@media (max-width: 840px) {
+  .adminCategoryGrid {
+    grid-template-columns: 1fr;
+  }
+}
