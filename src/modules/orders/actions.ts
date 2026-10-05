@@ -1,6 +1,12 @@
 "use server";
 
-import { PaymentProvider, PaymentStatus, ReceiptType, OrderStatus } from "@prisma/client";
+import {
+  OrderStatus,
+  PaymentProvider,
+  PaymentStatus,
+  Prisma,
+  ReceiptType,
+} from "@prisma/client";
 import { randomBytes } from "node:crypto";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -9,6 +15,7 @@ import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { consumeRateLimit } from "@/lib/rate-limit";
 
 const manualOrderSchema = z
   .object({
@@ -35,6 +42,8 @@ const manualOrderSchema = z
     }
   });
 
+const orderNumberSchema = z.string().trim().min(8).max(48);
+
 function isEnabled(name: string) {
   return process.env[name] === "true";
 }
@@ -53,23 +62,38 @@ function providerConfigured(provider: "YAPE_MANUAL" | "TRANSFER_MANUAL") {
   );
 }
 
-async function requireUser() {
+async function requireUser(callbackUrl = "/checkout") {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
-    redirect("/iniciar-sesion?callbackUrl=/checkout");
+    redirect(`/iniciar-sesion?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
   return session.user.id;
 }
 
 function createOrderNumber() {
   const date = new Date();
-  const ymd = [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("");
+  const ymd = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("");
   const random = randomBytes(3).toString("hex").toUpperCase();
   return `ROSH-${ymd}-${random}`;
 }
 
 export async function submitManualOrder(formData: FormData) {
   const userId = await requireUser();
+
+  const rateLimit = await consumeRateLimit({
+    scope: "manual-order-submit",
+    identifier: userId,
+    limit: 10,
+    windowMs: 10 * 60 * 1000,
+  });
+
+  if (!rateLimit.allowed) {
+    redirect(`/checkout/pago?addressId=${encodeURIComponent(String(formData.get("addressId") ?? ""))}&error=too-many`);
+  }
 
   const parsed = manualOrderSchema.safeParse({
     addressId: formData.get("addressId"),
@@ -90,15 +114,18 @@ export async function submitManualOrder(formData: FormData) {
     redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=provider`);
   }
 
-  const provider = parsed.data.provider === "YAPE_MANUAL"
-    ? PaymentProvider.YAPE_MANUAL
-    : PaymentProvider.TRANSFER_MANUAL;
+  const provider =
+    parsed.data.provider === "YAPE_MANUAL"
+      ? PaymentProvider.YAPE_MANUAL
+      : PaymentProvider.TRANSFER_MANUAL;
 
   const duplicateOperation = await prisma.payment.findFirst({
     where: {
       provider,
       operationCode: parsed.data.operationCode,
-      status: { in: [PaymentStatus.UNDER_REVIEW, PaymentStatus.PAID] },
+      status: {
+        in: [PaymentStatus.UNDER_REVIEW, PaymentStatus.PAID],
+      },
     },
     select: { id: true },
   });
@@ -172,6 +199,8 @@ export async function submitManualOrder(formData: FormData) {
 
   try {
     createdOrder = await prisma.$transaction(async (tx) => {
+      // Reserva atómica: si un producto ya no tiene stock suficiente, toda la
+      // transacción revierte y no queda un pedido incompleto.
       for (const item of cart.items) {
         const reserved = await tx.product.updateMany({
           where: {
@@ -198,7 +227,10 @@ export async function submitManualOrder(formData: FormData) {
           subtotal,
           shippingAmount,
           total,
-          receiptType: parsed.data.receiptType === "FACTURA" ? ReceiptType.FACTURA : ReceiptType.BOLETA,
+          receiptType:
+            parsed.data.receiptType === "FACTURA"
+              ? ReceiptType.FACTURA
+              : ReceiptType.BOLETA,
           documentNumber: parsed.data.documentNumber,
           businessName: parsed.data.businessName,
           taxAddress: parsed.data.taxAddress,
@@ -240,6 +272,14 @@ export async function submitManualOrder(formData: FormData) {
     if (error instanceof Error && error.message === "STOCK_CHANGED") {
       redirect("/carrito?error=stock-changed");
     }
+
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=duplicate-operation`);
+    }
+
     throw error;
   }
 
@@ -247,4 +287,85 @@ export async function submitManualOrder(formData: FormData) {
   revalidatePath("/checkout");
   revalidatePath("/mi-cuenta");
   redirect(`/pedidos/${createdOrder.number}?created=1`);
+}
+
+export async function cancelPendingOrder(orderNumber: string) {
+  const parsed = orderNumberSchema.safeParse(orderNumber);
+  if (!parsed.success) return;
+
+  const userId = await requireUser(`/pedidos/${parsed.data}`);
+  const now = new Date();
+
+  const result = await prisma.$transaction(async (tx) => {
+    const order = await tx.order.findFirst({
+      where: {
+        number: parsed.data,
+        userId,
+      },
+      select: {
+        id: true,
+        number: true,
+        status: true,
+        items: {
+          select: {
+            productId: true,
+            quantity: true,
+          },
+        },
+      },
+    });
+
+    if (
+      !order ||
+      ![OrderStatus.PENDING_PAYMENT, OrderStatus.PAYMENT_REVIEW].includes(order.status)
+    ) {
+      return "unavailable" as const;
+    }
+
+    // Reclamar la transición evita que una aprobación del administrador y una
+    // cancelación del cliente ocurran a la vez.
+    const claimed = await tx.order.updateMany({
+      where: {
+        id: order.id,
+        status: order.status,
+      },
+      data: {
+        status: OrderStatus.CANCELLED,
+        cancelledAt: now,
+      },
+    });
+
+    if (claimed.count !== 1) {
+      return "unavailable" as const;
+    }
+
+    if (order.status === OrderStatus.PAYMENT_REVIEW) {
+      for (const item of order.items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { stock: { increment: item.quantity } },
+        });
+      }
+    }
+
+    await tx.payment.updateMany({
+      where: {
+        orderId: order.id,
+        status: { in: [PaymentStatus.PENDING, PaymentStatus.UNDER_REVIEW] },
+      },
+      data: {
+        status: PaymentStatus.CANCELLED,
+      },
+    });
+
+    return "cancelled" as const;
+  });
+
+  revalidatePath("/mi-cuenta");
+  revalidatePath("/admin");
+  revalidatePath("/admin/pagos");
+  revalidatePath("/admin/pedidos");
+  revalidatePath(`/pedidos/${parsed.data}`);
+
+  redirect(`/pedidos/${parsed.data}?cancel=${result}`);
 }
