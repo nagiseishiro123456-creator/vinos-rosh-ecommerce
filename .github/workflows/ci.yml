@@ -46,6 +46,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Production dependency audit
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Validate Prisma schema
         run: npx prisma validate
 
