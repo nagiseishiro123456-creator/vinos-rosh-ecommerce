@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 
+import { SiteHeader } from "@/components/site-header";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { SiteHeader } from "@/components/site-header";
 
 export async function StoreHeader() {
   const session = await getServerSession(authOptions);
@@ -11,11 +11,11 @@ export async function StoreHeader() {
   let cartCount = 0;
   if (userId) {
     try {
-      const items = await prisma.cartItem.findMany({
+      const aggregate = await prisma.cartItem.aggregate({
         where: { cart: { userId } },
-        select: { quantity: true },
+        _sum: { quantity: true },
       });
-      cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount = aggregate._sum.quantity ?? 0;
     } catch (error) {
       console.error("HEADER_CART_COUNT_ERROR", error);
     }
