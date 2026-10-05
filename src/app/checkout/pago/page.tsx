@@ -8,6 +8,7 @@ import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -51,7 +52,7 @@ export default async function PaymentPage({ searchParams }: Props) {
     redirect("/checkout");
   }
 
-  const [address, cart] = await Promise.all([
+  const [address, cart, commerce] = await Promise.all([
     prisma.address.findFirst({
       where: {
         id: parsedAddressId.data,
@@ -78,6 +79,7 @@ export default async function PaymentPage({ searchParams }: Props) {
         },
       },
     }),
+    getCommerceSettings(),
   ]);
 
   if (!address || !cart || cart.items.length === 0) {
@@ -108,13 +110,6 @@ export default async function PaymentPage({ searchParams }: Props) {
   const shippingAmount = Number(shippingZone.price);
   const total = subtotal + shippingAmount;
 
-  const yapeEnabled =
-    process.env.PAYMENTS_YAPE_MANUAL_ENABLED === "true" &&
-    Boolean(process.env.YAPE_PHONE || process.env.YAPE_QR_IMAGE_URL);
-  const transferEnabled =
-    process.env.PAYMENTS_TRANSFER_MANUAL_ENABLED === "true" &&
-    Boolean(process.env.BANK_ACCOUNT_NUMBER);
-
   return (
     <main className="checkoutPage">
       <div className="catalogHeaderWrap compact">
@@ -140,14 +135,15 @@ export default async function PaymentPage({ searchParams }: Props) {
             addressId={address.id}
             total={total}
             yape={{
-              enabled: yapeEnabled,
-              phone: process.env.YAPE_PHONE ?? null,
-              qrImageUrl: process.env.YAPE_QR_IMAGE_URL ?? null,
+              enabled: commerce.yape.ready,
+              phone: commerce.yape.phone,
+              qrImageUrl: commerce.yape.qrImageUrl,
             }}
             transfer={{
-              enabled: transferEnabled,
-              label: process.env.BANK_ACCOUNT_LABEL ?? null,
-              accountNumber: process.env.BANK_ACCOUNT_NUMBER ?? null,
+              enabled: commerce.transfer.ready,
+              label: commerce.transfer.label,
+              accountNumber: commerce.transfer.accountNumber,
+              holder: commerce.transfer.holder,
             }}
           />
         </div>
