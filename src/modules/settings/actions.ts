@@ -20,38 +20,35 @@ const optionalHttpsUrl = z.union([
 
 const optionalEmail = z.union([z.literal(""), z.string().trim().email().max(180)]);
 
-const settingsSchema = z
-  .object({
-    contactEmail: optionalEmail,
-    whatsappPhone: optionalPhone,
-    yapeEnabled: z.boolean(),
-    yapePhone: optionalPhone,
-    yapeQrImageUrl: optionalHttpsUrl,
-    transferEnabled: z.boolean(),
-    bankAccountLabel: z.string().trim().max(120),
-    bankAccountNumber: z.string().trim().max(120),
-    bankAccountHolder: z.string().trim().max(160),
-  })
-  .superRefine((data, ctx) => {
-    if (data.yapeEnabled && !data.yapePhone && !data.yapeQrImageUrl) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["yapePhone"],
-        message: "Configura un número o un QR para activar Yape.",
-      });
-    }
+const settingsSchema = z.object({
+  contactEmail: optionalEmail,
+  whatsappPhone: optionalPhone,
+  yapeEnabled: z.boolean(),
+  yapePhone: optionalPhone,
+  yapeQrImageUrl: optionalHttpsUrl,
+  removeYapeQr: z.boolean(),
+  transferEnabled: z.boolean(),
+  bankAccountLabel: z.string().trim().max(120),
+  bankAccountNumber: z.string().trim().max(120),
+  bankAccountHolder: z.string().trim().max(160),
+});
 
-    if (data.transferEnabled && !data.bankAccountNumber) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["bankAccountNumber"],
-        message: "Configura una cuenta para activar transferencias.",
-      });
-    }
-  });
+const allowedQrMimeTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
+const maxQrBytes = 500 * 1024;
 
 function emptyToNull(value: string) {
   return value || null;
+}
+
+async function uploadedQrDataUrl(value: FormDataEntryValue | null) {
+  if (!(value instanceof File) || value.size === 0) return null;
+
+  if (value.size > maxQrBytes || !allowedQrMimeTypes.has(value.type)) {
+    throw new Error("INVALID_QR_FILE");
+  }
+
+  const bytes = Buffer.from(await value.arrayBuffer());
+  return `data:${value.type};base64,${bytes.toString("base64")}`;
 }
 
 export async function updateCommerceSettings(formData: FormData) {
@@ -63,6 +60,7 @@ export async function updateCommerceSettings(formData: FormData) {
     yapeEnabled: formData.get("yapeEnabled") === "on",
     yapePhone: String(formData.get("yapePhone") ?? "").trim(),
     yapeQrImageUrl: String(formData.get("yapeQrImageUrl") ?? "").trim(),
+    removeYapeQr: formData.get("removeYapeQr") === "on",
     transferEnabled: formData.get("transferEnabled") === "on",
     bankAccountLabel: String(formData.get("bankAccountLabel") ?? "").trim(),
     bankAccountNumber: String(formData.get("bankAccountNumber") ?? "").trim(),
@@ -73,12 +71,43 @@ export async function updateCommerceSettings(formData: FormData) {
     redirect("/admin/configuracion?error=invalid");
   }
 
+  const current = await prisma.commerceSettings.findUnique({
+    where: { id: COMMERCE_SETTINGS_ID },
+    select: { yapeQrImageUrl: true },
+  });
+
+  let uploadedQr: string | null;
+  try {
+    uploadedQr = await uploadedQrDataUrl(formData.get("yapeQrFile"));
+  } catch {
+    redirect("/admin/configuracion?error=invalid-qr");
+  }
+
+  let yapeQrImageUrl: string | null;
+  if (parsed.data.removeYapeQr) {
+    yapeQrImageUrl = null;
+  } else if (uploadedQr) {
+    yapeQrImageUrl = uploadedQr;
+  } else if (parsed.data.yapeQrImageUrl) {
+    yapeQrImageUrl = parsed.data.yapeQrImageUrl;
+  } else {
+    yapeQrImageUrl = current?.yapeQrImageUrl ?? process.env.YAPE_QR_IMAGE_URL ?? null;
+  }
+
+  if (parsed.data.yapeEnabled && !parsed.data.yapePhone && !yapeQrImageUrl) {
+    redirect("/admin/configuracion?error=yape-incomplete");
+  }
+
+  if (parsed.data.transferEnabled && !parsed.data.bankAccountNumber) {
+    redirect("/admin/configuracion?error=transfer-incomplete");
+  }
+
   const data = {
     contactEmail: emptyToNull(parsed.data.contactEmail),
     whatsappPhone: emptyToNull(parsed.data.whatsappPhone),
     yapeEnabled: parsed.data.yapeEnabled,
     yapePhone: emptyToNull(parsed.data.yapePhone),
-    yapeQrImageUrl: emptyToNull(parsed.data.yapeQrImageUrl),
+    yapeQrImageUrl,
     transferEnabled: parsed.data.transferEnabled,
     bankAccountLabel: emptyToNull(parsed.data.bankAccountLabel),
     bankAccountNumber: emptyToNull(parsed.data.bankAccountNumber),
