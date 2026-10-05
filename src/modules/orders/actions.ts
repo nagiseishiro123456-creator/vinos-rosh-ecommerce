@@ -303,7 +303,8 @@ export async function cancelPendingOrder(orderNumber: string) {
 
     if (
       !order ||
-      ![OrderStatus.PENDING_PAYMENT, OrderStatus.PAYMENT_REVIEW].includes(order.status)
+      (order.status !== OrderStatus.PENDING_PAYMENT &&
+        order.status !== OrderStatus.PAYMENT_REVIEW)
     ) {
       return "unavailable" as const;
     }
