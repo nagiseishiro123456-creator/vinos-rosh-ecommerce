@@ -1,8 +1,9 @@
+import { compare } from "bcryptjs";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
+import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
 import { loginSchema } from "@/modules/auth/schemas";
 
 export const authOptions: NextAuthOptions = {
@@ -26,9 +27,19 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Correo", type: "email" },
         password: { label: "Contraseña", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const parsed = loginSchema.safeParse(credentials);
         if (!parsed.success) return null;
+
+        const ip = getClientIp(request.headers);
+        const rateLimit = await consumeRateLimit({
+          scope: "auth-login",
+          identifier: `${ip}:${parsed.data.email}`,
+          limit: 20,
+          windowMs: 15 * 60 * 1000,
+        });
+
+        if (!rateLimit.allowed) return null;
 
         const user = await prisma.user.findUnique({
           where: { email: parsed.data.email },
