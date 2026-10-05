@@ -5,6 +5,7 @@ out
 .env.local
 .env.*.local
 coverage
+backups
 *.log
 .DS_Store
 .prisma
