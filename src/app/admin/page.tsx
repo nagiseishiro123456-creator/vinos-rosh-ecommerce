@@ -27,6 +27,7 @@ export default async function AdminPage() {
     { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
     { title: "Reseñas", description: "Moderación de opiniones de compras entregadas y verificadas.", href: "/admin/resenas" },
     { title: "Configuración", description: "Yape, transferencia, WhatsApp y datos públicos sin tocar código.", href: "/admin/configuracion" },
+    { title: "Lanzamiento", description: "Checklist de producción y bloqueos comerciales o legales pendientes.", href: "/admin/lanzamiento" },
   ] as const;
 
   return (
