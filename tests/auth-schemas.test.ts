@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { loginSchema, registerSchema } from "../src/modules/auth/schemas";
+import { loginSchema, passwordSchema, registerSchema } from "../src/modules/auth/schemas";
 
 test("registerSchema accepts a valid Peruvian customer", () => {
   const result = registerSchema.safeParse({
@@ -28,6 +28,14 @@ test("registerSchema rejects weak passwords", () => {
   });
 
   assert.equal(result.success, false);
+});
+
+test("passwordSchema enforces length, uppercase, lowercase and number", () => {
+  assert.equal(passwordSchema.safeParse("Segura123").success, true);
+  assert.equal(passwordSchema.safeParse("segura123").success, false);
+  assert.equal(passwordSchema.safeParse("SEGURA123").success, false);
+  assert.equal(passwordSchema.safeParse("SeguraABC").success, false);
+  assert.equal(passwordSchema.safeParse("Se1").success, false);
 });
 
 test("registerSchema rejects invalid Peruvian mobile numbers", () => {
