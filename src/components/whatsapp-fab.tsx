@@ -1,9 +1,14 @@
 import { MessageCircle } from "lucide-react";
 
 import { getWhatsAppUrl } from "@/lib/site";
+import { getCommerceSettings } from "@/modules/settings/queries";
 
-export function WhatsAppFab() {
-  const href = getWhatsAppUrl();
+export async function WhatsAppFab() {
+  const settings = await getCommerceSettings();
+  const href = getWhatsAppUrl(
+    "Hola, quisiera información sobre Vinos ROSH.",
+    settings.whatsappPhone,
+  );
 
   return (
     <a
