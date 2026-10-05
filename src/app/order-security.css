@@ -1,0 +1,71 @@
+.buttonDanger {
+  color: #fff;
+  background: var(--danger);
+  border-color: var(--danger);
+  box-shadow: 0 10px 26px rgba(158, 41, 55, 0.2);
+}
+
+.buttonDanger:hover {
+  background: #84202d;
+  border-color: #84202d;
+}
+
+.orderCancellationPanel {
+  margin-top: 22px;
+  padding: 20px;
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid rgba(158, 41, 55, 0.18);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.orderCancellationPanel > div {
+  display: grid;
+  gap: 6px;
+}
+
+.orderCancellationPanel strong {
+  color: var(--wine-dark);
+}
+
+.orderCancellationPanel span {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.orderCancellationPanel form,
+.orderCancellationPanel button {
+  width: 100%;
+}
+
+.orderCancelledBanner {
+  margin-bottom: 22px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(35, 109, 70, 0.18);
+  border-radius: 15px;
+  background: rgba(35, 109, 70, 0.08);
+  color: #1d5b3b;
+}
+
+.orderCancelledBanner span {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .orderCancellationPanel {
+    grid-template-columns: 1fr auto;
+    padding: 22px 24px;
+  }
+
+  .orderCancellationPanel form,
+  .orderCancellationPanel button {
+    width: auto;
+  }
+}
