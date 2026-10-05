@@ -8,8 +8,11 @@ export const siteConfig = {
   whatsappPhone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "",
 } as const;
 
-export function getWhatsAppUrl(message = "Hola, quisiera información sobre Vinos ROSH.") {
-  const phone = siteConfig.whatsappPhone.replace(/\D/g, "");
+export function getWhatsAppUrl(
+  message = "Hola, quisiera información sobre Vinos ROSH.",
+  phoneOverride?: string | null,
+) {
+  const phone = (phoneOverride ?? siteConfig.whatsappPhone).replace(/\D/g, "");
   if (!phone) return "#contacto";
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
