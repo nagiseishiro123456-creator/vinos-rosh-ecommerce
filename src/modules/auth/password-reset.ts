@@ -1,12 +1,14 @@
 "use server";
 
-import { createHash, randomBytes } from "crypto";
 import { hash } from "bcryptjs";
+import { createHash, randomBytes } from "crypto";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { sendPasswordResetEmail } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
+import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
 import { passwordSchema } from "@/modules/auth/schemas";
 
 const emailSchema = z.string().trim().toLowerCase().email();
@@ -29,10 +31,25 @@ function getAppUrl() {
   return candidate?.replace(/\/$/, "") || "http://localhost:3000";
 }
 
-export async function requestPasswordReset(formData: FormData) {
-  const parsedEmail = emailSchema.safeParse(formData.get("email"));
+async function currentIp() {
+  return getClientIp(await headers());
+}
 
-  // Respuesta deliberadamente genérica para no revelar si una cuenta existe.
+export async function requestPasswordReset(formData: FormData) {
+  const ip = await currentIp();
+  const rateLimit = await consumeRateLimit({
+    scope: "password-reset-request",
+    identifier: ip,
+    limit: 5,
+    windowMs: 30 * 60 * 1000,
+  });
+
+  // Respuesta deliberadamente genérica: no revelamos existencia de cuenta ni bloqueo.
+  if (!rateLimit.allowed) {
+    redirect("/recuperar-contrasena?sent=1");
+  }
+
+  const parsedEmail = emailSchema.safeParse(formData.get("email"));
   if (!parsedEmail.success) {
     redirect("/recuperar-contrasena?sent=1");
   }
@@ -75,6 +92,18 @@ export async function requestPasswordReset(formData: FormData) {
 }
 
 export async function resetPassword(formData: FormData) {
+  const ip = await currentIp();
+  const rateLimit = await consumeRateLimit({
+    scope: "password-reset-submit",
+    identifier: ip,
+    limit: 10,
+    windowMs: 30 * 60 * 1000,
+  });
+
+  if (!rateLimit.allowed) {
+    redirect("/restablecer-contrasena?error=invalid-token");
+  }
+
   const parsed = resetSchema.safeParse({
     token: formData.get("token"),
     password: formData.get("password"),
