@@ -6,8 +6,15 @@ import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/modules/auth/schemas";
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: false,
   session: {
     strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
+  jwt: {
+    maxAge: 7 * 24 * 60 * 60,
   },
   pages: {
     signIn: "/iniciar-sesion",
@@ -25,15 +32,19 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: parsed.data.email },
+          select: {
+            id: true,
+            email: true,
+            passwordHash: true,
+            firstName: true,
+            lastName: true,
+            role: true,
+          },
         });
 
         if (!user?.passwordHash) return null;
 
-        const passwordIsValid = await compare(
-          parsed.data.password,
-          user.passwordHash,
-        );
-
+        const passwordIsValid = await compare(parsed.data.password, user.passwordHash);
         if (!passwordIsValid) return null;
 
         return {
