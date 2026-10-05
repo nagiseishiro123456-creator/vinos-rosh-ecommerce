@@ -19,6 +19,7 @@ export default async function AdminPage() {
 
   const modules = [
     { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: "/admin/productos" },
+    { title: "Categorías", description: "Organización del catálogo y filtros públicos.", href: "/admin/categorias" },
     { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: "/admin/inventario" },
     { title: "Pedidos", description: "Preparación, envío y confirmación de entrega.", href: "/admin/pedidos" },
     { title: "Clientes", description: "Cuentas registradas, pedidos, direcciones y reseñas.", href: "/admin/clientes" },
