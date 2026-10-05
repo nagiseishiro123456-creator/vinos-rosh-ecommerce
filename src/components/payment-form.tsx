@@ -17,6 +17,7 @@ type Props = {
     enabled: boolean;
     label: string | null;
     accountNumber: string | null;
+    holder: string | null;
   };
 };
 
@@ -105,7 +106,8 @@ export function PaymentForm({ addressId, total, yape, transfer }: Props) {
               <span>Transfiere exactamente</span>
               <strong>{formatPrice(total)}</strong>
               {transfer.label ? <p>{transfer.label}</p> : null}
-              {transfer.accountNumber ? <p>Cuenta: <b>{transfer.accountNumber}</b></p> : null}
+              {transfer.holder ? <p>Titular: <b>{transfer.holder}</b></p> : null}
+              {transfer.accountNumber ? <p>Cuenta / CCI: <b>{transfer.accountNumber}</b></p> : null}
               <small>Luego registra el código de la operación para que el administrador pueda verificarla.</small>
             </div>
           </div>
