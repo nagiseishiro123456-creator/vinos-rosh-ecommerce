@@ -1,6 +1,6 @@
 "use server";
 
-import { OrderStatus, PaymentStatus } from "@prisma/client";
+import { InventoryMovementType, OrderStatus, PaymentStatus } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -108,6 +108,7 @@ export async function rejectManualPayment(paymentId: string) {
           orderId: true,
           order: {
             select: {
+              number: true,
               status: true,
               items: {
                 select: { productId: true, quantity: true },
@@ -155,9 +156,22 @@ export async function rejectManualPayment(paymentId: string) {
       if (paymentClaim.count !== 1) throw stateChanged();
 
       for (const item of payment.order.items) {
-        await tx.product.update({
+        const product = await tx.product.update({
           where: { id: item.productId },
           data: { stock: { increment: item.quantity } },
+          select: { stock: true },
+        });
+
+        await tx.inventoryMovement.create({
+          data: {
+            productId: item.productId,
+            orderId: payment.orderId,
+            actorUserId: adminId,
+            type: InventoryMovementType.ORDER_RELEASE,
+            quantity: item.quantity,
+            stockAfter: product.stock,
+            note: `Liberación por rechazo de pago del pedido ${payment.order.number}`,
+          },
         });
       }
     });
@@ -169,6 +183,7 @@ export async function rejectManualPayment(paymentId: string) {
 
   revalidatePath("/admin/pagos");
   revalidatePath("/admin/pedidos");
+  revalidatePath("/admin/inventario");
   revalidatePath("/admin");
   revalidatePath("/mi-cuenta");
 }
