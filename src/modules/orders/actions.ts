@@ -16,6 +16,7 @@ import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { consumeRateLimit } from "@/lib/rate-limit";
+import { getCommerceSettings } from "@/modules/settings/queries";
 
 const manualOrderSchema = z
   .object({
@@ -44,22 +45,9 @@ const manualOrderSchema = z
 
 const orderNumberSchema = z.string().trim().min(8).max(48);
 
-function isEnabled(name: string) {
-  return process.env[name] === "true";
-}
-
-function providerConfigured(provider: "YAPE_MANUAL" | "TRANSFER_MANUAL") {
-  if (provider === "YAPE_MANUAL") {
-    return (
-      isEnabled("PAYMENTS_YAPE_MANUAL_ENABLED") &&
-      Boolean(process.env.YAPE_PHONE || process.env.YAPE_QR_IMAGE_URL)
-    );
-  }
-
-  return (
-    isEnabled("PAYMENTS_TRANSFER_MANUAL_ENABLED") &&
-    Boolean(process.env.BANK_ACCOUNT_NUMBER)
-  );
+async function providerConfigured(provider: "YAPE_MANUAL" | "TRANSFER_MANUAL") {
+  const settings = await getCommerceSettings();
+  return provider === "YAPE_MANUAL" ? settings.yape.ready : settings.transfer.ready;
 }
 
 async function requireUser(callbackUrl = "/checkout") {
@@ -110,7 +98,7 @@ export async function submitManualOrder(formData: FormData) {
     redirect(`/checkout/pago?addressId=${encodeURIComponent(String(formData.get("addressId") ?? ""))}&error=invalid`);
   }
 
-  if (!providerConfigured(parsed.data.provider)) {
+  if (!(await providerConfigured(parsed.data.provider))) {
     redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=provider`);
   }
 
@@ -199,8 +187,6 @@ export async function submitManualOrder(formData: FormData) {
 
   try {
     createdOrder = await prisma.$transaction(async (tx) => {
-      // Reserva atómica: si un producto ya no tiene stock suficiente, toda la
-      // transacción revierte y no queda un pedido incompleto.
       for (const item of cart.items) {
         const reserved = await tx.product.updateMany({
           where: {
@@ -322,8 +308,6 @@ export async function cancelPendingOrder(orderNumber: string) {
       return "unavailable" as const;
     }
 
-    // Reclamar la transición evita que una aprobación del administrador y una
-    // cancelación del cliente ocurran a la vez.
     const claimed = await tx.order.updateMany({
       where: {
         id: order.id,
