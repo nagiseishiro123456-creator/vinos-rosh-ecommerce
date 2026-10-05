@@ -5,12 +5,17 @@ import { notFound, redirect } from "next/navigation";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { cancelPendingOrder } from "@/modules/orders/actions";
 
 export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ number: string }>;
-  searchParams: Promise<{ created?: string; review?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    review?: string;
+    cancel?: string;
+  }>;
 };
 
 function formatPrice(value: number) {
@@ -93,6 +98,9 @@ export default async function OrderPage({ params, searchParams }: Props) {
   if (!order) notFound();
 
   const payment = order.payments[0];
+  const canCustomerCancel =
+    session.user.role === "CUSTOMER" &&
+    (order.status === "PENDING_PAYMENT" || order.status === "PAYMENT_REVIEW");
 
   return (
     <main className="orderPage">
@@ -105,6 +113,19 @@ export default async function OrderPage({ params, searchParams }: Props) {
           <div className="orderCreatedBanner">
             <strong>Pedido recibido.</strong>
             <span>Reservamos el stock y enviamos el pago a revisión.</span>
+          </div>
+        ) : null}
+
+        {query.cancel === "cancelled" ? (
+          <div className="orderCancelledBanner">
+            <strong>Pedido cancelado.</strong>
+            <span>La reserva de stock fue liberada y el pago pendiente dejó de estar en revisión.</span>
+          </div>
+        ) : null}
+
+        {query.cancel === "unavailable" ? (
+          <div className="checkoutWarningPanel">
+            El pedido cambió de estado y ya no puede cancelarse desde esta pantalla.
           </div>
         ) : null}
 
@@ -170,6 +191,20 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <p>Comprobante solicitado: <strong>{order.receiptType}</strong></p>
           </section>
         </div>
+
+        {canCustomerCancel ? (
+          <section className="orderCancellationPanel">
+            <div>
+              <strong>¿Necesitas cancelar?</strong>
+              <span>
+                Solo puedes hacerlo mientras el pago siga pendiente o en revisión. Si el pago ya fue aprobado, la cancelación y un posible reembolso deben resolverse con el negocio.
+              </span>
+            </div>
+            <form action={cancelPendingOrder.bind(null, order.number)}>
+              <button className="button buttonDanger" type="submit">Cancelar pedido</button>
+            </form>
+          </section>
+        ) : null}
 
         <div className="orderStatusActions">
           <Link className="button buttonDark" href="/productos">Seguir comprando</Link>
