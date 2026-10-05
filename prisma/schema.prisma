@@ -98,6 +98,25 @@ model RateLimitBucket {
   @@index([resetAt])
 }
 
+model CommerceSettings {
+  id String @id @default("default")
+
+  contactEmail  String?
+  whatsappPhone String?
+
+  yapeEnabled    Boolean @default(false)
+  yapePhone      String?
+  yapeQrImageUrl String?
+
+  transferEnabled   Boolean @default(false)
+  bankAccountLabel  String?
+  bankAccountNumber String?
+  bankAccountHolder String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Address {
   id           String   @id @default(cuid())
   userId       String
