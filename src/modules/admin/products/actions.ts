@@ -1,6 +1,6 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
+import { InventoryMovementType, Prisma } from "@prisma/client";
 import type { Route } from "next";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -98,7 +98,7 @@ function productRedirect(path: ProductAdminPath, status: string): never {
 }
 
 export async function createProduct(formData: FormData) {
-  await requireAdmin("/admin/productos/nuevo");
+  const session = await requireAdmin("/admin/productos/nuevo");
 
   const parsed = parseProductForm(formData);
   if (!parsed.success) {
@@ -114,36 +114,54 @@ export async function createProduct(formData: FormData) {
   const active = formData.get("active") === "on";
 
   try {
-    const product = await prisma.product.create({
-      data: {
-        name: data.name,
-        slug,
-        sku: data.sku || null,
-        shortDescription: data.shortDescription || null,
-        description: data.description,
-        price: new Prisma.Decimal(data.price),
-        stock: data.stock,
-        categoryId,
-        featured,
-        active,
-        ...(data.imageUrl
-          ? {
-              images: {
-                create: {
-                  url: data.imageUrl,
-                  alt: data.name,
-                  position: 0,
+    const product = await prisma.$transaction(async (tx) => {
+      const created = await tx.product.create({
+        data: {
+          name: data.name,
+          slug,
+          sku: data.sku || null,
+          shortDescription: data.shortDescription || null,
+          description: data.description,
+          price: new Prisma.Decimal(data.price),
+          stock: data.stock,
+          categoryId,
+          featured,
+          active,
+          ...(data.imageUrl
+            ? {
+                images: {
+                  create: {
+                    url: data.imageUrl,
+                    alt: data.name,
+                    position: 0,
+                  },
                 },
-              },
-            }
-          : {}),
-      },
-      select: { id: true },
+              }
+            : {}),
+        },
+        select: { id: true },
+      });
+
+      if (data.stock > 0) {
+        await tx.inventoryMovement.create({
+          data: {
+            productId: created.id,
+            actorUserId: session.user.id,
+            type: InventoryMovementType.INITIAL_STOCK,
+            quantity: data.stock,
+            stockAfter: data.stock,
+            note: "Stock inicial al crear el producto",
+          },
+        });
+      }
+
+      return created;
     });
 
     revalidatePath("/");
     revalidatePath("/productos");
     revalidatePath("/admin/productos");
+    revalidatePath("/admin/inventario");
     redirect(`/admin/productos/${product.id}?status=created`);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
@@ -154,7 +172,7 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function updateProduct(productId: string, formData: FormData) {
-  await requireAdmin(`/admin/productos/${productId}`);
+  const session = await requireAdmin(`/admin/productos/${productId}`);
 
   const parsedId = productIdSchema.safeParse(productId);
   const parsed = parseProductForm(formData);
@@ -172,6 +190,13 @@ export async function updateProduct(productId: string, formData: FormData) {
 
   try {
     await prisma.$transaction(async (tx) => {
+      const current = await tx.product.findUnique({
+        where: { id: parsedId.data },
+        select: { stock: true },
+      });
+
+      if (!current) throw new Error("PRODUCT_NOT_FOUND");
+
       await tx.product.update({
         where: { id: parsedId.data },
         data: {
@@ -187,6 +212,20 @@ export async function updateProduct(productId: string, formData: FormData) {
           active,
         },
       });
+
+      const stockDelta = data.stock - current.stock;
+      if (stockDelta !== 0) {
+        await tx.inventoryMovement.create({
+          data: {
+            productId: parsedId.data,
+            actorUserId: session.user.id,
+            type: InventoryMovementType.MANUAL_ADJUSTMENT,
+            quantity: stockDelta,
+            stockAfter: data.stock,
+            note: "Ajuste desde edición de producto",
+          },
+        });
+      }
 
       if (data.imageUrl) {
         const firstImage = await tx.productImage.findFirst({
@@ -217,6 +256,7 @@ export async function updateProduct(productId: string, formData: FormData) {
     revalidatePath("/productos");
     revalidatePath(`/productos/${slug}`);
     revalidatePath("/admin/productos");
+    revalidatePath("/admin/inventario");
     revalidatePath(`/admin/productos/${parsedId.data}`);
     redirect(`/admin/productos/${parsedId.data}?status=updated`);
   } catch (error) {
@@ -245,15 +285,41 @@ export async function setProductActive(productId: string, active: boolean) {
 }
 
 export async function updateInventory(productId: string, formData: FormData) {
-  await requireAdmin("/admin/inventario");
+  const session = await requireAdmin("/admin/inventario");
   const parsedId = productIdSchema.safeParse(productId);
   const parsedStock = stockSchema.safeParse({ stock: formData.get("stock") });
   if (!parsedId.success || !parsedStock.success) return;
 
-  const product = await prisma.product.update({
-    where: { id: parsedId.data },
-    data: { stock: parsedStock.data.stock },
-    select: { slug: true },
+  const product = await prisma.$transaction(async (tx) => {
+    const current = await tx.product.findUnique({
+      where: { id: parsedId.data },
+      select: { stock: true, slug: true },
+    });
+    if (!current) throw new Error("PRODUCT_NOT_FOUND");
+
+    const nextStock = parsedStock.data.stock;
+    const delta = nextStock - current.stock;
+
+    const updated = await tx.product.update({
+      where: { id: parsedId.data },
+      data: { stock: nextStock },
+      select: { slug: true },
+    });
+
+    if (delta !== 0) {
+      await tx.inventoryMovement.create({
+        data: {
+          productId: parsedId.data,
+          actorUserId: session.user.id,
+          type: InventoryMovementType.MANUAL_ADJUSTMENT,
+          quantity: delta,
+          stockAfter: nextStock,
+          note: "Ajuste manual desde inventario",
+        },
+      });
+    }
+
+    return updated;
   });
 
   revalidatePath("/");
