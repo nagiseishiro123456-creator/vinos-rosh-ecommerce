@@ -13,12 +13,22 @@ type Props = {
   }>;
 };
 
+function configurationError(code: string | undefined) {
+  if (code === "invalid-qr") return "El QR debe ser PNG, JPG o WebP y pesar como máximo 500 KB.";
+  if (code === "yape-incomplete") return "Para activar Yape registra un número o un código QR.";
+  if (code === "transfer-incomplete") return "Para activar transferencia registra el número de cuenta o CCI.";
+  return "Revisa los datos ingresados antes de guardar.";
+}
+
 export default async function AdminConfigurationPage({ searchParams }: Props) {
   await requireAdmin("/admin/configuracion");
   const [settings, query] = await Promise.all([
     getCommerceSettings(),
     searchParams,
   ]);
+
+  const qrIsHttps = settings.yape.qrImageUrl?.startsWith("https://") ?? false;
+  const hasStoredQr = Boolean(settings.yape.qrImageUrl);
 
   return (
     <main className="shell adminPage adminSettingsPage">
@@ -40,9 +50,7 @@ export default async function AdminConfigurationPage({ searchParams }: Props) {
       ) : null}
 
       {query.error ? (
-        <div className="checkoutError">
-          Revisa los datos. Para activar Yape necesitas un número o QR; para activar transferencia necesitas una cuenta.
-        </div>
+        <div className="checkoutError">{configurationError(query.error)}</div>
       ) : null}
 
       <div className="adminSettingsSource">
@@ -52,7 +60,7 @@ export default async function AdminConfigurationPage({ searchParams }: Props) {
         </span>
       </div>
 
-      <form className="adminSettingsForm" action={updateCommerceSettings}>
+      <form className="adminSettingsForm" action={updateCommerceSettings} encType="multipart/form-data">
         <section className="adminCard adminSettingsCard">
           <p className="eyebrow wine">CONTACTO</p>
           <h2>Atención al cliente</h2>
@@ -106,17 +114,34 @@ export default async function AdminConfigurationPage({ searchParams }: Props) {
               />
             </div>
             <div className="formField">
-              <label htmlFor="yapeQrImageUrl">URL HTTPS del QR</label>
+              <label htmlFor="yapeQrImageUrl">URL HTTPS del QR (opcional)</label>
               <input
                 id="yapeQrImageUrl"
                 name="yapeQrImageUrl"
                 type="url"
-                defaultValue={settings.yape.qrImageUrl ?? ""}
+                defaultValue={qrIsHttps ? settings.yape.qrImageUrl ?? "" : ""}
                 placeholder="https://.../qr-yape.png"
               />
-              <small>Puede dejarse vacío si se muestra únicamente el número.</small>
+              <small>También puedes subir el QR directamente, sin Cloudinary ni otro servicio.</small>
+            </div>
+            <div className="formField full">
+              <label htmlFor="yapeQrFile">Subir QR desde este equipo</label>
+              <input
+                id="yapeQrFile"
+                name="yapeQrFile"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+              />
+              <small>PNG, JPG o WebP · máximo 500 KB. Se guarda en PostgreSQL para mantener costo S/ 0.</small>
             </div>
           </div>
+
+          {hasStoredQr ? (
+            <label className="adminRemoveQr">
+              <input type="checkbox" name="removeYapeQr" />
+              <span>Eliminar el QR guardado al guardar cambios</span>
+            </label>
+          ) : null}
 
           <div className={`adminReadiness ${settings.yape.ready ? "ready" : "pending"}`}>
             {settings.yape.ready ? "Yape está listo para el checkout." : "Yape todavía no tiene datos suficientes para mostrarse al cliente."}
