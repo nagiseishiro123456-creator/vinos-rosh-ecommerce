@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
@@ -10,7 +11,7 @@ type Check = {
   title: string;
   description: string;
   ready: boolean;
-  href?: string;
+  href?: Route;
   blocking?: boolean;
 };
 
