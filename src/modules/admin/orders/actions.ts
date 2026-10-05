@@ -41,10 +41,17 @@ export async function advanceOrderStatus(orderId: string) {
   if (nextStatus === OrderStatus.SHIPPED) data.shippedAt = now;
   if (nextStatus === OrderStatus.DELIVERED) data.deliveredAt = now;
 
-  await prisma.order.update({
-    where: { id: order.id },
+  // El estado anterior forma parte del WHERE para impedir saltos de estado si
+  // dos acciones administrativas llegan simultáneamente.
+  const updated = await prisma.order.updateMany({
+    where: {
+      id: order.id,
+      status: order.status,
+    },
     data,
   });
+
+  if (updated.count !== 1) return;
 
   revalidatePath("/admin/pedidos");
   revalidatePath(`/admin/pedidos/${order.id}`);
