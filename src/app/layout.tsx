@@ -7,6 +7,7 @@ import "./admin-customers.css";
 import "./admin-dashboard.css";
 import "./admin-categories.css";
 import "./admin-settings.css";
+import "./admin-launch.css";
 import "./account-reviews.css";
 import "./account-catalog-tools.css";
 import "./auth-security.css";
