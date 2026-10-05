@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 import { submitManualOrder } from "@/modules/orders/actions";
@@ -94,7 +93,16 @@ export function PaymentForm({ addressId, total, yape, transfer }: Props) {
             </div>
             {yape.qrImageUrl ? (
               <div className="paymentQr">
-                <Image src={yape.qrImageUrl} alt="Código QR de Yape de Vinos ROSH" width={190} height={190} />
+                {/* URL administrable: se usa img para no atar el QR a una lista fija de hosts de next/image. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={yape.qrImageUrl}
+                  alt="Código QR de Yape de Vinos ROSH"
+                  width={190}
+                  height={190}
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
               </div>
             ) : null}
           </div>
