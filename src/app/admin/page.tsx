@@ -30,6 +30,7 @@ export default async function AdminPage() {
     { title: "Contactos", description: "Consultas recibidas desde el formulario público sin servicios externos.", href: "/admin/contactos" },
     { title: "Configuración", description: "Yape, transferencia, WhatsApp y datos públicos sin tocar código.", href: "/admin/configuracion" },
     { title: "Lanzamiento", description: "Checklist de producción y bloqueos comerciales o legales pendientes.", href: "/admin/lanzamiento" },
+    { title: "Respaldo", description: "Exportación manual de datos comerciales para no depender del hosting gratuito.", href: "/admin/respaldo" },
   ] as const;
 
   return (
