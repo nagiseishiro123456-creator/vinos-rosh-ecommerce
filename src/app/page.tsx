@@ -7,14 +7,16 @@ import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { siteConfig } from "@/lib/site";
 import { getFeaturedProducts } from "@/modules/products/queries";
+import { getFeaturedVerifiedReviews } from "@/modules/reviews/queries";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [products, commerce] = await Promise.all([
+  const [products, commerce, verifiedReviews] = await Promise.all([
     getFeaturedProducts(),
     getCommerceSettings(),
+    getFeaturedVerifiedReviews(3),
   ]);
   const showDemoCatalog = process.env.SHOW_DEMO_CATALOG === "true";
 
@@ -158,11 +160,28 @@ export default async function HomePage() {
             </p>
           </div>
         </div>
-        <div className="reviewEmptyState">
-          <div className="stars" aria-hidden="true">★★★★★</div>
-          <strong>Aquí aparecerán las primeras reseñas verificadas.</strong>
-          <span>El sistema ya está preparado para calificaciones de 1 a 5 estrellas.</span>
-        </div>
+        {verifiedReviews.length > 0 ? (
+          <div className="verifiedReviewGrid">
+            {verifiedReviews.map((review) => (
+              <article className="verifiedReviewCard" key={review.id}>
+                <div className="stars" aria-label={`${review.rating} de 5 estrellas`}>
+                  {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                </div>
+                <blockquote>“{review.comment}”</blockquote>
+                <div>
+                  <strong>{review.user.firstName}</strong>
+                  <span>Compra verificada · {review.product.name}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="reviewEmptyState">
+            <div className="stars" aria-hidden="true">★★★★★</div>
+            <strong>Aquí aparecerán las primeras reseñas verificadas.</strong>
+            <span>El sistema ya está preparado para calificaciones de 1 a 5 estrellas.</span>
+          </div>
+        )}
       </section>
 
       <footer className="siteFooter" id="contacto">
