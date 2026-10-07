@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
+import { runMaintenanceFromAdmin } from "@/modules/admin/maintenance/actions";
+import { getManualPaymentHoldMinutes } from "@/modules/orders/hold";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
@@ -28,6 +30,7 @@ export default async function LaunchReadinessPage() {
   const publicUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() ?? "";
   const productionUrlReady = publicUrl.startsWith("https://") && !publicUrl.includes("localhost");
   const paymentReady = settings.yape.ready || settings.transfer.ready;
+  const holdMinutes = getManualPaymentHoldMinutes();
 
   const checks: Check[] = [
     {
@@ -135,6 +138,19 @@ export default async function LaunchReadinessPage() {
       <div className="launchProgress" aria-label={`Preparación ${progress}%`}>
         <span style={{ width: `${progress}%` }} />
       </div>
+
+      <section className="adminCard">
+        <p className="eyebrow wine">MANTENIMIENTO</p>
+        <h2>Reservas de pago manual</h2>
+        <p>
+          Los pedidos en revisión reservan stock durante {holdMinutes} minutos. Puedes ejecutar el mantenimiento sin servicios externos ni cron de pago para liberar reservas vencidas, tokens expirados y límites antiguos.
+        </p>
+        <form action={runMaintenanceFromAdmin}>
+          <button className="button buttonPrimary" type="submit">
+            Ejecutar mantenimiento ahora
+          </button>
+        </form>
+      </section>
 
       <section className="launchChecklist">
         {checks.map((check) => (
