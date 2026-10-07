@@ -1,7 +1,10 @@
 {
   "name": "vinos-rosh-ecommerce",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -26,27 +29,29 @@
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
-    "next": "15.5.27",
+    "next": "16.3.8",
     "next-auth": "^4.24.15",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "tailwind-merge": "^3.3.0",
     "zod": "^4.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "eslint": "^9.31.0",
-    "eslint-config-next": "15.5.27",
-    "postcss": "^8.5.0",
+    "eslint-config-next": "16.3.8",
+    "postcss": "^8.5.23",
     "prisma": "6.19.3",
     "tailwindcss": "^4.1.0",
     "tsx": "^4.20.5",
     "typescript": "^5.8.0"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -1,17 +1,18 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 
-export default function LoginPage() {
+function LoginContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [resetCompleted, setResetCompleted] = useState(false);
 
-  useEffect(() => {
-    setResetCompleted(new URLSearchParams(window.location.search).get("reset") === "success");
-  }, []);
+  const resetCompleted = searchParams.get("reset") === "success";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,12 +27,14 @@ export default function LoginPage() {
     });
 
     if (result?.ok) {
-      const params = new URLSearchParams(window.location.search);
-      const callbackUrl = params.get("callbackUrl");
-      const safeCallback = callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
-        ? callbackUrl
-        : "/mi-cuenta";
-      window.location.href = safeCallback;
+      const callbackUrl = searchParams.get("callbackUrl");
+      const safeCallback: Route =
+        callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
+          ? (callbackUrl as Route)
+          : "/mi-cuenta";
+
+      router.push(safeCallback);
+      router.refresh();
       return;
     }
 
@@ -91,5 +94,13 @@ export default function LoginPage() {
         </form>
       </section>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="authPage" aria-busy="true" />}>
+      <LoginContent />
+    </Suspense>
   );
 }
