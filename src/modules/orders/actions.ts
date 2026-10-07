@@ -109,6 +109,19 @@ export async function submitManualOrder(formData: FormData) {
       ? PaymentProvider.YAPE_MANUAL
       : PaymentProvider.TRANSFER_MANUAL;
 
+  // Evita que una cuenta bloquee inventario creando muchos pedidos manuales
+  // sin terminar la verificación del pago.
+  const pendingManualOrders = await prisma.order.count({
+    where: {
+      userId,
+      status: OrderStatus.PAYMENT_REVIEW,
+    },
+  });
+
+  if (pendingManualOrders >= 3) {
+    redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=pending-limit`);
+  }
+
   const duplicateOperation = await prisma.payment.findFirst({
     where: {
       provider,
