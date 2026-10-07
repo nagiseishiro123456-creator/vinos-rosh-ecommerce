@@ -62,6 +62,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
       total: true,
       receiptType: true,
       createdAt: true,
+      refundedAt: true,
       shippingRecipient: true,
       shippingPhone: true,
       shippingDistrict: true,
@@ -90,6 +91,8 @@ export default async function OrderPage({ params, searchParams }: Props) {
           provider: true,
           status: true,
           operationCode: true,
+          refundReference: true,
+          refundedAt: true,
         },
       },
     },
@@ -126,6 +129,16 @@ export default async function OrderPage({ params, searchParams }: Props) {
         {query.cancel === "unavailable" ? (
           <div className="checkoutWarningPanel">
             El pedido cambió de estado y ya no puede cancelarse desde esta pantalla.
+          </div>
+        ) : null}
+
+        {order.status === "REFUNDED" ? (
+          <div className="orderCancelledBanner">
+            <strong>Pedido reembolsado.</strong>
+            <span>
+              El negocio registró la devolución del dinero
+              {order.refundedAt ? ` el ${order.refundedAt.toLocaleString("es-PE")}` : ""}.
+            </span>
           </div>
         ) : null}
 
@@ -188,6 +201,8 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <h2>{payment?.provider === "YAPE_MANUAL" ? "Yape" : payment?.provider === "TRANSFER_MANUAL" ? "Transferencia" : "Pago"}</h2>
             <p>Estado: <strong>{payment?.status ?? "Sin pago"}</strong></p>
             {payment?.operationCode ? <p>Operación: <strong>{payment.operationCode}</strong></p> : null}
+            {payment?.refundReference ? <p>Referencia de reembolso: <strong>{payment.refundReference}</strong></p> : null}
+            {payment?.refundedAt ? <p>Reembolsado: <strong>{payment.refundedAt.toLocaleString("es-PE")}</strong></p> : null}
             <p>Comprobante solicitado: <strong>{order.receiptType}</strong></p>
           </section>
         </div>
