@@ -40,6 +40,16 @@ function statusLabel(status: string) {
   return labels[status] ?? status;
 }
 
+function eventLabel(type: string, toStatus: string | null) {
+  if (type === "CREATED") return "Pedido recibido";
+  if (type === "PAYMENT_SUBMITTED") return "Pago enviado a revisión";
+  if (type === "PAYMENT_APPROVED") return "Pago confirmado";
+  if (type === "PAYMENT_REJECTED") return "Pago rechazado";
+  if (type === "CANCELLED") return "Pedido cancelado";
+  if (type === "STATUS_CHANGED" && toStatus) return statusLabel(toStatus);
+  return toStatus ? statusLabel(toStatus) : "Actualización del pedido";
+}
+
 export default async function OrderPage({ params, searchParams }: Props) {
   const session = await getServerSession(authOptions);
   const route = await params;
@@ -90,6 +100,16 @@ export default async function OrderPage({ params, searchParams }: Props) {
           provider: true,
           status: true,
           operationCode: true,
+        },
+      },
+      events: {
+        orderBy: { createdAt: "asc" },
+        select: {
+          id: true,
+          type: true,
+          toStatus: true,
+          note: true,
+          createdAt: true,
         },
       },
     },
@@ -191,6 +211,44 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <p>Comprobante solicitado: <strong>{order.receiptType}</strong></p>
           </section>
         </div>
+
+        <section className="orderTimelineCard" aria-labelledby="order-timeline-title">
+          <div className="orderTimelineHeading">
+            <div>
+              <p className="eyebrow wine">SEGUIMIENTO</p>
+              <h2 id="order-timeline-title">Historial del pedido</h2>
+            </div>
+            <span>{order.events.length || 1} actualización(es)</span>
+          </div>
+
+          <ol className="orderTimeline">
+            {order.events.length > 0 ? (
+              order.events.map((event, index) => (
+                <li key={event.id} className={index === order.events.length - 1 ? "current" : ""}>
+                  <span className="orderTimelineDot" aria-hidden="true" />
+                  <div>
+                    <strong>{eventLabel(event.type, event.toStatus)}</strong>
+                    {event.note ? <p>{event.note}</p> : null}
+                    <time dateTime={event.createdAt.toISOString()}>
+                      {event.createdAt.toLocaleString("es-PE")}
+                    </time>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <li className="current">
+                <span className="orderTimelineDot" aria-hidden="true" />
+                <div>
+                  <strong>Pedido registrado</strong>
+                  <p>Este pedido fue creado antes de habilitar el historial detallado.</p>
+                  <time dateTime={order.createdAt.toISOString()}>
+                    {order.createdAt.toLocaleString("es-PE")}
+                  </time>
+                </div>
+              </li>
+            )}
+          </ol>
+        </section>
 
         {canCustomerCancel ? (
           <section className="orderCancellationPanel">
