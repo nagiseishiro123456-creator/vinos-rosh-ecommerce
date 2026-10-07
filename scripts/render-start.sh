@@ -17,9 +17,13 @@ if [[ "${BOOTSTRAP_BUSINESS_DATA:-false}" == "true" ]]; then
 fi
 
 echo "Preparando salida standalone de Next.js..."
-rm -rf .next/standalone/public
 mkdir -p .next/standalone/.next
-cp -R public .next/standalone/public
+
+if [[ -d public ]]; then
+  rm -rf .next/standalone/public
+  cp -R public .next/standalone/public
+fi
+
 rm -rf .next/standalone/.next/static
 cp -R .next/static .next/standalone/.next/static
 
