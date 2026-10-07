@@ -17,6 +17,7 @@ import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { consumeRateLimit } from "@/lib/rate-limit";
+import { releaseStock, reserveStock, StockChangedError } from "@/modules/inventory/stock-service";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 const manualOrderSchema = z
@@ -188,31 +189,13 @@ export async function submitManualOrder(formData: FormData) {
 
   try {
     createdOrder = await prisma.$transaction(async (tx) => {
-      const stockAfterByProduct = new Map<string, number>();
-
-      for (const item of cart.items) {
-        const reserved = await tx.product.updateMany({
-          where: {
-            id: item.product.id,
-            active: true,
-            stock: { gte: item.quantity },
-          },
-          data: {
-            stock: { decrement: item.quantity },
-          },
-        });
-
-        if (reserved.count !== 1) {
-          throw new Error("STOCK_CHANGED");
-        }
-
-        const productAfter = await tx.product.findUnique({
-          where: { id: item.product.id },
-          select: { stock: true },
-        });
-        if (!productAfter) throw new Error("STOCK_CHANGED");
-        stockAfterByProduct.set(item.product.id, productAfter.stock);
-      }
+      const stockAfterByProduct = await reserveStock(
+        tx,
+        cart.items.map((item) => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+        })),
+      );
 
       const order = await tx.order.create({
         data: {
@@ -277,7 +260,7 @@ export async function submitManualOrder(formData: FormData) {
       return { number: order.number };
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "STOCK_CHANGED") {
+    if (error instanceof StockChangedError) {
       redirect("/carrito?error=stock-changed");
     }
 
@@ -348,25 +331,19 @@ export async function cancelPendingOrder(orderNumber: string) {
     }
 
     if (order.status === OrderStatus.PAYMENT_REVIEW) {
-      for (const item of order.items) {
-        const product = await tx.product.update({
-          where: { id: item.productId },
-          data: { stock: { increment: item.quantity } },
-          select: { stock: true },
-        });
+      const stockAfterByProduct = await releaseStock(tx, order.items);
 
-        await tx.inventoryMovement.create({
-          data: {
-            productId: item.productId,
-            orderId: order.id,
-            actorUserId: userId,
-            type: InventoryMovementType.ORDER_RELEASE,
-            quantity: item.quantity,
-            stockAfter: product.stock,
-            note: `Liberación por cancelación del pedido ${order.number}`,
-          },
-        });
-      }
+      await tx.inventoryMovement.createMany({
+        data: order.items.map((item) => ({
+          productId: item.productId,
+          orderId: order.id,
+          actorUserId: userId,
+          type: InventoryMovementType.ORDER_RELEASE,
+          quantity: item.quantity,
+          stockAfter: stockAfterByProduct.get(item.productId) ?? 0,
+          note: `Liberación por cancelación del pedido ${order.number}`,
+        })),
+      });
     }
 
     await tx.payment.updateMany({
