@@ -2,6 +2,7 @@
 
 import {
   InventoryMovementType,
+  OrderEventType,
   OrderStatus,
   PaymentProvider,
   PaymentStatus,
@@ -257,6 +258,19 @@ export async function submitManualOrder(formData: FormData) {
         select: { id: true, number: true },
       });
 
+      await tx.orderEvent.create({
+        data: {
+          orderId: order.id,
+          actorUserId: userId,
+          type: OrderEventType.CREATED,
+          toStatus: OrderStatus.PAYMENT_REVIEW,
+          note:
+            provider === PaymentProvider.YAPE_MANUAL
+              ? "Pedido creado con pago Yape enviado a revisión."
+              : "Pedido creado con transferencia enviada a revisión.",
+        },
+      });
+
       await tx.inventoryMovement.createMany({
         data: cart.items.map((item) => ({
           productId: item.product.id,
@@ -358,6 +372,17 @@ export async function cancelPendingOrder(orderNumber: string) {
         })),
       });
     }
+
+    await tx.orderEvent.create({
+      data: {
+        orderId: order.id,
+        actorUserId: userId,
+        type: OrderEventType.CANCELLED,
+        fromStatus: order.status,
+        toStatus: OrderStatus.CANCELLED,
+        note: "Pedido cancelado por el cliente.",
+      },
+    });
 
     await tx.payment.updateMany({
       where: {
