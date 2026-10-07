@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { prisma } from "@/lib/prisma";
 
 export const COMMERCE_SETTINGS_ID = "default";
@@ -6,7 +8,7 @@ function envEnabled(name: string) {
   return process.env[name] === "true";
 }
 
-export async function getCommerceSettings() {
+export const getCommerceSettings = cache(async function getCommerceSettings() {
   const stored = await prisma.commerceSettings.findUnique({
     where: { id: COMMERCE_SETTINGS_ID },
   });
@@ -56,4 +58,4 @@ export async function getCommerceSettings() {
       holder: null,
     },
   };
-}
+});
