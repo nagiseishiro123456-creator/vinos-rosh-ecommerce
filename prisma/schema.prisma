@@ -57,6 +57,15 @@ enum InventoryMovementType {
   ORDER_RELEASE
 }
 
+enum OrderEventType {
+  CREATED
+  PAYMENT_SUBMITTED
+  PAYMENT_APPROVED
+  PAYMENT_REJECTED
+  STATUS_CHANGED
+  CANCELLED
+}
+
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
@@ -76,6 +85,7 @@ model User {
   reviewedPayments    Payment[]            @relation("PaymentReviewedBy")
   passwordResetTokens PasswordResetToken[]
   inventoryMovements  InventoryMovement[]  @relation("InventoryMovementActor")
+  orderEvents         OrderEvent[]          @relation("OrderEventActor")
 
   @@index([role])
   @@index([createdAt])
@@ -286,6 +296,7 @@ model Order {
   payments           Payment[]
   reviews            Review[]
   inventoryMovements InventoryMovement[]
+  events             OrderEvent[]
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -385,3 +396,23 @@ model InventoryMovement {
   @@index([type])
   @@index([createdAt])
 }
+
+model OrderEvent {
+  id          String         @id @default(cuid())
+  orderId     String
+  actorUserId String?
+  type        OrderEventType
+  fromStatus  OrderStatus?
+  toStatus    OrderStatus?
+  note        String?
+  createdAt   DateTime       @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actor User? @relation("OrderEventActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([orderId, createdAt])
+  @@index([actorUserId])
+  @@index([type])
+  @@index([createdAt])
+}
+
