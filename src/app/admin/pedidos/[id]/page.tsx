@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
-import { advanceOrderStatus } from "@/modules/admin/orders/actions";
+import { advanceOrderStatus, registerManualRefund } from "@/modules/admin/orders/actions";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Pendiente de pago",
@@ -64,6 +64,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
       paidAt: true,
       shippedAt: true,
       deliveredAt: true,
+      refundedAt: true,
       user: { select: { firstName: true, lastName: true, email: true, phone: true } },
       items: {
         orderBy: { createdAt: "asc" },
@@ -86,6 +87,8 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
           amount: true,
           reviewedAt: true,
           paidAt: true,
+          refundedAt: true,
+          refundReference: true,
         },
       },
     },
@@ -95,6 +98,8 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
 
   const advanceAction = advanceOrderStatus.bind(null, order.id);
   const nextLabel = nextActionLabels[order.status];
+  const refundAction = registerManualRefund.bind(null, order.id);
+  const canRefund = order.status === "PAID" || order.status === "PREPARING";
 
   return (
     <main className="shell adminPage adminOrderDetailPage">
@@ -184,6 +189,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
               <span>
                 <strong>{formatPrice(Number(payment.amount))}</strong>
                 <small>{payment.status}</small>
+                {payment.refundReference ? <small>Reembolso: {payment.refundReference}</small> : null}
               </span>
             </div>
           ))}
@@ -199,9 +205,39 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
             <span><strong>Pagado</strong><small>{formatDate(order.paidAt)}</small></span>
             <span><strong>Enviado</strong><small>{formatDate(order.shippedAt)}</small></span>
             <span><strong>Entregado</strong><small>{formatDate(order.deliveredAt)}</small></span>
+            <span><strong>Reembolsado</strong><small>{formatDate(order.refundedAt)}</small></span>
           </div>
           {order.customerNotes ? <p className="adminOrderNote">Nota del cliente: {order.customerNotes}</p> : null}
         </article>
+        {canRefund ? (
+          <article className="adminPanel">
+            <p className="eyebrow wine">REEMBOLSO MANUAL</p>
+            <h2>Registrar dinero ya devuelto</h2>
+            <p>
+              Usa esta acción solo después de devolver el dinero al cliente mediante Yape o transferencia. El sistema marcará el pedido como reembolsado y repondrá el stock porque todavía no fue despachado.
+            </p>
+            <form action={refundAction} className="adminRefundForm">
+              <label>
+                Referencia del reembolso
+                <input
+                  name="refundReference"
+                  type="text"
+                  minLength={3}
+                  maxLength={120}
+                  required
+                  placeholder="Ej. Yape 12345678"
+                />
+              </label>
+              <label className="adminConfirmCheck">
+                <input name="confirm" type="checkbox" value="yes" required />
+                Confirmo que el dinero ya fue devuelto al cliente.
+              </label>
+              <button className="button adminRejectButton" type="submit">
+                Registrar reembolso y reponer stock
+              </button>
+            </form>
+          </article>
+        ) : null}
       </section>
     </main>
   );
