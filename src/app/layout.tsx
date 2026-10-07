@@ -18,6 +18,7 @@ import "./analytics-consent.css";
 import "./mobile-performance.css";
 import "./contact.css";
 import "./history-faq.css";
+import "./admin-backup.css";
 
 const previewMode = process.env.PREVIEW_MODE === "true";
 
