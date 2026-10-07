@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +45,8 @@ export default function RegisterPage() {
     });
 
     if (result?.ok) {
-      window.location.href = "/mi-cuenta";
+      router.push("/mi-cuenta");
+      router.refresh();
       return;
     }
 
