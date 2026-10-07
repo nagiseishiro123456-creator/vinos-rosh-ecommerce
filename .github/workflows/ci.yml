@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: vinos-rosh-ci
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
