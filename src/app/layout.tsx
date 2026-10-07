@@ -17,6 +17,8 @@ import "./order-security.css";
 import "./analytics-consent.css";
 import "./mobile-performance.css";
 
+const previewMode = process.env.PREVIEW_MODE === "true";
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
@@ -27,8 +29,10 @@ export const metadata: Metadata = {
     "Bebidas de uva sin alcohol de producción propia. Conoce la historia, productos y experiencia ROSH.",
   applicationName: "Vinos ROSH",
   robots: {
-    index: true,
-    follow: true,
+    index: !previewMode,
+    follow: !previewMode,
+    noarchive: previewMode,
+    nosnippet: previewMode,
   },
   openGraph: {
     type: "website",
