@@ -1,0 +1,239 @@
+/* Mobile-first polish and low-cost performance/accessibility improvements. */
+
+html {
+  scroll-padding-top: calc(86px + env(safe-area-inset-top));
+}
+
+body {
+  overflow-x: clip;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+.button,
+.iconButton,
+.cartButton,
+.mobileMenuButton,
+.headerLogin {
+  touch-action: manipulation;
+}
+
+.siteHeader {
+  padding-top: env(safe-area-inset-top);
+}
+
+.catalogHeaderWrap.compact {
+  min-height: calc(92px + env(safe-area-inset-top));
+}
+
+.mobileNav {
+  max-height: calc(100dvh - 76px - env(safe-area-inset-top));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+.whatsappFab {
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+@media (max-width: 619px) {
+  .shell {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .siteHeaderInner {
+    min-height: 68px;
+    gap: 12px;
+  }
+
+  .siteBrand strong {
+    font-size: 1.35rem;
+  }
+
+  .headerActions {
+    gap: 6px;
+  }
+
+  .cartButton,
+  .mobileMenuButton {
+    min-width: 46px;
+    min-height: 46px;
+  }
+
+  .homeHero {
+    min-height: max(680px, 100svh);
+  }
+
+  .homeHeroImage {
+    object-position: 62% center;
+  }
+
+  .homeHeroOverlay {
+    background:
+      linear-gradient(0deg, rgba(25, 5, 8, .78) 0%, rgba(31, 6, 10, .38) 56%, rgba(31, 6, 10, .25) 100%),
+      linear-gradient(90deg, rgba(31, 6, 10, .78), rgba(31, 6, 10, .22));
+  }
+
+  .heroCopy {
+    padding-top: calc(118px + env(safe-area-inset-top));
+    padding-bottom: max(96px, calc(76px + env(safe-area-inset-bottom)));
+  }
+
+  .heroCopy h1 {
+    margin-top: 12px;
+    font-size: clamp(3.15rem, 16vw, 4.6rem);
+    line-height: .92;
+  }
+
+  .heroLead {
+    max-width: 34rem;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .heroActions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: min(100%, 420px);
+  }
+
+  .heroActions .button {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  .benefitStrip {
+    margin-top: -30px;
+    border-radius: 16px;
+  }
+
+  .benefitStrip article {
+    min-height: 88px;
+    padding: 16px;
+  }
+
+  .storeSection,
+  .reviewsSection {
+    padding-block: 72px;
+  }
+
+  .storySection {
+    padding-block: 72px 88px;
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+
+  .sectionHeading .textLink {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .productCard {
+    border-radius: 18px;
+  }
+
+  .productImageWrap {
+    aspect-ratio: 1 / .9;
+  }
+
+  .productCardBody {
+    padding: 20px;
+  }
+
+  .storyImageLarge {
+    min-height: 390px;
+  }
+
+  .storySeal {
+    right: 8px;
+    bottom: -38px;
+    width: 142px;
+    height: 142px;
+  }
+
+  .storyCopy {
+    padding-top: 20px;
+  }
+
+  .footerGrid {
+    gap: 30px;
+  }
+
+  .siteFooter {
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
+  }
+
+  .whatsappFab {
+    min-width: 52px;
+    min-height: 52px;
+    padding: 0 15px;
+  }
+
+  .checkoutHeading h1,
+  .orderStatusHeader h1 {
+    font-size: clamp(2.45rem, 12vw, 3.6rem);
+  }
+
+  .paymentOption,
+  .receiptOptions label,
+  .checkoutAddressCard {
+    min-height: 64px;
+  }
+
+  .paymentSection .fullButton {
+    min-height: 54px;
+  }
+
+  .paymentQr {
+    margin-inline: auto;
+  }
+
+  .orderStatusActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .orderStatusActions .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+@supports (content-visibility: auto) {
+  .storeSection,
+  .storySection,
+  .reviewsSection,
+  .siteFooter {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
+  }
+}
