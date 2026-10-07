@@ -11,7 +11,7 @@ services:
     plan: free
     repo: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce
     autoDeployTrigger: checksPass
-    buildCommand: npm install && npx prisma generate && npm run build
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build
     startCommand: bash scripts/render-start.sh
     healthCheckPath: /api/health
     envVars:
