@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { SignOutButton } from "@/components/sign-out-button";
 
 type SiteHeaderProps = {
   cartCount?: number;
@@ -79,9 +80,11 @@ export function SiteHeader({
               <ShoppingBag size={19} aria-hidden="true" />
               {cartCount > 0 ? <span className="cartCount" aria-hidden="true">{cartCount}</span> : null}
             </Link>
-            <Link className="headerLogin desktopOnly" href={isAuthenticated ? accountHref : "/iniciar-sesion"}>
-              {isAuthenticated ? (isAdmin ? "Administrar" : "Mi cuenta") : "Iniciar sesión"}
-            </Link>
+            {isAuthenticated ? (
+              <SignOutButton className="headerLogin desktopOnly" />
+            ) : (
+              <Link className="headerLogin desktopOnly" href="/iniciar-sesion">Iniciar sesión</Link>
+            )}
             <button
               className="mobileMenuButton"
               type="button"
@@ -103,7 +106,7 @@ export function SiteHeader({
             <Link href="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
             {isAdmin ? <Link href="/admin" onClick={() => setMenuOpen(false)}>Administración</Link> : null}
             <Link href="/mi-cuenta" onClick={() => setMenuOpen(false)}>Mi cuenta</Link>
-            {!isAuthenticated ? <Link href="/iniciar-sesion" onClick={() => setMenuOpen(false)}>Iniciar sesión</Link> : null}
+            {isAuthenticated ? <SignOutButton className="mobileSignOut" /> : <Link href="/iniciar-sesion" onClick={() => setMenuOpen(false)}>Iniciar sesión</Link>}
           </nav>
         ) : null}
       </header>

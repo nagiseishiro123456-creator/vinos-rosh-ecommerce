@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { SignOutButton } from "@/components/sign-out-button";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -99,6 +100,7 @@ export default async function AccountPage() {
           <div className="accountHeadingActions">
             <Link className="button buttonGhostLight" href="/mi-cuenta/perfil">Editar perfil</Link>
             {session.user.role === "ADMIN" ? <Link className="button buttonPrimary" href="/admin">Ir al panel admin</Link> : null}
+            <SignOutButton />
           </div>
         </div>
 

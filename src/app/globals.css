@@ -113,6 +113,9 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   font-weight: 900;
 }
 .headerLogin { min-height: 42px; padding: 0 17px; display: inline-flex; align-items: center; border-radius: 999px; background: white; color: var(--wine-dark); font-weight: 800; font-size: .82rem; }
+.signOutButton { gap: 8px; white-space: nowrap; }
+.signOutButton:disabled { opacity: .65; cursor: wait; }
+.headerLogin.signOutButton { border: 0; }
 .desktopOnly { display: none; }
 .mobileMenuButton { border: 0; }
 .mobileNav {
@@ -122,6 +125,7 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   border-top: 1px solid rgba(255,255,255,.1);
 }
 .mobileNav a { padding: 13px 8px; border-bottom: 1px solid rgba(255,255,255,.08); font-weight: 700; }
+.mobileSignOut { min-height: 48px; display: flex; align-items: center; padding: 13px 8px; border: 0; border-bottom: 1px solid rgba(255,255,255,.08); background: transparent; color: inherit; font-weight: 700; text-align: left; }
 
 /* Home hero */
 .homeHero { position: relative; min-height: 720px; overflow: hidden; color: white; display: flex; align-items: flex-end; }

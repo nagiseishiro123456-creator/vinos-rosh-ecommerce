@@ -27,6 +27,18 @@
   background: white;
 }
 
+.adminSessionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 24px;
+}
+
+.adminSessionBar + .adminPage {
+  padding-top: 32px;
+}
+
 .adminStatsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
