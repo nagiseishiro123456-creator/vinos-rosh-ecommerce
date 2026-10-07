@@ -322,3 +322,53 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   .desktopNav { margin-left: auto; }
   .heroCopy h1 { max-width: 820px; }
 }
+
+
+.verifiedReviewGrid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.verifiedReviewCard {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  min-height: 250px;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(184, 148, 93, 0.12), transparent 32%),
+    #fff;
+  box-shadow: 0 14px 44px rgba(70, 35, 27, 0.07);
+}
+
+.verifiedReviewCard blockquote {
+  margin: 0;
+  color: var(--ink);
+  font-family: Georgia, serif;
+  font-size: 1.12rem;
+  line-height: 1.7;
+}
+
+.verifiedReviewCard > div:last-child {
+  display: grid;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.verifiedReviewCard > div:last-child span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .verifiedReviewGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .verifiedReviewCard {
+    min-height: auto;
+  }
+}
