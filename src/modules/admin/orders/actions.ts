@@ -1,6 +1,6 @@
 "use server";
 
-import { OrderStatus } from "@prisma/client";
+import { OrderEventType, OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -16,7 +16,7 @@ const allowedTransitions: Partial<Record<OrderStatus, OrderStatus>> = {
 };
 
 export async function advanceOrderStatus(orderId: string) {
-  await requireAdmin("/admin/pedidos");
+  const session = await requireAdmin("/admin/pedidos");
 
   const parsed = orderIdSchema.safeParse(orderId);
   if (!parsed.success) return;
@@ -41,17 +41,40 @@ export async function advanceOrderStatus(orderId: string) {
   if (nextStatus === OrderStatus.SHIPPED) data.shippedAt = now;
   if (nextStatus === OrderStatus.DELIVERED) data.deliveredAt = now;
 
-  // El estado anterior forma parte del WHERE para impedir saltos de estado si
-  // dos acciones administrativas llegan simultáneamente.
-  const updated = await prisma.order.updateMany({
-    where: {
-      id: order.id,
-      status: order.status,
-    },
-    data,
+  // El cambio de estado y su evento de auditoría se guardan en la misma
+  // transacción. El estado anterior forma parte del WHERE para impedir saltos
+  // si dos acciones administrativas llegan simultáneamente.
+  const changed = await prisma.$transaction(async (tx) => {
+    const updated = await tx.order.updateMany({
+      where: {
+        id: order.id,
+        status: order.status,
+      },
+      data,
+    });
+
+    if (updated.count !== 1) return false;
+
+    await tx.orderEvent.create({
+      data: {
+        orderId: order.id,
+        actorUserId: session.user.id,
+        type: OrderEventType.STATUS_CHANGED,
+        fromStatus: order.status,
+        toStatus: nextStatus,
+        note:
+          nextStatus === OrderStatus.PREPARING
+            ? "Pedido marcado como en preparación."
+            : nextStatus === OrderStatus.SHIPPED
+              ? "Pedido marcado como enviado."
+              : "Pedido marcado como entregado.",
+      },
+    });
+
+    return true;
   });
 
-  if (updated.count !== 1) return;
+  if (!changed) return;
 
   revalidatePath("/admin/pedidos");
   revalidatePath(`/admin/pedidos/${order.id}`);
