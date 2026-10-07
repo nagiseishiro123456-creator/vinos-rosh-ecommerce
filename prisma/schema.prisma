@@ -277,6 +277,7 @@ model Order {
   shippedAt   DateTime?
   deliveredAt DateTime?
   cancelledAt DateTime?
+  refundedAt  DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -321,11 +322,13 @@ model Payment {
   currency          String          @default("PEN")
   externalReference String?
   operationCode     String?
+  refundReference   String?
   proofUrl          String?
   notes             String?
   reviewedById      String?
   paidAt            DateTime?
   reviewedAt        DateTime?
+  refundedAt        DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
