@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -27,9 +28,9 @@ function LoginContent() {
 
     if (result?.ok) {
       const callbackUrl = searchParams.get("callbackUrl");
-      const safeCallback =
+      const safeCallback: Route =
         callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
-          ? callbackUrl
+          ? (callbackUrl as Route)
           : "/mi-cuenta";
 
       router.push(safeCallback);
