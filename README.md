@@ -1,5 +1,8 @@
 # Vinos ROSH Ecommerce
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce)
+
+
 E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular sobre Next.js App Router.
 
 ## Stack
@@ -76,5 +79,18 @@ npm run prisma:studio
 ## Modelo principal
 `User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `Review`.
 
+## Preview gratuito en Render
+
+El repositorio incluye un `render.yaml` que crea:
+- 1 Web Service Free para Next.js;
+- 1 Render Postgres Free;
+- migraciones Prisma automáticas al arrancar;
+- health check en `/api/health`;
+- pagos externos desactivados por defecto.
+
+El botón **Deploy to Render** de arriba usa esta configuración.
+
+> Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
+
 ## Próximo hito
-Validar localmente migración + registro + login + sesión + ADMIN y luego avanzar al catálogo real y al storefront premium basado en el prototipo aprobado.
+Seguir puliendo storefront premium, UX móvil y cargar contenido real validado por el cliente.
