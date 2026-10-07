@@ -1,0 +1,40 @@
+# Preview gratuito de Vinos ROSH en Render.
+# IMPORTANTE:
+# - El servicio web Free puede dormir tras inactividad.
+# - Render Postgres Free expira a los 30 días.
+# - Esto es para validación/demostración, no producción definitiva.
+
+services:
+  - type: web
+    name: vinos-rosh-ecommerce-preview
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: bash scripts/render-start.sh
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vinos-rosh-preview-db
+          property: connectionString
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: SHOW_DEMO_CATALOG
+        value: "true"
+      - key: PAYMENTS_CULQI_ENABLED
+        value: "false"
+      - key: PAYMENTS_YAPE_MANUAL_ENABLED
+        value: "false"
+      - key: PAYMENTS_TRANSFER_MANUAL_ENABLED
+        value: "false"
+      - key: MANUAL_PAYMENT_HOLD_MINUTES
+        value: "120"
+
+databases:
+  - name: vinos-rosh-preview-db
+    plan: free
+    postgresMajorVersion: "16"
+    databaseName: vinos_rosh
+    user: vinos_rosh
