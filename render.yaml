@@ -35,6 +35,8 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
       - key: SHOW_DEMO_CATALOG
         value: "true"
+      - key: PREVIEW_MODE
+        value: "true"
       - key: PAYMENTS_CULQI_ENABLED
         value: "false"
       - key: PAYMENTS_YAPE_MANUAL_ENABLED
