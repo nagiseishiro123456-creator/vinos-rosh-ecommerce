@@ -1,4 +1,4 @@
-import { Grape, Leaf, ShieldCheck, Truck } from "lucide-react";
+import { BadgeCheck, Grape, HeartHandshake, Leaf, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -73,6 +73,40 @@ export default async function HomePage() {
         </article>
       </section>
 
+      <section className="brandPromiseSection shell" aria-labelledby="promesa-rosh">
+        <div className="brandPromiseIntro">
+          <p className="eyebrow wine">LA EXPERIENCIA ROSH</p>
+          <h2 id="promesa-rosh">Una compra cuidada desde el origen hasta la entrega.</h2>
+          <p>
+            La tienda está diseñada para mostrar información clara, conservar la trazabilidad
+            del producto y acompañar cada pedido sin perder el carácter familiar de la marca.
+          </p>
+        </div>
+
+        <div className="brandPromiseGrid">
+          <article>
+            <span><Sparkles size={20} aria-hidden="true" /></span>
+            <strong>Origen cuidado</strong>
+            <p>Producción propia y una historia ligada al cultivo de la uva.</p>
+          </article>
+          <article>
+            <span><Leaf size={20} aria-hidden="true" /></span>
+            <strong>Sin alcohol</strong>
+            <p>Una propuesta de uva pensada para compartir y disfrutar.</p>
+          </article>
+          <article>
+            <span><ShieldCheck size={20} aria-hidden="true" /></span>
+            <strong>Compra transparente</strong>
+            <p>Stock, envío y estado del pedido visibles antes y después de comprar.</p>
+          </article>
+          <article>
+            <span><BadgeCheck size={20} aria-hidden="true" /></span>
+            <strong>Opiniones verificadas</strong>
+            <p>Las reseñas públicas nacen únicamente de pedidos realmente entregados.</p>
+          </article>
+        </div>
+      </section>
+
       <section className="storeSection shell" id="productos">
         <div className="sectionHeading">
           <div>
@@ -145,6 +179,28 @@ export default async function HomePage() {
               conservar una comunicación auténtica y coherente con el origen de la marca.
             </p>
             <Link className="button buttonDark" href="/#contacto">Conocer más</Link>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="homeCtaSection">
+        <div className="homeCtaBackdrop" aria-hidden="true" />
+        <div className="homeCtaInner shell">
+          <div className="homeCtaIcon" aria-hidden="true">
+            <HeartHandshake size={28} />
+          </div>
+          <div>
+            <p className="eyebrow">DE LA FAMILIA A TU MESA</p>
+            <h2>Conoce la propuesta ROSH y acompaña su siguiente etapa.</h2>
+            <p>
+              Estamos preparando el catálogo definitivo con fotografías, precios y stock reales.
+              La experiencia de compra ya está lista para crecer con la marca.
+            </p>
+          </div>
+          <div className="homeCtaActions">
+            <Link className="button buttonLight" href="/productos">Explorar catálogo</Link>
+            <Link className="button buttonGhost" href="/mi-cuenta">Mi cuenta</Link>
           </div>
         </div>
       </section>
