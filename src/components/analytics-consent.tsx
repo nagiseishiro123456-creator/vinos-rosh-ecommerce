@@ -1,33 +1,49 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 const consentKey = "rosh-analytics-consent-v1";
+const consentEvent = "rosh-analytics-consent-change";
 
 type Consent = "accepted" | "rejected" | null;
+type ConsentSnapshot = Consent | "loading";
+
+function readConsent(): Consent {
+  const stored = window.localStorage.getItem(consentKey);
+  return stored === "accepted" || stored === "rejected" ? stored : null;
+}
+
+function subscribeConsent(callback: () => void) {
+  function handleChange() {
+    callback();
+  }
+
+  window.addEventListener("storage", handleChange);
+  window.addEventListener(consentEvent, handleChange);
+
+  return () => {
+    window.removeEventListener("storage", handleChange);
+    window.removeEventListener(consentEvent, handleChange);
+  };
+}
 
 export function AnalyticsConsent() {
   const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim() ?? "";
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() ?? "";
   const enabled = Boolean(gaId || metaPixelId);
-  const [consent, setConsent] = useState<Consent>(null);
-  const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!enabled) return;
-    const stored = window.localStorage.getItem(consentKey);
-    if (stored === "accepted" || stored === "rejected") {
-      setConsent(stored);
-    }
-    setLoaded(true);
-  }, [enabled]);
+  const consent = useSyncExternalStore<ConsentSnapshot>(
+    subscribeConsent,
+    readConsent,
+    () => "loading",
+  );
 
-  if (!enabled || !loaded) return null;
+  if (!enabled || consent === "loading") return null;
 
   function decide(value: Exclude<Consent, null>) {
     window.localStorage.setItem(consentKey, value);
-    setConsent(value);
+    window.dispatchEvent(new Event(consentEvent));
   }
 
   return (
