@@ -66,7 +66,7 @@ export function SiteHeader({
           <nav className="desktopNav" aria-label="Navegación principal">
             <Link href="/#inicio">Inicio</Link>
             <Link href="/productos">Productos</Link>
-            <Link href="/#historia">Nuestra historia</Link>
+            <Link href="/nuestra-historia">Nuestra historia</Link>
             <Link href="/contacto">Contacto</Link>
           </nav>
 
@@ -101,7 +101,7 @@ export function SiteHeader({
           <nav id="mobile-navigation" className="mobileNav" aria-label="Navegación móvil">
             <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
             <Link href="/productos" onClick={() => setMenuOpen(false)}>Buscar y ver productos</Link>
-            <Link href="/#historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
+            <Link href="/nuestra-historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
             <Link href="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
             {isAdmin ? <Link href="/admin" onClick={() => setMenuOpen(false)}>Administración</Link> : null}
             <Link href="/mi-cuenta" onClick={() => setMenuOpen(false)}>Mi cuenta</Link>
