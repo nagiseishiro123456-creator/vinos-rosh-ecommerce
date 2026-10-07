@@ -67,7 +67,7 @@ export function SiteHeader({
             <Link href="/#inicio">Inicio</Link>
             <Link href="/productos">Productos</Link>
             <Link href="/#historia">Nuestra historia</Link>
-            <Link href="/#contacto">Contacto</Link>
+            <Link href="/contacto">Contacto</Link>
           </nav>
 
           <div className="headerActions">
@@ -102,7 +102,7 @@ export function SiteHeader({
             <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
             <Link href="/productos" onClick={() => setMenuOpen(false)}>Buscar y ver productos</Link>
             <Link href="/#historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
-            <Link href="/#contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
+            <Link href="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
             {isAdmin ? <Link href="/admin" onClick={() => setMenuOpen(false)}>Administración</Link> : null}
             <Link href="/mi-cuenta" onClick={() => setMenuOpen(false)}>Mi cuenta</Link>
             {!isAuthenticated ? <Link href="/iniciar-sesion" onClick={() => setMenuOpen(false)}>Iniciar sesión</Link> : null}
