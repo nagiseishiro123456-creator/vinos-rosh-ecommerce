@@ -1,0 +1,365 @@
+.historyPage,
+.faqPage {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.historyHero {
+  position: relative;
+  min-height: 690px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  color: white;
+}
+
+.historyHero > img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.historyHeroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(29, 5, 9, .88), rgba(42, 7, 12, .56) 50%, rgba(42, 7, 12, .18)),
+    linear-gradient(0deg, rgba(24, 4, 7, .54), transparent 55%);
+}
+
+.historyHeroCopy {
+  position: relative;
+  z-index: 2;
+  padding-block: 170px 94px;
+}
+
+.historyHeroCopy h1 {
+  max-width: 890px;
+  margin: 12px 0 18px;
+  font-size: clamp(3.1rem, 8vw, 6.5rem);
+  line-height: .94;
+}
+
+.historyHeroCopy > p:last-child {
+  max-width: 670px;
+  margin: 0;
+  color: #f3e6e0;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.historyIntro {
+  padding-block: 94px;
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.historyIntro h2,
+.historyValuesHeading h2,
+.historyProcessCopy h2,
+.historyClosing h2,
+.faqIntro h2 {
+  margin: 8px 0 0;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+}
+
+.historyIntroCopy {
+  display: grid;
+  gap: 16px;
+}
+
+.historyIntroCopy p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.historyValuesSection {
+  padding-block: 92px;
+  background: var(--ivory);
+}
+
+.historyValuesHeading {
+  max-width: 760px;
+  margin-bottom: 34px;
+}
+
+.historyValueGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.historyValueGrid article {
+  min-height: 230px;
+  padding: 24px;
+  display: grid;
+  align-content: start;
+  gap: 13px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid rgba(107,15,26,.08);
+  box-shadow: 0 14px 42px rgba(62,10,15,.05);
+}
+
+.historyValueGrid article > span,
+.historySteps article > span,
+.faqIntro > span {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--wine);
+  background: #f7e9eb;
+}
+
+.historyValueGrid strong {
+  margin-top: 5px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+}
+
+.historyValueGrid p,
+.historySteps p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: .9rem;
+}
+
+.historyProcess {
+  padding-block: 104px;
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.historyProcessVisual {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.historyProcessVisual img {
+  object-fit: cover;
+}
+
+.historyProcessCopy h2 {
+  margin-bottom: 28px;
+}
+
+.historySteps {
+  display: grid;
+  gap: 14px;
+}
+
+.historySteps article {
+  padding: 17px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fffdf9;
+}
+
+.historySteps strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.historyClosing {
+  position: relative;
+  overflow: hidden;
+  color: white;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(184,148,93,.24), transparent 28%),
+    var(--wine-dark);
+}
+
+.historyClosingInner {
+  min-height: 320px;
+  padding-block: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 34px;
+}
+
+.historyClosingInner > div:first-child {
+  max-width: 760px;
+}
+
+.historyClosing h2 {
+  margin-top: 8px;
+}
+
+.historyClosingActions {
+  min-width: 190px;
+  display: grid;
+  gap: 10px;
+}
+
+.faqShell {
+  padding-block: 78px 110px;
+}
+
+.faqIntro {
+  max-width: 830px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 34px;
+}
+
+.faqList {
+  max-width: 900px;
+  display: grid;
+  gap: 12px;
+}
+
+.faqList details {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 10px 32px rgba(62,10,15,.04);
+}
+
+.faqList summary {
+  min-height: 66px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 800;
+}
+
+.faqList summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqList details[open] summary svg {
+  transform: rotate(90deg);
+}
+
+.faqList summary svg {
+  flex: 0 0 auto;
+  color: var(--wine);
+  transition: transform .2s ease;
+}
+
+.faqList details > p {
+  margin: 0;
+  padding: 0 20px 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.faqContact {
+  max-width: 900px;
+  margin-top: 28px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-radius: 18px;
+  color: white;
+  background: var(--wine-dark);
+}
+
+.faqContact > div {
+  display: grid;
+  gap: 4px;
+}
+
+.faqContact span {
+  color: #ead9d6;
+  font-size: .86rem;
+}
+
+@media (max-width: 900px) {
+  .historyIntro,
+  .historyProcess {
+    grid-template-columns: 1fr;
+  }
+
+  .historyValueGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .historyClosingInner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .historyClosingActions {
+    width: min(100%, 420px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 619px) {
+  .historyHero {
+    min-height: max(650px, 92svh);
+  }
+
+  .historyHeroCopy {
+    padding-block: 145px 92px;
+  }
+
+  .historyHeroCopy h1 {
+    font-size: clamp(3rem, 14vw, 4.3rem);
+  }
+
+  .historyIntro,
+  .historyValuesSection,
+  .historyProcess,
+  .faqShell {
+    padding-block: 70px;
+  }
+
+  .historyValueGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .historyValueGrid article {
+    min-height: auto;
+  }
+
+  .historyProcessVisual {
+    min-height: 390px;
+  }
+
+  .historyClosingInner {
+    padding-block: 62px 104px;
+  }
+
+  .historyClosingActions {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .historyClosingActions .button,
+  .faqContact .button {
+    width: 100%;
+  }
+
+  .faqIntro {
+    flex-direction: column;
+  }
+
+  .faqContact {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
