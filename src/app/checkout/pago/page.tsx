@@ -8,6 +8,7 @@ import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getManualPaymentHoldMinutes } from "@/modules/orders/hold";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
@@ -36,9 +37,6 @@ function errorMessage(error: string | undefined) {
   }
   if (error === "too-many") {
     return "Se detectaron demasiados intentos seguidos. Espera unos minutos antes de volver a enviar el pedido.";
-  }
-  if (error === "pending-limit") {
-    return "Tienes varios pedidos con pago todavía en revisión. Cancela uno que ya no necesites o espera a que el administrador los revise antes de crear otro.";
   }
   return "Revisa los datos del pago y del comprobante.";
 }
@@ -112,6 +110,7 @@ export default async function PaymentPage({ searchParams }: Props) {
   );
   const shippingAmount = Number(shippingZone.price);
   const total = subtotal + shippingAmount;
+  const holdMinutes = getManualPaymentHoldMinutes();
 
   return (
     <main className="checkoutPage">
@@ -133,6 +132,13 @@ export default async function PaymentPage({ searchParams }: Props) {
           {params.error ? (
             <div className="checkoutError">{errorMessage(params.error)}</div>
           ) : null}
+
+          <div className="checkoutWarningPanel">
+            <strong>Reserva temporal de stock: {holdMinutes} minutos.</strong>
+            <p>
+              Si el pago no es validado dentro de ese periodo, el sistema puede cancelar la reserva durante el mantenimiento y devolver las unidades al inventario.
+            </p>
+          </div>
 
           <PaymentForm
             addressId={address.id}
