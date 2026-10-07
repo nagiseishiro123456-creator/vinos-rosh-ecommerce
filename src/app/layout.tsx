@@ -14,6 +14,7 @@ import "./account-reviews.css";
 import "./account-catalog-tools.css";
 import "./auth-security.css";
 import "./order-security.css";
+import "./order-timeline.css";
 import "./analytics-consent.css";
 import "./mobile-performance.css";
 
