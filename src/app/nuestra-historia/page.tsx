@@ -10,7 +10,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Nuestra historia",
   description:
-    "Conoce el origen familiar de ROSH, su vínculo con la uva y la historia que inspira la marca.",
+    "El legado de Víctor Rosh: del colportaje y los caminos rurales al cultivo familiar de la uva.",
 };
 
 export default function HistoryPage() {
@@ -19,7 +19,7 @@ export default function HistoryPage() {
       <section className="historyHero">
         <Image
           src={`${siteConfig.prototypeAssetsBase}/story.jpg`}
-          alt="Uvas y viñedo vinculados a la historia de ROSH"
+          alt="Uvas y viñedo vinculados al legado de Víctor Rosh"
           fill
           priority
           sizes="100vw"
@@ -27,30 +27,29 @@ export default function HistoryPage() {
         <div className="historyHeroOverlay" aria-hidden="true" />
         <StoreHeader />
         <div className="historyHeroCopy shell">
-          <p className="eyebrow">NUESTRA HISTORIA</p>
-          <h1>Una marca que nace de familia, esfuerzo y propósito.</h1>
+          <p className="eyebrow">EL LEGADO DE VÍCTOR ROSH</p>
+          <h1>De los caminos de tierra al fruto de la vid.</h1>
           <p>
-            ROSH reúne una historia vinculada a Víctor Rosh, al colportaje, al trabajo familiar
-            y a una pasión que fue creciendo alrededor del cultivo de la uva.
+            Toda gran historia comienza con paciencia. El origen de ROSH se encuentra en los
+            caminos rurales recorridos por Víctor Rosh, en el trabajo familiar y en una forma
+            de mirar la tierra con perseverancia y propósito.
           </p>
         </div>
       </section>
 
       <section className="historyIntro shell">
         <div>
-          <p className="eyebrow wine">EL ORIGEN</p>
-          <h2>Antes del producto, estuvo la historia.</h2>
+          <p className="eyebrow wine">1968 — 1975</p>
+          <h2>Los años de colportaje.</h2>
         </div>
         <div className="historyIntroCopy">
           <p>
-            La identidad de ROSH no se construye únicamente alrededor de una botella. Su punto de
-            partida es una historia familiar que queremos conservar con respeto y contar de manera
-            auténtica.
+            A finales de la década de 1960, Víctor trabajaba como colportor. Viajaba de pueblo
+            en pueblo llevando libros, enciclopedias y textos de formación a comunidades alejadas.
           </p>
           <p>
-            Por eso esta página está preparada para crecer con fotografías, fechas, recuerdos y
-            testimonios que la familia decida compartir. No añadimos hechos que todavía no hayan
-            sido validados por ellos.
+            Aquellos años fortalecieron tres valores que la familia asocia hoy con ROSH:
+            perseverancia, escucha y respeto por los ciclos de la naturaleza.
           </p>
         </div>
       </section>
@@ -58,30 +57,36 @@ export default function HistoryPage() {
       <section className="historyValuesSection">
         <div className="shell">
           <div className="historyValuesHeading">
-            <p className="eyebrow wine">LO QUE QUEREMOS TRANSMITIR</p>
-            <h2>Origen, trabajo y una experiencia hecha para compartir.</h2>
+            <p className="eyebrow wine">1974</p>
+            <h2>El intercambio que cambió el rumbo.</h2>
+            <p>
+              Durante una travesía por el valle, Víctor llegó a una pequeña finca. Según el relato
+              familiar, un agricultor le ofreció alimento, cobijo y un terreno pedregoso a cambio
+              de uno de sus libros. Allí nació la idea de cultivar uva y convertir la tierra en un
+              legado para la familia.
+            </p>
           </div>
 
           <div className="historyValueGrid">
             <article>
               <span><UsersRound size={22} /></span>
               <strong>Familia</strong>
-              <p>La marca se presenta desde una historia humana y cercana, no desde un discurso industrial.</p>
+              <p>El proyecto se construyó desde una historia cercana, transmitida entre generaciones.</p>
             </article>
             <article>
               <span><BookOpen size={22} /></span>
               <strong>Colportaje</strong>
-              <p>Una parte del relato familiar está vinculada al servicio, la perseverancia y el trabajo de colportaje.</p>
+              <p>El servicio, la lectura y la constancia forman parte del relato que precede al viñedo.</p>
             </article>
             <article>
               <span><Sprout size={22} /></span>
-              <strong>Cultivo</strong>
-              <p>La uva y el cuidado de su origen forman parte central de la identidad visual y narrativa de ROSH.</p>
+              <strong>Tierra</strong>
+              <p>Un terreno difícil se convirtió en símbolo de paciencia, aprendizaje y trabajo manual.</p>
             </article>
             <article>
               <span><Heart size={22} /></span>
               <strong>Propósito</strong>
-              <p>La experiencia busca conservar el vínculo entre producto, historia y quienes lo comparten.</p>
+              <p>ROSH busca conservar la historia detrás de cada presentación y compartirla en familia.</p>
             </article>
           </div>
         </div>
@@ -91,27 +96,33 @@ export default function HistoryPage() {
         <div className="historyProcessVisual">
           <Image
             src={`${siteConfig.prototypeAssetsBase}/hero.jpg`}
-            alt="Viñedo ROSH"
+            alt="Viñedo asociado a la historia familiar ROSH"
             fill
             sizes="(max-width: 900px) 92vw, 48vw"
           />
         </div>
 
         <div className="historyProcessCopy">
-          <p className="eyebrow wine">DEL VIÑEDO A LA MESA</p>
-          <h2>Una narrativa sencilla y transparente.</h2>
+          <p className="eyebrow wine">1978</p>
+          <h2>La primera cosecha.</h2>
+          <p>
+            Cuatro años después del encuentro que marcó el origen del proyecto, la familia sitúa
+            en 1978 la primera cosecha del viñedo. Víctor limpió la tierra, seleccionó sarmientos
+            y aplicó al cultivo la misma disciplina que había desarrollado durante sus años de
+            colportaje.
+          </p>
           <div className="historySteps">
             <article>
               <span><Grape size={20} /></span>
-              <div><strong>1. Origen</strong><p>Mostrar de dónde nace la uva y quiénes están detrás de la marca.</p></div>
+              <div><strong>1. Cultivar</strong><p>Trabajar la uva desde una relación paciente con la tierra.</p></div>
             </article>
             <article>
               <span><Leaf size={20} /></span>
-              <div><strong>2. Elaboración</strong><p>Explicar el proceso real cuando la familia valide el contenido técnico definitivo.</p></div>
+              <div><strong>2. Conservar</strong><p>Mantener vivo el vínculo entre producto, familia e historia.</p></div>
             </article>
             <article>
               <span><Heart size={20} /></span>
-              <div><strong>3. Experiencia</strong><p>Presentar ROSH como una bebida de uva sin alcohol pensada para compartir.</p></div>
+              <div><strong>3. Compartir</strong><p>Hoy ROSH presenta bebidas de uva sin alcohol pensadas para acompañar momentos especiales.</p></div>
             </article>
           </div>
         </div>
@@ -120,8 +131,13 @@ export default function HistoryPage() {
       <section className="historyClosing">
         <div className="shell historyClosingInner">
           <div>
-            <p className="eyebrow">SIGUE CONOCIENDO ROSH</p>
-            <h2>La historia continuará creciendo con contenido real de la familia.</h2>
+            <p className="eyebrow">ROSH HOY</p>
+            <h2>Historias que se comparten con el alma.</h2>
+            <p>
+              Décadas después, ROSH mantiene como inspiración la paciencia, el trabajo manual y
+              el coraje de sembrar en terrenos difíciles. La propuesta actual es una línea de
+              bebidas de uva sin alcohol, creada para compartir esa historia en nuevos momentos.
+            </p>
           </div>
           <div className="historyClosingActions">
             <Link className="button buttonLight" href="/productos">Ver productos</Link>
