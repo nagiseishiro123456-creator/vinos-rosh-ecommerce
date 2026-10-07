@@ -15,6 +15,7 @@ import "./account-catalog-tools.css";
 import "./auth-security.css";
 import "./order-security.css";
 import "./analytics-consent.css";
+import "./mobile-performance.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
