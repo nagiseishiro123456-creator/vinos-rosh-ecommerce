@@ -37,6 +37,9 @@ function errorMessage(error: string | undefined) {
   if (error === "too-many") {
     return "Se detectaron demasiados intentos seguidos. Espera unos minutos antes de volver a enviar el pedido.";
   }
+  if (error === "pending-limit") {
+    return "Tienes varios pedidos con pago todavía en revisión. Cancela uno que ya no necesites o espera a que el administrador los revise antes de crear otro.";
+  }
   return "Revisa los datos del pago y del comprobante.";
 }
 
