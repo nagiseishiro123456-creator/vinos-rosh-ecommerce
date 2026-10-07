@@ -11,6 +11,11 @@ else
   echo "ADMIN_EMAIL / ADMIN_PASSWORD no configurados: se omite seed de administrador."
 fi
 
+if [[ "${BOOTSTRAP_BUSINESS_DATA:-false}" == "true" ]]; then
+  echo "Cargando catálogo, zonas y configuración comercial inicial..."
+  node scripts/bootstrap-business-data.mjs
+fi
+
 echo "Preparando salida standalone de Next.js..."
 rm -rf .next/standalone/public
 mkdir -p .next/standalone/.next
