@@ -1,6 +1,6 @@
 "use server";
 
-import { InventoryMovementType, OrderStatus, PaymentStatus } from "@prisma/client";
+import { InventoryMovementType, OrderEventType, OrderStatus, PaymentStatus } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -81,6 +81,17 @@ export async function approveManualPayment(paymentId: string) {
       });
 
       if (paymentClaim.count !== 1) throw stateChanged();
+
+      await tx.orderEvent.create({
+        data: {
+          orderId: payment.orderId,
+          actorUserId: adminId,
+          type: OrderEventType.PAYMENT_APPROVED,
+          fromStatus: OrderStatus.PAYMENT_REVIEW,
+          toStatus: OrderStatus.PAID,
+          note: "Pago manual verificado y aprobado por administración.",
+        },
+      });
     });
   } catch (error) {
     if (!(error instanceof Error && error.message === "PAYMENT_STATE_CHANGED")) {
@@ -168,6 +179,17 @@ export async function rejectManualPayment(paymentId: string) {
           stockAfter: stockAfterByProduct.get(item.productId) ?? 0,
           note: `Liberación por rechazo de pago del pedido ${payment.order.number}`,
         })),
+      });
+
+      await tx.orderEvent.create({
+        data: {
+          orderId: payment.orderId,
+          actorUserId: adminId,
+          type: OrderEventType.PAYMENT_REJECTED,
+          fromStatus: OrderStatus.PAYMENT_REVIEW,
+          toStatus: OrderStatus.CANCELLED,
+          note: "Pago manual rechazado por administración; el stock reservado fue liberado.",
+        },
       });
     });
   } catch (error) {
