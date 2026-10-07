@@ -11,5 +11,14 @@ else
   echo "ADMIN_EMAIL / ADMIN_PASSWORD no configurados: se omite seed de administrador."
 fi
 
+echo "Preparando salida standalone de Next.js..."
+rm -rf .next/standalone/public
+mkdir -p .next/standalone/.next
+cp -R public .next/standalone/public
+rm -rf .next/standalone/.next/static
+cp -R .next/static .next/standalone/.next/static
+
 echo "Iniciando Vinos ROSH en Render..."
-exec npm run start -- -H 0.0.0.0 -p "${PORT:-10000}"
+export HOSTNAME="0.0.0.0"
+export PORT="${PORT:-10000}"
+exec node .next/standalone/server.js
