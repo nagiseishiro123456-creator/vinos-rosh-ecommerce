@@ -55,8 +55,8 @@ button,
     gap: 12px;
   }
 
-  .siteBrand strong {
-    font-size: 1.35rem;
+  .siteBrand .brandLogo {
+    width: 124px;
   }
 
   .headerActions {
@@ -148,7 +148,7 @@ button,
   }
 
   .productImageWrap {
-    aspect-ratio: 1 / .9;
+    aspect-ratio: 4 / 3;
   }
 
   .productCardBody {
@@ -312,5 +312,19 @@ button,
 @media (min-width: 620px) {
   .mobileBottomNav {
     display: none;
+  }
+}
+
+@media (min-width: 850px) and (max-width: 1099px) {
+  .siteBrand .brandLogo {
+    width: 124px;
+  }
+
+  .siteHeaderInner {
+    gap: 18px;
+  }
+
+  .desktopNav {
+    gap: 20px;
   }
 }

@@ -78,9 +78,9 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   box-shadow: 0 10px 35px rgba(0,0,0,.16);
 }
 .siteHeaderInner { min-height: 76px; display: flex; align-items: center; gap: 26px; }
-.siteBrand { display: grid; line-height: .9; font-family: Georgia, serif; letter-spacing: .12em; flex-shrink: 0; }
-.siteBrand span { font-size: .6rem; letter-spacing: .34em; opacity: .82; }
-.siteBrand strong { font-size: 1.55rem; letter-spacing: .04em; }
+.siteBrand { display: inline-flex; align-items: center; flex-shrink: 0; }
+.brandLogo { display: block; width: 144px; max-width: 100%; height: auto; object-fit: contain; }
+.brandLogoLight { filter: brightness(0) invert(1); }
 .desktopNav { display: none; margin-left: auto; align-items: center; gap: 28px; font-size: .85rem; font-weight: 650; }
 .desktopNav a { opacity: .9; transition: opacity .2s ease; }
 .desktopNav a:hover { opacity: 1; }
@@ -199,8 +199,8 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
 .footerGrid { display: grid; gap: 36px; }
 .footerGrid > div { display: grid; align-content: start; gap: 10px; }
 .footerGrid p, .footerGrid span, .footerGrid a { color: #d9c5be; font-size: .85rem; line-height: 1.55; }
-.footerBrand { font-family: Georgia, serif; letter-spacing: .09em; }
-.footerBrand strong { display: block; font-size: 1.7rem; }
+.footerBrand { display: inline-flex; width: fit-content; }
+.footerBrand .brandLogo { width: 180px; }
 .footerBottom { margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.1); color: #bca9a4; font-size: .75rem; }
 .whatsappFab { position: fixed; z-index: 45; right: 18px; bottom: 18px; min-height: 52px; display: inline-flex; align-items: center; gap: 9px; padding: 0 17px; border-radius: 999px; color: white; background: #1f9f61; box-shadow: 0 12px 32px rgba(20,96,59,.3); font-weight: 800; font-size: .82rem; }
 
@@ -260,8 +260,8 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
 /* Auth */
 .authPage { min-height: 100vh; display: grid; background: var(--cream); }
 .authVisual { min-height: 330px; padding: 34px 24px; color: white; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(160deg, rgba(62,10,15,.98), rgba(107,15,26,.92)), radial-gradient(circle at 70% 25%, #c47a55, transparent 35%); }
-.authVisual .brand { font-family: Georgia, serif; letter-spacing: .08em; }
-.authVisual .brand strong { display: block; font-size: 1.55rem; }
+.authVisual .brand { display: inline-flex; width: fit-content; }
+.authVisual .brandLogo { width: 180px; }
 .authVisual h1 { font-size: clamp(3rem, 7vw, 5rem); line-height: .94; margin: 35px 0 16px; }
 .authVisual p { max-width: 500px; color: #f0dcd5; line-height: 1.7; }
 .authPanel { display: grid; place-items: center; padding: 48px 20px; }
@@ -379,44 +379,6 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   color: var(--wine-dark);
   background: #fffdf9;
   box-shadow: 0 12px 30px rgba(22, 7, 8, .16);
-}
-
-.siteBrand {
-  grid-auto-flow: column;
-  grid-template-columns: auto auto;
-  align-items: center;
-  gap: 10px;
-}
-
-.siteBrandMark {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, .3);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .1);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: 0;
-  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, .04);
-}
-
-.siteBrandWord {
-  display: grid;
-  line-height: .86;
-}
-
-.siteBrandWord small {
-  font-size: .56rem;
-  letter-spacing: .32em;
-  opacity: .74;
-}
-
-.siteBrandWord strong {
-  font-size: 1.48rem;
-  letter-spacing: .055em;
 }
 
 .brandPromiseSection {

@@ -21,6 +21,7 @@ const allowedImageHosts = new Set([
 
 const imageUrlSchema = z.string().trim().refine((value) => {
   if (!value) return true;
+  if (/^\/products\/[a-z0-9-]+\.webp$/.test(value)) return true;
 
   try {
     const url = new URL(value);
@@ -28,7 +29,7 @@ const imageUrlSchema = z.string().trim().refine((value) => {
   } catch {
     return false;
   }
-}, "La imagen debe usar HTTPS y un proveedor de imágenes permitido.");
+}, "Usa una imagen de la tienda o un enlace HTTPS de un proveedor permitido.");
 
 const productSchema = z.object({
   name: z.string().trim().min(2).max(120),

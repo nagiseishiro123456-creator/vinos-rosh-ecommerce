@@ -2,6 +2,7 @@ import { BadgeCheck, Grape, HeartHandshake, Leaf, ShieldCheck, Sparkles, Truck }
 import Image from "next/image";
 import Link from "next/link";
 
+import { BrandLogo } from "@/components/brand-logo";
 import { ProductCard } from "@/components/product-card";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
@@ -243,7 +244,9 @@ export default async function HomePage() {
       <footer className="siteFooter" id="contacto">
         <div className="footerGrid shell">
           <div>
-            <div className="footerBrand">VINOS <strong>ROSH</strong></div>
+            <Link className="footerBrand" href="/" aria-label="Ir al inicio de Vinos ROSH">
+              <BrandLogo light />
+            </Link>
             <p>Bebidas de uva sin alcohol de producción propia.</p>
           </div>
           <div>

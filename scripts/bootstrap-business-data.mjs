@@ -5,8 +5,12 @@ import {
 
 const prisma = new PrismaClient();
 
-const PRODUCT_IMAGE =
-  "https://nagiseishiro123456-creator.github.io/vinos-rosh-prototype/assets/products.jpg";
+const PRODUCT_IMAGES = {
+  "vinos-rosh-morado-intenso": "/products/morado-intenso.webp",
+  "vinos-rosh-blanco-citrico": "/products/blanco-citrico.webp",
+  "vinos-rosh-morado-edicion-reserva": "/products/morado-edicion-reserva.webp",
+  "vinos-rosh-dulce-atardecer": "/products/dulce-atardecer.webp",
+};
 
 const products = [
   {
@@ -84,88 +88,36 @@ const shippingZones = [
 async function upsertProduct(categoryId, data) {
   const existing = await prisma.product.findUnique({
     where: { slug: data.slug },
-    select: { id: true, stock: true },
-  });
-
-  if (!existing) {
-    const created = await prisma.product.create({
-      data: {
-        ...data,
-        categoryId,
-        active: true,
-        images: {
-          create: {
-            url: PRODUCT_IMAGE,
-            alt: data.name,
-            position: 0,
-          },
-        },
-      },
-      select: { id: true },
-    });
-
-    if (data.stock > 0) {
-      await prisma.inventoryMovement.create({
-        data: {
-          productId: created.id,
-          type: InventoryMovementType.INITIAL_STOCK,
-          quantity: data.stock,
-          stockAfter: data.stock,
-          note: "Carga inicial confirmada del catálogo ROSH",
-        },
-      });
-    }
-
-    return;
-  }
-
-  const delta = data.stock - existing.stock;
-
-  await prisma.product.update({
-    where: { id: existing.id },
-    data: {
-      name: data.name,
-      sku: data.sku,
-      shortDescription: data.shortDescription,
-      description: data.description,
-      price: data.price,
-      stock: data.stock,
-      featured: data.featured,
-      active: true,
-      categoryId,
-    },
-  });
-
-  const firstImage = await prisma.productImage.findFirst({
-    where: { productId: existing.id },
-    orderBy: { position: "asc" },
     select: { id: true },
   });
 
-  if (firstImage) {
-    await prisma.productImage.update({
-      where: { id: firstImage.id },
-      data: { url: PRODUCT_IMAGE, alt: data.name, position: 0 },
-    });
-  } else {
-    await prisma.productImage.create({
-      data: {
-        productId: existing.id,
-        url: PRODUCT_IMAGE,
-        alt: data.name,
-        position: 0,
-      },
-    });
-  }
+  // Initial data must not reset live stock, edits or images on every deploy.
+  if (existing) return;
 
-  if (delta !== 0) {
+  const created = await prisma.product.create({
+    data: {
+      ...data,
+      categoryId,
+      active: true,
+      images: {
+        create: {
+          url: PRODUCT_IMAGES[data.slug],
+          alt: data.name,
+          position: 0,
+        },
+      },
+    },
+    select: { id: true },
+  });
+
+  if (data.stock > 0) {
     await prisma.inventoryMovement.create({
       data: {
-        productId: existing.id,
-        type: InventoryMovementType.MANUAL_ADJUSTMENT,
-        quantity: delta,
+        productId: created.id,
+        type: InventoryMovementType.INITIAL_STOCK,
+        quantity: data.stock,
         stockAfter: data.stock,
-        note: "Sincronización inicial de stock confirmado ROSH",
+        note: "Carga inicial confirmada del catálogo ROSH",
       },
     });
   }

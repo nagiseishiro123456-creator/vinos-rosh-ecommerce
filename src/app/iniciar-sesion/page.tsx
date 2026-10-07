@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FormEvent, Suspense, useState } from "react";
 
+import { BrandLogo } from "@/components/brand-logo";
+
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,8 +47,8 @@ function LoginContent() {
   return (
     <main className="authPage">
       <section className="authVisual">
-        <Link className="brand" href="/">
-          VINOS <strong>ROSH</strong>
+        <Link className="brand" href="/" aria-label="Ir al inicio de Vinos ROSH">
+          <BrandLogo light />
         </Link>
         <div>
           <span className="eyebrow">BIENVENIDO</span>

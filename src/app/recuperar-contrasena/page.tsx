@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BrandLogo } from "@/components/brand-logo";
 import { requestPasswordReset } from "@/modules/auth/password-reset";
 
 export const metadata: Metadata = {
@@ -19,8 +20,8 @@ export default async function RecoverPasswordPage({ searchParams }: Props) {
   return (
     <main className="authPage">
       <section className="authVisual">
-        <Link className="brand" href="/">
-          VINOS <strong>ROSH</strong>
+        <Link className="brand" href="/" aria-label="Ir al inicio de Vinos ROSH">
+          <BrandLogo light />
         </Link>
         <div>
           <span className="eyebrow">SEGURIDAD</span>

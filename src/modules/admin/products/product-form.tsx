@@ -64,10 +64,10 @@ export function ProductForm({ action, submitLabel, values = {} }: ProductFormPro
         </label>
 
         <label className="adminField adminFieldWide">
-          <span>Imagen principal (URL HTTPS)</span>
-          <input name="imageUrl" type="url" defaultValue={values.imageUrl ?? ""} placeholder="https://res.cloudinary.com/..." />
+          <span>Imagen principal</span>
+          <input name="imageUrl" type="text" inputMode="url" autoCapitalize="none" spellCheck={false} maxLength={2048} defaultValue={values.imageUrl ?? ""} placeholder="/products/morado-intenso.webp o https://res.cloudinary.com/..." />
           <small>
-            Modo sin costo: por ahora aceptamos URL de Cloudinary Free o del repositorio/prototipo. La subida directa de imágenes se conectará usando únicamente el plan gratuito.
+            Puedes usar una imagen de la tienda o un enlace HTTPS de Cloudinary o del repositorio.
           </small>
         </label>
       </div>

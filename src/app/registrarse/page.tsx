@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
+import { BrandLogo } from "@/components/brand-logo";
+
 export default function RegisterPage() {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
@@ -57,8 +59,8 @@ export default function RegisterPage() {
   return (
     <main className="authPage">
       <section className="authVisual">
-        <Link className="brand" href="/">
-          VINOS <strong>ROSH</strong>
+        <Link className="brand" href="/" aria-label="Ir al inicio de Vinos ROSH">
+          <BrandLogo light />
         </Link>
         <div>
           <span className="eyebrow">CREA TU CUENTA</span>

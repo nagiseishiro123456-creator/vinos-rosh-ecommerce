@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { BrandLogo } from "@/components/brand-logo";
+
 type SiteHeaderProps = {
   cartCount?: number;
   isAuthenticated?: boolean;
@@ -56,11 +58,7 @@ export function SiteHeader({
       <header className={`siteHeader${scrolled ? " siteHeaderScrolled" : ""}`}>
         <div className="siteHeaderInner shell">
           <Link className="siteBrand" href="/" aria-label="Ir al inicio de Vinos ROSH">
-            <span className="siteBrandMark" aria-hidden="true">R</span>
-            <span className="siteBrandWord">
-              <small>VINOS</small>
-              <strong>ROSH</strong>
-            </span>
+            <BrandLogo light />
           </Link>
 
           <nav className="desktopNav" aria-label="Navegación principal">
