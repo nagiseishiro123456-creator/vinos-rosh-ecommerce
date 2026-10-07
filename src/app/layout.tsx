@@ -17,6 +17,7 @@ import "./order-security.css";
 import "./analytics-consent.css";
 import "./mobile-performance.css";
 import "./contact.css";
+import "./history-faq.css";
 
 const previewMode = process.env.PREVIEW_MODE === "true";
 
