@@ -256,6 +256,7 @@ export default async function HomePage() {
             <strong>Atención</strong>
             {commerce.contactEmail ? <a href={`mailto:${commerce.contactEmail}`}>{commerce.contactEmail}</a> : <span>Correo pendiente de configurar</span>}
             {commerce.whatsappPhone ? <span>WhatsApp disponible</span> : <span>WhatsApp pendiente de configurar</span>}
+            <Link href="/contacto">Formulario de contacto</Link>
             <span>Envíos según cobertura activa</span>
           </div>
           <div>
