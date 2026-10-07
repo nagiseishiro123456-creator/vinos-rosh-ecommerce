@@ -1,0 +1,269 @@
+.contactPage {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.contactShell {
+  padding-block: 76px 110px;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(360px, 1.1fr);
+  gap: 54px;
+  align-items: start;
+}
+
+.contactIntro h2,
+.contactFormCard h2 {
+  margin: 8px 0 16px;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.02;
+}
+
+.contactIntro > p:not(.eyebrow) {
+  max-width: 620px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.contactChannels {
+  margin-top: 30px;
+  display: grid;
+  gap: 12px;
+}
+
+.contactChannels article {
+  padding: 16px;
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.72);
+}
+
+.contactChannels article > svg {
+  margin-top: 2px;
+  color: var(--wine);
+  flex: 0 0 auto;
+}
+
+.contactChannels article > div {
+  display: grid;
+  gap: 4px;
+}
+
+.contactChannels strong {
+  font-size: .9rem;
+}
+
+.contactChannels a,
+.contactChannels span {
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.45;
+}
+
+.contactChannels a {
+  color: var(--wine);
+  font-weight: 750;
+}
+
+.contactFormCard {
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.contactFormCard h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.contactForm {
+  display: grid;
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.contactFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.contactForm label {
+  display: grid;
+  gap: 7px;
+}
+
+.contactForm label > span {
+  font-size: .8rem;
+  font-weight: 800;
+}
+
+.contactForm label > span small {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.contactForm input,
+.contactForm textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  background: #fffdfb;
+  outline: none;
+}
+
+.contactForm input {
+  min-height: 48px;
+  padding-inline: 13px;
+}
+
+.contactForm textarea {
+  min-height: 160px;
+  padding: 13px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+}
+
+.contactHoneypot {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+.contactNotice {
+  margin: 16px 0;
+  padding: 13px 15px;
+  border-radius: 12px;
+  font-size: .86rem;
+  line-height: 1.5;
+}
+
+.contactNotice.success {
+  color: #17633a;
+  background: #edf9f1;
+  border: 1px solid #bee8cb;
+}
+
+.contactNotice.error {
+  color: #84212b;
+  background: #fff0f1;
+  border: 1px solid #efc6cb;
+}
+
+.contactAdminList {
+  display: grid;
+  gap: 16px;
+}
+
+.contactAdminCard {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 10px 34px rgba(66, 31, 24, .05);
+}
+
+.contactAdminCard.status-new {
+  border-left: 4px solid var(--wine);
+}
+
+.contactAdminCard.status-resolved {
+  opacity: .78;
+}
+
+.contactAdminTop,
+.contactAdminSender,
+.contactAdminActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.contactAdminTop {
+  justify-content: space-between;
+}
+
+.contactAdminTop > div {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.contactAdminTop small,
+.contactAdminSender {
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.contactAdminStatus {
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: var(--wine);
+  background: #f7e9eb;
+  font-size: .66rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+}
+
+.contactAdminSender {
+  margin-top: 14px;
+}
+
+.contactAdminSender a {
+  color: var(--wine);
+  font-weight: 700;
+}
+
+.contactAdminCard > p {
+  margin: 16px 0 18px;
+  white-space: pre-wrap;
+  color: #574c47;
+  line-height: 1.65;
+}
+
+.contactAdminActions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 820px) {
+  .contactShell {
+    grid-template-columns: 1fr;
+    padding-block: 54px 90px;
+  }
+}
+
+@media (max-width: 560px) {
+  .contactFormCard {
+    padding: 22px;
+    border-radius: 20px;
+  }
+
+  .contactFormGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .contactAdminTop {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .contactAdminActions,
+  .contactAdminActions form,
+  .contactAdminActions button {
+    width: 100%;
+  }
+}
