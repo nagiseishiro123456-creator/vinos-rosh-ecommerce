@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { releaseStock } from "@/modules/inventory/stock-service";
 
 const paymentIdSchema = z.string().cuid();
 
@@ -155,25 +156,19 @@ export async function rejectManualPayment(paymentId: string) {
 
       if (paymentClaim.count !== 1) throw stateChanged();
 
-      for (const item of payment.order.items) {
-        const product = await tx.product.update({
-          where: { id: item.productId },
-          data: { stock: { increment: item.quantity } },
-          select: { stock: true },
-        });
+      const stockAfterByProduct = await releaseStock(tx, payment.order.items);
 
-        await tx.inventoryMovement.create({
-          data: {
-            productId: item.productId,
-            orderId: payment.orderId,
-            actorUserId: adminId,
-            type: InventoryMovementType.ORDER_RELEASE,
-            quantity: item.quantity,
-            stockAfter: product.stock,
-            note: `Liberación por rechazo de pago del pedido ${payment.order.number}`,
-          },
-        });
-      }
+      await tx.inventoryMovement.createMany({
+        data: payment.order.items.map((item) => ({
+          productId: item.productId,
+          orderId: payment.orderId,
+          actorUserId: adminId,
+          type: InventoryMovementType.ORDER_RELEASE,
+          quantity: item.quantity,
+          stockAfter: stockAfterByProduct.get(item.productId) ?? 0,
+          note: `Liberación por rechazo de pago del pedido ${payment.order.number}`,
+        })),
+      });
     });
   } catch (error) {
     if (!(error instanceof Error && error.message === "PAYMENT_STATE_CHANGED")) {
