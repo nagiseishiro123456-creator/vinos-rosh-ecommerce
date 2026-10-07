@@ -52,6 +52,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   ]);
 
   const hasFilters = Boolean(params.q || params.categoria || params.stock === "1" || (params.orden && params.orden !== "featured"));
+  const showPreviewLayout = process.env.SHOW_DEMO_CATALOG === "true" && !hasFilters;
 
   return (
     <main className="catalogPage">
@@ -117,6 +118,41 @@ export default async function ProductsPage({ searchParams }: Props) {
         {products.length > 0 ? (
           <div className="productGrid">
             {products.map((product) => <ProductCard key={product.id} product={product} />)}
+          </div>
+        ) : showPreviewLayout ? (
+          <div className="catalogPreviewBlock">
+            <div className="catalogPreviewHeading">
+              <p className="eyebrow wine">VISTA PREVIA DEL CATÁLOGO</p>
+              <h2>La experiencia visual está lista para recibir los productos reales.</h2>
+              <p>
+                No mostramos nombres, precios ni stock inventados. Estas tarjetas indican exactamente
+                qué información se cargará desde el panel administrativo.
+              </p>
+            </div>
+            <div className="catalogPreviewGrid" aria-label="Estructura visual del catálogo">
+              <article>
+                <div className="catalogPreviewMedia"><span>01</span></div>
+                <small>FOTOGRAFÍA REAL</small>
+                <strong>Imagen principal del producto</strong>
+                <p>Se reemplazará por las fotografías entregadas por ROSH.</p>
+              </article>
+              <article>
+                <div className="catalogPreviewMedia"><span>02</span></div>
+                <small>FICHA COMERCIAL</small>
+                <strong>Nombre y descripción reales</strong>
+                <p>El contenido se administra sin modificar el código.</p>
+              </article>
+              <article>
+                <div className="catalogPreviewMedia"><span>03</span></div>
+                <small>DISPONIBILIDAD</small>
+                <strong>Precio y stock sincronizados</strong>
+                <p>Solo se publicará información confirmada por el negocio.</p>
+              </article>
+            </div>
+            <div className="catalogPreviewFooter">
+              <Link className="button buttonDark" href="/">Volver al inicio</Link>
+              <span>Modo preview · sin datos comerciales ficticios</span>
+            </div>
           </div>
         ) : (
           <div className="emptyPanel">
