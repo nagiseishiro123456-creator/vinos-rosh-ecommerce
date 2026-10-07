@@ -98,3 +98,57 @@ test("releaseStock restores a previously reserved quantity", async (t) => {
   });
   assert.equal(productAfter.stock, 3);
 });
+
+test("a failed multi-product reservation rolls back earlier stock changes", async (t) => {
+  const suffix = randomUUID().replaceAll("-", "");
+  const available = await prisma.product.create({
+    data: {
+      id: `test-a-${suffix}`,
+      name: "Producto disponible para rollback",
+      slug: `rollback-disponible-${suffix}`,
+      sku: `RBA-${suffix.slice(0, 12)}`,
+      description: "Producto temporal para comprobar rollback transaccional.",
+      price: 10,
+      stock: 1,
+      active: true,
+    },
+  });
+  const unavailable = await prisma.product.create({
+    data: {
+      id: `test-z-${suffix}`,
+      name: "Producto agotado para rollback",
+      slug: `rollback-agotado-${suffix}`,
+      sku: `RBZ-${suffix.slice(0, 12)}`,
+      description: "Producto temporal sin stock para comprobar rollback.",
+      price: 10,
+      stock: 0,
+      active: true,
+    },
+  });
+
+  t.after(async () => {
+    await prisma.product.deleteMany({
+      where: { id: { in: [available.id, unavailable.id] } },
+    });
+  });
+
+  await assert.rejects(
+    prisma.$transaction((tx) =>
+      reserveStock(tx, [
+        { productId: available.id, quantity: 1 },
+        { productId: unavailable.id, quantity: 1 },
+      ]),
+    ),
+    StockChangedError,
+  );
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: [available.id, unavailable.id] } },
+    select: { id: true, stock: true },
+  });
+
+  const stockById = new Map(products.map((product) => [product.id, product.stock]));
+  assert.equal(stockById.get(available.id), 1);
+  assert.equal(stockById.get(unavailable.id), 0);
+});
+
