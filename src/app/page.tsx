@@ -178,7 +178,7 @@ export default async function HomePage() {
               Esta sección se conectará con el relato definitivo validado por la familia para
               conservar una comunicación auténtica y coherente con el origen de la marca.
             </p>
-            <Link className="button buttonDark" href="/#contacto">Conocer más</Link>
+            <Link className="button buttonDark" href="/nuestra-historia">Conocer más</Link>
           </div>
         </div>
       </section>
@@ -251,6 +251,7 @@ export default async function HomePage() {
             <a href="#productos">Productos</a>
             <a href="#historia">Nuestra historia</a>
             <Link href="/mi-cuenta">Mi cuenta</Link>
+            <Link href="/preguntas-frecuentes">Preguntas frecuentes</Link>
           </div>
           <div>
             <strong>Atención</strong>
