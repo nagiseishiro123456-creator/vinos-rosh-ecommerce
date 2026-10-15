@@ -16,7 +16,10 @@ E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular
 - Pagos híbridos: Culqi + Yape manual + transferencia manual
 
 ## Estado
-Sprint 0 completado y Sprint 1 en curso.
+Fase 2, Sprint 1: integridad del pedido e instalación reproducible.
+El trabajo se entrega por historias pequeñas: ver [avance actual](docs/progreso.md),
+[backlog](docs/backlog.md) y [plan del Sprint 1](docs/sprints/fase-2-sprint-01.md).
+La tienda sigue siendo un entorno de validación; no hay lanzamiento comercial en este hito.
 
 Ya existe:
 - estructura Next.js
@@ -32,7 +35,7 @@ Ya existe:
 ## Inicio local recomendado (Windows)
 
 Requisitos:
-- Node.js LTS
+- Node.js 22.23.3 (archivo `.nvmrc`) y npm 11.9.0
 - Docker Desktop con Docker Compose
 - Git
 
@@ -47,9 +50,9 @@ Ese comando:
 2. genera secretos aleatorios para desarrollo;
 3. levanta PostgreSQL 16;
 4. instala dependencias;
-5. formatea y valida Prisma;
+5. valida Prisma sin modificar el esquema;
 6. genera Prisma Client;
-7. ejecuta la migración `init`;
+7. aplica todas las migraciones versionadas con `prisma migrate deploy`;
 8. crea/actualiza el usuario ADMIN;
 9. ejecuta el typecheck.
 
@@ -93,4 +96,13 @@ El botón **Deploy to Render** de arriba usa esta configuración.
 > Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
 
 ## Próximo hito
-Seguir puliendo storefront premium, UX móvil y cargar contenido real validado por el cliente.
+S1-02: cálculo monetario exacto en servidor. A continuación: reserva previa al pago,
+idempotencia y revisión/vencimiento controlados. Consultar el [índice de documentación](docs/README.md).
+
+## Verificación y evidencias
+
+La instalación estándar usa `npm ci --include=dev` y el lockfile versionado.
+Para preparar otra plataforma y ejecutar pruebas, seguir [la guía reproducible](docs/desarrollo-reproducible.md).
+CI valida migraciones en PostgreSQL 16, pruebas existentes, tipos, lint y build.
+También comprueba `/api/health` y genera capturas desktop/móvil con Playwright en una BD aislada.
+Los resultados ejecutados y las limitaciones se registran en [QA del Sprint 1](docs/testing/sprint-01.md).

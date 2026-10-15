@@ -2,6 +2,7 @@
   "name": "vinos-rosh-ecommerce",
   "version": "0.4.0",
   "private": true,
+  "packageManager": "npm@11.9.0",
   "engines": {
     "node": "22.x"
   },
@@ -11,7 +12,10 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/**/*.test.ts",
+    "test": "node --env-file-if-exists=.env --import tsx --test tests/*.test.ts",
+    "test:smoke": "playwright test",
+    "db:seed:smoke": "node --env-file-if-exists=.env --import tsx scripts/seed-smoke.ts",
+    "prepare:standalone": "node scripts/prepare-standalone.mjs",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
     "prisma:migrate": "prisma migrate dev",
@@ -37,6 +41,7 @@
     "zod": "^4.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.15.0",
