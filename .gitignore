@@ -9,3 +9,7 @@ backups
 *.log
 .DS_Store
 .prisma
+*.tsbuildinfo
+next-env.d.ts
+test-results/
+playwright-report/
