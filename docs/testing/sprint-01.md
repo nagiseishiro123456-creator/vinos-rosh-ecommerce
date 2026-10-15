@@ -18,8 +18,40 @@ registradas se repitieron con Node 22. El resultado inicial carecía de lockfile
 | PostgreSQL local | No disponible: contenedor sin Docker y con restricciones para iniciar una BD nativa. |
 
 ## Validación del cambio
-En curso. Se registrarán run de CI, conteo de tests, smoke y enlaces a capturas antes
-de declarar cerrada S1-01. Las otras historias permanecen pendientes.
+S1-01 implementada/verificada en rama, PR #3 pendiente de integración. Las otras historias siguen pendientes.
+
+Código verificado: `e8910c5946faf502804705496527006a3f82309c`.
+[CI definitiva](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/38824743481)
+(job `116729444584`, success). El workflow inicial
+[38824338198](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/38824338198)
+también aprobó; se refinó la captura larga para revelar contenido fuera del viewport.
+
+| Comprobación de entrega | Resultado |
+| --- | --- |
+| npm ci --include=dev local | Aprobado; 432 paquetes. |
+| Lockfile y dependencias directas | Coinciden. |
+| Toolchain CI | Node 22.23.3 / npm 11.9.0. |
+| PostgreSQL de CI | 16.15, servicio temporal aislado. |
+| Migraciones sobre BD vacía | 7 aplicadas. |
+| Seed administrador y conectividad | Aprobados con datos exclusivos de CI. |
+| Suite existente | 15 aprobadas, 0 fallidas, 0 omitidas. |
+| Typecheck / lint / build | Aprobados en local y CI. |
+| Preparación standalone | Aprobada; imágenes de public accesibles. |
+| Auditoría de producción | 0 vulnerabilidades reportadas. |
+| Smoke | 2 aprobados (desktop/móvil); health 200, DB conectada, cuatro páginas por proyecto. |
+| Fixture fuera de BD permitida | Rechazada antes de conectar (comprobación local con BD ficticia no permitida). |
+| Capturas | 8 PNG de CI + 2 locales del acceso, revisadas visualmente. |
+
+[Índice de imágenes](../evidencias/sprint-01/README.md) y
+[manifiesto con hashes](../evidencias/sprint-01/manifest.json).
+Artefacto original: `12015275384`, run `38824743481`; vence el 2026-10-29.
+Las copias en Git conservan la evidencia aunque venza ese artefacto.
+
+La revisión de capturas verificó contenido, logo, formulario y producto de QA.
+El capturador carga imágenes diferidas y fuerza `content-visibility: visible` solo
+al tomar la imagen para registrar toda la página; no modifica el CSS del producto.
+No se evalúa todavía la conformidad de UX del checkout.
+La tipografía puede variar entre navegadores/sistemas porque el proyecto usa fuentes del sistema.
 La captura de producto usa un nombre de QA y una imagen de referencia existente;
 no prueba un producto comercial ni una transacción real.
 

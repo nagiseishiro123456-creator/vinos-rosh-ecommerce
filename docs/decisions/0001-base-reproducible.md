@@ -18,8 +18,8 @@ compilada y generar imágenes en escritorio/móvil; no se envía al navegador de
 
 ## Consecuencias
 CI requiere Chromium y más tiempo; se ejecuta en runner estándar de repositorio público.
-Los artefactos de CI se conservan 14 días y las capturas elegidas deben copiarse a
-`docs/evidencias/` en una entrega posterior para conservación junto a Git.
+Los artefactos de CI se conservan 14 días y las capturas elegidas se copian a
+`docs/evidencias/` en esta entrega para conservación junto a Git.
 Fixture limitada explícitamente a `vinos_rosh_ci`/`vinos_rosh_test`, con activación
 `SMOKE_TEST_DATA=true`. Nunca se usa contra la BD de Render.
 Una actualización de Node/npm/dependencias debe modificar estos archivos y volver a verificarse.

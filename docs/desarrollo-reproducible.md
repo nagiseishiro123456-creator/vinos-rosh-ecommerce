@@ -21,7 +21,8 @@ El script PowerShell se revisó estáticamente; requiere comprobación en Window
 5. `npm run db:up` y esperar un estado healthy de PostgreSQL.
 6. `npx prisma validate` y `npm run prisma:generate`.
 7. `npx prisma migrate deploy` y `npm run db:seed`.
-8. `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`.
+8. `npm run typecheck`, `npm run lint`, `npm run build`. Para `npm test`, configurar
+   primero una BD aislada según la sección siguiente; no usar la BD de desarrollo con pedidos conservados.
 9. `npm run dev` para desarrollo. `/api/health` debe devolver 200 y `database: connected`.
 
 `prisma migrate dev` se reserva para crear nuevas migraciones deliberadamente;

@@ -10,9 +10,10 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 5. [Instalación y verificación reproducible](desarrollo-reproducible.md)
 6. [Decisión 0001: dependencias y evidencia](decisions/0001-base-reproducible.md)
 7. [Resultados QA y capturas](testing/sprint-01.md)
-8. [Política de costos vigente](cost-policy.md)
-9. [Preview Render](render-free-preview.md)
-10. [Backups y recuperación](07-despliegue/backups-y-recuperacion.md)
+8. [Capturas conservadas en Git](evidencias/sprint-01/README.md)
+9. [Política de costos vigente](cost-policy.md)
+10. [Preview Render](render-free-preview.md)
+11. [Backups y recuperación](07-despliegue/backups-y-recuperacion.md)
 
 ## Cuándo documentar
 
