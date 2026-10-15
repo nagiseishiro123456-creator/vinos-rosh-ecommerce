@@ -15,7 +15,8 @@ function Invoke-Checked([scriptblock]$Command) {
 
 function New-RandomHex([int]$Bytes = 32) {
   $buffer = New-Object byte[] $Bytes
-  [System.Security.Cryptography.RandomNumberGenerator]::Fill($buffer)
+  $random = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+  try { $random.GetBytes($buffer) } finally { $random.Dispose() }
   return ($buffer | ForEach-Object { $_.ToString("x2") }) -join ""
 }
 

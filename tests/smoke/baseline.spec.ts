@@ -27,8 +27,21 @@ test("S1-01: storefront baseline with a connected database", async ({ page, requ
         )).toBeGreaterThan(0);
       }
       await page.evaluate(() => document.fonts.ready);
+      // Full-page evidence must load off-screen lazy images too. Keep the
+      // application's normal optimization; disable content skipping only while capturing.
+      await page.evaluate(async () => {
+        await Promise.all(Array.from(document.images, async (image) => {
+          image.loading = "eager";
+          await image.decode().catch(() => undefined);
+        }));
+      });
       const screenshot = testInfo.outputPath(`${screen.name}.png`);
-      await page.screenshot({ path: screenshot, fullPage: true, animations: "disabled" });
+      await page.screenshot({
+        path: screenshot,
+        fullPage: true,
+        animations: "disabled",
+        style: "* { content-visibility: visible !important; }",
+      });
       await testInfo.attach(screen.name, { path: screenshot, contentType: "image/png" });
     });
   }
