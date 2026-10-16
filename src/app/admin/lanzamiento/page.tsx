@@ -143,7 +143,7 @@ export default async function LaunchReadinessPage() {
         <p className="eyebrow wine">MANTENIMIENTO</p>
         <h2>Reservas de pago manual</h2>
         <p>
-          Los pedidos en revisión reservan stock durante {holdMinutes} minutos. Puedes ejecutar el mantenimiento sin servicios externos ni cron de pago para liberar reservas vencidas, tokens expirados y límites antiguos.
+          Las nuevas reservas sin pago comunicado duran {holdMinutes} minutos; cada pedido conserva su vencimiento original. El mantenimiento libera solo reservas pendientes vencidas. Los pagos en revisión conservan su stock y requieren conciliación. También se eliminan tokens expirados y límites antiguos. Ejecuta este mantenimiento para liberar reservas de clientes que no regresan a la tienda.
         </p>
         <form action={runMaintenanceFromAdmin}>
           <button className="button buttonPrimary" type="submit">

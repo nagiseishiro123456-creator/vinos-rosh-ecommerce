@@ -19,6 +19,10 @@ export function getManualPaymentHoldMinutes() {
   return normalizeManualPaymentHoldMinutes(process.env.MANUAL_PAYMENT_HOLD_MINUTES);
 }
 
+export function getReservationExpiresAt(now = new Date(), holdMinutes = getManualPaymentHoldMinutes()) {
+  return new Date(now.getTime() + holdMinutes * 60 * 1000);
+}
+
 export function getManualPaymentCutoff(
   now = new Date(),
   holdMinutes = getManualPaymentHoldMinutes(),

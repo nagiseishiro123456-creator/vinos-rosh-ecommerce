@@ -6,9 +6,10 @@ import { assertOrderAmountFits } from "@/modules/checkout/pricing";
 import { verifyCheckoutQuote } from "@/modules/checkout/quote";
 import { loadCheckoutSnapshot } from "@/modules/checkout/snapshot";
 import { reserveStock } from "@/modules/inventory/stock-service";
+import { getReservationExpiresAt } from "@/modules/orders/hold";
 
 export class ManualOrderError extends Error {
-  constructor(public code: "QUOTE_CHANGED" | "PENDING_LIMIT" | "DUPLICATE_OPERATION" | "BUSY") {
+  constructor(public code: "QUOTE_CHANGED" | "PENDING_LIMIT" | "BUSY") {
     super(code);
   }
 }
@@ -18,14 +19,13 @@ export type ManualOrderInput = {
   checkoutQuote: string;
   provider: typeof PaymentProvider.YAPE_MANUAL | typeof PaymentProvider.TRANSFER_MANUAL;
   receiptType: ReceiptType;
-  operationCode: string;
   documentNumber?: string;
   businessName?: string;
   taxAddress?: string;
   customerNotes?: string;
 };
 
-export async function createManualOrder(userId: string, input: ManualOrderInput) {
+export async function reserveManualOrder(userId: string, input: ManualOrderInput) {
   const now = new Date();
   const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
   const number = `ROSH-${date}-${randomBytes(6).toString("hex").toUpperCase()}`;
@@ -40,18 +40,15 @@ export async function createManualOrder(userId: string, input: ManualOrderInput)
         const { address, cart, amounts } = snapshot;
         assertOrderAmountFits(amounts.total);
 
-        const pending = await tx.order.count({ where: { userId, status: OrderStatus.PAYMENT_REVIEW } });
+        const pending = await tx.order.count({ where: { userId, status: { in: [OrderStatus.PENDING_PAYMENT, OrderStatus.PAYMENT_REVIEW] } } });
         if (pending >= 3) throw new ManualOrderError("PENDING_LIMIT");
-        const duplicate = await tx.payment.findUnique({
-          where: { provider_operationCode: { provider: input.provider, operationCode: input.operationCode } },
-          select: { id: true },
-        });
-        if (duplicate) throw new ManualOrderError("DUPLICATE_OPERATION");
 
         const stockAfter = await reserveStock(tx, cart.items.map((item) => ({ productId: item.product.id, quantity: item.quantity })));
+        const reservedAt = new Date();
         const order = await tx.order.create({
           data: {
-            number, userId, addressId: address.id, status: OrderStatus.PAYMENT_REVIEW,
+            number, userId, addressId: address.id, status: OrderStatus.PENDING_PAYMENT,
+            stockReservedAt: reservedAt, reservationExpiresAt: getReservationExpiresAt(reservedAt),
             subtotal: amounts.subtotal, shippingAmount: amounts.shippingAmount, total: amounts.total,
             receiptType: input.receiptType, documentNumber: input.documentNumber,
             businessName: input.businessName, taxAddress: input.taxAddress,
@@ -67,8 +64,8 @@ export async function createManualOrder(userId: string, input: ManualOrderInput)
               })),
             },
             payments: { create: {
-              provider: input.provider, status: PaymentStatus.UNDER_REVIEW,
-              amount: amounts.total, currency: "PEN", operationCode: input.operationCode,
+              provider: input.provider, status: PaymentStatus.PENDING,
+              amount: amounts.total, currency: "PEN",
             } },
           },
           select: { id: true, number: true },
@@ -89,9 +86,6 @@ export async function createManualOrder(userId: string, input: ManualOrderInput)
         if (error.code === "P2034") {
           if (attempt < 2) continue;
           throw new ManualOrderError("BUSY");
-        }
-        if (error.code === "P2002" && String(error.meta?.target).includes("operationCode")) {
-          throw new ManualOrderError("DUPLICATE_OPERATION");
         }
       }
       throw error;

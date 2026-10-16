@@ -16,6 +16,7 @@ type Props = {
     created?: string;
     review?: string;
     cancel?: string;
+    payment?: string;
   }>;
 };
 
@@ -50,7 +51,12 @@ export default async function OrderPage({ params, searchParams }: Props) {
     },
     select: {
       number: true,
+      userId: true,
       status: true,
+      stockReservedAt: true,
+      stockReleasedAt: true,
+      reservationExpiresAt: true,
+      reservationExpiredAt: true,
       subtotal: true,
       shippingAmount: true,
       total: true,
@@ -87,6 +93,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
           operationCode: true,
           refundReference: true,
           refundedAt: true,
+          reportedAt: true,
         },
       },
     },
@@ -97,7 +104,9 @@ export default async function OrderPage({ params, searchParams }: Props) {
   const payment = order.payments[0];
   const canCustomerCancel =
     session.user.role === "CUSTOMER" &&
-    (order.status === "PENDING_PAYMENT" || order.status === "PAYMENT_REVIEW");
+    order.userId === session.user.id && order.status === "PENDING_PAYMENT" &&
+    Boolean(order.stockReservedAt && !order.stockReleasedAt);
+  const canContinuePayment = order.userId === session.user.id && order.status === "PENDING_PAYMENT";
 
   return (
     <main className="orderPage">
@@ -109,8 +118,20 @@ export default async function OrderPage({ params, searchParams }: Props) {
         {query.created ? (
           <div className="orderCreatedBanner">
             <strong>Pedido recibido.</strong>
-            <span>Reservamos el stock y enviamos el pago a revisión.</span>
+            <span>Consulta el estado y las instrucciones de tu pedido.</span>
           </div>
+        ) : null}
+
+        {query.payment === "sent" || query.payment === "already-sent" ? (
+          <div className="orderCreatedBanner" role="status"><strong>Operación enviada a revisión.</strong><span>No pagues otra vez. La tienda verificará el abono y conservará la reserva mientras lo revisa.</span></div>
+        ) : null}
+
+        {order.reservationExpiredAt || query.payment === "expired" ? (
+          <div className="checkoutWarningPanel" role="status"><strong>La reserva venció.</strong><p>Las unidades se liberaron. Si ya pagaste, contacta a la tienda para conciliar el abono y no pagues de nuevo.</p></div>
+        ) : null}
+
+        {query.payment === "unavailable" ? (
+          <div className="checkoutWarningPanel" role="alert">El pedido cambió de estado. Revisa su estado actual; si ya pagaste, contacta a la tienda y no pagues otra vez.</div>
         ) : null}
 
         {query.cancel === "cancelled" ? (
@@ -151,7 +172,8 @@ export default async function OrderPage({ params, searchParams }: Props) {
           <div>
             <p className="eyebrow wine">PEDIDO {order.number}</p>
             <h1>{statusLabel(order.status)}</h1>
-            <p>Creado el {order.createdAt.toLocaleString("es-PE")}</p>
+            <p>Creado el {order.createdAt.toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</p>
+            {order.status === "PENDING_PAYMENT" && order.reservationExpiresAt ? <p>Reserva hasta el {order.reservationExpiresAt.toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</p> : null}
           </div>
           <span className={`orderStatusPill status-${order.status.toLowerCase()}`}>{statusLabel(order.status)}</span>
         </div>
@@ -193,11 +215,12 @@ export default async function OrderPage({ params, searchParams }: Props) {
           <section className="adminCard">
             <p className="eyebrow wine">PAGO</p>
             <h2>{payment?.provider === "YAPE_MANUAL" ? "Yape" : payment?.provider === "TRANSFER_MANUAL" ? "Transferencia" : "Pago"}</h2>
-            <p>Estado: <strong>{payment?.status ?? "Sin pago"}</strong></p>
+            <p>Estado: <strong>{({ PENDING: "Pendiente de pago", UNDER_REVIEW: "En revisión", PAID: "Confirmado", FAILED: "Fallido", REJECTED: "Rechazado", CANCELLED: "Cancelado", REFUNDED: "Reembolsado" } as Record<string, string>)[payment?.status ?? ""] ?? "Sin pago"}</strong></p>
             {payment?.operationCode ? <p>Operación: <strong>{payment.operationCode}</strong></p> : null}
+            {payment?.reportedAt ? <p>Comunicado el {payment.reportedAt.toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</p> : null}
             {payment?.refundReference ? <p>Referencia de reembolso: <strong>{payment.refundReference}</strong></p> : null}
             {payment?.refundedAt ? <p>Reembolsado: <strong>{payment.refundedAt.toLocaleString("es-PE")}</strong></p> : null}
-            <p>Comprobante solicitado: <strong>{order.receiptType}</strong></p>
+            <p>Comprobante solicitado: <strong>{order.receiptType === "BOLETA" ? "Boleta" : "Factura"}</strong></p>
           </section>
         </div>
 
@@ -206,7 +229,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <div>
               <strong>¿Necesitas cancelar?</strong>
               <span>
-                Solo puedes hacerlo mientras el pago siga pendiente o en revisión. Si el pago ya fue aprobado, la cancelación y un posible reembolso deben resolverse con el negocio.
+                Cancela únicamente si todavía no pagaste. Si ya realizaste el pago, comunica la operación o contacta a la tienda para conciliar el abono.
               </span>
             </div>
             <form action={cancelPendingOrder.bind(null, order.number)}>
@@ -215,7 +238,10 @@ export default async function OrderPage({ params, searchParams }: Props) {
           </section>
         ) : null}
 
+        {order.status === "PAYMENT_REVIEW" ? <div className="checkoutWarningPanel">El pago está en revisión y la reserva se mantiene. Para cancelar o conciliar el pago, contacta a la tienda.</div> : null}
+
         <div className="orderStatusActions">
+          {canContinuePayment ? <Link className="button buttonPrimary" href={`/pedidos/${order.number}/pagar`}>Continuar al pago del pedido</Link> : null}
           <Link className="button buttonDark" href="/productos">Seguir comprando</Link>
           <Link className="button" href="/mi-cuenta">Ir a mi cuenta</Link>
         </div>

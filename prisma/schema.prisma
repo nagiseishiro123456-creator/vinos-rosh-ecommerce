@@ -279,6 +279,11 @@ model Order {
 
   customerNotes String?
 
+  stockReservedAt      DateTime?
+  reservationExpiresAt DateTime?
+  stockReleasedAt      DateTime?
+  reservationExpiredAt DateTime?
+
   paidAt      DateTime?
   shippedAt   DateTime?
   deliveredAt DateTime?
@@ -297,6 +302,7 @@ model Order {
   @@index([userId])
   @@index([userId, createdAt])
   @@index([status])
+  @@index([status, reservationExpiresAt])
   @@index([createdAt])
 }
 
@@ -328,6 +334,7 @@ model Payment {
   currency          String          @default("PEN")
   externalReference String?
   operationCode     String?
+  reportedAt        DateTime?
   refundReference   String?
   proofUrl          String?
   notes             String?

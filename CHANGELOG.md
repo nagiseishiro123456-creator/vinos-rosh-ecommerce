@@ -1,5 +1,13 @@
 # Changelog
 
+## Fase 2 — Sprint 1 / S1-03 (implementado, validación en curso, 2026-10-15)
+- Confirmación/reserva antes de instrucciones; pago pendiente y plazo persistido por pedido.
+- Ruta privada para pagar sobre el snapshot de la orden, con comunicación de operación separada.
+- Comunicar/aprobar no reserva otra vez ni elimina cambios posteriores del carrito.
+- Cancelar/vencer reservas pendientes libera una sola vez; revisión requiere conciliación.
+- Migración aditiva de marcadores y reportedAt, con contrato SQL sobre datos antiguos.
+- Pruebas de concurrencia/propiedad/límites y recorridos autenticados desktop/móvil.
+
 ## Fase 2 — Sprint 1 / S1-02 (implementado y verificado en rama, 2026-10-15)
 - Cálculos en Prisma.Decimal y representación monetaria canónica, sin punto flotante.
 - Confirmación HMAC del resumen y transacción Serializable para leer y guardar importes coherentes.

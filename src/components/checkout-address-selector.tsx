@@ -99,11 +99,11 @@ export function CheckoutAddressSelector({
 
         {canContinue ? (
           <Link className="button buttonPrimary fullButton" href={`/checkout/pago?addressId=${selectedAddressId}`}>
-            Continuar al pago
+            Revisar pedido
           </Link>
         ) : (
           <button className="button buttonDisabled fullButton" type="button" disabled>
-            Continuar al pago
+            Revisar pedido
           </button>
         )}
         <small className="checkoutSecurityNote">El monto de envío se valida nuevamente en el servidor antes de crear el pedido.</small>

@@ -15,6 +15,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 9. [Política de costos vigente](cost-policy.md)
 10. [Preview Render](render-free-preview.md)
 11. [Backups y recuperación](07-despliegue/backups-y-recuperacion.md)
+12. [ADR 0003: reserva previa](decisions/0003-reserva-previa.md) · [QA S1-03](testing/s1-03-reserva.md)
 
 ## Cuándo documentar
 
