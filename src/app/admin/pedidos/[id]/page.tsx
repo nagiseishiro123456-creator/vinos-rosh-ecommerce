@@ -206,7 +206,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
 
         <article className="adminPanel">
           <p className="eyebrow wine">TRAZABILIDAD</p>
-          <p>Fechas en hora de Perú. Eventos registrados desde S1-05.</p>
+          <p>Fechas en hora de Perú. El historial incluye los eventos registrados a partir de esta actualización.</p>
           <div className="adminOrderTimeline">
             <span><strong>Creado</strong><small>{formatDate(order.createdAt)}</small></span>
             <span><strong>Pagado</strong><small>{formatDate(order.paidAt)}</small></span>
