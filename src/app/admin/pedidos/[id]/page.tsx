@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
-import { advanceOrderStatus, registerManualRefund } from "@/modules/admin/orders/actions";
+import { advanceOrderStatus, registerManualRefund, openReconciliation, closeReconciliation } from "@/modules/admin/orders/actions";
+import { operationMessages } from "@/modules/admin/operation-feedback";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Pendiente de pago",
@@ -26,15 +27,17 @@ const nextActionLabels: Partial<Record<string, string>> = {
 
 function formatDate(value: Date | null) {
   if (!value) return "—";
-  return new Intl.DateTimeFormat("es-PE", { dateStyle: "medium", timeStyle: "short" }).format(value);
+  return new Intl.DateTimeFormat("es-PE", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Lima" }).format(value);
 }
 
 type AdminOrderDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ result?: string }>;
 };
 
-export default async function AdminOrderDetailPage({ params }: AdminOrderDetailPageProps) {
+export default async function AdminOrderDetailPage({ params, searchParams }: AdminOrderDetailPageProps) {
   const { id } = await params;
+  const { result } = await searchParams;
   await requireAdmin(`/admin/pedidos/${id}`);
 
   const order = await prisma.order.findUnique({
@@ -63,6 +66,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
       shippedAt: true,
       deliveredAt: true,
       refundedAt: true,
+      events: { orderBy: { createdAt: "desc" }, take: 100, include: { actor: { select: { firstName: true, lastName: true } } } },
       user: { select: { firstName: true, lastName: true, email: true, phone: true } },
       items: {
         orderBy: { createdAt: "asc" },
@@ -87,6 +91,8 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
           paidAt: true,
           refundedAt: true,
           refundReference: true,
+          currency: true,
+          reconciliation: true,
         },
       },
     },
@@ -94,7 +100,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
 
   if (!order) notFound();
 
-  const advanceAction = advanceOrderStatus.bind(null, order.id);
+  const advanceAction = advanceOrderStatus.bind(null, order.id, order.status);
   const nextLabel = nextActionLabels[order.status];
   const refundAction = registerManualRefund.bind(null, order.id);
   const canRefund = order.status === "PAID" || order.status === "PREPARING";
@@ -112,6 +118,8 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
           <Link className="button buttonDark" href={`/pedidos/${order.number}`}>Vista cliente</Link>
         </div>
       </div>
+
+      {result && Object.hasOwn(operationMessages, result) ? <p role="status" className="adminCard">{operationMessages[result]}</p> : null}
 
       <div className="adminOrderStatusBar">
         <span className={`adminBadge status-${order.status.toLowerCase()}`}>{statusLabels[order.status] ?? order.status}</span>
@@ -198,6 +206,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
 
         <article className="adminPanel">
           <p className="eyebrow wine">TRAZABILIDAD</p>
+          <p>Fechas en hora de Perú. Eventos registrados desde S1-05.</p>
           <div className="adminOrderTimeline">
             <span><strong>Creado</strong><small>{formatDate(order.createdAt)}</small></span>
             <span><strong>Pagado</strong><small>{formatDate(order.paidAt)}</small></span>
@@ -206,7 +215,35 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
             <span><strong>Reembolsado</strong><small>{formatDate(order.refundedAt)}</small></span>
           </div>
           {order.customerNotes ? <p className="adminOrderNote">Nota del cliente: {order.customerNotes}</p> : null}
+          <ol className="adminEventList">
+            {order.events.map((event) => <li key={event.id}>
+              <strong>{({ PAYMENT_APPROVED: "Pago aprobado", PAYMENT_REJECTED: "Pago rechazado", PAYMENT_REFUNDED: "Reembolso registrado", ORDER_ADVANCED: "Estado actualizado", RECONCILIATION_OPENED: "Conciliación abierta", RECONCILIATION_REFUNDED: "Conciliación resuelta", RESERVATION_EXPIRED: "Reserva vencida", RESERVATION_CANCELLED: "Reserva cancelada", PAYMENT_REPORTED: "Pago comunicado" } as Record<string, string>)[event.kind] ?? event.kind}</strong>
+              <p>{event.note}</p><small>{formatDate(event.createdAt)} · {event.actor ? `${event.actor.firstName} ${event.actor.lastName}` : "Sistema / cuenta retirada"}</small>
+            </li>)}
+          </ol>
         </article>
+        {order.status === "CANCELLED" ? order.payments.filter((p) => ["YAPE_MANUAL", "TRANSFER_MANUAL"].includes(p.provider) && ["CANCELLED", "REJECTED"].includes(p.status)).map((payment) => (
+          <article className="adminPanel" key={`reconciliation-${payment.id}`}>
+            <p className="eyebrow wine">CONCILIACIÓN MANUAL</p>
+            <h2>{payment.reconciliation ? (payment.reconciliation.refundedAt ? "Conciliación resuelta" : "Ingreso pendiente de devolución") : "Registrar ingreso después del cierre"}</h2>
+            <p>El pedido permanece cancelado. Esta gestión no reserva ni devuelve stock. Verifica el ingreso y, si corresponde, devuelve el dinero fuera de la plataforma.</p>
+            {payment.reconciliation ? <>
+              <p>Importe recibido: <strong>{formatPrice(payment.reconciliation.receivedAmount.toFixed(2))}</strong> · Operación: {payment.operationCode}</p>
+              {payment.reconciliation.refundedAt ? <p>Devuelto {formatDate(payment.reconciliation.refundedAt)} · Referencia: {payment.reconciliation.refundReference}</p> :
+                <form action={closeReconciliation.bind(null, order.id, payment.id)} className="adminRefundForm">
+                  <label>Referencia de devolución<input name="refundReference" minLength={3} maxLength={120} required /></label>
+                  <label className="adminConfirmCheck"><input name="confirm" type="checkbox" value="yes" required />Confirmo que devolví íntegramente el importe recibido.</label>
+                  <button className="button buttonDark" type="submit">Registrar devolución de conciliación</button>
+                </form>}
+            </> : <form action={openReconciliation.bind(null, order.id, payment.id)} className="adminRefundForm">
+              <label>Código de operación recibido<input name="operationCode" defaultValue={payment.operationCode ?? ""} readOnly={!!payment.operationCode} minLength={4} maxLength={80} required /></label>
+              <label>Importe realmente recibido en PEN<input name="receivedAmount" type="text" inputMode="decimal" placeholder="98.20" pattern="(?:0|[1-9][0-9]{0,7})\.[0-9]{2}" required /></label>
+              <label>Motivo de conciliación<input name="reason" minLength={4} maxLength={500} required /></label>
+              <label className="adminConfirmCheck"><input name="confirm" type="checkbox" value="yes" required />Verifiqué este ingreso en la cuenta real del negocio.</label>
+              <button className="button buttonDark" type="submit">Abrir conciliación</button>
+            </form>}
+          </article>
+        )) : null}
         {canRefund ? (
           <article className="adminPanel">
             <p className="eyebrow wine">REEMBOLSO MANUAL</p>

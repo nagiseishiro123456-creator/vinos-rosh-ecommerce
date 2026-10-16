@@ -38,6 +38,10 @@ async function closeReservation(
     status: PaymentStatus.CANCELLED,
     notes: options.expired ? "Reserva vencida sin operación comunicada." : "Reserva cancelada por el cliente sin operación comunicada.",
   } });
+  await tx.orderEvent.create({ data: { orderId, actorUserId: options.userId,
+    kind: options.expired ? "RESERVATION_EXPIRED" : "RESERVATION_CANCELLED",
+    note: options.expired ? "Vencimiento sin pago comunicado; stock liberado." : "Cancelación del cliente sin pago comunicado; stock liberado.", createdAt: now,
+  } });
   return true;
 }
 
@@ -61,7 +65,7 @@ export async function reportManualPayment(userId: string, number: string, operat
       const order = await tx.order.findFirst({ where: { userId, number }, include: { payments: true } });
       if (!order) return "unavailable" as const;
       const payment = order.payments.find((p) => p.provider === "YAPE_MANUAL" || p.provider === "TRANSFER_MANUAL");
-      if (order.status === OrderStatus.PAYMENT_REVIEW && payment?.operationCode === code) return "already-sent" as const;
+      if (order.status === OrderStatus.PAYMENT_REVIEW && payment?.status === PaymentStatus.UNDER_REVIEW && payment.operationCode === code) return "already-sent" as const;
       if (order.status !== OrderStatus.PENDING_PAYMENT || !order.stockReservedAt || order.stockReleasedAt || !order.reservationExpiresAt) return "unavailable" as const;
       if (order.reservationExpiresAt <= now) {
         await closeReservation(tx, order.id, now, { expired: true, userId });
@@ -77,6 +81,9 @@ export async function reportManualPayment(userId: string, number: string, operat
         id: payment.id, status: PaymentStatus.PENDING, operationCode: null,
       }, data: { status: PaymentStatus.UNDER_REVIEW, operationCode: code, reportedAt: now } });
       if (updated.count !== 1) throw new Error("PAYMENT_STATE_CHANGED");
+      await tx.orderEvent.create({ data: { orderId: order.id, actorUserId: userId, kind: "PAYMENT_REPORTED",
+        note: `Operación comunicada: ${code}. Pendiente de verificación bancaria.`, createdAt: now,
+      } });
       return "sent" as const;
     });
   } catch (error) {

@@ -1,132 +1,25 @@
 "use server";
 
-import { InventoryMovementType, OrderStatus, PaymentStatus } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { approveManualPaymentRecord } from "@/modules/payments/review-service";
-import { releaseStock } from "@/modules/inventory/stock-service";
+import { requireAdmin } from "@/modules/admin/auth";
+import { adminOperation } from "@/modules/admin/operation-feedback";
+import { approveManualPaymentRecord, rejectManualPaymentRecord } from "@/modules/payments/review-service";
 
-const paymentIdSchema = z.string().cuid();
+const idSchema = z.string().cuid();
 
-async function requireAdmin() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect("/iniciar-sesion?callbackUrl=/admin/pagos");
-  }
-  if (session.user.role !== "ADMIN") {
-    redirect("/mi-cuenta");
-  }
-  return session.user.id;
+export async function approveManualPayment(paymentId: string, formData: FormData) {
+  const session = await requireAdmin("/admin/pagos");
+  if (!idSchema.safeParse(paymentId).success || formData.get("confirm") !== "yes") redirect("/admin/pagos?result=invalid");
+  const payment = await prisma.payment.findUnique({ where: { id: paymentId }, select: { orderId: true } });
+  await adminOperation(payment?.orderId, "/admin/pagos", () => approveManualPaymentRecord(session.user.id, paymentId));
 }
 
-function stateChanged() {
-  return new Error("PAYMENT_STATE_CHANGED");
-}
-
-export async function approveManualPayment(paymentId: string) {
-  const adminId = await requireAdmin();
-  const parsedId = paymentIdSchema.safeParse(paymentId);
-  if (!parsedId.success) return;
-
-  await approveManualPaymentRecord(adminId, parsedId.data);
-
-  revalidatePath("/admin/pagos");
-  revalidatePath("/admin/pedidos");
-  revalidatePath("/admin");
-  revalidatePath("/mi-cuenta");
-}
-
-export async function rejectManualPayment(paymentId: string) {
-  const adminId = await requireAdmin();
-  const parsedId = paymentIdSchema.safeParse(paymentId);
-  if (!parsedId.success) return;
-
-  try {
-    await prisma.$transaction(async (tx) => {
-      const payment = await tx.payment.findUnique({
-        where: { id: parsedId.data },
-        select: {
-          id: true,
-          status: true,
-          orderId: true,
-          order: {
-            select: {
-              number: true,
-              status: true,
-              items: {
-                select: { productId: true, quantity: true },
-              },
-            },
-          },
-        },
-      });
-
-      if (
-        !payment ||
-        payment.status !== PaymentStatus.UNDER_REVIEW ||
-        payment.order.status !== OrderStatus.PAYMENT_REVIEW
-      ) {
-        return;
-      }
-
-      const now = new Date();
-
-      const orderClaim = await tx.order.updateMany({
-        where: {
-          id: payment.orderId,
-          status: OrderStatus.PAYMENT_REVIEW,
-        },
-        data: {
-          status: OrderStatus.CANCELLED,
-          cancelledAt: now,
-          stockReleasedAt: now,
-        },
-      });
-
-      if (orderClaim.count !== 1) throw stateChanged();
-
-      const paymentClaim = await tx.payment.updateMany({
-        where: {
-          id: payment.id,
-          status: PaymentStatus.UNDER_REVIEW,
-        },
-        data: {
-          status: PaymentStatus.REJECTED,
-          reviewedById: adminId,
-          reviewedAt: now,
-        },
-      });
-
-      if (paymentClaim.count !== 1) throw stateChanged();
-
-      const stockAfterByProduct = await releaseStock(tx, payment.order.items);
-
-      await tx.inventoryMovement.createMany({
-        data: payment.order.items.map((item) => ({
-          productId: item.productId,
-          orderId: payment.orderId,
-          actorUserId: adminId,
-          type: InventoryMovementType.ORDER_RELEASE,
-          quantity: item.quantity,
-          stockAfter: stockAfterByProduct.get(item.productId) ?? 0,
-          note: `Liberación por rechazo de pago del pedido ${payment.order.number}`,
-        })),
-      });
-    });
-  } catch (error) {
-    if (!(error instanceof Error && error.message === "PAYMENT_STATE_CHANGED")) {
-      throw error;
-    }
-  }
-
-  revalidatePath("/admin/pagos");
-  revalidatePath("/admin/pedidos");
-  revalidatePath("/admin/inventario");
-  revalidatePath("/admin");
-  revalidatePath("/mi-cuenta");
+export async function rejectManualPayment(paymentId: string, formData: FormData) {
+  const session = await requireAdmin("/admin/pagos");
+  const reason = z.string().trim().min(4).max(500).safeParse(formData.get("reason"));
+  if (!idSchema.safeParse(paymentId).success || !reason.success || formData.get("confirm") !== "yes") redirect("/admin/pagos?result=invalid");
+  const payment = await prisma.payment.findUnique({ where: { id: paymentId }, select: { orderId: true } });
+  await adminOperation(payment?.orderId, "/admin/pagos", () => rejectManualPaymentRecord(session.user.id, paymentId, reason.data));
 }
