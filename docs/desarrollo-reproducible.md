@@ -85,3 +85,13 @@ pedido pendiente, abrir su detalle desde Mi cuenta y usar “Continuar al pago d
 Antes de aplicar la migración en un entorno con datos: respaldo completo y revisión de
 pendientes antiguos sin marca de reserva. Nunca inferir su stock ni pagar una orden sin
 reserva verificable. La política/migración propuesta no se ha aplicado a Render.
+
+## Verificación de idempotencia — S1-04
+CI aplica 9 migraciones y ejecuta además el SQL de identidad sobre fixtures antiguas en un esquema
+transaccional aislado. Las pruebas de integración de checkout exigen `vinos_rosh_ci`/`vinos_rosh_test`.
+El caso de rollback instala un trigger dirigido a una única clave ficticia y lo elimina al terminar;
+no se debe ejecutar esta suite en una BD conservada o compartida. Los proveedores de integración usan
+variables de proceso con destino `QA-NO-TRANSFERIR`, sin abonos ni cambios a configuración de Render.
+El recorrido de navegador descarta una respuesta de acción después del commit, reenvía desde dos
+pestañas, verifica conflicto y prueba el formulario nativo con sesión de QA sin JavaScript.
+Cada escenario visual reinicia los cupos de acciones de su cliente sintético; no cambia el rate limit real.

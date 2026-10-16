@@ -10,41 +10,11 @@ import { consumeRateLimit } from "@/lib/rate-limit";
 import { StockChangedError } from "@/modules/inventory/stock-service";
 import { MoneyError } from "@/modules/checkout/pricing";
 import { CheckoutUnavailableError } from "@/modules/checkout/snapshot";
-import { reserveManualOrder, ManualOrderError } from "@/modules/orders/manual-order-service";
+import { reserveManualOrder, ManualOrderError, CheckoutConflictError } from "@/modules/orders/manual-order-service";
 import { cancelUnpaidReservation, reportManualPayment, PaymentReportError } from "@/modules/orders/reservation-service";
-import { getCommerceSettings } from "@/modules/settings/queries";
-
-const manualOrderSchema = z
-  .object({
-    addressId: z.string().cuid(),
-    checkoutQuote: z.string().regex(/^v1:[a-f0-9]{64}$/),
-    provider: z.enum(["YAPE_MANUAL", "TRANSFER_MANUAL"]),
-    receiptType: z.enum(["BOLETA", "FACTURA"]),
-    documentNumber: z.string().trim().max(20).optional(),
-    businessName: z.string().trim().max(180).optional(),
-    taxAddress: z.string().trim().max(220).optional(),
-    customerNotes: z.string().trim().max(500).optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.receiptType === "FACTURA") {
-      if (!/^\d{11}$/.test(data.documentNumber ?? "")) {
-        ctx.addIssue({ code: "custom", path: ["documentNumber"], message: "RUC inválido" });
-      }
-      if (!data.businessName) {
-        ctx.addIssue({ code: "custom", path: ["businessName"], message: "Razón social requerida" });
-      }
-      if (!data.taxAddress) {
-        ctx.addIssue({ code: "custom", path: ["taxAddress"], message: "Dirección fiscal requerida" });
-      }
-    }
-  });
+import { manualOrderSchema } from "@/modules/orders/manual-order-input";
 
 const orderNumberSchema = z.string().trim().min(8).max(48);
-
-async function providerConfigured(provider: "YAPE_MANUAL" | "TRANSFER_MANUAL") {
-  const settings = await getCommerceSettings();
-  return provider === "YAPE_MANUAL" ? settings.yape.ready : settings.transfer.ready;
-}
 
 async function requireUser(callbackUrl = "/checkout") {
   const session = await getServerSession(authOptions);
@@ -71,6 +41,7 @@ export async function reserveOrder(formData: FormData) {
   const parsed = manualOrderSchema.safeParse({
     addressId: formData.get("addressId"),
     checkoutQuote: formData.get("checkoutQuote"),
+    checkoutKey: formData.get("checkoutKey"),
     provider: formData.get("provider"),
     receiptType: formData.get("receiptType"),
     documentNumber: formData.get("documentNumber") || undefined,
@@ -83,16 +54,13 @@ export async function reserveOrder(formData: FormData) {
     redirect(`/checkout/pago?addressId=${encodeURIComponent(String(formData.get("addressId") ?? ""))}&error=invalid`);
   }
 
-  if (!(await providerConfigured(parsed.data.provider))) {
-    redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=provider`);
-  }
-
-  let createdOrder: { number: string };
+  let createdOrder: { number: string; replayed: boolean };
   try {
     createdOrder = await reserveManualOrder(userId, parsed.data);
   } catch (error) {
+    if (error instanceof CheckoutConflictError) redirect(`/pedidos/${error.orderNumber}?confirmation=conflict`);
     if (error instanceof ManualOrderError) {
-      const codes = { QUOTE_CHANGED: "quote-changed", PENDING_LIMIT: "pending-limit", BUSY: "busy" };
+      const codes = { QUOTE_CHANGED: "quote-changed", PENDING_LIMIT: "pending-limit", BUSY: "busy", INVALID_CONFIRMATION: "invalid-confirmation", PROVIDER_UNAVAILABLE: "provider" };
       redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=${codes[error.code]}`);
     }
     if (error instanceof CheckoutUnavailableError) {
@@ -108,7 +76,7 @@ export async function reserveOrder(formData: FormData) {
   revalidatePath("/checkout");
   revalidatePath("/mi-cuenta");
   revalidatePath("/admin/inventario");
-  redirect(`/pedidos/${createdOrder.number}/pagar?reserved=1`);
+  redirect(`/pedidos/${createdOrder.number}/pagar?${createdOrder.replayed ? "recovered" : "reserved"}=1`);
 }
 
 export async function cancelPendingOrder(orderNumber: string) {

@@ -11,6 +11,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { assertOrderAmountFits, MoneyError } from "@/modules/checkout/pricing";
 import { createCheckoutQuote } from "@/modules/checkout/quote";
+import { createCheckoutKey } from "@/modules/checkout/idempotency";
 import { loadCheckoutSnapshot, CheckoutUnavailableError } from "@/modules/checkout/snapshot";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
@@ -30,6 +31,7 @@ function errorMessage(error: string | undefined) {
   }
   if (error === "pending-limit") return "Tienes tres reservas o pagos en revisión. Consulta tus pedidos antes de crear otro.";
   if (error === "busy") return "La compra se está actualizando. Revisa el resumen e inténtalo de nuevo.";
+  if (error === "invalid-confirmation") return "La confirmación ya no es válida. Revisa este resumen actualizado antes de continuar.";
   if (error === "duplicate-operation") {
     return "Ese código de operación ya está registrado. Verifica el número antes de continuar.";
   }
@@ -69,6 +71,7 @@ export default async function PaymentPage({ searchParams }: Props) {
   const { address, cart, shippingZone, amounts } = snapshot;
   const commerce = await getCommerceSettings();
   const checkoutQuote = createCheckoutQuote({ ...snapshot, userId: session.user.id });
+  const checkoutKey = createCheckoutKey(session.user.id, checkoutQuote);
   const subtotal = amounts.subtotal.toFixed(2);
   const shippingAmount = amounts.shippingAmount.toFixed(2);
   const total = amounts.total.toFixed(2);
@@ -98,6 +101,7 @@ export default async function PaymentPage({ searchParams }: Props) {
             addressId={address.id}
             total={total}
             checkoutQuote={checkoutQuote}
+            checkoutKey={checkoutKey}
             yapeEnabled={commerce.yape.ready}
             transferEnabled={commerce.transfer.ready}
           />

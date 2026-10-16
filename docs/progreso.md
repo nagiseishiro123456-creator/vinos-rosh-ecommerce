@@ -1,10 +1,10 @@
 # Punto de avance
 
-- Fase: 2. Sprint: 1. S1-01 a S1-03 verificadas en ramas.
+- Fase: 2. Sprint: 1. S1-04 en validación; S1-01 a S1-03 conservadas.
 - Fecha de este punto de avance: 2026-10-16 (America/Lima).
 - Base S1-03: `e8b72d8f41b36eec6d3317e127e531affe4309d5` de S1-02 (PR #4).
-- Rama actual: `fase-2/sprint-01-reserva-previa`, basada en S1-02.
-- Estado: S1-03 implementada y verificada; lista para revisión, integración pendiente. El Sprint 1 sigue abierto.
+- Rama actual: `fase-2/sprint-01-idempotencia`, basada en S1-03.
+- Estado: S1-04 implementada; validación con PostgreSQL/navegador y evidencias pendientes. El Sprint 1 sigue abierto.
 - PR actual: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/5
 - Código verificado: `411e47cc46dff14922c1affc74de02079b0b6b7d`.
 
@@ -30,16 +30,15 @@ CI: 40 pruebas, 6 casos de navegador y 8 migraciones aprobados, incluido contrat
 16 capturas revisadas y conservadas con hashes. [QA S1-03](testing/s1-03-reserva.md).
 
 ## Siguiente acción
-Iniciar S1-04: documentar primero clave por usuario/operación, huella del contenido y
-resultado recuperable; implementar unicidad persistida y pruebas de doble clic, reintento
-tras respuesta perdida y clave repetida con otro contenido. Actualizar QA, evidencias y avance
-en su PR. S1-05 continúa pendiente; S1-03 adelantó el vencimiento solo de reservas sin pago comunicado.
+Completar S1-04: PostgreSQL, contratos de migración y recorridos de respuesta perdida/conflicto,
+capturas y cierre documental. [ADR 0004](decisions/0004-idempotencia-reserva.md) y
+[QA S1-04](testing/s1-04-idempotencia.md). Después iniciar S1-05, revisión/conciliación ampliada.
 Cadena de integración: PR #3 → #4 → #5. Tras integrar cada base, retargetear el siguiente PR
 a main y revisar el diff. No se han fusionado ramas ni desplegado estos cambios.
 
 ## Riesgos abiertos
 - Conciliación tardía y revisión administrativa ampliada: S1-05.
-- Reintento de creación sin clave idempotente persistida: S1-04.
+- Idempotencia persistida implementada en S1-04, pendiente de verificar con BD/navegador.
 - Docker y PowerShell no ejecutados en este contenedor; ver límites de S1-01.
 - Instalación completa de CI informa 5 vulnerabilidades altas incluyendo herramientas;
   auditoría solo de producción informa 0. Revisar dependencias de desarrollo antes de cerrar el sprint.

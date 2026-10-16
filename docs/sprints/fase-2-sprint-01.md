@@ -69,4 +69,5 @@ Los checks de S1-01 no demuestran el cierre de las otras cuatro historias ni hab
 - S1-01: preparación reproducible verificada y 10 capturas conservadas; ver [QA](../testing/sprint-01.md).
 - S1-02: implementada y verificada, PR #4 dependiente de #3; 28 pruebas y 4 casos de navegador aprobados, 10 capturas nuevas; ver [QA de dinero](../testing/s1-02-dinero.md).
 - S1-03: implementada y verificada en PR #5 (depende de #4); 40 pruebas, 6 casos de navegador, 8 migraciones y 16 capturas. [ADR](../decisions/0003-reserva-previa.md) y [QA](../testing/s1-03-reserva.md).
-- S1-04/S1-05: pendientes; el ajuste básico que excluye pagos en revisión del vencimiento se adelanta a S1-03 por coherencia del flujo.
+- El ajuste básico que excluye pagos en revisión del vencimiento se adelantó a S1-03 por coherencia del flujo.
+- S1-04: implementada, validación en curso; [ADR](../decisions/0004-idempotencia-reserva.md) y [QA](../testing/s1-04-idempotencia.md). S1-05 sigue pendiente.

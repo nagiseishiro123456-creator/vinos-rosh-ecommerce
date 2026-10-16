@@ -17,6 +17,7 @@ type Props = {
     review?: string;
     cancel?: string;
     payment?: string;
+    confirmation?: string;
   }>;
 };
 
@@ -115,6 +116,9 @@ export default async function OrderPage({ params, searchParams }: Props) {
       </div>
 
       <section className="orderStatusShell shell">
+        {query.confirmation === "conflict" ? <div className="checkoutError" role="alert">
+          Esta confirmación ya creó un pedido con otros datos. Revisa este pedido existente; para otra compra vuelve al carrito. No pagues de nuevo.
+        </div> : null}
         {query.created ? (
           <div className="orderCreatedBanner">
             <strong>Pedido recibido.</strong>

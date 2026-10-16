@@ -88,7 +88,7 @@ abrir instrucciones o comunicar después del plazo ejecuta la misma liberación 
 Sin mantenimiento/acceso, la liberación puede demorarse. No se agrega cron de pago.
 La migración 8 reconoce stock de pedidos históricos activos sin asignarles nuevos plazos.
 Pendientes históricos sin marca de reserva se bloquean para revisión operativa; no se infiere su stock.
-Ver [ADR 0003](decisions/0003-reserva-previa.md). Idempotencia de creación: S1-04 pendiente.
+Ver [ADR 0003](decisions/0003-reserva-previa.md). Idempotencia de creación implementada en S1-04, validación en curso.
 
 ## Importes y confirmación — S1-02
 Ver [ADR 0002](decisions/0002-dinero-y-confirmacion.md). El cálculo comercial usa
@@ -100,4 +100,18 @@ comprueba la firma del resumen y guarda líneas, subtotal, envío, total y pago 
 mismo snapshot. Los cambios de contenido exigen revisar la pantalla actualizada.
 Las acciones de administración rechazan precisión monetaria extra.
 S1-02 no modificó el esquema. S1-03 incorpora la reserva previa; idempotencia persistida
-sigue pendiente en S1-04. La firma confirma contenido y no sustituye esa garantía.
+se implementa en S1-04 (validación en curso). La firma confirma contenido y la clave identifica la operación.
+
+## Confirmación idempotente — S1-04
+Ver [ADR 0004](decisions/0004-idempotencia-reserva.md) y [QA](testing/s1-04-idempotencia.md).
+La migración 9 agrega checkoutKey/checkoutRequestHash y UNIQUE(userId, checkoutKey), con check de pareja/formato.
+La clave HMAC es estable por cliente y firma del resumen; no depende del clic o de memoria de una instancia.
+La huella SHA-256 liga todos los datos aceptados y normalizados. El servidor busca primero el resultado
+persistido: mismo contenido devuelve la orden existente; contenido distinto produce conflicto propio.
+La creación sigue siendo Serializable. P2034 se reintenta; P2002 de checkout se resuelve leyendo la orden ganadora.
+Stock, orden, identidad, pago y consumo de carrito se confirman juntos o revierten juntos.
+La disponibilidad del proveedor se resuelve dentro de la creación usando la misma función que la UI;
+no se exige al recuperar un resultado anterior. Replays no extienden plazos ni mutan carrito/stock/pagos.
+Históricos conservan NULL, sin deduplicación retroactiva. No hay TTL de identidad mientras exista la orden.
+El formulario hidratado conserva sus datos si falla la respuesta; las redirecciones de Next se relanzan
+al framework. La acción nativa permite envío sin JavaScript. No se incorporan servicios/dependencias.
