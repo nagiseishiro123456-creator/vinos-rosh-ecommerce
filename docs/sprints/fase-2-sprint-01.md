@@ -2,7 +2,7 @@
 
 ## Sprint Goal
 Crear pedidos con importes exactos, reserva anterior al pago y protección contra duplicados.
-Estado: iniciado, S1-01 a S1-03 implementadas y verificadas en ramas; integración pendiente. Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
+Estado: iniciado, S1-01 a S1-04 implementadas y verificadas en ramas; integración pendiente. Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
 Los 26 SP son una estimación preliminar; no constituyen fecha de entrega.
 
 ## Historias y aceptación
@@ -70,4 +70,5 @@ Los checks de S1-01 no demuestran el cierre de las otras cuatro historias ni hab
 - S1-02: implementada y verificada, PR #4 dependiente de #3; 28 pruebas y 4 casos de navegador aprobados, 10 capturas nuevas; ver [QA de dinero](../testing/s1-02-dinero.md).
 - S1-03: implementada y verificada en PR #5 (depende de #4); 40 pruebas, 6 casos de navegador, 8 migraciones y 16 capturas. [ADR](../decisions/0003-reserva-previa.md) y [QA](../testing/s1-03-reserva.md).
 - El ajuste básico que excluye pagos en revisión del vencimiento se adelantó a S1-03 por coherencia del flujo.
-- S1-04: implementada, validación en curso; [ADR](../decisions/0004-idempotencia-reserva.md) y [QA](../testing/s1-04-idempotencia.md). S1-05 sigue pendiente.
+- S1-04: implementada y verificada en PR #6 (depende de #5); 53 pruebas, 10 casos de navegador, 9 migraciones y 8 capturas nuevas. [ADR](../decisions/0004-idempotencia-reserva.md) y [QA](../testing/s1-04-idempotencia.md).
+- S1-05: pendiente. El Sprint 1 sigue abierto.

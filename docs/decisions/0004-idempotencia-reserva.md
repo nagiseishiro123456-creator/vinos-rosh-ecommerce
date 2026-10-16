@@ -1,6 +1,6 @@
 # ADR 0004 — Idempotencia persistida de confirmación
 
-Fecha: 2026-10-16 (America/Lima). Estado: adoptada para implementar S1-04; verificación pendiente.
+Fecha: 2026-10-16 (America/Lima). Estado: adoptada y verificada para S1-04; integración pendiente en PR #6.
 Base: S1-03 `b35a57896ba06eb35402f5b4d404f3233846df95` (PR #5, pendiente de integración).
 
 ## Clave y contenido
@@ -16,6 +16,17 @@ campos fiscales/notas aceptados. Entradas normalizadas con Zod, trim y opcionale
 equivalentes a ausentes. Los campos monetarios del navegador y campos ajenos se ignoran.
 
 ## Regla transaccional
+
+```mermaid
+flowchart TB
+    A["Confirmación autenticada"] --> B{"¿Existe usuario + clave?"}
+    B -- "Sí" --> C{"¿Misma huella?"}
+    C -- "Sí" --> D["Recuperar pedido sin nuevos efectos"]
+    C -- "No" --> E["Conflicto con el pedido propio"]
+    B -- "No" --> F["Validar y reservar en una transacción"]
+    F -- "Choque de concurrencia: reintento acotado" --> B
+```
+
 Un índice UNIQUE(userId, checkoutKey) garantiza a lo sumo una orden por operación/cliente.
 Se lee esa clave ANTES de consultar carrito, precios, stock, límite de pendientes o proveedor:
 - Mismo contenido: devolver ID/número de la orden existente, sin tocar stock, plazo, pagos o carrito.
@@ -53,3 +64,6 @@ desktop/móvil con manifiesto, arquitectura, backlog y punto de avance en el mis
 Aceptación: reintento secuencial/concurrente devuelve una orden, respuesta perdida recuperable,
 conflicto fiscal/proveedor/resumen, acceso ajeno rechazado, rollback y nueva compra explícita.
 Revisión administrativa/conciliación ampliada sigue en S1-05.
+
+Verificación: 53 pruebas, 10 casos de navegador, 9 migraciones y dos contratos SQL aprobados;
+ocho capturas nuevas conservadas. Resultados y límites: [QA S1-04](../testing/s1-04-idempotencia.md).

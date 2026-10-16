@@ -88,7 +88,7 @@ abrir instrucciones o comunicar después del plazo ejecuta la misma liberación 
 Sin mantenimiento/acceso, la liberación puede demorarse. No se agrega cron de pago.
 La migración 8 reconoce stock de pedidos históricos activos sin asignarles nuevos plazos.
 Pendientes históricos sin marca de reserva se bloquean para revisión operativa; no se infiere su stock.
-Ver [ADR 0003](decisions/0003-reserva-previa.md). Idempotencia de creación implementada en S1-04, validación en curso.
+Ver [ADR 0003](decisions/0003-reserva-previa.md). Idempotencia de creación implementada y verificada en rama S1-04.
 
 ## Importes y confirmación — S1-02
 Ver [ADR 0002](decisions/0002-dinero-y-confirmacion.md). El cálculo comercial usa
@@ -100,7 +100,7 @@ comprueba la firma del resumen y guarda líneas, subtotal, envío, total y pago 
 mismo snapshot. Los cambios de contenido exigen revisar la pantalla actualizada.
 Las acciones de administración rechazan precisión monetaria extra.
 S1-02 no modificó el esquema. S1-03 incorpora la reserva previa; idempotencia persistida
-se implementa en S1-04 (validación en curso). La firma confirma contenido y la clave identifica la operación.
+se implementa y verifica en rama S1-04. La firma confirma contenido y la clave identifica la operación.
 
 ## Confirmación idempotente — S1-04
 Ver [ADR 0004](decisions/0004-idempotencia-reserva.md) y [QA](testing/s1-04-idempotencia.md).

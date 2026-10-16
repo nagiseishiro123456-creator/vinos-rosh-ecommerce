@@ -1,0 +1,75 @@
+{
+  "story": "S1-04",
+  "date": "2026-10-16",
+  "timezone": "America/Lima",
+  "run_id": 38927156735,
+  "tested_commit": "184feaba3d17da1741b7ef16caf8839a5375a428",
+  "artifact_id": 12057810664,
+  "artifact_sha256": "f3c88e7bb8046f3f2edbe1c18fc6e7d33fc41d984028ace3d7dc55643a2ed94e",
+  "images": [
+    {
+      "file": "ci-desktop-16-reserva-sin-javascript.png",
+      "source": "test-results/idempotency-S1-04-native-f-fddf7--hydrated-retry-recovers-it-desktop/16-reserva-sin-javascript.png",
+      "bytes": 338075,
+      "width": 1440,
+      "height": 1254,
+      "sha256": "e4d7df110aa80fdda515f570242e24de358e09e258b8415f3a99d891e721f80d"
+    },
+    {
+      "file": "ci-mobile-16-reserva-sin-javascript.png",
+      "source": "test-results/idempotency-S1-04-native-f-fddf7--hydrated-retry-recovers-it-mobile/16-reserva-sin-javascript.png",
+      "bytes": 229573,
+      "width": 390,
+      "height": 1945,
+      "sha256": "d8f90144001e5b58c8db7afd27efd97f8ae06b0e9e5ff66f4b8def89111ace9d"
+    },
+    {
+      "file": "ci-desktop-13-respuesta-perdida.png",
+      "source": "test-results/idempotency-S1-04-response-67d22-nd-changed-content-conflict-desktop/13-respuesta-perdida.png",
+      "bytes": 258446,
+      "width": 1440,
+      "height": 1377,
+      "sha256": "dab00572f3bcd4e8dfb6806b1969629b956d79fb3390933acf7d723dcc181681"
+    },
+    {
+      "file": "ci-desktop-14-mismo-pedido-recuperado.png",
+      "source": "test-results/idempotency-S1-04-response-67d22-nd-changed-content-conflict-desktop/14-mismo-pedido-recuperado.png",
+      "bytes": 338993,
+      "width": 1440,
+      "height": 1254,
+      "sha256": "f47e4a1231518d100b041e7571ee685d515813dd655f611ebe2a18480e692f06"
+    },
+    {
+      "file": "ci-desktop-15-conflicto-controlado.png",
+      "source": "test-results/idempotency-S1-04-response-67d22-nd-changed-content-conflict-desktop/15-conflicto-controlado.png",
+      "bytes": 232897,
+      "width": 1440,
+      "height": 1136,
+      "sha256": "71b1ecf60ae55c2c9abc5b84da326a66b56556b65bd988cd814eadcaac83155f"
+    },
+    {
+      "file": "ci-mobile-13-respuesta-perdida.png",
+      "source": "test-results/idempotency-S1-04-response-67d22-nd-changed-content-conflict-mobile/13-respuesta-perdida.png",
+      "bytes": 179603,
+      "width": 390,
+      "height": 2073,
+      "sha256": "e4f8ab7185a6e0149a951878778d26b45f1e798d7098f57cab7568339b4b6d31"
+    },
+    {
+      "file": "ci-mobile-14-mismo-pedido-recuperado.png",
+      "source": "test-results/idempotency-S1-04-response-67d22-nd-changed-content-conflict-mobile/14-mismo-pedido-recuperado.png",
+      "bytes": 231224,
+      "width": 390,
+      "height": 1945,
+      "sha256": "86da80f06a086ec9e4a95f93c24480818d476f11703b8e2b173184376cf56f02"
+    },
+    {
+      "file": "ci-mobile-15-conflicto-controlado.png",
+      "source": "test-results/idempotency-S1-04-response-67d22-nd-changed-content-conflict-mobile/15-conflicto-controlado.png",
+      "bytes": 163679,
+      "width": 390,
+      "height": 1800,
+      "sha256": "b913de7518e7599d9dc4cec508c6c505a378c59d934c2034d73b2154ea6eab36"
+    }
+  ]
+}
