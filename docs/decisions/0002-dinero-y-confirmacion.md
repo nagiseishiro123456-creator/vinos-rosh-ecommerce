@@ -1,6 +1,6 @@
 # ADR 0002 — Dinero exacto y confirmación del resumen
 
-Fecha: 2026-10-15. Estado: adoptada para S1-02; verificación pendiente.
+Fecha: 2026-10-15. Estado: adoptada y verificada para S1-02; integración pendiente en PR #4.
 
 ## Política
 - Moneda única actual: PEN. Precios finales de catálogo y tarifas se expresan con hasta dos decimales.

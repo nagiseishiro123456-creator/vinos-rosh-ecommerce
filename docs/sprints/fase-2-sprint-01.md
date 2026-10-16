@@ -2,7 +2,7 @@
 
 ## Sprint Goal
 Crear pedidos con importes exactos, reserva anterior al pago y protección contra duplicados.
-Estado: iniciado, S1-01 implementada y verificada en rama; integración pendiente. Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
+Estado: iniciado, S1-01 y S1-02 implementadas y verificadas en ramas; integración pendiente. Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
 Los 26 SP son una estimación preliminar; no constituyen fecha de entrega.
 
 ## Historias y aceptación
@@ -67,5 +67,5 @@ Los checks de S1-01 no demuestran el cierre de las otras cuatro historias ni hab
 
 ## Registro de entregas
 - S1-01: preparación reproducible verificada y 10 capturas conservadas; ver [QA](../testing/sprint-01.md).
-- S1-02: implementada, validación en curso; ver [QA de dinero](../testing/s1-02-dinero.md).
+- S1-02: implementada y verificada, PR #4 dependiente de #3; 28 pruebas y 4 casos de navegador aprobados, 10 capturas nuevas; ver [QA de dinero](../testing/s1-02-dinero.md).
 - S1-03 a S1-05: pendientes.
