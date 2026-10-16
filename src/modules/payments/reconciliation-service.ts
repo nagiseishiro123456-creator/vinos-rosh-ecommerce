@@ -5,7 +5,7 @@ import { AdminOperationError, assertTransactionAdmin } from "@/modules/admin/tra
 
 export const reconciliationSchema = z.object({
   operationCode: z.string().trim().min(4).max(80),
-  receivedAmount: z.string().regex(/^(?:0|[1-9]\d{0,7})\.\d{2}$/).refine((v) => new Prisma.Decimal(v).gt(0)),
+  receivedAmount: z.string().regex(/^(?:0|[1-9]\d{0,7})\.\d{2}$/).refine((v) => v !== "0.00"),
   reason: z.string().trim().min(4).max(500),
 });
 export const refundReferenceSchema = z.string().trim().min(3).max(120);

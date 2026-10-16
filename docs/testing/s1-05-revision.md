@@ -42,3 +42,11 @@ usado por micromatch/fast-glob del plugin ESLint de Next. No son cinco fallos in
 No se cambió el lockfile: el downgrade sugerido a eslint-config-next 14.2.35 desalinearía
 Next 16. No se suprime el aviso. Revisar disponibilidad de parche antes del lanzamiento.
 Auditoría de producción, migración y resultados finales se completarán con CI.
+
+## Incidencias durante la verificación
+
+- CI inicial [38931930840](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/38931930840):
+  migraciones/contratos SQL aprobados, 65/66 pruebas aprobadas. La refinación monetaria
+  de Zod intentaba convertir `1,00` a Decimal pese al error de formato. Corregido usando
+  la exclusión textual de `0.00` después del formato canónico; ninguna conversión se
+  ejecuta para entradas inválidas. La prueba negativa original se conserva.

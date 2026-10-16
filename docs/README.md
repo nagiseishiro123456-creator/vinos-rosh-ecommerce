@@ -17,6 +17,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 11. [Backups y recuperación](07-despliegue/backups-y-recuperacion.md)
 12. [ADR 0003: reserva previa](decisions/0003-reserva-previa.md) · [QA S1-03](testing/s1-03-reserva.md)
 13. [ADR 0004: idempotencia](decisions/0004-idempotencia-reserva.md) · [QA S1-04](testing/s1-04-idempotencia.md)
+14. [ADR 0005: revisión y conciliación](decisions/0005-revision-conciliacion.md) · [QA S1-05](testing/s1-05-revision.md)
+15. [Guía de pagos, devoluciones y conciliación](operacion-pagos-manuales.md)
 
 ## Cuándo documentar
 
