@@ -735,6 +735,10 @@
     width: 100%;
   }
 
+  .paymentReviewActions form {
+    flex: 0 0 auto;
+  }
+
   .paymentQr {
     width: 160px;
     height: 160px;

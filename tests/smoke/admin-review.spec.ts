@@ -37,6 +37,8 @@ test("S1-05: customer authorization, admin approval and recorded external refund
     await loginAdmin(adminPage);
     const approveForm = adminPage.getByRole("button", { name: "Confirmar pago", exact: true }).locator("..");
     await approveForm.getByRole("checkbox").check();
+    const approveButton = await approveForm.getByRole("button", { name: "Confirmar pago", exact: true }).boundingBox();
+    expect(approveButton?.height).toBeLessThan(96);
     await capture(adminPage, testInfo, "17-revision-administrativa");
 
     // Replay a real, valid admin action payload under a customer session. Cookie/header

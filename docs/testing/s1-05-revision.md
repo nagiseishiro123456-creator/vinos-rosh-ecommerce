@@ -50,3 +50,8 @@ Auditoría de producción, migración y resultados finales se completarán con C
   de Zod intentaba convertir `1,00` a Decimal pese al error de formato. Corregido usando
   la exclusión textual de `0.00` después del formato canónico; ninguna conversión se
   ejecuta para entradas inválidas. La prueba negativa original se conserva.
+- CI [38932211301](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/38932211301):
+  66 pruebas y 14 casos de navegador aprobados. La inspección real de la captura móvil
+  17 detectó un formulario estirado por flex-basis de escritorio al apilar sus acciones.
+  Se elimina esa base vertical en móvil y se conserva una aserción del tamaño del botón
+  (menor de 96px). Se regenerarán evidencias sobre el código corregido.
