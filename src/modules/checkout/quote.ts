@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 import { money, type MoneyInput } from "@/modules/checkout/pricing";
+import { checkoutSigningSecret } from "@/modules/checkout/signing";
 
 type QuoteInput = {
   userId: string;
@@ -15,11 +16,6 @@ type QuoteInput = {
   shippingZone: { id: string; price: MoneyInput };
 };
 
-function signingSecret(secret = process.env.NEXTAUTH_SECRET) {
-  if (!secret || secret.length < 32) throw new Error("CHECKOUT_SIGNING_SECRET_REQUIRED");
-  return secret;
-}
-
 export function createCheckoutQuote(input: QuoteInput, secret?: string): string {
   const { address, cart, shippingZone, userId } = input;
   const payload = JSON.stringify({
@@ -32,7 +28,7 @@ export function createCheckoutQuote(input: QuoteInput, secret?: string): string 
       item.quantity, money(item.product.price).toFixed(2),
     ]),
   });
-  return `v1:${createHmac("sha256", signingSecret(secret)).update("rosh-checkout-quote:v1\n").update(payload).digest("hex")}`;
+  return `v1:${createHmac("sha256", checkoutSigningSecret(secret)).update("rosh-checkout-quote:v1\n").update(payload).digest("hex")}`;
 }
 
 export function verifyCheckoutQuote(quote: string, input: QuoteInput, secret?: string): boolean {

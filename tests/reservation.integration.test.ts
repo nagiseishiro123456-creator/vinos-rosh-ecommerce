@@ -2,9 +2,8 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import test, { after } from "node:test";
 
-import { checkoutFixture } from "./helpers/checkout";
+import { confirmationFor, checkoutFixture } from "./helpers/checkout";
 import { prisma } from "../src/lib/prisma";
-import { createCheckoutQuote } from "../src/modules/checkout/quote";
 import { loadCheckoutSnapshot } from "../src/modules/checkout/snapshot";
 import { reserveManualOrder, ManualOrderError } from "../src/modules/orders/manual-order-service";
 import { cancelUnpaidReservation, expireUnpaidReservation, reportManualPayment, PaymentReportError } from "../src/modules/orders/reservation-service";
@@ -58,8 +57,8 @@ test("two full checkouts competing for the final bottle create only one reserved
   const address = await prisma.address.create({ data: { userId: other.id, recipient: "QA", phone: "000000000", department: "QA", province: "QA", district: f.zone.district, addressLine1: "Dirección ficticia" } });
   const [a, b] = await Promise.all([loadCheckoutSnapshot(prisma, f.user.id, f.address.id), loadCheckoutSnapshot(prisma, other.id, address.id)]);
   const results = await Promise.allSettled([
-    reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...a, userId: f.user.id }) }),
-    reserveManualOrder(other.id, { ...f.input, addressId: address.id, checkoutQuote: createCheckoutQuote({ ...b, userId: other.id }) }),
+    reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...a, userId: f.user.id }, f.user.id) }),
+    reserveManualOrder(other.id, { ...f.input, addressId: address.id, ...confirmationFor({ ...b, userId: other.id }, other.id) }),
   ]);
   assert.equal(results.filter((r) => r.status === "fulfilled").length, 1);
   assert.equal(await prisma.order.count({ where: { userId: { in: [f.user.id, other.id] } } }), 1);
@@ -74,7 +73,7 @@ test("missing availability in a multi-product checkout leaves every line, paymen
   await prisma.cartItem.create({ data: { cartId: f.cart.id, productId: other.id, quantity: 1 } });
   const snapshot = await loadCheckoutSnapshot(prisma, f.user.id, f.address.id);
   await prisma.product.update({ where: { id: other.id }, data: { stock: 0 } });
-  await assert.rejects(reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...snapshot, userId: f.user.id }) }));
+  await assert.rejects(reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...snapshot, userId: f.user.id }, f.user.id) }));
   assert.equal(await prisma.order.count({ where: { userId: f.user.id } }), 0);
   assert.equal(await prisma.payment.count({ where: { order: { userId: f.user.id } } }), 0);
   assert.equal(await prisma.inventoryMovement.count({ where: { actorUserId: f.user.id } }), 0);
@@ -155,7 +154,7 @@ test("a duplicate operation rolls back the review transition without losing eith
   const first = await reserveManualOrder(f.user.id, f.input);
   await prisma.cartItem.create({ data: { cartId: f.cart.id, productId: f.product.id, quantity: 1 } });
   const snapshot = await loadCheckoutSnapshot(prisma, f.user.id, f.address.id);
-  const second = await reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...snapshot, userId: f.user.id }) });
+  const second = await reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...snapshot, userId: f.user.id }, f.user.id) });
   const operation = `QA-${randomUUID()}`;
   await reportManualPayment(f.user.id, first.number, operation);
   await assert.rejects(reportManualPayment(f.user.id, second.number, operation), (e: unknown) => e instanceof PaymentReportError && e.code === "DUPLICATE_OPERATION");
@@ -181,11 +180,11 @@ test("three reservations or reviews block a fourth before touching stock", async
   for (let i = 0; i < 2; i++) {
     await prisma.cartItem.create({ data: { cartId: f.cart.id, productId: f.product.id, quantity: 1 } });
     const snapshot = await loadCheckoutSnapshot(prisma, f.user.id, f.address.id);
-    await reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...snapshot, userId: f.user.id }) });
+    await reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...snapshot, userId: f.user.id }, f.user.id) });
   }
   await prisma.cartItem.create({ data: { cartId: f.cart.id, productId: f.product.id, quantity: 1 } });
   const snapshot = await loadCheckoutSnapshot(prisma, f.user.id, f.address.id);
-  await assert.rejects(reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...snapshot, userId: f.user.id }) }), (e: unknown) => e instanceof ManualOrderError && e.code === "PENDING_LIMIT");
+  await assert.rejects(reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...snapshot, userId: f.user.id }, f.user.id) }), (e: unknown) => e instanceof ManualOrderError && e.code === "PENDING_LIMIT");
   assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: f.product.id } })).stock, 5);
   assert.equal(await prisma.order.count({ where: { userId: f.user.id } }), 3);
 });

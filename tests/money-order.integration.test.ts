@@ -2,11 +2,10 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import test, { after } from "node:test";
 
-import { checkoutFixture as fixture } from "./helpers/checkout";
+import { confirmationFor, checkoutFixture as fixture } from "./helpers/checkout";
 
 import { prisma } from "../src/lib/prisma";
 import { MoneyError } from "../src/modules/checkout/pricing";
-import { createCheckoutQuote } from "../src/modules/checkout/quote";
 import { loadCheckoutSnapshot } from "../src/modules/checkout/snapshot";
 import { reserveManualOrder, ManualOrderError } from "../src/modules/orders/manual-order-service";
 
@@ -47,7 +46,7 @@ test("a changed price creates no order or stock movement until a refreshed quote
   await assert.rejects(reserveManualOrder(f.user.id, f.input), (error: unknown) => error instanceof ManualOrderError && error.code === "QUOTE_CHANGED");
   await unchanged(f);
   const fresh = await loadCheckoutSnapshot(prisma, f.user.id, f.address.id);
-  const order = await reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...fresh, userId: f.user.id }) });
+  const order = await reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...fresh, userId: f.user.id }, f.user.id) });
   assert.equal((await prisma.order.findUniqueOrThrow({ where: { id: order.id } })).total.toFixed(2), "98.80");
 });
 
@@ -70,7 +69,7 @@ test("an amount exceeding Decimal(10,2) is rejected before reserving stock", asy
   await prisma.cartItem.updateMany({ where: { cartId: f.cart.id }, data: { quantity: 99 } });
   await prisma.cartItem.create({ data: { cartId: f.cart.id, productId: second.id, quantity: 99 } });
   const snapshot = await loadCheckoutSnapshot(prisma, f.user.id, f.address.id);
-  await assert.rejects(reserveManualOrder(f.user.id, { ...f.input, checkoutQuote: createCheckoutQuote({ ...snapshot, userId: f.user.id }) }), MoneyError);
+  await assert.rejects(reserveManualOrder(f.user.id, { ...f.input, ...confirmationFor({ ...snapshot, userId: f.user.id }, f.user.id) }), MoneyError);
   assert.equal(await prisma.order.count({ where: { userId: f.user.id } }), 0);
   assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: second.id } })).stock, 99);
 });
