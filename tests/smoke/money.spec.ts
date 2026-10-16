@@ -46,7 +46,7 @@ test("S1-02: exact total, changed-price review and server-authoritative order", 
   await prisma.product.update({ where: { id: product.id }, data: { price: "30.10" } });
   await page.getByLabel("Número o código de operación").fill(`QA-${testInfo.project.name}-${Date.now()}`);
   await page.getByRole("button", { name: /Enviar pedido por/ }).click();
-  await expect(page.getByRole("alert")).toContainText("Revisa el resumen actualizado");
+  await expect(page.locator(".checkoutError[role='alert']")).toContainText("Revisa el resumen actualizado");
   await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 98.80");
   expect(await prisma.order.count({ where: { userId: user.id } })).toBe(0);
   expect((await prisma.product.findUniqueOrThrow({ where: { id: product.id } })).stock).toBe(10);
