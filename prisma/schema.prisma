@@ -82,6 +82,7 @@ model User {
   reviewedPayments    Payment[]            @relation("PaymentReviewedBy")
   passwordResetTokens PasswordResetToken[]
   inventoryMovements  InventoryMovement[]  @relation("InventoryMovementActor")
+  orderEvents         OrderEvent[]
 
   @@index([role])
   @@index([createdAt])
@@ -189,6 +190,7 @@ model Product {
   orderItems         OrderItem[]
   reviews            Review[]
   inventoryMovements InventoryMovement[]
+
 
   @@index([categoryId])
   @@index([active])
@@ -300,6 +302,7 @@ model Order {
   payments           Payment[]
   reviews            Review[]
   inventoryMovements InventoryMovement[]
+  events             OrderEvent[]
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -350,6 +353,7 @@ model Payment {
 
   order      Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   reviewedBy User? @relation("PaymentReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reconciliation PaymentReconciliation?
 
   @@unique([provider, operationCode])
   @@index([orderId])
@@ -357,6 +361,34 @@ model Payment {
   @@index([provider])
   @@index([provider, externalReference])
   @@index([reviewedById])
+}
+
+model OrderEvent {
+  id          String   @id @default(cuid())
+  orderId     String
+  actorUserId String?
+  kind        String
+  note        String
+  createdAt   DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actor User? @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([orderId, createdAt])
+  @@index([actorUserId])
+}
+
+model PaymentReconciliation {
+  id              String   @id @default(cuid())
+  paymentId       String   @unique
+  receivedAmount  Decimal  @db.Decimal(10, 2)
+  openedAt        DateTime @default(now())
+  refundedAt      DateTime?
+  refundReference String?  @db.VarChar(120)
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([refundedAt, openedAt])
 }
 
 model Review {

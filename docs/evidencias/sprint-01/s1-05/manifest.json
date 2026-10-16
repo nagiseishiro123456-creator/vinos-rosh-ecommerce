@@ -1,0 +1,91 @@
+{
+  "story": "S1-05",
+  "date": "2026-10-16",
+  "timezone": "America/Lima",
+  "run_id": 38970804257,
+  "tested_commit": "2e90b606436d55d6e4f59cb8634a347a15e8b8d6",
+  "artifact_id": 12077335953,
+  "artifact_sha256": "9f6931507e5e2165093648e305e943bcbec921345ac3f464d15551c3d1ec1793",
+  "images": [
+    {
+      "file": "ci-desktop-17-revision-administrativa.png",
+      "source": "test-results/admin-review-S1-05-custome-04260-nd-recorded-external-refund-desktop/17-revision-administrativa.png",
+      "bytes": 103799,
+      "width": 1440,
+      "height": 1072,
+      "sha256": "641a0a5c018af3fae608f6e841a03533c7dc1e006c55ff8127076f0f89dc1ca1"
+    },
+    {
+      "file": "ci-desktop-18-pago-aprobado-trazabilidad.png",
+      "source": "test-results/admin-review-S1-05-custome-04260-nd-recorded-external-refund-desktop/18-pago-aprobado-trazabilidad.png",
+      "bytes": 231673,
+      "width": 1440,
+      "height": 1675,
+      "sha256": "10155e28337d5bbe634672d442ecc455c0a4daef268dae2eebf191f627cd8d8f"
+    },
+    {
+      "file": "ci-desktop-19-reembolso-administrativo.png",
+      "source": "test-results/admin-review-S1-05-custome-04260-nd-recorded-external-refund-desktop/19-reembolso-administrativo.png",
+      "bytes": 199187,
+      "width": 1440,
+      "height": 1891,
+      "sha256": "0ae1f42364103f5d37676afb05d92f911fb9922e11a9e8d243b87a0062d220b0"
+    },
+    {
+      "file": "ci-mobile-17-revision-administrativa.png",
+      "source": "test-results/admin-review-S1-05-custome-04260-nd-recorded-external-refund-mobile/17-revision-administrativa.png",
+      "bytes": 91934,
+      "width": 390,
+      "height": 1361,
+      "sha256": "25402ef63acc5da9395fcccc836687697b199ba0658bdaccca717eccff71d583"
+    },
+    {
+      "file": "ci-mobile-18-pago-aprobado-trazabilidad.png",
+      "source": "test-results/admin-review-S1-05-custome-04260-nd-recorded-external-refund-mobile/18-pago-aprobado-trazabilidad.png",
+      "bytes": 202244,
+      "width": 390,
+      "height": 2921,
+      "sha256": "25b7f775eebe7c4e2a5c6dec616b879d54d08bdfe17d02097fc40ffd904d3302"
+    },
+    {
+      "file": "ci-mobile-19-reembolso-administrativo.png",
+      "source": "test-results/admin-review-S1-05-custome-04260-nd-recorded-external-refund-mobile/19-reembolso-administrativo.png",
+      "bytes": 174082,
+      "width": 390,
+      "height": 2595,
+      "sha256": "f3683d6afd204b39a2397afbbac5f4d0f075178f74079d04a9e2d20522c81732"
+    },
+    {
+      "file": "ci-desktop-20-conciliacion-abierta.png",
+      "source": "test-results/admin-review-S1-05-reasone-01ac1-p-cancelled-stock-available-desktop/20-conciliacion-abierta.png",
+      "bytes": 247767,
+      "width": 1440,
+      "height": 1892,
+      "sha256": "5f1fcb3163a920576bf6121e1c578b33106a9b8dcb61b9c0c8c52489bbbf3084"
+    },
+    {
+      "file": "ci-desktop-21-conciliacion-resuelta.png",
+      "source": "test-results/admin-review-S1-05-reasone-01ac1-p-cancelled-stock-available-desktop/21-conciliacion-resuelta.png",
+      "bytes": 249902,
+      "width": 1440,
+      "height": 2016,
+      "sha256": "d077cde31274ec1b0b0255868c578262cb5e19f3d3804768111493df460309c8"
+    },
+    {
+      "file": "ci-mobile-20-conciliacion-abierta.png",
+      "source": "test-results/admin-review-S1-05-reasone-01ac1-p-cancelled-stock-available-mobile/20-conciliacion-abierta.png",
+      "bytes": 217999,
+      "width": 390,
+      "height": 3152,
+      "sha256": "7724743de12f0c51ccff4a79d73f5ccfc912ca1b9be7c7ed03b78d49630bee46"
+    },
+    {
+      "file": "ci-mobile-21-conciliacion-resuelta.png",
+      "source": "test-results/admin-review-S1-05-reasone-01ac1-p-cancelled-stock-available-mobile/21-conciliacion-resuelta.png",
+      "bytes": 221234,
+      "width": 390,
+      "height": 3110,
+      "sha256": "c00488cb140ded73996df9145158bca8b2e4080a0dc439b684db65e4b54ea111"
+    }
+  ]
+}
