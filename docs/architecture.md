@@ -70,7 +70,7 @@ Nunca se almacenarán números completos de tarjeta ni CVV.
 Desarrollo utiliza PostgreSQL 16 mediante Docker Compose. El script `scripts/setup-dev.ps1` automatiza secretos locales, arranque de BD, migración, seed y typecheck.
 
 ## Flujo de compra
-Flujo implementado en S1-03 (validación en curso; ver [QA](testing/s1-03-reserva.md)):
+Flujo implementado y verificado en rama S1-03 (integración pendiente; ver [QA](testing/s1-03-reserva.md)):
 1. Catálogo → carrito persistente del usuario autenticado.
 2. Dirección con cobertura → resumen y comprobante/método, todavía sin datos bancarios.
 3. Confirmar: transacción Serializable de snapshot firmado, orden PENDING_PAYMENT,

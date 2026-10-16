@@ -1,6 +1,7 @@
 # ADR 0003 — Reserva antes del pago manual
 
-Fecha: 2026-10-15 (America/Lima). Estado: adoptada para implementar S1-03, validación pendiente.
+Fecha de decisión: 2026-10-15 (America/Lima). Registro de cierre: 2026-10-16.
+Estado: adoptada y verificada para S1-03; integración pendiente en PR #5.
 Base: S1-02, commit `e8b72d8f41b36eec6d3317e127e531affe4309d5`. PR #4 pendiente de integrar.
 
 ## Decisión y secuencia
@@ -53,8 +54,10 @@ Idempotencia persistida de creación sigue en S1-04. S1-05 ampliará pruebas de 
 conciliación tardía y operación administrativa. Se adelanta aquí la exclusión de PAYMENT_REVIEW del
 mantenimiento y la cancelación del cliente porque son necesarias para que el nuevo flujo sea coherente.
 
-## Documentación y evidencia previstas
+## Documentación y evidencia
 Antes: este ADR y criterios S1-03. Durante: migración, servicios, pruebas de BD y recorrido autenticado.
 Al cerrar: QA, capturas reales desktop/móvil, manifiesto de hashes, backlog, arquitectura y progreso.
 Pruebas: rollback multi-producto, última unidad concurrente, plazo persistido, liberación única,
 propiedad del pedido, precio congelado tras reservar y carrito modificado después sin perder cambios.
+Resultado: 40 pruebas y 6 casos de navegador aprobados; migración verificada y 16 capturas conservadas.
+Detalle de ejecución e incidencias: [QA S1-03](../testing/s1-03-reserva.md).

@@ -13,7 +13,7 @@ E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular
 - Zod
 - Cloudinary (media)
 - Resend (correo transaccional)
-- Pagos híbridos: Culqi + Yape manual + transferencia manual
+- Yape y transferencia manuales; Culqi contemplado en el modelo, integración automática pendiente
 
 ## Estado
 Fase 2, Sprint 1: integridad del pedido e instalación reproducible.
@@ -96,9 +96,10 @@ El botón **Deploy to Render** de arriba usa esta configuración.
 > Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
 
 ## Próximo hito
-S1-02 está implementada y verificada en el PR #4, dependiente del PR #3.
-Siguiente historia: S1-03, reserva previa al pago; después, idempotencia y
-revisión/vencimiento controlados. Consultar el [índice de documentación](docs/README.md).
+S1-03 está implementada y verificada en el PR #5, dependiente de #4 y #3.
+La reserva precede a las instrucciones de pago y conserva un plazo por pedido.
+Siguiente historia: S1-04, idempotencia persistida; después, conciliación y
+revisión administrativa ampliada. Consultar el [índice de documentación](docs/README.md).
 
 ## Verificación y evidencias
 

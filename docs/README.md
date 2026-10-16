@@ -11,7 +11,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 6. [Decisión 0001: dependencias y evidencia](decisions/0001-base-reproducible.md)
 7. [QA S1-01](testing/sprint-01.md) y [QA S1-02](testing/s1-02-dinero.md)
    · [ADR 0002: dinero y confirmación](decisions/0002-dinero-y-confirmacion.md)
-8. Capturas conservadas en Git: [S1-01](evidencias/sprint-01/README.md) · [S1-02](evidencias/sprint-01/s1-02/README.md)
+8. Capturas conservadas en Git: [S1-01](evidencias/sprint-01/README.md) · [S1-02](evidencias/sprint-01/s1-02/README.md) · [S1-03](evidencias/sprint-01/s1-03/README.md)
 9. [Política de costos vigente](cost-policy.md)
 10. [Preview Render](render-free-preview.md)
 11. [Backups y recuperación](07-despliegue/backups-y-recuperacion.md)

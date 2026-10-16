@@ -1,6 +1,7 @@
 # QA — S1-03: reserva previa al pago
 
-Fecha: 2026-10-15 (America/Lima). Estado: implementada, validación con BD/navegador pendiente.
+Inicio y ejecución con capturas: 2026-10-15 (America/Lima). Registro de cierre: 2026-10-16.
+Estado: implementada y verificada en rama; integración pendiente. PR #5, dependiente del PR #4.
 Rama `fase-2/sprint-01-reserva-previa`, basada en S1-02 `e8b72d8f41b36eec6d3317e127e531affe4309d5`.
 Decisión anterior al código: [ADR 0003](../decisions/0003-reserva-previa.md).
 
@@ -10,7 +11,7 @@ privadas del pedido → comunicar operación sin otra reserva. Caducidad persist
 solo reservas pendientes pueden vencer o ser canceladas por el cliente. Pagos en revisión
 requieren conciliación. Incluye los ajustes de mantenimiento indispensables del nuevo flujo.
 
-## Comprobaciones previstas
+## Comprobaciones ejecutadas
 - Migración 8 aditiva aplicada sobre PostgreSQL 16 vacío, sin reset.
 - SQL de la migración ejecutado además sobre fixtures antiguas en esquema temporal con rollback:
   reconoce cinco estados con stock reservado; no infiere reservas pendientes/cerradas ni plazos.
@@ -31,7 +32,39 @@ requieren conciliación. Incluye los ajustes de mantenimiento indispensables del
 Un primer lint detectó una variable de cleanup que debía ser const y se corrigió.
 La primera validación de Prisma se ejecutó sin DATABASE_URL; se repitió con URL ficticia local
 y aprobó. El build termina; registra intentos de configuración sin PostgreSQL local disponible.
-CI con BD es la comprobación necesaria antes del cierre, no estas comprobaciones locales.
+La comprobación con PostgreSQL se ejecutó en CI; no se ejecutó PostgreSQL en este contenedor.
+
+## Resultado de CI y evidencia
+Código verificado: `411e47cc46dff14922c1affc74de02079b0b6b7d`.
+[Run 38830960074 aprobado](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/38830960074),
+job `116749379592`. Node 22.23.3 / npm 11.9.0.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Instalación y Prisma | Lockfile, validate/generate y 8 migraciones sobre PostgreSQL 16 aprobados. |
+| Migración sobre datos antiguos | SQL real sobre esquema temporal: backfill de cinco estados, sin reservas inventadas ni plazos retroactivos; rollback aprobado. |
+| Lógica e integración | 40 aprobadas: 28 de la entrega anterior adaptadas al nuevo flujo y 12 nuevas. |
+| Navegador Chromium | 6 aprobados: baseline, importes/reserva/comunicación y cancelación/privacidad/vencimiento, cada uno en escritorio/móvil. |
+| Tipos / lint / build | Aprobados. |
+| Auditoría de producción | 0 hallazgos en la consulta de CI; siguen pendientes los 5 altos de herramientas registrados en S1-02. |
+| Capturas | 16 PNG originales revisados, con manifiesto de origen/tamaño/dimensiones/SHA-256. |
+
+Se verificó que el checkout no muestre cuenta/QR antes de reservar. Después de reservar,
+el precio se conserva aunque cambien catálogo/tarifa. Comunicar el pago mantiene el carrito
+añadido después y deja stock 7 para una reserva de 3 sobre stock 10. Cancelar/vencer devuelve
+una sola vez. El cliente ajeno autenticado recibe HTTP 404 y no ve datos bancarios.
+Los recorridos visuales usan transferencia ficticia; no verifican servicios bancarios ni un abono.
+[Galería y manifiesto](../evidencias/sprint-01/s1-03/README.md).
+
+## Revisión visual y pendientes heredados
+Se revisaron las 16 capturas: confirmación sin instrucciones, reserva con fecha límite,
+operación en revisión, cancelación y aviso de vencimiento coherentes con las pruebas de BD.
+Los estados de pago/comprobante del detalle ahora se muestran en español y sus fechas en hora de Perú.
+Siguen para Sprint 2: evitar saltos de moneda/importe, revisar orden del resumen/CTA móvil
+y superposición de navegación/WhatsApp. Las capturas largas conservan controles fijos en la
+posición del viewport inicial; el flujo automatizado pudo operar los botones.
+El prefijo de fecha del número interno de pedido sigue usando la fecha del servidor;
+normalizar su criterio con las fechas de interfaz antes del lanzamiento.
 
 ## Límites heredados
 Idempotencia persistida de creación corresponde a S1-04; botón pendiente no sustituye esa garantía.
