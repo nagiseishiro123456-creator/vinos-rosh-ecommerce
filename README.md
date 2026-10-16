@@ -80,7 +80,7 @@ npm run prisma:studio
 - Los pagos manuales y Culqi comparten una abstracción `Payment`.
 
 ## Modelo principal
-`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `Review`.
+`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `OrderEvent`, `PaymentReconciliation`, `Review`.
 
 ## Preview gratuito en Render
 
@@ -96,10 +96,11 @@ El botón **Deploy to Render** de arriba usa esta configuración.
 > Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
 
 ## Próximo hito
-S1-04 está implementada y verificada en el PR #6, dependiente de #5, #4 y #3.
-La reserva precede al pago; su confirmación es idempotente y permite recuperar el mismo pedido.
-Siguiente historia: S1-05, conciliación y revisión administrativa ampliada para cerrar
-el Sprint 1. Consultar el [índice de documentación](docs/README.md).
+Las cinco historias del Sprint 1 están implementadas y verificadas en ramas. PR final #7,
+dependiente de #6, #5, #4 y #3: revisión administrativa trazable y conciliación de ingresos
+tardíos sin reactivar pedidos ni tocar stock. Ver [cierre técnico](docs/sprints/cierre-sprint-01.md)
+y [guía operativa de pagos](docs/operacion-pagos-manuales.md). Sigue pendiente revisar,
+aceptar e integrar la cadena antes de cerrar formalmente el sprint. Después: refinar Sprint 2 de UX/accesibilidad.
 
 ## Verificación y evidencias
 

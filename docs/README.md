@@ -11,7 +11,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 6. [Decisión 0001: dependencias y evidencia](decisions/0001-base-reproducible.md)
 7. [QA S1-01](testing/sprint-01.md) y [QA S1-02](testing/s1-02-dinero.md)
    · [ADR 0002: dinero y confirmación](decisions/0002-dinero-y-confirmacion.md)
-8. Capturas conservadas en Git: [S1-01](evidencias/sprint-01/README.md) · [S1-02](evidencias/sprint-01/s1-02/README.md) · [S1-03](evidencias/sprint-01/s1-03/README.md) · [S1-04](evidencias/sprint-01/s1-04/README.md)
+8. Capturas conservadas en Git: [S1-01](evidencias/sprint-01/README.md) · [S1-02](evidencias/sprint-01/s1-02/README.md) · [S1-03](evidencias/sprint-01/s1-03/README.md) · [S1-04](evidencias/sprint-01/s1-04/README.md) · [S1-05](evidencias/sprint-01/s1-05/README.md)
 9. [Política de costos vigente](cost-policy.md)
 10. [Preview Render](render-free-preview.md)
 11. [Backups y recuperación](07-despliegue/backups-y-recuperacion.md)
@@ -19,6 +19,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 13. [ADR 0004: idempotencia](decisions/0004-idempotencia-reserva.md) · [QA S1-04](testing/s1-04-idempotencia.md)
 14. [ADR 0005: revisión y conciliación](decisions/0005-revision-conciliacion.md) · [QA S1-05](testing/s1-05-revision.md)
 15. [Guía de pagos, devoluciones y conciliación](operacion-pagos-manuales.md)
+16. [Cierre técnico, revisión y continuidad del Sprint 1](sprints/cierre-sprint-01.md)
 
 ## Cuándo documentar
 

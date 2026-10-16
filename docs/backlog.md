@@ -12,10 +12,12 @@ Estimaciones preliminares; los puntos no representan horas.
 | S1-02 | Calcular dinero de forma exacta en servidor. | 5 | Implementada y verificada en rama; integración pendiente |
 | S1-03 | Crear pedido y reservar antes de presentar instrucciones de pago. | 8 | Implementada y verificada en rama; integración pendiente |
 | S1-04 | Evitar pedidos duplicados mediante idempotencia persistida. | 5 | Implementada y verificada en rama; integración pendiente |
-| S1-05 | Resolver revisión, vencimiento y concurrencia con trazabilidad. | 5 | Pendiente |
+| S1-05 | Resolver revisión, vencimiento y concurrencia con trazabilidad. | 5 | Implementada y verificada en rama; integración pendiente |
 
 Dependencias de entrega: S1-01 → S1-02 → S1-03 → S1-04 → S1-05.
 Documentación y pruebas forman parte de cada historia.
+Las cinco historias suman 26 SP implementados/verificados en ramas. Ver [cierre técnico](sprints/cierre-sprint-01.md);
+aceptación e integración pendientes antes de cerrar formalmente el sprint.
 
 ## Secuencia posterior, sujeta a refinamiento
 
@@ -34,7 +36,8 @@ producto con microinteracciones y CTA inmediato; catálogo/carrito/checkout sin 
 
 No se activan servicios de pago ni se modifica la política de costos con este backlog.
 
-Pendientes detectados al verificar S1-02: revisar las dependencias de desarrollo señaladas
-por la instalación completa de CI antes del cierre de Sprint 1; en Sprint 2, traducir
+Dependencias de desarrollo revisadas en S1-05: cinco avisos altos por braces sin parche
+publicado; seguimiento registrado, sin downgrade de Next. Producción: cero hallazgos.
+Pendientes de UX para Sprint 2: traducir
 estados técnicos, evitar saltos de línea en moneda/importe y revisar controles flotantes,
 posición del resumen y CTA móvil. Ver [QA S1-02](testing/s1-02-dinero.md).
