@@ -1,5 +1,7 @@
 "use client";
 
+import { addMoney, formatPrice } from "@/lib/money";
+
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -9,18 +11,11 @@ function normalize(value: string) {
   return value.trim().toLocaleLowerCase("es-PE");
 }
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 type Props = {
   addresses: CheckoutAddress[];
   shippingZones: CheckoutShippingZone[];
-  subtotal: number;
+  subtotal: string;
   initialAddressId?: string;
   blocked?: boolean;
 };
@@ -52,8 +47,8 @@ export function CheckoutAddressSelector({
     );
   }, [selectedAddress, shippingZones]);
 
-  const shipping = selectedZone?.price ?? 0;
-  const total = subtotal + shipping;
+  const shipping = selectedZone?.price ?? "0.00";
+  const total = addMoney(subtotal, shipping);
   const canContinue = Boolean(selectedAddress && selectedZone && !blocked);
 
   return (

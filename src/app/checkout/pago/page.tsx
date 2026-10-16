@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -8,6 +9,9 @@ import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { assertOrderAmountFits, MoneyError } from "@/modules/checkout/pricing";
+import { createCheckoutQuote } from "@/modules/checkout/quote";
+import { loadCheckoutSnapshot, CheckoutUnavailableError } from "@/modules/checkout/snapshot";
 import { getManualPaymentHoldMinutes } from "@/modules/orders/hold";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
@@ -20,15 +24,13 @@ type Props = {
   }>;
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 function errorMessage(error: string | undefined) {
+  if (error === "quote-changed") {
+    return "El carrito, los precios o el envío cambiaron. Revisa el resumen actualizado antes de continuar. Si ya pagaste, contacta a la tienda para conciliar el importe y no pagues de nuevo.";
+  }
+  if (error === "pending-limit") return "Tienes pedidos pendientes de revisión. Consulta su estado antes de crear otro.";
+  if (error === "busy") return "La compra se está actualizando. Revisa el resumen e inténtalo de nuevo.";
   if (error === "duplicate-operation") {
     return "Ese código de operación ya está registrado. Verifica el número antes de continuar.";
   }
@@ -53,63 +55,24 @@ export default async function PaymentPage({ searchParams }: Props) {
     redirect("/checkout");
   }
 
-  const [address, cart, commerce] = await Promise.all([
-    prisma.address.findFirst({
-      where: {
-        id: parsedAddressId.data,
-        userId: session.user.id,
-        active: true,
-      },
-    }),
-    prisma.cart.findUnique({
-      where: { userId: session.user.id },
-      select: {
-        items: {
-          select: {
-            quantity: true,
-            product: {
-              select: {
-                id: true,
-                name: true,
-                price: true,
-                stock: true,
-                active: true,
-              },
-            },
-          },
-        },
-      },
-    }),
-    getCommerceSettings(),
-  ]);
-
-  if (!address || !cart || cart.items.length === 0) {
-    redirect("/carrito");
+  let snapshot;
+  try {
+    snapshot = await loadCheckoutSnapshot(prisma, session.user.id, parsedAddressId.data);
+    assertOrderAmountFits(snapshot.amounts.total);
+  } catch (error) {
+    if (error instanceof CheckoutUnavailableError) {
+      if (error.code === "UNSUPPORTED_ZONE") redirect(`/checkout?addressId=${parsedAddressId.data}&error=unsupported-zone`);
+      redirect("/carrito?error=stock-changed");
+    }
+    if (error instanceof MoneyError) redirect("/carrito?error=amount-invalid");
+    throw error;
   }
-
-  const shippingZone = await prisma.shippingZone.findFirst({
-    where: {
-      active: true,
-      department: address.department,
-      province: address.province,
-      district: address.district,
-    },
-  });
-
-  if (!shippingZone) {
-    redirect(`/checkout?addressId=${address.id}&error=unsupported-zone`);
-  }
-
-  if (cart.items.some((item) => !item.product.active || item.quantity > item.product.stock)) {
-    redirect("/carrito?error=stock-changed");
-  }
-
-  const subtotal = cart.items.reduce(
-    (sum, item) => sum + Number(item.product.price) * item.quantity,
-    0,
-  );
-  const shippingAmount = Number(shippingZone.price);
-  const total = subtotal + shippingAmount;
+  const { address, cart, shippingZone, amounts } = snapshot;
+  const commerce = await getCommerceSettings();
+  const checkoutQuote = createCheckoutQuote({ ...snapshot, userId: session.user.id });
+  const subtotal = amounts.subtotal.toFixed(2);
+  const shippingAmount = amounts.shippingAmount.toFixed(2);
+  const total = amounts.total.toFixed(2);
   const holdMinutes = getManualPaymentHoldMinutes();
 
   return (
@@ -130,7 +93,7 @@ export default async function PaymentPage({ searchParams }: Props) {
           </div>
 
           {params.error ? (
-            <div className="checkoutError">{errorMessage(params.error)}</div>
+            <div className="checkoutError" role="alert">{errorMessage(params.error)}</div>
           ) : null}
 
           <div className="checkoutWarningPanel">
@@ -143,6 +106,7 @@ export default async function PaymentPage({ searchParams }: Props) {
           <PaymentForm
             addressId={address.id}
             total={total}
+            checkoutQuote={checkoutQuote}
             yape={{
               enabled: commerce.yape.ready,
               phone: commerce.yape.phone,
@@ -167,10 +131,10 @@ export default async function PaymentPage({ searchParams }: Props) {
           </div>
 
           <div className="orderReviewItems">
-            {cart.items.map((item) => (
+            {cart.items.map((item, index) => (
               <div key={item.product.id}>
                 <span>{item.quantity} × {item.product.name}</span>
-                <strong>{formatPrice(Number(item.product.price) * item.quantity)}</strong>
+                <strong>{formatPrice(amounts.lines[index].subtotal.toFixed(2))}</strong>
               </div>
             ))}
           </div>

@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { BadgeCheck, Star } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -14,13 +15,6 @@ type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 function formatReviewDate(value: Date) {
   return new Intl.DateTimeFormat("es-PE", {

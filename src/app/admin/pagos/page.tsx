@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { PaymentStatus } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -9,13 +10,6 @@ import { approveManualPayment, rejectManualPayment } from "@/modules/payments/ac
 
 export const dynamic = "force-dynamic";
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 function providerLabel(provider: string) {
   if (provider === "YAPE_MANUAL") return "Yape";
@@ -90,7 +84,7 @@ export default async function PaymentsAdminPage() {
                     <span>{providerLabel(payment.provider)}</span>
                     <strong>{payment.order.number}</strong>
                   </div>
-                  <strong>{formatPrice(Number(payment.amount))}</strong>
+                  <strong>{formatPrice(payment.amount.toFixed(2))}</strong>
                 </div>
 
                 <div className="paymentReviewGrid">

@@ -96,8 +96,9 @@ El botón **Deploy to Render** de arriba usa esta configuración.
 > Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
 
 ## Próximo hito
-S1-02: cálculo monetario exacto en servidor. A continuación: reserva previa al pago,
-idempotencia y revisión/vencimiento controlados. Consultar el [índice de documentación](docs/README.md).
+S1-02 está implementada y verificada en el PR #4, dependiente del PR #3.
+Siguiente historia: S1-03, reserva previa al pago; después, idempotencia y
+revisión/vencimiento controlados. Consultar el [índice de documentación](docs/README.md).
 
 ## Verificación y evidencias
 

@@ -51,8 +51,15 @@ npm run test:smoke
 Para Playwright, exportar las variables del `.env` a la sesión o ejecutar su CLI con
 `node --env-file=.env node_modules/@playwright/test/cli.js test`.
 En Linux puede hacer falta `npx playwright install --with-deps chromium`.
+Desde S1-02 la fixture también crea un cliente `qa-s102@example.com`, una dirección
+ficticia y transferencia simulada `QA-NO-TRANSFERIR`, exclusivamente en la BD aislada.
+El password de QA es solo de prueba y se puede sobrescribir con `SMOKE_CUSTOMER_PASSWORD`.
+No se deben realizar abonos ni utilizar cuentas reales.
+
 El smoke inicia el servidor standalone por sí mismo y exige health 200 con conexión real.
-Genera Home, catálogo, producto ficticio y acceso en 1440×1000 y 390×844.
+Genera Home, catálogo, producto ficticio y acceso en 1440×1000 y 390×844;
+el caso S1-02 también autentica al cliente ficticio y registra carrito, entrega,
+pago, revisión del nuevo importe y pedido manual simulado.
 Salidas: `test-results/` y `playwright-report/` (temporales, ignoradas por Git).
 Para conservar capturas seleccionadas, copiarlas a `docs/evidencias/sprint-01/`
 con un índice que identifique origen, datos, revisión y límites.

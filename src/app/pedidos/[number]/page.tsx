@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -18,13 +19,6 @@ type Props = {
   }>;
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
@@ -178,13 +172,13 @@ export default async function OrderPage({ params, searchParams }: Props) {
                       )
                     ) : null}
                   </span>
-                  <strong>{formatPrice(Number(item.subtotal))}</strong>
+                  <strong>{formatPrice(item.subtotal.toFixed(2))}</strong>
                 </div>
               ))}
             </div>
-            <div className="summaryRow"><span>Subtotal</span><strong>{formatPrice(Number(order.subtotal))}</strong></div>
-            <div className="summaryRow"><span>Envío</span><strong>{formatPrice(Number(order.shippingAmount))}</strong></div>
-            <div className="summaryTotal"><span>Total</span><strong>{formatPrice(Number(order.total))}</strong></div>
+            <div className="summaryRow"><span>Subtotal</span><strong>{formatPrice(order.subtotal.toFixed(2))}</strong></div>
+            <div className="summaryRow"><span>Envío</span><strong>{formatPrice(order.shippingAmount.toFixed(2))}</strong></div>
+            <div className="summaryTotal"><span>Total</span><strong>{formatPrice(order.total.toFixed(2))}</strong></div>
           </section>
 
           <section className="adminCard">

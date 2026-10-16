@@ -78,7 +78,7 @@ export default async function EditProductPage({ params, searchParams }: EditProd
             sku: product.sku,
             shortDescription: product.shortDescription,
             description: product.description,
-            price: Number(product.price).toFixed(2),
+            price: product.price.toFixed(2),
             stock: product.stock,
             categoryName: product.category?.name ?? null,
             imageUrl: product.images[0]?.url ?? null,

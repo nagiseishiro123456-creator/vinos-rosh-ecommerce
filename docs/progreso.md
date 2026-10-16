@@ -1,34 +1,39 @@
 # Punto de avance
 
-- Fase: 2. Sprint: 1. S1-01 implementada/verificada; siguiente historia: S1-02.
+- Fase: 2. Sprint: 1. S1-01 y S1-02 verificadas en ramas.
 - Fecha: 2026-10-15 (America/Lima).
-- Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2` de `main`.
-- Rama: `fase-2/sprint-01-base-reproducible`.
-- Estado: S1-01 completada técnicamente en rama, pendiente de integración del PR #3. El Sprint 1 sigue abierto.
-- PR: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/3
-- Código verificado: `e8910c5946faf502804705496527006a3f82309c`.
+- Base S1-02: `5c4c59e1b3806f4a131edbf74c4e8e4a62c17b17` de S1-01 (PR #3).
+- Rama actual: `fase-2/sprint-01-dinero-exacto`.
+- Estado: S1-02 implementada y verificada, lista para revisión; integración pendiente. El Sprint 1 sigue abierto.
+- PR actual: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/4
+- Código verificado: `b72f85c061db70a4fefef6fd172bc26527c3aa4b`.
 
-## Trabajo preparado
-Lockfile y toolchain fijados, instalación con `npm ci` en CI/preview/Docker/setup,
-preparación de assets standalone y documentación de continuidad.
-Smoke de navegador y capturas desktop/móvil con fixture aislada, sin clientes ni pagos reales.
+## S1-01 conservada
+Instalación reproducible, 7 migraciones, 15 pruebas y 2 smoke aprobados en su entrega.
+10 capturas y resultados originales: [QA S1-01](testing/sprint-01.md).
 
-## Verificación inicial
-Node 22.23.3 / npm 11.9.0: Prisma Client generado, 8 pruebas sin BD,
-lint, typecheck y build aprobados. Auditoría de producción sin vulnerabilidades reportadas.
-Las pruebas con PostgreSQL se verifican en el servicio temporal de GitHub Actions:
-el contenedor de trabajo no permite iniciar la base de forma convencional.
-CI con PostgreSQL 16 aprobó 7 migraciones, 15 pruebas de negocio/integración y 2 smoke.
-Se conservan 8 capturas de CI y 2 locales. Resultados y enlaces: [QA](testing/sprint-01.md).
+## Última historia entregada: S1-02
+Rama `fase-2/sprint-01-dinero-exacto`, basada en S1-01; PR #3 sigue pendiente de integración.
+Cálculo en Prisma.Decimal, cadenas monetarias canónicas, validación administrativa
+y confirmación firmada del resumen. Lectura y persistencia dentro de la misma transacción.
+CI aprobada: 7 migraciones sobre PostgreSQL 16, 28 pruebas, tipos/lint/build y 4 casos
+de navegador (baseline y compra en escritorio/móvil). Se conservan 10 capturas nuevas
+con manifiesto de origen/hashes. No se usó Render ni se realizaron pagos reales.
+Detalle: [QA S1-02](testing/s1-02-dinero.md).
 
 ## Siguiente acción
-Validación de S1-01 aprobada en CI y capturas revisadas. Iniciar S1-02:
-trazar todos los cálculos monetarios y definir una política uniforme con `Prisma.Decimal`.
-Mantener las siguientes historias pendientes hasta implementarlas y verificarlas.
+Iniciar S1-03: documentar primero estados/transiciones/vencimiento en ADR; luego
+crear orden y reserva antes de mostrar instrucciones de pago. Implementar migración
+y pruebas de rollback/última unidad/carrito modificado; actualizar flujo, QA y capturas
+en su PR. S1-04/S1-05 continúan pendientes. Integrar primero PR #3 y después #4;
+no fusionar la rama de S1-02 sin su base ni desplegar sin revisión.
 
 ## Riesgos abiertos
-- La revisión de pagos manuales puede vencer automáticamente: se corregirá en S1-05.
-- El código inicial presenta instrucciones de pago antes de reservar stock: S1-03.
-- Los cálculos usan conversiones a `Number`: S1-02.
-- Docker y PowerShell no se ejecutan en este contenedor; validar en esos entornos antes de declararlos probados.
-- Render sigue siendo preview; no se realiza merge a main ni despliegue en esta entrega.
+- Revisión de pagos manuales que puede vencer automáticamente: S1-05.
+- Pago comunicado antes de reservar stock: S1-03.
+- Reintento de creación sin clave idempotente persistida: S1-04.
+- Docker y PowerShell no ejecutados en este contenedor; ver límites de S1-01.
+- Instalación completa de CI informa 5 vulnerabilidades altas incluyendo herramientas;
+  auditoría solo de producción informa 0. Revisar dependencias de desarrollo antes de cerrar el sprint.
+- Ajustes de UX móvil, traducción de estados y zona horaria registrados en QA S1-02.
+- Render sigue como preview. No se ha fusionado main ni utilizado su BD.

@@ -84,3 +84,15 @@ cancelación automática de pagos ya comunicados. Ver el plan y QA del Sprint 1.
 9. Pedido pasa a `PAID`.
 10. Preparación, envío y entrega.
 11. Solo tras `DELIVERED` se habilita la reseña verificada.
+
+## Importes y confirmación — S1-02
+Ver [ADR 0002](decisions/0002-dinero-y-confirmacion.md). El cálculo comercial usa
+Prisma.Decimal. El navegador recibe cadenas con dos decimales; el formateo y la
+suma de previsualización utilizan céntimos enteros, sin Prisma en el bundle cliente.
+La Server Action autentica, valida con Zod y verifica la configuración del método.
+`createManualOrder` relee carrito/dirección/tarifa en una transacción Serializable,
+comprueba la firma del resumen y guarda líneas, subtotal, envío, total y pago del
+mismo snapshot. Los cambios de contenido exigen revisar la pantalla actualizada.
+Las acciones de administración rechazan precisión monetaria extra.
+No se modifica el esquema de BD. Reserva previa e idempotencia persistida siguen
+pendientes en S1-03/S1-04; la firma no sustituye esas garantías.

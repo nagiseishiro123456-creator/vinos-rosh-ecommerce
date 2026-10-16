@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,13 +8,6 @@ import type { PublicProductCard } from "@/modules/products/queries";
 const FALLBACK_IMAGE =
   "https://nagiseishiro123456-creator.github.io/vinos-rosh-prototype/assets/products.jpg";
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 export function ProductCard({ product }: { product: PublicProductCard }) {
   return (

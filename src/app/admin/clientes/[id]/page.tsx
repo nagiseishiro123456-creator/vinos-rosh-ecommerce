@@ -1,3 +1,4 @@
+import { addMoney, formatPrice } from "@/lib/money";
 import { UserRole } from "@prisma/client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,13 +12,6 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
@@ -92,7 +86,7 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
 
   const totalOrdered = customer.orders
     .filter((order) => order.status !== "CANCELLED" && order.status !== "REFUNDED")
-    .reduce((sum, order) => sum + Number(order.total), 0);
+    .reduce((sum, order) => addMoney(sum, order.total.toFixed(2)), "0.00");
 
   return (
     <main className="shell adminPage adminCustomerDetailPage">
@@ -168,7 +162,7 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
                       <td>{order.createdAt.toLocaleDateString("es-PE")}</td>
                       <td>{order.items.length}</td>
                       <td><span className={`adminBadge status-${order.status.toLowerCase()}`}>{statusLabel(order.status)}</span></td>
-                      <td>{formatPrice(Number(order.total))}</td>
+                      <td>{formatPrice(order.total.toFixed(2))}</td>
                       <td><Link className="adminTextButton" href={`/admin/pedidos/${order.id}`}>Ver pedido</Link></td>
                     </tr>
                   ))}
