@@ -1,3 +1,4 @@
+import { calculateAmounts } from "@/modules/checkout/pricing";
 import { prisma } from "@/lib/prisma";
 
 export type CheckoutAddress = {
@@ -18,7 +19,7 @@ export type CheckoutShippingZone = {
   department: string;
   province: string;
   district: string;
-  price: number;
+  price: string;
 };
 
 export type CheckoutCartItem = {
@@ -28,7 +29,7 @@ export type CheckoutCartItem = {
     id: string;
     name: string;
     slug: string;
-    price: number;
+    price: string;
     stock: number;
     active: boolean;
   };
@@ -91,22 +92,21 @@ export async function getCheckoutData(userId: string) {
     ...item,
     product: {
       ...item.product,
-      price: Number(item.product.price),
+      price: item.product.price.toFixed(2),
     },
   }));
 
   const zones: CheckoutShippingZone[] = shippingZones.map((zone) => ({
     ...zone,
-    price: Number(zone.price),
+    price: zone.price.toFixed(2),
   }));
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0,
-  );
+  const subtotal = calculateAmounts(items.map((item) => ({
+    unitPrice: item.product.price, quantity: item.quantity,
+  }))).subtotal.toFixed(2);
 
   const hasInvalidItems = items.some(
-    (item) => !item.product.active || item.product.stock < item.quantity,
+    (item) => !item.product.active || item.product.stock < item.quantity || item.quantity > 99,
   );
 
   return {

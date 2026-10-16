@@ -67,4 +67,5 @@ Los checks de S1-01 no demuestran el cierre de las otras cuatro historias ni hab
 
 ## Registro de entregas
 - S1-01: preparación reproducible verificada y 10 capturas conservadas; ver [QA](../testing/sprint-01.md).
-- S1-02 a S1-05: pendientes.
+- S1-02: implementada, validación en curso; ver [QA de dinero](../testing/s1-02-dinero.md).
+- S1-03 a S1-05: pendientes.

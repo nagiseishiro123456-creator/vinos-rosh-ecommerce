@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
@@ -14,9 +15,6 @@ const statusLabels: Record<string, string> = {
   REFUNDED: "Reembolsado",
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(value);
-}
 
 function formatDate(value: Date) {
   return new Intl.DateTimeFormat("es-PE", {
@@ -101,7 +99,7 @@ export default async function AdminOrdersPage() {
                       <small>{order.user.email}</small>
                     </td>
                     <td>{order.shippingDistrict}</td>
-                    <td>{formatPrice(Number(order.total))}</td>
+                    <td>{formatPrice(order.total.toFixed(2))}</td>
                     <td><span className={`adminBadge status-${order.status.toLowerCase()}`}>{statusLabels[order.status] ?? order.status}</span></td>
                     <td>
                       {payment ? (

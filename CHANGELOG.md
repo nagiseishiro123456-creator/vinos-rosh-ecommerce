@@ -1,6 +1,14 @@
 # Changelog
 
-## Fase 2 — Sprint 1 / S1-01 (implementado y verificado en rama, 2026-10-15)
+## Fase 2 — Sprint 1 / S1-02 (rama en validación, 2026-10-15)
++- Cálculos en Prisma.Decimal y representación monetaria canónica, sin punto flotante.
++- Confirmación HMAC del resumen y transacción Serializable para leer y guardar importes coherentes.
++- Revisión explícita si cambia carrito/dirección/precios/envío; totales del cliente ignorados.
++- Entrada administrativa con hasta dos decimales; envío cero permitido.
++- Pruebas unitarias, de BD y recorrido de navegador autenticado con pagos ficticios.
++- Sin cambio de esquema ni activación de pasarelas. Depende de S1-01 (PR #3).
++
++## Fase 2 — Sprint 1 / S1-01 (implementado y verificado en rama, 2026-10-15)
 - Dependencias fijadas por lockfile y toolchain Node/npm registrado.
 - Instalación con npm ci en CI, preview, Docker y preparación Windows.
 - Preparación standalone con assets públicos; copia de public en Docker.

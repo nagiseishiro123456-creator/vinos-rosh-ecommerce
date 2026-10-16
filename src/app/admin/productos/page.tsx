@@ -1,16 +1,10 @@
+import { formatPrice } from "@/lib/money";
 import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
 import { setProductActive } from "@/modules/admin/products/actions";
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 export const dynamic = "force-dynamic";
 
@@ -84,7 +78,7 @@ export default async function AdminProductsPage() {
                       <small>{product.sku || product.slug}</small>
                     </td>
                     <td>{product.category?.name ?? "Sin categoría"}</td>
-                    <td>{formatPrice(Number(product.price))}</td>
+                    <td>{formatPrice(product.price.toFixed(2))}</td>
                     <td>
                       <span className={product.stock <= 5 ? "adminStock low" : "adminStock"}>{product.stock}</span>
                     </td>

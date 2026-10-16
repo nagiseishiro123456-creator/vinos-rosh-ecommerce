@@ -7,7 +7,7 @@ export type PublicProductCard = {
   name: string;
   slug: string;
   shortDescription: string | null;
-  price: number;
+  price: string;
   stock: number;
   imageUrl: string | null;
   rating: number | null;
@@ -66,7 +66,7 @@ function mapProductCard(product: {
   name: string;
   slug: string;
   shortDescription: string | null;
-  price: { toString(): string };
+  price: { toFixed(decimalPlaces: number): string };
   stock: number;
   images: { url: string }[];
   reviews: { rating: number }[];
@@ -81,7 +81,7 @@ function mapProductCard(product: {
     name: product.name,
     slug: product.slug,
     shortDescription: product.shortDescription,
-    price: Number(product.price),
+    price: product.price.toFixed(2),
     stock: product.stock,
     imageUrl: product.images[0]?.url ?? null,
     rating,
@@ -222,7 +222,7 @@ export async function getProductBySlug(slug: string): Promise<PublicProductDetai
       sku: product.sku,
       shortDescription: product.shortDescription,
       description: product.description,
-      price: Number(product.price),
+      price: product.price.toFixed(2),
       stock: product.stock,
       imageUrl: product.images[0]?.url ?? null,
       images: product.images,

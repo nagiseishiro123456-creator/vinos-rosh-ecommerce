@@ -1,12 +1,15 @@
 "use client";
 
+import { formatPrice } from "@/lib/money";
+
 import { useState } from "react";
 
 import { submitManualOrder } from "@/modules/orders/actions";
 
 type Props = {
   addressId: string;
-  total: number;
+  total: string;
+  checkoutQuote: string;
   yape: {
     enabled: boolean;
     phone: string | null;
@@ -20,15 +23,8 @@ type Props = {
   };
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
-export function PaymentForm({ addressId, total, yape, transfer }: Props) {
+export function PaymentForm({ addressId, total, checkoutQuote, yape, transfer }: Props) {
   const firstProvider = yape.enabled ? "YAPE_MANUAL" : transfer.enabled ? "TRANSFER_MANUAL" : "";
   const [provider, setProvider] = useState(firstProvider);
   const [receiptType, setReceiptType] = useState("BOLETA");
@@ -37,6 +33,7 @@ export function PaymentForm({ addressId, total, yape, transfer }: Props) {
   return (
     <form className="paymentForm" action={submitManualOrder}>
       <input type="hidden" name="addressId" value={addressId} />
+      <input type="hidden" name="checkoutQuote" value={checkoutQuote} />
 
       <section className="paymentSection">
         <p className="eyebrow wine">MÉTODO DE PAGO</p>
@@ -176,7 +173,7 @@ export function PaymentForm({ addressId, total, yape, transfer }: Props) {
         </div>
 
         <button className="button buttonPrimary fullButton" type="submit" disabled={!hasProvider}>
-          Enviar pedido para validar pago
+          Enviar pedido por {formatPrice(total)} para validar pago
         </button>
         <p className="checkoutSecurityNote">
           El pedido queda en revisión. El stock se reserva al enviarlo y se libera automáticamente si el administrador rechaza el pago.

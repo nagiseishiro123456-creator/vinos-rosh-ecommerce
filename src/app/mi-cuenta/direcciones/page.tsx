@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -13,13 +14,6 @@ type Props = {
   searchParams: Promise<{ status?: string; error?: string }>;
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 export default async function AddressesPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
@@ -179,7 +173,7 @@ export default async function AddressesPage({ searchParams }: Props) {
                     <option value="" disabled>Selecciona una zona</option>
                     {shippingZones.map((zone) => (
                       <option key={zone.id} value={zone.id}>
-                        {zone.district} · {zone.province} · {formatPrice(Number(zone.price))}
+                        {zone.district} · {zone.province} · {formatPrice(zone.price.toFixed(2))}
                       </option>
                     ))}
                   </select>

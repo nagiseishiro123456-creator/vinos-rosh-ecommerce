@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,21 +6,16 @@ import { redirect } from "next/navigation";
 
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
+import { calculateAmounts } from "@/modules/checkout/pricing";
 import { prisma } from "@/lib/prisma";
 import { siteConfig } from "@/lib/site";
 import { removeCartItem, updateCartItem } from "@/modules/cart/actions";
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 export const dynamic = "force-dynamic";
 
-export default async function CartPage() {
+export default async function CartPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  const params = await searchParams;
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     redirect("/iniciar-sesion?callbackUrl=/carrito");
@@ -54,12 +50,10 @@ export default async function CartPage() {
   });
 
   const items = cart?.items ?? [];
-  const subtotal = items.reduce(
-    (sum, item) => sum + Number(item.product.price) * item.quantity,
-    0,
-  );
+  const amounts = calculateAmounts(items.map((item) => ({ unitPrice: item.product.price, quantity: item.quantity })));
+  const subtotal = amounts.subtotal.toFixed(2);
   const hasInvalidItems = items.some(
-    (item) => !item.product.active || item.product.stock < item.quantity,
+    (item) => !item.product.active || item.product.stock < item.quantity || item.quantity > 99,
   );
 
   return (
@@ -72,6 +66,7 @@ export default async function CartPage() {
         <div className="cartMain">
           <p className="eyebrow wine">TU COMPRA</p>
           <h1>Carrito</h1>
+          {params.error ? <div className="checkoutError" role="alert">{params.error === "amount-invalid" ? "El importe supera el límite permitido o contiene datos inválidos. Revisa el carrito antes de continuar." : "La disponibilidad o cantidad cambió. Revisa el carrito antes de continuar."}</div> : null}
 
           {items.length === 0 ? (
             <div className="emptyPanel">
@@ -81,11 +76,11 @@ export default async function CartPage() {
             </div>
           ) : (
             <div className="cartItems">
-              {items.map((item) => {
+              {items.map((item, index) => {
                 const image = item.product.images[0];
                 const updateAction = updateCartItem.bind(null, item.id);
                 const removeAction = removeCartItem.bind(null, item.id);
-                const lineTotal = Number(item.product.price) * item.quantity;
+                const lineTotal = amounts.lines[index].subtotal.toFixed(2);
 
                 return (
                   <article className="cartItem" key={item.id}>
@@ -100,7 +95,7 @@ export default async function CartPage() {
 
                     <div className="cartItemInfo">
                       <Link href={`/productos/${item.product.slug}`}><strong>{item.product.name}</strong></Link>
-                      <span>{formatPrice(Number(item.product.price))} c/u</span>
+                      <span>{formatPrice(item.product.price.toFixed(2))} c/u</span>
                       {!item.product.active || item.product.stock <= 0 ? (
                         <small className="cartWarning">Este producto ya no está disponible.</small>
                       ) : item.quantity > item.product.stock ? (
@@ -116,7 +111,7 @@ export default async function CartPage() {
                           name="quantity"
                           type="number"
                           min={1}
-                          max={Math.max(1, item.product.stock)}
+                          max={Math.min(99, Math.max(1, item.product.stock))}
                           defaultValue={item.quantity}
                         />
                         <button type="submit">Actualizar</button>
