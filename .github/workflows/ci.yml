@@ -82,6 +82,12 @@ jobs:
       - name: Apply committed migrations
         run: npx prisma migrate deploy
 
+      - name: Verify reservation migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/reservation-migration-before.sql prisma/migrations/20261016002500_reserve_before_manual_payment/migration.sql tests/sql/reservation-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Seed initial admin
         run: npm run db:seed
 

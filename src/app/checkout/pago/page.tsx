@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { PaymentForm } from "@/components/payment-form";
+import { ReservationForm } from "@/components/reservation-form";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
@@ -12,7 +12,6 @@ import { prisma } from "@/lib/prisma";
 import { assertOrderAmountFits, MoneyError } from "@/modules/checkout/pricing";
 import { createCheckoutQuote } from "@/modules/checkout/quote";
 import { loadCheckoutSnapshot, CheckoutUnavailableError } from "@/modules/checkout/snapshot";
-import { getManualPaymentHoldMinutes } from "@/modules/orders/hold";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
@@ -27,9 +26,9 @@ type Props = {
 
 function errorMessage(error: string | undefined) {
   if (error === "quote-changed") {
-    return "El carrito, los precios o el envío cambiaron. Revisa el resumen actualizado antes de continuar. Si ya pagaste, contacta a la tienda para conciliar el importe y no pagues de nuevo.";
+    return "El carrito, los precios o el envío cambiaron. Revisa el resumen actualizado antes de continuar. Todavía no se creó una reserva ni se realizó un cobro.";
   }
-  if (error === "pending-limit") return "Tienes pedidos pendientes de revisión. Consulta su estado antes de crear otro.";
+  if (error === "pending-limit") return "Tienes tres reservas o pagos en revisión. Consulta tus pedidos antes de crear otro.";
   if (error === "busy") return "La compra se está actualizando. Revisa el resumen e inténtalo de nuevo.";
   if (error === "duplicate-operation") {
     return "Ese código de operación ya está registrado. Verifica el número antes de continuar.";
@@ -73,7 +72,6 @@ export default async function PaymentPage({ searchParams }: Props) {
   const subtotal = amounts.subtotal.toFixed(2);
   const shippingAmount = amounts.shippingAmount.toFixed(2);
   const total = amounts.total.toFixed(2);
-  const holdMinutes = getManualPaymentHoldMinutes();
 
   return (
     <main className="checkoutPage">
@@ -86,8 +84,8 @@ export default async function PaymentPage({ searchParams }: Props) {
           <div className="checkoutHeading">
             <div>
               <p className="eyebrow wine">CHECKOUT · PASO 2</p>
-              <h1>Pago y comprobante</h1>
-              <p>El pago manual se registra como pendiente de revisión. El administrador confirma o rechaza la operación antes de preparar el pedido.</p>
+              <h1>Confirma tu reserva</h1>
+              <p>Revisa la entrega, el importe y el comprobante. Al confirmar reservaremos las botellas; después podrás pagar.</p>
             </div>
             <Link className="textLink" href={`/checkout?addressId=${address.id}`}>← Cambiar dirección</Link>
           </div>
@@ -96,28 +94,12 @@ export default async function PaymentPage({ searchParams }: Props) {
             <div className="checkoutError" role="alert">{errorMessage(params.error)}</div>
           ) : null}
 
-          <div className="checkoutWarningPanel">
-            <strong>Reserva temporal de stock: {holdMinutes} minutos.</strong>
-            <p>
-              Si el pago no es validado dentro de ese periodo, el sistema puede cancelar la reserva durante el mantenimiento y devolver las unidades al inventario.
-            </p>
-          </div>
-
-          <PaymentForm
+          <ReservationForm
             addressId={address.id}
             total={total}
             checkoutQuote={checkoutQuote}
-            yape={{
-              enabled: commerce.yape.ready,
-              phone: commerce.yape.phone,
-              qrImageUrl: commerce.yape.qrImageUrl,
-            }}
-            transfer={{
-              enabled: commerce.transfer.ready,
-              label: commerce.transfer.label,
-              accountNumber: commerce.transfer.accountNumber,
-              holder: commerce.transfer.holder,
-            }}
+            yapeEnabled={commerce.yape.ready}
+            transferEnabled={commerce.transfer.ready}
           />
         </div>
 

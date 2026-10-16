@@ -2,7 +2,7 @@
 
 ## Sprint Goal
 Crear pedidos con importes exactos, reserva anterior al pago y protección contra duplicados.
-Estado: iniciado, S1-01 y S1-02 implementadas y verificadas en ramas; integración pendiente. Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
+Estado: iniciado, S1-01 a S1-03 implementadas y verificadas en ramas; integración pendiente. Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
 Los 26 SP son una estimación preliminar; no constituyen fecha de entrega.
 
 ## Historias y aceptación
@@ -49,7 +49,7 @@ La reserva sin operación comunicada puede vencer/cancelarse y liberarse una sol
 Pagos tardíos, discrepancias y cancelación tras comunicar pago requieren conciliación.
 El valor inicial de 120 minutos puede mantenerse configurable para reservas sin pago informado;
 cambiar la configuración no debe alterar retroactivamente el vencimiento de una orden.
-Estas reglas todavía no se presentan como comportamiento implementado en S1-01.
+S1-03 implementa y verifica estas reglas; S1-01/S1-02 se conservan como registros históricos.
 
 ## Orden de trabajo y documentación
 1. Baseline y entorno → resultados iniciales y guía de arranque.
@@ -68,4 +68,5 @@ Los checks de S1-01 no demuestran el cierre de las otras cuatro historias ni hab
 ## Registro de entregas
 - S1-01: preparación reproducible verificada y 10 capturas conservadas; ver [QA](../testing/sprint-01.md).
 - S1-02: implementada y verificada, PR #4 dependiente de #3; 28 pruebas y 4 casos de navegador aprobados, 10 capturas nuevas; ver [QA de dinero](../testing/s1-02-dinero.md).
-- S1-03 a S1-05: pendientes.
+- S1-03: implementada y verificada en PR #5 (depende de #4); 40 pruebas, 6 casos de navegador, 8 migraciones y 16 capturas. [ADR](../decisions/0003-reserva-previa.md) y [QA](../testing/s1-03-reserva.md).
+- S1-04/S1-05: pendientes; el ajuste básico que excluye pagos en revisión del vencimiento se adelanta a S1-03 por coherencia del flujo.
