@@ -15,6 +15,19 @@ Base: S1-02, commit `e8b72d8f41b36eec6d3317e127e531affe4309d5`. PR #4 pendiente 
 5. Aprobar conserva el stock reservado. Rechazar/cancelar/vencer libera una sola vez bajo condición de estado.
 
 ## Vencimiento y cancelación
+
+```mermaid
+stateDiagram-v2
+    direction TB
+    [*] --> PENDING_PAYMENT: Confirmar y reservar
+    PENDING_PAYMENT --> PAYMENT_REVIEW: Comunicar operación válida dentro del plazo
+    PENDING_PAYMENT --> CANCELLED: Cancelar sin pago comunicado o vencer
+    PAYMENT_REVIEW --> PAID: Administrador verifica abono
+    PAYMENT_REVIEW --> CANCELLED: Administrador rechaza y concilia
+```
+
+La entrada reserva una vez; las salidas hacia CANCELLED liberan una vez. Comunicar y aprobar no descuentan stock.
+
 `stockReservedAt`, `reservationExpiresAt` y `stockReleasedAt` identifican la reserva real.
 El vencimiento se calcula al crear: ahora + MANUAL_PAYMENT_HOLD_MINUTES (15–1440; default 120).
 Cambiar la variable después no altera reservas existentes. `reservationExpiredAt` distingue un vencimiento.

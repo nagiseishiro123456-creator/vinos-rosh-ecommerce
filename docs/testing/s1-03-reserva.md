@@ -39,3 +39,11 @@ No se usa Render, no se habilitan pasarelas ni se realizan pagos. El banco y las
 La tienda desconoce un abono manual no comunicado: pagos tardíos requieren conciliación, sin repetir pago.
 Sin mantenimiento periódico o acceso al pedido, la liberación no ocurre exactamente al vencer.
 S1-05 ampliará conciliación y pruebas de revisión administrativa; producción sigue pendiente.
+
+## Incidencia del primer recorrido
+Run `38830377639`, código `efdf71848fd0f10e7ede6e83ead85cf4b4afad91`: 40 pruebas de lógica/BD,
+contrato de migración, tipos/lint/build y cuatro casos de navegador aprobados.
+Los dos casos nuevos fallaron porque la espera `/carrito$/` coincidía con la query
+`/iniciar-sesion?callbackUrl=/carrito`. El auxiliar navegaba antes de completar el POST de login,
+cancelándolo. La traza confirmó la navegación sin cookie de sesión; no se relajó autenticación.
+Se corrigió la espera para comprobar pathname exacto y heading del carrito antes de continuar.

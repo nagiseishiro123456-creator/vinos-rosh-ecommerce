@@ -30,7 +30,9 @@ export async function loginCustomer(page: Page, email = "qa-s102@example.com") {
   await page.getByLabel("Correo electrónico").fill(email);
   await page.getByLabel("Contraseña", { exact: true }).fill(process.env.SMOKE_CUSTOMER_PASSWORD ?? "Qa-only-S1-02-12345");
   await page.getByRole("button", { name: "Iniciar sesión", exact: true }).click();
-  await expect(page).toHaveURL(/\/carrito$/);
+  // Match the pathname, not the callbackUrl query on the login page.
+  await expect(page).toHaveURL((url) => url.pathname === "/carrito");
+  await expect(page.getByRole("heading", { name: "Carrito", exact: true })).toBeVisible();
 }
 
 export async function reserveFromCart(page: Page) {
