@@ -5,14 +5,23 @@ Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, aute
 
 ## Stack
 - Next.js + React + TypeScript estricto
-- Tailwind CSS + shadcn/ui + Lucide React
+- Tailwind CSS 4 + CSS propio + Lucide React (shadcn/ui no se identifica en el código actual)
 - PostgreSQL
 - Prisma ORM
 - Zod
 - Auth.js / NextAuth Credentials + bcryptjs
-- Cloudinary
-- Resend
-- Vercel/hosting compatible con Next.js
+- Cloudinary opcional para URLs de media; también existen imágenes locales en `public/`
+- Resend opcional por HTTP para recuperación de contraseña; notificaciones de pedidos pendientes
+- Render gratuito como preview, con servicio Node.js y PostgreSQL separados
+- Motion pendiente de incorporar; no está instalado en S1-01
+
+## Ejecución del backend
+Server Actions (`src/modules/*/actions.ts`) para operaciones de formularios;
+Route Handlers (`src/app/api/**/route.ts`) para HTTP, autenticación y health check.
+Prisma Client accede a PostgreSQL mediante `DATABASE_URL`. No hay backend Express separado.
+Toolchain fijado en S1-01: Node.js 22.23.3, npm 11.9.0 y `package-lock.json`.
+La salida `standalone` requiere copiar `public` y `.next/static`; se usa
+`scripts/prepare-standalone.mjs` en CI/preview y `COPY` en la imagen Docker.
 
 ## Módulos
 - auth
@@ -32,10 +41,10 @@ Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, aute
 - Registro obligatorio antes de completar compra.
 - Un administrador inicialmente.
 - Tarifas de envío administrables por distrito.
-- Boleta y factura disponibles en checkout; integración tributaria pendiente de confirmación del cliente.
+- Checkout recopila los datos para boleta/factura; la emisión tributaria automática no está implementada.
 - Reseñas solo para compradores verificados con pedido entregado.
 - Pagos desacoplados del pedido mediante la entidad `Payment`.
-- Proveedores soportados: `CULQI`, `YAPE_MANUAL`, `TRANSFER_MANUAL`.
+- El modelo contempla `CULQI`, `YAPE_MANUAL`, `TRANSFER_MANUAL`. El flujo implementado es manual; Culqi queda pendiente.
 - La dirección y los datos principales del producto se guardan como snapshot en el pedido para preservar historial.
 
 ## Pagos híbridos
@@ -61,6 +70,9 @@ Nunca se almacenarán números completos de tarjeta ni CVV.
 Desarrollo utiliza PostgreSQL 16 mediante Docker Compose. El script `scripts/setup-dev.ps1` automatiza secretos locales, arranque de BD, migración, seed y typecheck.
 
 ## Flujo de compra
+Este es el flujo objetivo. En el código base el stock manual se reserva después
+de que el cliente comunica la operación: S1-03 corregirá el orden y S1-05 la
+cancelación automática de pagos ya comunicados. Ver el plan y QA del Sprint 1.
 1. Cliente navega catálogo.
 2. Agrega productos al carrito persistente.
 3. Inicia sesión o se registra.

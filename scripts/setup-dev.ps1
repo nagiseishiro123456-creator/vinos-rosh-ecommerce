@@ -6,15 +6,32 @@ function Assert-Command([string]$Name) {
   }
 }
 
+function Invoke-Checked([scriptblock]$Command) {
+  & $Command
+  if ($LASTEXITCODE -ne 0) {
+    throw "El comando falló con código $LASTEXITCODE. Se detiene la preparación."
+  }
+}
+
 function New-RandomHex([int]$Bytes = 32) {
   $buffer = New-Object byte[] $Bytes
-  [System.Security.Cryptography.RandomNumberGenerator]::Fill($buffer)
+  $random = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+  try { $random.GetBytes($buffer) } finally { $random.Dispose() }
   return ($buffer | ForEach-Object { $_.ToString("x2") }) -join ""
 }
 
 Assert-Command node
 Assert-Command npm
 Assert-Command docker
+
+$expectedNode = (Get-Content (Join-Path $PSScriptRoot "..\.nvmrc")).Trim()
+$actualNode = (& node -p "process.versions.node").Trim()
+if ($actualNode -ne $expectedNode) {
+  throw "Usa Node.js $expectedNode (actual: $actualNode) para reproducir el entorno."
+}
+if ((& npm --version).Trim() -ne "11.9.0") {
+  throw "Usa npm 11.9.0: npm install --global npm@11.9.0"
+}
 
 $envPath = Join-Path $PSScriptRoot "..\.env"
 $generatedAdminPassword = $null
@@ -72,10 +89,10 @@ EMAIL_FROM="Vinos ROSH <no-reply@example.com>"
 Push-Location (Join-Path $PSScriptRoot "..")
 try {
   Write-Host "[1/8] Instalando dependencias..." -ForegroundColor Cyan
-  npm install
+  Invoke-Checked { npm ci --include=dev }
 
   Write-Host "[2/8] Levantando PostgreSQL con Docker..." -ForegroundColor Cyan
-  docker compose up -d db
+  Invoke-Checked { docker compose up -d db }
 
   Write-Host "[3/8] Esperando a PostgreSQL..." -ForegroundColor Cyan
   $ready = $false
@@ -94,21 +111,20 @@ try {
     throw "PostgreSQL no respondió a tiempo. Revisa 'docker compose logs db'."
   }
 
-  Write-Host "[4/8] Formateando y validando Prisma..." -ForegroundColor Cyan
-  npx prisma format
-  npx prisma validate
+  Write-Host "[4/8] Validando Prisma..." -ForegroundColor Cyan
+  Invoke-Checked { npx prisma validate }
 
   Write-Host "[5/8] Generando Prisma Client..." -ForegroundColor Cyan
-  npx prisma generate
+  Invoke-Checked { npx prisma generate }
 
   Write-Host "[6/8] Aplicando migraciones..." -ForegroundColor Cyan
-  npx prisma migrate dev
+  Invoke-Checked { npx prisma migrate deploy }
 
   Write-Host "[7/8] Creando/actualizando administrador inicial..." -ForegroundColor Cyan
-  npm run db:seed
+  Invoke-Checked { npm run db:seed }
 
   Write-Host "[8/8] Verificando TypeScript..." -ForegroundColor Cyan
-  npm run typecheck
+  Invoke-Checked { npm run typecheck }
 
   Write-Host ""
   Write-Host "===============================================" -ForegroundColor Green

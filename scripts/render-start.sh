@@ -17,15 +17,7 @@ if [[ "${BOOTSTRAP_BUSINESS_DATA:-false}" == "true" ]]; then
 fi
 
 echo "Preparando salida standalone de Next.js..."
-mkdir -p .next/standalone/.next
-
-if [[ -d public ]]; then
-  rm -rf .next/standalone/public
-  cp -R public .next/standalone/public
-fi
-
-rm -rf .next/standalone/.next/static
-cp -R .next/static .next/standalone/.next/static
+npm run prepare:standalone
 
 echo "Iniciando Vinos ROSH en Render..."
 export HOSTNAME="0.0.0.0"

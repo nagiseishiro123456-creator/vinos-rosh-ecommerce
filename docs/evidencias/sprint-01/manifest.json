@@ -1,0 +1,48 @@
+{
+  "run_id": 38824743481,
+  "tested_commit": "e8910c5946faf502804705496527006a3f82309c",
+  "artifact_id": 12015275384,
+  "fixture": "rosh-qa-botella-de-prueba; synthetic data; no payment",
+  "screenshots": [
+    {
+      "file": "ci-desktop-01-home.png",
+      "sha256": "77ace6a0d79ec17f1fd05731f2444f3cc5dd9ca518f97fd41a8033e7590ae983",
+      "bytes": 2540629
+    },
+    {
+      "file": "ci-desktop-02-catalogo.png",
+      "sha256": "e6808264b16ed789b4fcb828889aeb463963918422434bd2a21049c87634e68c",
+      "bytes": 553673
+    },
+    {
+      "file": "ci-desktop-03-producto-qa.png",
+      "sha256": "14b92f2d83b11882e393892c60f2f8a6c5750b612e03244df11480391d8e930d",
+      "bytes": 532103
+    },
+    {
+      "file": "ci-desktop-04-acceso.png",
+      "sha256": "2355521ad8e14b39bdd9e164e49f8afeaaf9913e8c340d9bb9bc395e70e319bd",
+      "bytes": 314903
+    },
+    {
+      "file": "ci-mobile-01-home.png",
+      "sha256": "5d29558ffaabb2864f0661e213c7cc353555f0fc8c5f22435f152e4eb28e1e8e",
+      "bytes": 1060129
+    },
+    {
+      "file": "ci-mobile-02-catalogo.png",
+      "sha256": "e3ae49d4316b3c7005cde5a010cb1cce1637dbfbcc6afdb7250eb09e1eb25d1e",
+      "bytes": 286405
+    },
+    {
+      "file": "ci-mobile-03-producto-qa.png",
+      "sha256": "9dd01fb511f18729b327eb398a2b413488ab998a7052c748c51532b2948ce1ae",
+      "bytes": 255009
+    },
+    {
+      "file": "ci-mobile-04-acceso.png",
+      "sha256": "2dda4e00d2cbefff6896d31194810f58313a4983e958591826715c495ddcc191",
+      "bytes": 125134
+    }
+  ]
+}

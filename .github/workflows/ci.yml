@@ -7,12 +7,16 @@ on:
     branches: [main]
 
 concurrency:
-  group: vinos-rosh-ci
+  group: vinos-rosh-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     services:
       postgres:
@@ -37,6 +41,14 @@ jobs:
       ADMIN_PASSWORD: CI-only-password-A1-123456
       ADMIN_FIRST_NAME: Admin
       ADMIN_LAST_NAME: CI
+      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+      PREVIEW_MODE: "true"
+      SHOW_DEMO_CATALOG: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+      PAYMENTS_CULQI_ENABLED: "false"
+      PAYMENTS_YAPE_MANUAL_ENABLED: "false"
+      PAYMENTS_TRANSFER_MANUAL_ENABLED: "false"
+      SMOKE_TEST_DATA: "true"
 
     steps:
       - name: Checkout
@@ -45,11 +57,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version: 22
-          package-manager-cache: false
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Use pinned npm
+        run: npm install --global npm@11.9.0
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --include=dev
+
+      - name: Record toolchain
+        run: |
+          node --version
+          npm --version
 
       - name: Production dependency audit
         run: npm audit --omit=dev --audit-level=high
@@ -81,3 +101,25 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Prepare isolated visual fixture and standalone assets
+        run: |
+          npm run db:seed:smoke
+          npm run prepare:standalone
+
+      - name: Install Chromium for visual evidence
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke checks and desktop/mobile screenshots
+        run: npm run test:smoke
+
+      - name: Upload smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sprint-01-smoke-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14
