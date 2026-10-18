@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -120,7 +121,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
                   <option value="" disabled>Selecciona una zona</option>
                   {data.shippingZones.map((zone) => (
                     <option key={zone.id} value={zone.id}>
-                      {zone.district} · {zone.province} · S/ {zone.price.toFixed(2)}
+                      {zone.district} · {zone.province} · {formatPrice(zone.price)}
                     </option>
                   ))}
                 </select>

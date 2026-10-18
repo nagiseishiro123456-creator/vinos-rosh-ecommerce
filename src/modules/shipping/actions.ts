@@ -6,13 +6,14 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
+import { moneyInputSchema } from "@/modules/checkout/pricing";
 import { prisma } from "@/lib/prisma";
 
 const shippingZoneSchema = z.object({
   department: z.string().trim().min(2).max(80).default("Lima"),
   province: z.string().trim().min(2).max(80).default("Lima"),
   district: z.string().trim().min(2).max(100),
-  price: z.coerce.number().positive().max(10000),
+  price: moneyInputSchema({ max: "10000.00" }),
 });
 
 const zoneIdSchema = z.string().cuid();

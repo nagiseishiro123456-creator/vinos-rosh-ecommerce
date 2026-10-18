@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { moneyInputSchema } from "@/modules/checkout/pricing";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
 
@@ -37,7 +38,7 @@ const productSchema = z.object({
   sku: z.string().trim().max(60).optional(),
   shortDescription: z.string().trim().max(220).optional(),
   description: z.string().trim().min(10).max(6000),
-  price: z.coerce.number().positive().max(999999),
+  price: moneyInputSchema({ min: "0.01", max: "999999.00" }),
   stock: z.coerce.number().int().min(0).max(999999),
   categoryName: z.string().trim().max(100).optional(),
   imageUrl: imageUrlSchema,

@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -21,9 +22,6 @@ function statusLabel(status: string) {
   return labels[status] ?? status;
 }
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(value);
-}
 
 export const dynamic = "force-dynamic";
 
@@ -134,7 +132,7 @@ export default async function AccountPage() {
                       <small>{order.createdAt.toLocaleDateString("es-PE")} · {order.items.length} producto(s)</small>
                     </span>
                     <span>
-                      <strong>{formatPrice(Number(order.total))}</strong>
+                      <strong>{formatPrice(order.total.toFixed(2))}</strong>
                       <small>{statusLabel(order.status)}</small>
                     </span>
                   </Link>

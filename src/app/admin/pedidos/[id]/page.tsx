@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -22,9 +23,6 @@ const nextActionLabels: Partial<Record<string, string>> = {
   SHIPPED: "Marcar como entregado",
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(value);
-}
 
 function formatDate(value: Date | null) {
   if (!value) return "—";
@@ -135,16 +133,16 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
                   <small>{item.productSku || "Sin SKU"} · {item.quantity} unidad(es)</small>
                 </span>
                 <span>
-                  <small>{formatPrice(Number(item.unitPrice))} c/u</small>
-                  <strong>{formatPrice(Number(item.subtotal))}</strong>
+                  <small>{formatPrice(item.unitPrice.toFixed(2))} c/u</small>
+                  <strong>{formatPrice(item.subtotal.toFixed(2))}</strong>
                 </span>
               </div>
             ))}
           </div>
           <div className="adminOrderTotals">
-            <div><span>Subtotal</span><strong>{formatPrice(Number(order.subtotal))}</strong></div>
-            <div><span>Envío</span><strong>{formatPrice(Number(order.shippingAmount))}</strong></div>
-            <div className="total"><span>Total</span><strong>{formatPrice(Number(order.total))}</strong></div>
+            <div><span>Subtotal</span><strong>{formatPrice(order.subtotal.toFixed(2))}</strong></div>
+            <div><span>Envío</span><strong>{formatPrice(order.shippingAmount.toFixed(2))}</strong></div>
+            <div className="total"><span>Total</span><strong>{formatPrice(order.total.toFixed(2))}</strong></div>
           </div>
         </article>
 
@@ -187,7 +185,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
                 <small>{payment.operationCode ? `Operación: ${payment.operationCode}` : "Sin código de operación"}</small>
               </span>
               <span>
-                <strong>{formatPrice(Number(payment.amount))}</strong>
+                <strong>{formatPrice(payment.amount.toFixed(2))}</strong>
                 <small>{payment.status}</small>
                 {payment.refundReference ? <small>Reembolso: {payment.refundReference}</small> : null}
               </span>

@@ -1,0 +1,91 @@
+{
+  "story": "S1-02",
+  "date": "2026-10-15",
+  "timezone": "America/Lima",
+  "run_id": 38827763285,
+  "tested_commit": "b72f85c061db70a4fefef6fd172bc26527c3aa4b",
+  "artifact_id": 12015109857,
+  "artifact_sha256": "daa7ca46331e48ad8fd73b785408afee1e0c79707305d3d4e4ff935a6d4e3dcc",
+  "images": [
+    {
+      "file": "ci-desktop-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/05-carrito-exacto.png",
+      "sha256": "36804d16c8c22208554371e9671f41d001a51215ef2820c28a58c90a6a6f51f4",
+      "bytes": 170887,
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "file": "ci-desktop-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/06-entrega-exacta.png",
+      "sha256": "0e09ed2d5eff4e47276dd011602e1be1164d38387cd937cb572d91d29257438b",
+      "bytes": 235604,
+      "width": 1440,
+      "height": 1165
+    },
+    {
+      "file": "ci-desktop-07-pago-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/07-pago-exacto.png",
+      "sha256": "10ae97bc67ed268cc7f33b6fbc0918571f03b96a469ebc723080339848293ac8",
+      "bytes": 382580,
+      "width": 1440,
+      "height": 1717
+    },
+    {
+      "file": "ci-desktop-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/08-resumen-actualizado.png",
+      "sha256": "dd6cabe517bc9b48a44a7e79cb8d76d9900c1986defbf8dc49a4ba63c2e68829",
+      "bytes": 398349,
+      "width": 1440,
+      "height": 1843
+    },
+    {
+      "file": "ci-desktop-09-pedido-verificado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/09-pedido-verificado.png",
+      "sha256": "f419c02b4e3b4181c8d99e48fdcdb0aa1b3612bccf79bd82f875119b09634966",
+      "bytes": 218212,
+      "width": 1440,
+      "height": 1137
+    },
+    {
+      "file": "ci-mobile-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/05-carrito-exacto.png",
+      "sha256": "a2228c6823f8e604a861f6e4eef7f60f802e8d7e290c11571955e2e6c3bf23df",
+      "bytes": 102709,
+      "width": 390,
+      "height": 1023
+    },
+    {
+      "file": "ci-mobile-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/06-entrega-exacta.png",
+      "sha256": "d0a609a227bb6b14f3011e630445af154d75b127507155ef223447880aad03f1",
+      "bytes": 162904,
+      "width": 390,
+      "height": 1941
+    },
+    {
+      "file": "ci-mobile-07-pago-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/07-pago-exacto.png",
+      "sha256": "1b27afe89c0bcbe839a75b37dd985bcdbbd8cec2405bd3f8f645dd5f8a1bde18",
+      "bytes": 261575,
+      "width": 390,
+      "height": 2477
+    },
+    {
+      "file": "ci-mobile-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/08-resumen-actualizado.png",
+      "sha256": "a8c475feec8e672d2bcdcfd34da20f57632532d11a3f970fe3587d926c03a711",
+      "bytes": 280223,
+      "width": 390,
+      "height": 2677
+    },
+    {
+      "file": "ci-mobile-09-pedido-verificado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/09-pedido-verificado.png",
+      "sha256": "56f9ad4eb09d52133565c7d6fc44bc6e2f4cbcb5f1daab811464afc4657cd371",
+      "bytes": 148677,
+      "width": 390,
+      "height": 1686
+    }
+  ]
+}

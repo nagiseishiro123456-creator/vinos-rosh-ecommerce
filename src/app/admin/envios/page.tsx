@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -12,13 +13,6 @@ type Props = {
   searchParams: Promise<{ saved?: string; error?: string }>;
 };
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    minimumFractionDigits: 2,
-  }).format(value);
-}
 
 export default async function ShippingAdminPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
@@ -67,7 +61,7 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
 
           <div className="formField">
             <label htmlFor="price">Tarifa de envío (S/)</label>
-            <input id="price" name="price" type="number" min="0.01" max="10000" step="0.01" placeholder="12.00" required />
+            <input id="price" name="price" type="number" min="0" max="10000" step="0.01" placeholder="12.00" required />
           </div>
 
           <button className="button buttonDark" type="submit">Guardar tarifa</button>
@@ -99,7 +93,7 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
                     return (
                       <tr key={zone.id}>
                         <td><strong>{zone.district}</strong><small>{zone.province}, {zone.department}</small></td>
-                        <td>{formatPrice(Number(zone.price))}</td>
+                        <td>{formatPrice(zone.price.toFixed(2))}</td>
                         <td><span className={`statusPill ${zone.active ? "active" : "inactive"}`}>{zone.active ? "Activo" : "Pausado"}</span></td>
                         <td>
                           <form action={toggleAction}>

@@ -45,7 +45,7 @@ export async function addToCart(productId: string, productSlug: string) {
     select: { id: true, quantity: true },
   });
 
-  const nextQuantity = Math.min((existing?.quantity ?? 0) + 1, product.stock);
+  const nextQuantity = Math.min((existing?.quantity ?? 0) + 1, product.stock, 99);
 
   await prisma.cartItem.upsert({
     where: { cartId_productId: { cartId: cart.id, productId: product.id } },
