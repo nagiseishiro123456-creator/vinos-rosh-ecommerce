@@ -59,7 +59,10 @@ No se deben realizar abonos ni utilizar cuentas reales.
 El smoke inicia el servidor standalone por sí mismo y exige health 200 con conexión real.
 Genera Home, catálogo, producto ficticio y acceso en 1440×1000 y 390×844;
 el caso S1-02 también autentica al cliente ficticio y registra carrito, entrega,
-pago, revisión del nuevo importe y pedido manual simulado.
+confirmación/reserva, revisión del nuevo importe y operación manual simulada.
+Desde S1-03 verifica también cancelación, vencimiento y 404 para otro cliente autenticado,
+sin cuentas reales. CI ejecuta el SQL de la migración 8 sobre fixtures antiguas en un
+esquema temporal y revierte ese esquema para validar el backfill.
 Salidas: `test-results/` y `playwright-report/` (temporales, ignoradas por Git).
 Para conservar capturas seleccionadas, copiarlas a `docs/evidencias/sprint-01/`
 con un índice que identifique origen, datos, revisión y límites.
@@ -71,3 +74,14 @@ No se ejecuta contra Render ni modifica su configuración activa.
 Dockerfile y Blueprint actualizados representan configuración propuesta; no equivalen
 a una imagen Docker construida ni a un despliegue de Render verificado.
 La base de trabajo no puede iniciar PostgreSQL convencional: CI aporta la validación de BD.
+
+## Operación de reservas desde S1-03
+`MANUAL_PAYMENT_HOLD_MINUTES` aplica solo a nuevas reservas. El vencimiento existente no cambia
+al editar la variable. Ejecutar `npm run db:maintenance` o el botón de `/admin/lanzamiento`
+para liberar pendientes vencidos; hasta 100 por ejecución. Repetir hasta agotar pendientes
+si hubo mucha inactividad. No usar las pruebas como sustituto del mantenimiento operativo.
+Un pago ya comunicado en revisión se concilia, no vence automáticamente. Para retomar un
+pedido pendiente, abrir su detalle desde Mi cuenta y usar “Continuar al pago del pedido”.
+Antes de aplicar la migración en un entorno con datos: respaldo completo y revisión de
+pendientes antiguos sin marca de reserva. Nunca inferir su stock ni pagar una orden sin
+reserva verificable. La política/migración propuesta no se ha aplicado a Render.

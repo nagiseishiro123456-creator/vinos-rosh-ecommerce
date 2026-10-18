@@ -1,0 +1,139 @@
+{
+  "story": "S1-03",
+  "date": "2026-10-15",
+  "timezone": "America/Lima",
+  "run_id": 38830960074,
+  "tested_commit": "411e47cc46dff14922c1affc74de02079b0b6b7d",
+  "artifact_id": 12016824246,
+  "artifact_sha256": "9c2f3535267733c7ea6a756623495255c6f11336c730a2372b261df49cd43e94",
+  "images": [
+    {
+      "file": "ci-desktop-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/05-carrito-exacto.png",
+      "bytes": 170887,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "36804d16c8c22208554371e9671f41d001a51215ef2820c28a58c90a6a6f51f4"
+    },
+    {
+      "file": "ci-desktop-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/06-entrega-exacta.png",
+      "bytes": 235522,
+      "width": 1440,
+      "height": 1165,
+      "sha256": "b9e80054e5b3b88f11aaf4b86d274ed775c9c0a9ae850c10c635d00639e92d4a"
+    },
+    {
+      "file": "ci-desktop-07-confirmacion-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/07-confirmacion-exacta.png",
+      "bytes": 241582,
+      "width": 1440,
+      "height": 1252,
+      "sha256": "fe8c36109cc39daddf334a0a109fc3d9051897daba80b7fdde121bb4308a661a"
+    },
+    {
+      "file": "ci-desktop-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/08-resumen-actualizado.png",
+      "bytes": 256625,
+      "width": 1440,
+      "height": 1377,
+      "sha256": "33cbff438627ee90c6b0bb87c3b5a1e510cb070faae846e3684adca9da5827cb"
+    },
+    {
+      "file": "ci-desktop-09-reserva-confirmada.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/09-reserva-confirmada.png",
+      "bytes": 337502,
+      "width": 1440,
+      "height": 1254,
+      "sha256": "ce90ed5d58459144ab641425bd91cfab2257b75d6d3c54d96c7a11a8f94a99a4"
+    },
+    {
+      "file": "ci-desktop-10-operacion-en-revision.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/10-operacion-en-revision.png",
+      "bytes": 217462,
+      "width": 1440,
+      "height": 1099,
+      "sha256": "aad21d215df315da17e2b84c0033c8fcad3bf0cca3f0683288edf075e8a470aa"
+    },
+    {
+      "file": "ci-mobile-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/05-carrito-exacto.png",
+      "bytes": 102709,
+      "width": 390,
+      "height": 1023,
+      "sha256": "a2228c6823f8e604a861f6e4eef7f60f802e8d7e290c11571955e2e6c3bf23df"
+    },
+    {
+      "file": "ci-mobile-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/06-entrega-exacta.png",
+      "bytes": 162843,
+      "width": 390,
+      "height": 1941,
+      "sha256": "56a7ae03f5c47a1c767bdafbae22c1d6749f2e323739c289cd4ccfc57d1e6e6d"
+    },
+    {
+      "file": "ci-mobile-07-confirmacion-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/07-confirmacion-exacta.png",
+      "bytes": 168986,
+      "width": 390,
+      "height": 1897,
+      "sha256": "25239eeeca0c0aebd328ce92252f4b1cfc9e99423b327577fe7cc735bb126779"
+    },
+    {
+      "file": "ci-mobile-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/08-resumen-actualizado.png",
+      "bytes": 178517,
+      "width": 390,
+      "height": 2073,
+      "sha256": "d2a34cfb3eb63d6201e500980c8cbb86e1049f136b3db5095cb1dc4f612a5c85"
+    },
+    {
+      "file": "ci-mobile-09-reserva-confirmada.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/09-reserva-confirmada.png",
+      "bytes": 229718,
+      "width": 390,
+      "height": 1945,
+      "sha256": "62f84f3e5d9b6210f7e3fba5870c6ec7543a06dc54d3bc3081fbbee5f5d0f865"
+    },
+    {
+      "file": "ci-mobile-10-operacion-en-revision.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/10-operacion-en-revision.png",
+      "bytes": 149654,
+      "width": 390,
+      "height": 1642,
+      "sha256": "10aaab55857484aa74c88c8a6c0f8f538f985c73cdc60f8d1d0e776e099f7980"
+    },
+    {
+      "file": "ci-desktop-11-reserva-cancelada.png",
+      "source": "test-results/reservation-S1-03-private--ec317-ancellation-and-lazy-expiry-desktop/11-reserva-cancelada.png",
+      "bytes": 176875,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "afd2fadd9e7e95ce0edb26ec21f459dee5efb06b00f32cb9554f24cee47e8c80"
+    },
+    {
+      "file": "ci-desktop-12-reserva-vencida.png",
+      "source": "test-results/reservation-S1-03-private--ec317-ancellation-and-lazy-expiry-desktop/12-reserva-vencida.png",
+      "bytes": 188950,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "88e55d327442276a7f2134f719896602c4d2673c11a76353fae6fc14bd2f97a1"
+    },
+    {
+      "file": "ci-mobile-11-reserva-cancelada.png",
+      "source": "test-results/reservation-S1-03-private--ec317-ancellation-and-lazy-expiry-mobile/11-reserva-cancelada.png",
+      "bytes": 104658,
+      "width": 390,
+      "height": 1304,
+      "sha256": "f0664f7bbe8fa9d6ea347a8d76405b2feba383abee240685c715f01b39aa4713"
+    },
+    {
+      "file": "ci-mobile-12-reserva-vencida.png",
+      "source": "test-results/reservation-S1-03-private--ec317-ancellation-and-lazy-expiry-mobile/12-reserva-vencida.png",
+      "bytes": 122199,
+      "width": 390,
+      "height": 1461,
+      "sha256": "f35102b058e69c76950b67d8e54b9a5e04d85cd8a9850caa456fdcfc1d0e5eea"
+    }
+  ]
+}

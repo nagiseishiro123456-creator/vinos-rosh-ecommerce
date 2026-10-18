@@ -10,7 +10,7 @@ async function main() {
       `${result.rateLimitsDeleted} límites vencidos eliminados`,
       `${result.resetTokensDeleted} tokens eliminados`,
       `${result.expiredOrdersReleased} pedidos vencidos liberados`,
-      `reserva manual configurada en ${result.holdMinutes} minutos`,
+      `plazo para nuevas reservas: ${result.holdMinutes} minutos`,
     ].join(" · "),
   );
 }

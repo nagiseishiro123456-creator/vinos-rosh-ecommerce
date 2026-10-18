@@ -3,35 +3,27 @@
 import { formatPrice } from "@/lib/money";
 
 import { useState } from "react";
+import { SubmitButton } from "@/components/submit-button";
 
-import { submitManualOrder } from "@/modules/orders/actions";
+import { reserveOrder } from "@/modules/orders/actions";
 
 type Props = {
   addressId: string;
   total: string;
   checkoutQuote: string;
-  yape: {
-    enabled: boolean;
-    phone: string | null;
-    qrImageUrl: string | null;
-  };
-  transfer: {
-    enabled: boolean;
-    label: string | null;
-    accountNumber: string | null;
-    holder: string | null;
-  };
+  yapeEnabled: boolean;
+  transferEnabled: boolean;
 };
 
 
-export function PaymentForm({ addressId, total, checkoutQuote, yape, transfer }: Props) {
-  const firstProvider = yape.enabled ? "YAPE_MANUAL" : transfer.enabled ? "TRANSFER_MANUAL" : "";
+export function ReservationForm({ addressId, total, checkoutQuote, yapeEnabled, transferEnabled }: Props) {
+  const firstProvider = yapeEnabled ? "YAPE_MANUAL" : transferEnabled ? "TRANSFER_MANUAL" : "";
   const [provider, setProvider] = useState(firstProvider);
   const [receiptType, setReceiptType] = useState("BOLETA");
   const hasProvider = Boolean(firstProvider);
 
   return (
-    <form className="paymentForm" action={submitManualOrder}>
+    <form className="paymentForm" action={reserveOrder}>
       <input type="hidden" name="addressId" value={addressId} />
       <input type="hidden" name="checkoutQuote" value={checkoutQuote} />
 
@@ -40,7 +32,7 @@ export function PaymentForm({ addressId, total, checkoutQuote, yape, transfer }:
         <h2>¿Cómo deseas pagar?</h2>
 
         <div className="paymentOptions">
-          {yape.enabled ? (
+          {yapeEnabled ? (
             <label className={`paymentOption${provider === "YAPE_MANUAL" ? " active" : ""}`}>
               <input
                 type="radio"
@@ -56,7 +48,7 @@ export function PaymentForm({ addressId, total, checkoutQuote, yape, transfer }:
             </label>
           ) : null}
 
-          {transfer.enabled ? (
+          {transferEnabled ? (
             <label className={`paymentOption${provider === "TRANSFER_MANUAL" ? " active" : ""}`}>
               <input
                 type="radio"
@@ -80,57 +72,7 @@ export function PaymentForm({ addressId, total, checkoutQuote, yape, transfer }:
           </div>
         ) : null}
 
-        {provider === "YAPE_MANUAL" && yape.enabled ? (
-          <div className="paymentInstructions">
-            <div>
-              <span>Paga exactamente</span>
-              <strong>{formatPrice(total)}</strong>
-              {yape.phone ? <p>Yape: <b>{yape.phone}</b></p> : null}
-              <small>Después de pagar, ingresa el número/código de operación para enviar el pedido a revisión.</small>
-            </div>
-            {yape.qrImageUrl ? (
-              <div className="paymentQr">
-                {/* URL administrable: se usa img para no atar el QR a una lista fija de hosts de next/image. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={yape.qrImageUrl}
-                  alt="Código QR de Yape de Vinos ROSH"
-                  width={190}
-                  height={190}
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-
-        {provider === "TRANSFER_MANUAL" && transfer.enabled ? (
-          <div className="paymentInstructions">
-            <div>
-              <span>Transfiere exactamente</span>
-              <strong>{formatPrice(total)}</strong>
-              {transfer.label ? <p>{transfer.label}</p> : null}
-              {transfer.holder ? <p>Titular: <b>{transfer.holder}</b></p> : null}
-              {transfer.accountNumber ? <p>Cuenta / CCI: <b>{transfer.accountNumber}</b></p> : null}
-              <small>Luego registra el código de la operación para que el administrador pueda verificarla.</small>
-            </div>
-          </div>
-        ) : null}
-
-        <div className="formField">
-          <label htmlFor="operationCode">Número o código de operación</label>
-          <input
-            id="operationCode"
-            name="operationCode"
-            required
-            minLength={4}
-            maxLength={80}
-            autoComplete="off"
-            placeholder="Ej. 12345678"
-            disabled={!hasProvider}
-          />
-        </div>
+        <p className="checkoutSecurityNote">Primero confirmaremos el pedido y reservaremos las botellas. Después verás las instrucciones para pagar.</p>
       </section>
 
       <section className="paymentSection">
@@ -172,11 +114,11 @@ export function PaymentForm({ addressId, total, checkoutQuote, yape, transfer }:
           <textarea id="customerNotes" name="customerNotes" rows={3} maxLength={500} placeholder="Horario, indicación de entrega, etc." />
         </div>
 
-        <button className="button buttonPrimary fullButton" type="submit" disabled={!hasProvider}>
-          Enviar pedido por {formatPrice(total)} para validar pago
-        </button>
+        <SubmitButton disabled={!hasProvider} pendingText="Reservando…">
+          Confirmar y reservar por {formatPrice(total)}
+        </SubmitButton>
         <p className="checkoutSecurityNote">
-          El pedido queda en revisión. El stock se reserva al enviarlo y se libera automáticamente si el administrador rechaza el pago.
+          No se realiza ningún cobro al confirmar. Tendrás un plazo indicado en el pedido para pagar y comunicar la operación.
         </p>
       </section>
     </form>

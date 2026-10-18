@@ -1,22 +1,17 @@
 "use server";
 
-import {
-  InventoryMovementType,
-  OrderStatus,
-  PaymentStatus,
-} from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { consumeRateLimit } from "@/lib/rate-limit";
-import { releaseStock, StockChangedError } from "@/modules/inventory/stock-service";
+import { StockChangedError } from "@/modules/inventory/stock-service";
 import { MoneyError } from "@/modules/checkout/pricing";
 import { CheckoutUnavailableError } from "@/modules/checkout/snapshot";
-import { createManualOrder, ManualOrderError } from "@/modules/orders/manual-order-service";
+import { reserveManualOrder, ManualOrderError } from "@/modules/orders/manual-order-service";
+import { cancelUnpaidReservation, reportManualPayment, PaymentReportError } from "@/modules/orders/reservation-service";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 const manualOrderSchema = z
@@ -25,7 +20,6 @@ const manualOrderSchema = z
     checkoutQuote: z.string().regex(/^v1:[a-f0-9]{64}$/),
     provider: z.enum(["YAPE_MANUAL", "TRANSFER_MANUAL"]),
     receiptType: z.enum(["BOLETA", "FACTURA"]),
-    operationCode: z.string().trim().min(4).max(80),
     documentNumber: z.string().trim().max(20).optional(),
     businessName: z.string().trim().max(180).optional(),
     taxAddress: z.string().trim().max(220).optional(),
@@ -60,7 +54,7 @@ async function requireUser(callbackUrl = "/checkout") {
   return session.user.id;
 }
 
-export async function submitManualOrder(formData: FormData) {
+export async function reserveOrder(formData: FormData) {
   const userId = await requireUser();
 
   const rateLimit = await consumeRateLimit({
@@ -79,7 +73,6 @@ export async function submitManualOrder(formData: FormData) {
     checkoutQuote: formData.get("checkoutQuote"),
     provider: formData.get("provider"),
     receiptType: formData.get("receiptType"),
-    operationCode: formData.get("operationCode"),
     documentNumber: formData.get("documentNumber") || undefined,
     businessName: formData.get("businessName") || undefined,
     taxAddress: formData.get("taxAddress") || undefined,
@@ -96,10 +89,10 @@ export async function submitManualOrder(formData: FormData) {
 
   let createdOrder: { number: string };
   try {
-    createdOrder = await createManualOrder(userId, parsed.data);
+    createdOrder = await reserveManualOrder(userId, parsed.data);
   } catch (error) {
     if (error instanceof ManualOrderError) {
-      const codes = { QUOTE_CHANGED: "quote-changed", PENDING_LIMIT: "pending-limit", DUPLICATE_OPERATION: "duplicate-operation", BUSY: "busy" };
+      const codes = { QUOTE_CHANGED: "quote-changed", PENDING_LIMIT: "pending-limit", BUSY: "busy" };
       redirect(`/checkout/pago?addressId=${parsed.data.addressId}&error=${codes[error.code]}`);
     }
     if (error instanceof CheckoutUnavailableError) {
@@ -115,93 +108,37 @@ export async function submitManualOrder(formData: FormData) {
   revalidatePath("/checkout");
   revalidatePath("/mi-cuenta");
   revalidatePath("/admin/inventario");
-  redirect(`/pedidos/${createdOrder.number}?created=1`);
+  redirect(`/pedidos/${createdOrder.number}/pagar?reserved=1`);
 }
 
 export async function cancelPendingOrder(orderNumber: string) {
   const parsed = orderNumberSchema.safeParse(orderNumber);
   if (!parsed.success) return;
-
   const userId = await requireUser(`/pedidos/${parsed.data}`);
-  const now = new Date();
+  const cancelled = await cancelUnpaidReservation(userId, parsed.data);
+  refreshOrder(parsed.data);
+  redirect(`/pedidos/${parsed.data}?cancel=${cancelled ? "cancelled" : "unavailable"}`);
+}
 
-  const result = await prisma.$transaction(async (tx) => {
-    const order = await tx.order.findFirst({
-      where: {
-        number: parsed.data,
-        userId,
-      },
-      select: {
-        id: true,
-        number: true,
-        status: true,
-        items: {
-          select: {
-            productId: true,
-            quantity: true,
-          },
-        },
-      },
-    });
+function refreshOrder(number: string) {
+  for (const path of ["/carrito", "/mi-cuenta", "/admin", "/admin/pagos", "/admin/pedidos", "/admin/inventario", `/pedidos/${number}`, `/pedidos/${number}/pagar`]) revalidatePath(path);
+}
 
-    if (
-      !order ||
-      (order.status !== OrderStatus.PENDING_PAYMENT &&
-        order.status !== OrderStatus.PAYMENT_REVIEW)
-    ) {
-      return "unavailable" as const;
-    }
-
-    const claimed = await tx.order.updateMany({
-      where: {
-        id: order.id,
-        status: order.status,
-      },
-      data: {
-        status: OrderStatus.CANCELLED,
-        cancelledAt: now,
-      },
-    });
-
-    if (claimed.count !== 1) {
-      return "unavailable" as const;
-    }
-
-    if (order.status === OrderStatus.PAYMENT_REVIEW) {
-      const stockAfterByProduct = await releaseStock(tx, order.items);
-
-      await tx.inventoryMovement.createMany({
-        data: order.items.map((item) => ({
-          productId: item.productId,
-          orderId: order.id,
-          actorUserId: userId,
-          type: InventoryMovementType.ORDER_RELEASE,
-          quantity: item.quantity,
-          stockAfter: stockAfterByProduct.get(item.productId) ?? 0,
-          note: `Liberación por cancelación del pedido ${order.number}`,
-        })),
-      });
-    }
-
-    await tx.payment.updateMany({
-      where: {
-        orderId: order.id,
-        status: { in: [PaymentStatus.PENDING, PaymentStatus.UNDER_REVIEW] },
-      },
-      data: {
-        status: PaymentStatus.CANCELLED,
-      },
-    });
-
-    return "cancelled" as const;
-  });
-
-  revalidatePath("/mi-cuenta");
-  revalidatePath("/admin");
-  revalidatePath("/admin/pagos");
-  revalidatePath("/admin/pedidos");
-  revalidatePath("/admin/inventario");
-  revalidatePath(`/pedidos/${parsed.data}`);
-
-  redirect(`/pedidos/${parsed.data}?cancel=${result}`);
+export async function communicateManualPayment(orderNumber: string, formData: FormData) {
+  const number = orderNumberSchema.safeParse(orderNumber);
+  if (!number.success) return;
+  const userId = await requireUser(`/pedidos/${number.data}/pagar`);
+  const limit = await consumeRateLimit({ scope: "manual-payment-report", identifier: userId, limit: 10, windowMs: 10 * 60 * 1000 });
+  if (!limit.allowed) redirect(`/pedidos/${number.data}/pagar?error=too-many`);
+  const code = z.string().trim().min(4).max(80).safeParse(formData.get("operationCode"));
+  if (!code.success) redirect(`/pedidos/${number.data}/pagar?error=invalid`);
+  let result;
+  try {
+    result = await reportManualPayment(userId, number.data, code.data);
+  } catch (error) {
+    if (error instanceof PaymentReportError) redirect(`/pedidos/${number.data}/pagar?error=${error.code === "DUPLICATE_OPERATION" ? "duplicate-operation" : "invalid"}`);
+    throw error;
+  }
+  refreshOrder(number.data);
+  redirect(`/pedidos/${number.data}?payment=${result}`);
 }

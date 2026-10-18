@@ -10,6 +10,9 @@ import {
 
 import { prisma } from "../src/lib/prisma";
 import { runMaintenance } from "../src/modules/maintenance/service";
+import { checkoutFixture } from "./helpers/checkout";
+import { reserveManualOrder } from "../src/modules/orders/manual-order-service";
+import { reportManualPayment } from "../src/modules/orders/reservation-service";
 
 test("maintenance cancels expired manual-payment orders and restores stock", async () => {
   const stamp = Date.now().toString(36);
@@ -52,7 +55,9 @@ test("maintenance cancels expired manual-payment orders and restores stock", asy
       data: {
         number: `ROSH-TEST-${stamp}`,
         userId: user.id,
-        status: OrderStatus.PAYMENT_REVIEW,
+        status: OrderStatus.PENDING_PAYMENT,
+        stockReservedAt: new Date("2026-10-07T10:00:00.000Z"),
+        reservationExpiresAt: new Date("2026-10-07T10:15:00.000Z"),
         subtotal: 50,
         shippingAmount: 10,
         total: 60,
@@ -77,9 +82,8 @@ test("maintenance cancels expired manual-payment orders and restores stock", asy
         payments: {
           create: {
             provider: PaymentProvider.YAPE_MANUAL,
-            status: PaymentStatus.UNDER_REVIEW,
+            status: PaymentStatus.PENDING,
             amount: 60,
-            operationCode: `OP-${stamp}`,
           },
         },
       },
@@ -116,6 +120,8 @@ test("maintenance cancels expired manual-payment orders and restores stock", asy
     assert.equal(result.expiredOrdersReleased, 1);
     assert.equal(savedOrder.status, OrderStatus.CANCELLED);
     assert.equal(savedProduct.stock, 2);
+    assert.equal((await runMaintenance(new Date("2026-10-07T12:01:00.000Z"))).expiredOrdersReleased, 0);
+    assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: product.id } })).stock, 2);
     assert.equal(savedPayment.status, PaymentStatus.CANCELLED);
     assert.deepEqual(releaseMovement, { quantity: 2, stockAfter: 2 });
   } finally {
@@ -135,4 +141,19 @@ test("maintenance cancels expired manual-payment orders and restores stock", asy
       process.env.MANUAL_PAYMENT_HOLD_MINUTES = previousHold;
     }
   }
+});
+
+test("maintenance keeps old reported payments under review and their reserved stock", async (t) => {
+  process.env.NEXTAUTH_SECRET ||= "integration-only-signing-secret-at-least-32-chars";
+  const f = await checkoutFixture(t);
+  const created = await reserveManualOrder(f.user.id, f.input);
+  await reportManualPayment(f.user.id, created.number, `QA-KEEP-${Date.now()}`);
+  await prisma.order.update({ where: { id: created.id }, data: {
+    createdAt: new Date("2026-10-07T09:00:00Z"), stockReservedAt: new Date("2026-10-07T09:00:00Z"), reservationExpiresAt: new Date("2026-10-07T09:15:00Z"),
+  } });
+  await runMaintenance(new Date("2026-10-07T12:00:00Z"));
+  const order = await prisma.order.findUniqueOrThrow({ where: { id: created.id }, include: { payments: true } });
+  assert.equal(order.status, "PAYMENT_REVIEW"); assert.equal(order.stockReleasedAt, null);
+  assert.equal(order.payments[0].status, "UNDER_REVIEW");
+  assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: f.product.id } })).stock, 7);
 });

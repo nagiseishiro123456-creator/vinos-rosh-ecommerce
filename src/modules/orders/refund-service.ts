@@ -81,6 +81,7 @@ export async function refundPaidOrder({
       data: {
         status: OrderStatus.REFUNDED,
         refundedAt: now,
+        stockReleasedAt: now,
       },
     });
 

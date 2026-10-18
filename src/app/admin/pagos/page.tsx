@@ -32,6 +32,7 @@ export default async function PaymentsAdminPage() {
       amount: true,
       operationCode: true,
       createdAt: true,
+      reportedAt: true,
       order: {
         select: {
           number: true,
@@ -96,7 +97,7 @@ export default async function PaymentsAdminPage() {
                   <div>
                     <small>Operación</small>
                     <strong>{payment.operationCode ?? "Sin código"}</strong>
-                    <span>{payment.createdAt.toLocaleString("es-PE")}</span>
+                    <span>{(payment.reportedAt ?? payment.createdAt).toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</span>
                   </div>
                   <div>
                     <small>Entrega</small>

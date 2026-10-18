@@ -3,12 +3,17 @@ import test from "node:test";
 
 import {
   getManualPaymentCutoff,
+  getReservationExpiresAt,
   normalizeManualPaymentHoldMinutes,
 } from "../src/modules/orders/hold";
 
 test("manual payment hold defaults to 120 minutes", () => {
   assert.equal(normalizeManualPaymentHoldMinutes(undefined), 120);
   assert.equal(normalizeManualPaymentHoldMinutes("not-a-number"), 120);
+});
+
+test("reservation deadline adds the hold once at creation", () => {
+  assert.equal(getReservationExpiresAt(new Date("2026-10-15T20:00:00Z"), 120).toISOString(), "2026-10-15T22:00:00.000Z");
 });
 
 test("manual payment hold is clamped to a safe range", () => {
