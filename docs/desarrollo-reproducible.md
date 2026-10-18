@@ -31,6 +31,14 @@ Las pruebas de integración crean/modifican datos y ejecutan mantenimiento: usar
 base aislada, nunca una BD con clientes ni la del preview compartido.
 
 ## Smoke visual con BD aislada
+
+`npm test` ejecuta un archivo a la vez (`--test-concurrency=1`): los archivos de
+integración comparten la misma BD, crean fixtures y uno instala un trigger temporal.
+Ejecutarlos en paralelo introduce interferencia entre escenarios y conflictos
+Serializable durante la preparación. Las carreras deliberadas dentro de cada caso
+siguen usando Promise.all/Promise.allSettled: última unidad, seis confirmaciones,
+aprobación/rechazo y devolución/despacho conservan su concurrencia real. Para paralelizar
+archivos en el futuro, asignar una BD o esquema aislado por proceso primero.
 Preparar una BD vacía llamada `vinos_rosh_test` (o `vinos_rosh_ci` en CI).
 Configurar `DATABASE_URL` y URLs de aplicación/auth en un `.env` solo de pruebas;
 usar `NEXTAUTH_URL=http://127.0.0.1:3000`, `PREVIEW_MODE=true`, `SHOW_DEMO_CATALOG=false`,
