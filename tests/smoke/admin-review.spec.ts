@@ -4,6 +4,64 @@ import { loginCustomer, prisma, reserveFromCart, resetCheckoutFixture } from "./
 
 test.afterAll(() => prisma.$disconnect());
 
+test("RI-01: revoking ADMIN blocks existing-session reads, backup and a previously valid shipping action", async ({ page, browser }, testInfo) => {
+  test.setTimeout(120_000);
+  const { user } = await resetCheckoutFixture();
+  await loginCustomer(page); await reserveFromCart(page);
+  const order = await prisma.order.findFirstOrThrow({ where: { userId: user.id } });
+  const admin = await prisma.user.findUniqueOrThrow({ where: { email: process.env.ADMIN_EMAIL! } });
+  const district = `QA-REVOCATION-${testInfo.project.name}-${Date.now()}`;
+  const adminContext = await browser.newContext({ viewport: testInfo.project.use.viewport, isMobile: testInfo.project.use.isMobile, hasTouch: testInfo.project.use.hasTouch });
+  try {
+    const adminPage = await adminContext.newPage(); await loginAdmin(adminPage);
+    const before = await adminPage.goto(`/pedidos/${order.number}`);
+    expect(before?.status()).toBe(200);
+    await expect(adminPage.getByText("Dirección simulada — no realizar entregas", { exact: true })).toBeVisible();
+    expect((await adminContext.request.get("/api/admin/backup")).status()).toBe(200);
+    await adminPage.goto("/admin/envios");
+    await adminPage.getByLabel("Departamento", { exact: true }).fill("QA");
+    await adminPage.getByLabel("Provincia", { exact: true }).fill("QA");
+    await adminPage.getByLabel("Distrito", { exact: true }).fill(district);
+    await adminPage.getByLabel("Tarifa de envío (S/)", { exact: true }).fill("9.00");
+    let payload: { url: string; body: Buffer; contentType: string; action: string } | undefined;
+    await adminPage.route("**/admin/envios", async (route) => {
+      const request = route.request();
+      if (request.method() === "POST" && request.headers()["next-action"]) {
+        payload = { url: request.url(), body: request.postDataBuffer()!, contentType: request.headers()["content-type"], action: request.headers()["next-action"] };
+        await route.abort();
+      } else await route.continue();
+    });
+    await adminPage.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
+    await expect.poll(() => !!payload).toBe(true);
+    await prisma.user.update({ where: { id: admin.id }, data: { role: "CUSTOMER" } });
+    const session = await (await adminContext.request.get("/api/auth/session")).json();
+    expect(session.user.role).toBe("ADMIN"); // Same JWT, current DB role revoked.
+    const captured = payload!;
+    const replay = await adminContext.request.post(captured.url, { data: captured.body, headers: {
+      "content-type": captured.contentType, "next-action": captured.action, origin: new URL(captured.url).origin,
+    } });
+    expect(replay.headers()["x-action-redirect"] ?? replay.url()).toContain("/mi-cuenta");
+    expect(await prisma.shippingZone.count({ where: { district } })).toBe(0);
+    await adminPage.unroute("**/admin/envios");
+    const after = await adminPage.goto(`/pedidos/${order.number}`);
+    expect(after?.status()).toBe(404);
+    await expect(adminPage.getByText("Dirección simulada — no realizar entregas", { exact: true })).toHaveCount(0);
+    await capture(adminPage, testInfo, "22-pedido-ajeno-tras-revocar-admin");
+    const backup = await adminContext.request.get("/api/admin/backup");
+    expect(backup.status()).toBe(403); expect(await backup.json()).toEqual({ error: "No autorizado" });
+    await adminPage.goto("/admin/envios");
+    await expect(adminPage).toHaveURL((u) => u.pathname === "/mi-cuenta");
+    await expect(adminPage.getByRole("navigation", { name: "Sesión administrativa" })).toHaveCount(0);
+    // The customer still owns and can view their own order.
+    await page.goto(`/pedidos/${order.number}`);
+    await expect(page.getByRole("heading", { name: "Pendiente de pago", exact: true })).toBeVisible();
+  } finally {
+    await prisma.user.update({ where: { id: admin.id }, data: { role: "ADMIN" } });
+    await prisma.shippingZone.deleteMany({ where: { district } });
+    await adminContext.close();
+  }
+});
+
 async function loginAdmin(page: Page) {
   await page.goto("/iniciar-sesion?callbackUrl=/admin/pagos");
   await page.getByLabel("Correo electrónico").fill(process.env.ADMIN_EMAIL!);

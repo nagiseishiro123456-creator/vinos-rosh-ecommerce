@@ -1,11 +1,10 @@
 "use server";
 
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { authOptions } from "@/lib/auth";
+import { requireAdmin } from "@/modules/admin/auth";
 import { moneyInputSchema } from "@/modules/checkout/pricing";
 import { prisma } from "@/lib/prisma";
 
@@ -18,19 +17,8 @@ const shippingZoneSchema = z.object({
 
 const zoneIdSchema = z.string().cuid();
 
-async function requireAdmin() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect("/iniciar-sesion?callbackUrl=/admin/envios");
-  }
-  if (session.user.role !== "ADMIN") {
-    redirect("/mi-cuenta");
-  }
-  return session.user.id;
-}
-
 export async function saveShippingZone(formData: FormData) {
-  await requireAdmin();
+  await requireAdmin("/admin/envios");
 
   const parsed = shippingZoneSchema.safeParse({
     department: formData.get("department") || "Lima",
@@ -68,7 +56,7 @@ export async function saveShippingZone(formData: FormData) {
 }
 
 export async function toggleShippingZone(zoneId: string) {
-  await requireAdmin();
+  await requireAdmin("/admin/envios");
 
   const parsedId = zoneIdSchema.safeParse(zoneId);
   if (!parsedId.success) return;
