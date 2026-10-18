@@ -91,6 +91,12 @@ jobs:
       - name: Seed initial admin
         run: npm run db:seed
 
+      - name: Verify checkout identity migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/idempotency-migration-before.sql prisma/migrations/20261016154500_checkout_idempotency/migration.sql tests/sql/idempotency-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Verify database connectivity
         run: |
           node -e 'const { PrismaClient } = require("@prisma/client"); const p = new PrismaClient(); p.user.count().then(c => { console.log("users:", c); }).finally(() => p.$disconnect())'

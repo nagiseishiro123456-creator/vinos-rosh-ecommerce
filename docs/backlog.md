@@ -11,10 +11,10 @@ Estimaciones preliminares; los puntos no representan horas.
 | S1-01 | Reproducir instalación, BD y comprobaciones, con evidencias. | 3 | Implementada y verificada en rama; integración pendiente |
 | S1-02 | Calcular dinero de forma exacta en servidor. | 5 | Implementada y verificada en rama; integración pendiente |
 | S1-03 | Crear pedido y reservar antes de presentar instrucciones de pago. | 8 | Implementada y verificada en rama; integración pendiente |
-| S1-04 | Evitar pedidos duplicados mediante idempotencia persistida. | 5 | Pendiente |
+| S1-04 | Evitar pedidos duplicados mediante idempotencia persistida. | 5 | Implementada y verificada en rama; integración pendiente |
 | S1-05 | Resolver revisión, vencimiento y concurrencia con trazabilidad. | 5 | Pendiente |
 
-Dependencias: S1-01 → S1-02 → S1-03/S1-04 → S1-05.
+Dependencias de entrega: S1-01 → S1-02 → S1-03 → S1-04 → S1-05.
 Documentación y pruebas forman parte de cada historia.
 
 ## Secuencia posterior, sujeta a refinamiento

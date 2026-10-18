@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { expect, type Page } from "@playwright/test";
+import { clearRateLimit } from "../../src/lib/rate-limit";
 
 const databaseName = new URL(process.env.DATABASE_URL ?? "").pathname.slice(1);
 if (process.env.SMOKE_TEST_DATA !== "true" || !["vinos_rosh_ci", "vinos_rosh_test"].includes(databaseName)) {
@@ -8,6 +9,9 @@ if (process.env.SMOKE_TEST_DATA !== "true" || !["vinos_rosh_ci", "vinos_rosh_tes
 export const prisma = new PrismaClient();
 export async function resetCheckoutFixture() {
   const user = await prisma.user.findUniqueOrThrow({ where: { email: "qa-s102@example.com" } });
+  // Isolated synthetic customer only; scenarios do not inherit each other's request allowance.
+  await clearRateLimit("manual-order-submit", user.id);
+  await clearRateLimit("manual-payment-report", user.id);
   const product = await prisma.product.findUniqueOrThrow({ where: { slug: "rosh-qa-botella-de-prueba" } });
   const zone = await prisma.shippingZone.findUniqueOrThrow({ where: {
     department_province_district: { department: "QA", province: "QA", district: "Distrito QA S1-02" },

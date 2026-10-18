@@ -1,3 +1,4 @@
+import type { CommerceSettings } from "@prisma/client";
 import { cache } from "react";
 
 import { prisma } from "@/lib/prisma";
@@ -13,6 +14,10 @@ export const getCommerceSettings = cache(async function getCommerceSettings() {
     where: { id: COMMERCE_SETTINGS_ID },
   });
 
+  return resolveCommerceSettings(stored);
+});
+
+export function resolveCommerceSettings(stored: CommerceSettings | null) {
   if (stored) {
     const yapeReady = stored.yapeEnabled && Boolean(stored.yapePhone || stored.yapeQrImageUrl);
     const transferReady = stored.transferEnabled && Boolean(stored.bankAccountNumber);
@@ -58,4 +63,4 @@ export const getCommerceSettings = cache(async function getCommerceSettings() {
       holder: null,
     },
   };
-});
+}

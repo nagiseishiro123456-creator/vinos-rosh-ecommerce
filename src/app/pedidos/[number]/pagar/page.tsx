@@ -15,7 +15,7 @@ import { getCommerceSettings } from "@/modules/settings/queries";
 export const dynamic = "force-dynamic";
 
 export default async function ReservedPaymentPage({ params, searchParams }: {
-  params: Promise<{ number: string }>; searchParams: Promise<{ reserved?: string; error?: string }>;
+  params: Promise<{ number: string }>; searchParams: Promise<{ reserved?: string; recovered?: string; error?: string }>;
 }) {
   const { number } = await params;
   const query = await searchParams;
@@ -50,6 +50,7 @@ export default async function ReservedPaymentPage({ params, searchParams }: {
           <p>El importe de este pedido ya está confirmado. Tu reserva no representa un pago recibido.</p>
         </div></div>
         {query.reserved && canReport ? <div className="orderCreatedBanner" role="status"><strong>Botellas reservadas.</strong><span>Ahora puedes pagar y comunicar la operación de este pedido.</span></div> : null}
+        {query.recovered && canReport ? <div className="orderCreatedBanner" role="status"><strong>Recuperamos tu pedido existente.</strong><span>Es la misma reserva, con el mismo importe y plazo. Realiza un solo pago.</span></div> : null}
         {query.error ? <div className="checkoutError" role="alert">{errors[query.error] ?? errors.invalid}</div> : null}
         {canReport ? <>
           <div className="checkoutWarningPanel"><strong>Reserva hasta el {expires} (hora de Perú).</strong>

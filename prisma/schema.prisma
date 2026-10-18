@@ -283,6 +283,8 @@ model Order {
   reservationExpiresAt DateTime?
   stockReleasedAt      DateTime?
   reservationExpiredAt DateTime?
+  checkoutKey          String? @db.VarChar(68)
+  checkoutRequestHash  String? @db.Char(64)
 
   paidAt      DateTime?
   shippedAt   DateTime?
@@ -301,6 +303,7 @@ model Order {
 
   @@index([userId])
   @@index([userId, createdAt])
+  @@unique([userId, checkoutKey])
   @@index([status])
   @@index([status, reservationExpiresAt])
   @@index([createdAt])

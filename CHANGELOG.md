@@ -1,5 +1,13 @@
 # Changelog
 
+## Fase 2 — Sprint 1 / S1-04 (implementado y verificado en rama, 2026-10-16)
+- Identidad de checkout estable y huella completa de la solicitud; unicidad por usuario/operación en BD.
+- Reintento recupera la orden antes de consultar carrito/configuración; conflicto no crea ni sobrescribe.
+- Migración 9 aditiva con campos históricos NULL y restricciones de identidad.
+- Formulario conserva datos ante respuesta perdida; envío nativo y avisos de recuperación/conflicto.
+- Pruebas de concurrencia, fallo tras decremento, usuario ajeno y respuesta perdida después del commit.
+- Verificación: 53 pruebas, 10 casos de navegador, 9 migraciones y dos contratos SQL aprobados; 8 capturas nuevas conservadas.
+
 ## Fase 2 — Sprint 1 / S1-03 (implementado y verificado en rama, cierre documental 2026-10-16)
 - Confirmación/reserva antes de instrucciones; pago pendiente y plazo persistido por pedido.
 - Ruta privada para pagar sobre el snapshot de la orden, con comunicación de operación separada.

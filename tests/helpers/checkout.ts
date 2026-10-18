@@ -1,8 +1,20 @@
 import { randomUUID } from "node:crypto";
 import type { TestContext } from "node:test";
 import { prisma } from "../../src/lib/prisma";
+import { createCheckoutKey } from "../../src/modules/checkout/idempotency";
 import { createCheckoutQuote } from "../../src/modules/checkout/quote";
 import { loadCheckoutSnapshot } from "../../src/modules/checkout/snapshot";
+
+// Test-process-only fallback: fake destination, no external payment provider.
+const databaseName = new URL(process.env.DATABASE_URL ?? "").pathname.slice(1);
+if (!["vinos_rosh_ci", "vinos_rosh_test"].includes(databaseName)) throw new Error("Checkout integration fixtures require an isolated QA database.");
+process.env.PAYMENTS_TRANSFER_MANUAL_ENABLED = "true";
+process.env.BANK_ACCOUNT_NUMBER = "QA-NO-TRANSFERIR";
+
+export function confirmationFor(snapshot: Parameters<typeof createCheckoutQuote>[0], userId: string) {
+  const checkoutQuote = createCheckoutQuote({ ...snapshot, userId });
+  return { checkoutQuote, checkoutKey: createCheckoutKey(userId, checkoutQuote) };
+}
 
 export async function checkoutFixture(t: TestContext) {
   const stamp = randomUUID();
@@ -20,7 +32,7 @@ export async function checkoutFixture(t: TestContext) {
   });
   const snapshot = await loadCheckoutSnapshot(prisma, user.id, address.id);
   const input = { addressId: address.id, provider: "TRANSFER_MANUAL" as const, receiptType: "BOLETA" as const,
-    checkoutQuote: createCheckoutQuote({ ...snapshot, userId: user.id }) };
+    ...confirmationFor({ ...snapshot, userId: user.id }, user.id) };
   return { user, zone, product, cart, address, input };
 }
 

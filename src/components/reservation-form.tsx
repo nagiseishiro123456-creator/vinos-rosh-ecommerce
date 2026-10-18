@@ -2,7 +2,8 @@
 
 import { formatPrice } from "@/lib/money";
 
-import { useState } from "react";
+import { useState, useTransition, type FormEvent } from "react";
+import { unstable_rethrow } from "next/navigation";
 import { SubmitButton } from "@/components/submit-button";
 
 import { reserveOrder } from "@/modules/orders/actions";
@@ -11,21 +12,40 @@ type Props = {
   addressId: string;
   total: string;
   checkoutQuote: string;
+  checkoutKey: string;
   yapeEnabled: boolean;
   transferEnabled: boolean;
 };
 
 
-export function ReservationForm({ addressId, total, checkoutQuote, yapeEnabled, transferEnabled }: Props) {
+export function ReservationForm({ addressId, total, checkoutQuote, checkoutKey, yapeEnabled, transferEnabled }: Props) {
   const firstProvider = yapeEnabled ? "YAPE_MANUAL" : transferEnabled ? "TRANSFER_MANUAL" : "";
   const [provider, setProvider] = useState(firstProvider);
   const [receiptType, setReceiptType] = useState("BOLETA");
   const hasProvider = Boolean(firstProvider);
+  const [pending, startTransition] = useTransition();
+  const [networkError, setNetworkError] = useState(false);
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    // Hydrated submission preserves inputs on a lost response. The native action remains a no-JS fallback.
+    event.preventDefault();
+    if (pending) return;
+    const data = new FormData(event.currentTarget);
+    setNetworkError(false);
+    startTransition(async () => {
+      try { await reserveOrder(data); }
+      catch (error) { unstable_rethrow(error); setNetworkError(true); }
+    });
+  }
 
   return (
-    <form className="paymentForm" action={reserveOrder}>
+    <form className="paymentForm" action={reserveOrder} onSubmit={submit}>
       <input type="hidden" name="addressId" value={addressId} />
       <input type="hidden" name="checkoutQuote" value={checkoutQuote} />
+      <input type="hidden" name="checkoutKey" value={checkoutKey} />
+      {networkError ? <div className="checkoutError" role="alert">
+        No pudimos confirmar la respuesta. Reenvía los mismos datos para recuperar tu pedido, o revisa Mi cuenta antes de iniciar otra compra. No realices otro pago.
+      </div> : null}
 
       <section className="paymentSection">
         <p className="eyebrow wine">MÉTODO DE PAGO</p>
@@ -114,7 +134,7 @@ export function ReservationForm({ addressId, total, checkoutQuote, yapeEnabled, 
           <textarea id="customerNotes" name="customerNotes" rows={3} maxLength={500} placeholder="Horario, indicación de entrega, etc." />
         </div>
 
-        <SubmitButton disabled={!hasProvider} pendingText="Reservando…">
+        <SubmitButton disabled={!hasProvider} busy={pending} pendingText="Confirmando…">
           Confirmar y reservar por {formatPrice(total)}
         </SubmitButton>
         <p className="checkoutSecurityNote">
