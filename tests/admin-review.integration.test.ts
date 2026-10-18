@@ -11,6 +11,7 @@ import { advanceOrder } from "../src/modules/admin/orders/transition-service";
 import { openPaymentReconciliation, refundPaymentReconciliation } from "../src/modules/payments/reconciliation-service";
 import { AdminOperationError } from "../src/modules/admin/transaction-auth";
 import { loadCheckoutSnapshot } from "../src/modules/checkout/snapshot";
+import { buildBusinessBackup } from "../src/modules/admin/backup/export";
 
 process.env.NEXTAUTH_SECRET ||= "integration-only-signing-secret-at-least-32-chars";
 after(() => prisma.$disconnect());
@@ -31,6 +32,29 @@ async function state(f: Awaited<ReturnType<typeof fixture>>) {
   return { order, payment: order.payments[0], stock: product.stock, releases };
 }
 const errorCode = (code: AdminOperationError["code"]) => (e: unknown) => e instanceof AdminOperationError && e.code === code;
+
+test("RI-02: business export preserves reconciled money, refund reference and order audit without password hashes", async (t) => {
+  const f = await fixture(t, false);
+  await cancelUnpaidReservation(f.user.id, f.order.number);
+  await openPaymentReconciliation(f.user.id, f.payment.id, {
+    operationCode: f.operation, receivedAmount: "10.00", reason: "Ingreso recibido tras cancelación.",
+  });
+  await refundPaymentReconciliation(f.user.id, f.payment.id, "QA-BACKUP-REF");
+  const backup = await buildBusinessBackup();
+  assert.equal(backup.meta.version, 2);
+  assert.ok(backup.users.every((u) => !("passwordHash" in u)));
+  assert.equal(backup.orders.find((o) => o.id === f.order.id)?.status, "CANCELLED");
+  const received = backup.paymentReconciliations.find((r) => r.paymentId === f.payment.id);
+  assert.ok(received?.refundedAt);
+  assert.equal(received.receivedAmount.toFixed(2), "10.00");
+  assert.equal(received.refundReference, "QA-BACKUP-REF");
+  assert.deepEqual(backup.orderEvents.filter((e) => e.orderId === f.order.id).map((e) => e.kind).sort(),
+    ["RECONCILIATION_OPENED", "RECONCILIATION_REFUNDED", "RESERVATION_CANCELLED"]);
+  const json = JSON.stringify(backup);
+  assert.ok(!json.includes(f.user.passwordHash));
+  assert.ok(!("passwordResetTokens" in backup));
+  assert.ok(json.includes('"receivedAmount":"10"') || json.includes('"receivedAmount":"10.00"'));
+});
 
 test("approve versus reject claims one order and records exactly one administrative decision", async (t) => {
   const f = await fixture(t);

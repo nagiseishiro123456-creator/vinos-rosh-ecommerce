@@ -4,7 +4,7 @@
 - Fecha de este punto de avance: 2026-10-17 (America/Lima).
 - Base S1-05: `a457caf92fa1038bdaa6a1fc21fd8c96edddc86e` de S1-04 (PR #6).
 - Rama actual: `fase-2/sprint-01-revision-conciliacion`, basada en S1-04.
-- Estado: revisión integral e integración en curso; RI-01 de permisos corregido, pendiente de CI antes de fusionar. Sprint 1 formalmente abierto.
+- Estado: revisión integral e integración en curso; RI-01 de permisos verificado, RI-02 de respaldo corregido y pendiente de CI antes de fusionar. Sprint 1 formalmente abierto.
 - PR actual: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/7
 - Código S1-05 verificado: `2e90b606436d55d6e4f59cb8634a347a15e8b8d6`.
 
@@ -51,6 +51,8 @@ y [cierre técnico del sprint](sprints/cierre-sprint-01.md). 54 capturas conserv
 ## Siguiente acción
 Validar RI-01 con sesión ADMIN revocada (pedidos ajenos, envíos y API de respaldo),
 conservar evidencia e integrar después en orden. [Registro de revisión](testing/revision-integracion-sprint-01.md).
+CI 39095406481 aprobó RI-01: 66 pruebas y 16 casos de navegador. RI-02 añade historial
+y conciliaciones al exportador comercial y una prueba específica de sus datos.
 Cadena de integración: PR #3 → #4 → #5 → #6 → #7. Tras integrar cada base, retargetear el siguiente PR
 a main y revisar el diff. No se han fusionado ramas ni desplegado estos cambios.
 Render comprobado en My Workspace: web y PostgreSQL suspendidos; mantener estado y

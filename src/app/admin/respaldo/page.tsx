@@ -52,7 +52,8 @@ export default async function BackupPage() {
           <h2>Descargar datos del negocio</h2>
           <p>
             El archivo incluye catálogo, imágenes referenciadas, zonas, pedidos, pagos,
-            reseñas, movimientos de inventario, configuración pública y mensajes de contacto.
+            reseñas, movimientos de inventario, historial de pedidos, conciliaciones,
+            configuración pública y mensajes de contacto.
           </p>
           <p>
             Por seguridad no exportamos contraseñas, tokens de recuperación, límites de acceso

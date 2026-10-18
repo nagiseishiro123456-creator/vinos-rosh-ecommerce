@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export async function buildBusinessBackup() {
@@ -15,7 +16,9 @@ export async function buildBusinessBackup() {
     inventoryMovements,
     settings,
     contactMessages,
-  ] = await Promise.all([
+    orderEvents,
+    paymentReconciliations,
+  ] = await prisma.$transaction([
     prisma.user.findMany({
       orderBy: { createdAt: "asc" },
       select: {
@@ -42,12 +45,14 @@ export async function buildBusinessBackup() {
     prisma.inventoryMovement.findMany({ orderBy: { createdAt: "asc" } }),
     prisma.commerceSettings.findMany(),
     prisma.contactMessage.findMany({ orderBy: { createdAt: "asc" } }),
-  ]);
+    prisma.orderEvent.findMany({ orderBy: [{ createdAt: "asc" }, { id: "asc" }] }),
+    prisma.paymentReconciliation.findMany({ orderBy: [{ openedAt: "asc" }, { id: "asc" }] }),
+  ], { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
 
   return {
     meta: {
       format: "vinos-rosh-business-backup",
-      version: 1,
+      version: 2,
       generatedAt: new Date().toISOString(),
       excludes: [
         "passwordHash",
@@ -69,5 +74,7 @@ export async function buildBusinessBackup() {
     inventoryMovements,
     settings,
     contactMessages,
+    orderEvents,
+    paymentReconciliations,
   };
 }

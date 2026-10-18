@@ -30,6 +30,17 @@ intentar leer datos y reenviar un payload válido de envíos; comprobar ausencia
 Se comprueba además que el JWT sigue indicando ADMIN: el rechazo depende del estado
 actual de BD, sin cerrar sesión ni esperar su expiración. El dueño conserva acceso a su pedido.
 
+## Hallazgo RI-02 — Nuevos registros ausentes del respaldo comercial
+
+Severidad: media. El exportador comercial conserva las tablas de Fase 1, pero omite
+OrderEvent y PaymentReconciliation agregadas en S1-05. Un JSON descargado no conservaría
+el historial ni el importe/referencia de devolución de una conciliación.
+Se completará el formato (versión 2, arrays aditivos), con una transacción de lectura
+RepeatableRead para obtener un snapshot consistente de las tablas, sin incluir contraseñas
+ni tokens. Prueba prevista: caso cancelado, ingreso conciliado/devolución e historial
+presentes en la exportación. Sigue siendo un exportador comercial: no sustituye pg_dump
+ni incorpora un restaurador automático de JSON.
+
 ## Render observado antes de integrar
 
 Espacio confirmado por el usuario: My Workspace. Servicio de este repositorio
