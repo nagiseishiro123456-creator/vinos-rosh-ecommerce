@@ -96,11 +96,15 @@ El botón **Deploy to Render** de arriba usa esta configuración.
 > Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
 
 ## Próximo hito
-Las cinco historias del Sprint 1 están implementadas y verificadas en ramas. PR final #7,
-dependiente de #6, #5, #4 y #3: revisión administrativa trazable y conciliación de ingresos
-tardíos sin reactivar pedidos ni tocar stock. Ver [cierre técnico](docs/sprints/cierre-sprint-01.md)
-y [guía operativa de pagos](docs/operacion-pagos-manuales.md). Sigue pendiente revisar,
-aceptar e integrar la cadena antes de cerrar formalmente el sprint. Después: refinar Sprint 2 de UX/accesibilidad.
+Las cinco historias del Sprint 1 están revisadas e integradas en main (PR #3–#7):
+dinero exacto, reserva previa, idempotencia, revisión administrativa y conciliación.
+La revisión corrigió permisos revocados y completó el respaldo de los nuevos registros.
+Ver [cierre técnico](docs/sprints/cierre-sprint-01.md),
+[integración y CI](docs/testing/revision-integracion-sprint-01.md) y
+[guía operativa de pagos](docs/operacion-pagos-manuales.md).
+67 pruebas y 16 casos de navegador; 56 capturas conservadas. Render permanece suspendido,
+sin despliegue de este incremento. Siguiente paso: refinamiento de Sprint 2 de UX/accesibilidad
+y registro de aceptación funcional del Product Owner.
 
 ## Verificación y evidencias
 

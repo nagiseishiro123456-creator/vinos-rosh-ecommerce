@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --env-file-if-exists=.env --import tsx --test tests/*.test.ts",
+    "test": "node --env-file-if-exists=.env --import tsx --test --test-concurrency=1 tests/*.test.ts",
     "test:smoke": "playwright test",
     "db:seed:smoke": "node --env-file-if-exists=.env --import tsx scripts/seed-smoke.ts",
     "prepare:standalone": "node scripts/prepare-standalone.mjs",

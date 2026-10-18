@@ -2,7 +2,7 @@
 
 ## Sprint Goal
 Crear pedidos con importes exactos, reserva anterior al pago y protección contra duplicados.
-Estado: cinco historias implementadas y verificadas en ramas; revisión, aceptación e integración pendientes.
+Estado: cinco historias revisadas e integradas en main; aceptación funcional del Product Owner por registrar.
 [Registro de cierre técnico](cierre-sprint-01.md). Base: `b4831eab1eaf7c3486b4bf8643001edefb5decc2`.
 Los 26 SP son una estimación preliminar; no constituyen fecha de entrega.
 
@@ -74,4 +74,8 @@ Los checks de S1-01 no demuestran el cierre de las otras cuatro historias ni hab
 - S1-04: implementada y verificada en PR #6 (depende de #5); 53 pruebas, 10 casos de navegador, 9 migraciones y 8 capturas nuevas. [ADR](../decisions/0004-idempotencia-reserva.md) y [QA](../testing/s1-04-idempotencia.md).
 - S1-05: implementada y verificada en PR #7 (depende de #6); 66 pruebas, 14 casos de navegador,
   10 migraciones y tres contratos SQL aprobados; 10 capturas nuevas. [ADR](../decisions/0005-revision-conciliacion.md)
-  y [QA](../testing/s1-05-revision.md). El cierre técnico queda documentado; revisión, aceptación e integración pendientes.
+  y [QA](../testing/s1-05-revision.md). Estas cifras identifican la entrega original.
+- Revisión e integración 2026-10-17: PR #3–#7 fusionados; corregidos RI-01 (permisos
+  revocados) y RI-02 (respaldo con conciliaciones/historial). Suite final: 67 pruebas,
+  16 casos de navegador y 56 capturas conservadas. Ver [registro](../testing/revision-integracion-sprint-01.md).
+  Cierre técnico verificado, sin despliegue en Render. Sigue pendiente registrar la aceptación funcional.

@@ -8,16 +8,17 @@ Estimaciones preliminares; los puntos no representan horas.
 
 | ID | Historia | SP | Estado |
 | --- | --- | ---: | --- |
-| S1-01 | Reproducir instalación, BD y comprobaciones, con evidencias. | 3 | Implementada y verificada en rama; integración pendiente |
-| S1-02 | Calcular dinero de forma exacta en servidor. | 5 | Implementada y verificada en rama; integración pendiente |
-| S1-03 | Crear pedido y reservar antes de presentar instrucciones de pago. | 8 | Implementada y verificada en rama; integración pendiente |
-| S1-04 | Evitar pedidos duplicados mediante idempotencia persistida. | 5 | Implementada y verificada en rama; integración pendiente |
-| S1-05 | Resolver revisión, vencimiento y concurrencia con trazabilidad. | 5 | Implementada y verificada en rama; integración pendiente |
+| S1-01 | Reproducir instalación, BD y comprobaciones, con evidencias. | 3 | Revisada e integrada en main (#3) |
+| S1-02 | Calcular dinero de forma exacta en servidor. | 5 | Revisada e integrada en main (#4) |
+| S1-03 | Crear pedido y reservar antes de presentar instrucciones de pago. | 8 | Revisada e integrada en main (#5) |
+| S1-04 | Evitar pedidos duplicados mediante idempotencia persistida. | 5 | Revisada e integrada en main (#6) |
+| S1-05 | Resolver revisión, vencimiento y concurrencia con trazabilidad. | 5 | Revisada e integrada en main (#7) |
 
 Dependencias de entrega: S1-01 → S1-02 → S1-03 → S1-04 → S1-05.
 Documentación y pruebas forman parte de cada historia.
-Las cinco historias suman 26 SP implementados/verificados en ramas. Ver [cierre técnico](sprints/cierre-sprint-01.md);
-aceptación e integración pendientes antes de cerrar formalmente el sprint.
+Las cinco historias suman 26 SP revisados e integrados; ver [cierre técnico](sprints/cierre-sprint-01.md)
+y [registro de integración](testing/revision-integracion-sprint-01.md). Aceptación funcional del
+Product Owner por registrar. Próximo trabajo: refinamiento de Sprint 2; Render permanece suspendido.
 
 ## Secuencia posterior, sujeta a refinamiento
 

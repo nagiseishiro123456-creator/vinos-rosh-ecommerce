@@ -1,0 +1,28 @@
+{
+  "story": "Sprint 1 / integración / RI-01",
+  "date": "2026-10-17",
+  "timezone": "America/Lima",
+  "run_id": 39095704639,
+  "tested_commit": "db61726caa9cbedd94506745b38c3d4a39e98be0",
+  "integrated_commit": "3620f98556a4a9eaf6d4060e5568e345d74a489f",
+  "artifact_id": 12124850316,
+  "artifact_sha256": "3d59a4466926f7eacc236305735324bb02e5382179272a454bcdbf937b6609a3",
+  "images": [
+    {
+      "file": "ci-desktop-22-pedido-ajeno-tras-revocar-admin.png",
+      "source": "test-results/admin-review-RI-01-revokin-605cc-ously-valid-shipping-action-desktop/22-pedido-ajeno-tras-revocar-admin.png",
+      "bytes": 9637,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "0cf6cc14ce1756f6625a2bc079aecc3d1a4e382c74b0aab747ba6d3daa1627f1"
+    },
+    {
+      "file": "ci-mobile-22-pedido-ajeno-tras-revocar-admin.png",
+      "source": "test-results/admin-review-RI-01-revokin-605cc-ously-valid-shipping-action-mobile/22-pedido-ajeno-tras-revocar-admin.png",
+      "bytes": 6067,
+      "width": 390,
+      "height": 916,
+      "sha256": "8b422f3f13d862fe245912d3690a27fffff3a105f7cb192765a6c53ba1f5790b"
+    }
+  ]
+}
