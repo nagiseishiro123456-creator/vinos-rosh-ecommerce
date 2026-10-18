@@ -4,9 +4,11 @@
 - Fecha de este punto de avance: 2026-10-17 (America/Lima).
 - Incremento integrado: `3620f98556a4a9eaf6d4060e5568e345d74a489f` (PR #3–#7).
 - Rama de cierre: `fase-2/sprint-01-cierre-integrado`, basada en main integrado.
-- Estado: RI-01/RI-02 corregidos y verificados; CI de main detectó RI-03 de interferencia
-  entre archivos de pruebas. Corregido el runner; validación del cierre pendiente.
-- Candidato de código validado: `db61726caa9cbedd94506745b38c3d4a39e98be0`.
+- Estado: cinco historias integradas y tres hallazgos de revisión corregidos/verificados.
+- Cierre: [PR #8](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/8),
+  incluye runner aislado, resultados, manifiesto y continuidad; ver sus checks y estado de fusión.
+- Código de cierre validado: `351f3d6c6b8f61c5e09e20b545f7784de146ea23`,
+  [CI 39096248346](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39096248346).
 - Aceptación funcional del Product Owner por registrar; Render continúa suspendido.
 
 ## S1-01 conservada
@@ -61,6 +63,10 @@ Se integró #3 → #4 → #5 → #6 → #7; cada árbol fusionado coincide con s
 La primera CI de main 39096006029 falló en el fixture de una prueba por conflictos
 Serializable entre archivos paralelos (66/67). RI-03 aísla los archivos compartidos
 con `--test-concurrency=1`; las carreras deliberadas dentro de los casos se conservan.
+La corrección aprobó CI 39096248346: 67/67 pruebas y 16/16 casos de navegador,
+migraciones/contratos SQL, tipos, lint, build y producción sin hallazgos. La actualización
+posterior a ese commit solo registra resultados en documentación; los checks del PR #8
+y de main comprueban la cabecera final.
 [Registro completo](testing/revision-integracion-sprint-01.md).
 
 Render comprobado después de las cinco fusiones: web y PostgreSQL suspendidos, último
@@ -69,8 +75,7 @@ reanudaciones, cambios de configuración ni migraciones remotas. El build config
 en Render todavía usa `npm install`: sincronizar antes de un futuro despliegue.
 
 ## Siguiente acción
-Completar CI del cierre y comprobar main tras integrarlo. Luego registrar aceptación
-funcional y refinar Sprint 2 de UX móvil/accesibilidad antes de programarlo.
+Registrar aceptación funcional y refinar Sprint 2 de UX móvil/accesibilidad antes de programarlo.
 Antes: recorrido y criterios de aceptación. Durante cada historia: decisiones y estados
 en el PR. Al cerrar: pruebas pertinentes, capturas identificadas y actualización de este
 archivo/backlog. Motion sigue pendiente; respetar las reglas ya registradas.

@@ -92,15 +92,22 @@ el árbol de la cabecera validada; no hubo conflictos ni cambios de contenido al
 Árbol final del incremento: `2779a5dfcca0695f67d69319168bebdd8c5f8d59`.
 Los runs intermedios de main se cancelaron por la concurrencia del workflow al entrar
 la siguiente fusión; no se cuentan como validaciones completas. La comprobación
-completa del incremento corresponde al run de main indicado abajo.
+completa del incremento se repite en el PR de cierre y en main; el fallo inicial y la
+corrección se conservan abajo.
 
 ## Verificación final y evidencias
 
 Candidato `db61726caa9cbedd94506745b38c3d4a39e98be0`, CI 39095704639 aprobada:
 67 pruebas Node, 16 casos Chromium; 10 migraciones y tres contratos SQL sobre
 PostgreSQL 16; tipos, lint, build y auditoría de producción (0 hallazgos).
-La primera CI de main 39096006029 falló por RI-03, descrito arriba. El cierre incluye
-su corrección y debe aprobar la suite completa antes de integrarse y de cerrar la tarea.
+La primera CI de main 39096006029 falló por RI-03, descrito arriba. La corrección
+`351f3d6c6b8f61c5e09e20b545f7784de146ea23` aprobó
+[CI 39096248346](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39096248346):
+67/67 pruebas y 16/16 casos Chromium, 10 migraciones, tres contratos SQL, tipos,
+lint, build y auditoría de producción sin hallazgos. La actualización posterior solo
+documenta estos resultados. El [PR #8](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/8)
+conserva la fusión y las comprobaciones de la cabecera definitiva. La comprobación final
+de main se enlaza desde ese PR para no generar un commit documental que se cite a sí mismo.
 
 Se conservaron dos capturas originales nuevas y se revisaron ambas:
 [evidencias de integración](../evidencias/sprint-01/integracion/README.md).

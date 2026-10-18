@@ -1,7 +1,7 @@
 # Sprint 1 — Registro de revisión y cierre técnico
 
 Fecha de entrega inicial: 2026-10-16; revisión e integración: 2026-10-17 (America/Lima).
-Estado: cinco historias revisadas e integradas en main, 26 SP. Validación del cierre en curso;
+Estado: cinco historias revisadas e integradas en main, 26 SP. Cierre técnico verificado;
 aceptación funcional del Product Owner por registrar. No habilita lanzamiento comercial.
 
 ## Objetivo y alcance
@@ -39,7 +39,12 @@ la omisión de historial/conciliaciones en el exportador comercial (versión 2,
 snapshot de lectura consistente). Ambos tienen pruebas de regresión aprobadas.
 La primera CI de main 39096006029 falló por interferencia entre archivos de tests en
 la BD compartida (RI-03); el cierre serializa los archivos, manteniendo las carreras
-reales dentro de cada escenario. Debe pasar la CI de la corrección y de main antes de finalizar.
+reales dentro de cada escenario. La corrección `351f3d6c6b8f61c5e09e20b545f7784de146ea23`
+aprobó [CI 39096248346](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39096248346)
+con 67/67 pruebas y 16/16 casos de navegador y todas las comprobaciones anteriores.
+El [PR #8 de cierre](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/8)
+registra la entrega final, su fusión y los checks posteriores. Las actualizaciones posteriores
+al código validado solo registran resultados documentales.
 
 ## Revisión funcional del incremento
 
