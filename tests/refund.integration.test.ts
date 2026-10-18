@@ -66,6 +66,7 @@ test("manual refund restores stock and records audit data", async () => {
         number: `ROSH-REFUND-${stamp}`,
         userId: customer.id,
         status: OrderStatus.PAID,
+        stockReservedAt: new Date("2026-10-07T09:00:00.000Z"),
         subtotal: 60,
         shippingAmount: 10,
         total: 70,

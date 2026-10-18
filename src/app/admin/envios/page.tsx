@@ -1,9 +1,7 @@
 import { formatPrice } from "@/lib/money";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { authOptions } from "@/lib/auth";
+import { requireAdmin } from "@/modules/admin/auth";
 import { prisma } from "@/lib/prisma";
 import { saveShippingZone, toggleShippingZone } from "@/modules/shipping/actions";
 
@@ -15,9 +13,7 @@ type Props = {
 
 
 export default async function ShippingAdminPage({ searchParams }: Props) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/iniciar-sesion?callbackUrl=/admin/envios");
-  if (session.user.role !== "ADMIN") redirect("/mi-cuenta");
+  await requireAdmin("/admin/envios");
 
   const params = await searchParams;
   const zones = await prisma.shippingZone.findMany({

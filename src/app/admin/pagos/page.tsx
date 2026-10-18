@@ -1,10 +1,9 @@
 import { formatPrice } from "@/lib/money";
 import { PaymentStatus } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { authOptions } from "@/lib/auth";
+import { requireAdmin } from "@/modules/admin/auth";
+import { operationMessages } from "@/modules/admin/operation-feedback";
 import { prisma } from "@/lib/prisma";
 import { approveManualPayment, rejectManualPayment } from "@/modules/payments/actions";
 
@@ -17,10 +16,9 @@ function providerLabel(provider: string) {
   return provider;
 }
 
-export default async function PaymentsAdminPage() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/iniciar-sesion?callbackUrl=/admin/pagos");
-  if (session.user.role !== "ADMIN") redirect("/mi-cuenta");
+export default async function PaymentsAdminPage({ searchParams }: { searchParams: Promise<{ result?: string }> }) {
+  await requireAdmin("/admin/pagos");
+  const { result } = await searchParams;
 
   const payments = await prisma.payment.findMany({
     where: { status: PaymentStatus.UNDER_REVIEW },
@@ -29,6 +27,7 @@ export default async function PaymentsAdminPage() {
     select: {
       id: true,
       provider: true,
+      currency: true,
       amount: true,
       operationCode: true,
       createdAt: true,
@@ -36,6 +35,7 @@ export default async function PaymentsAdminPage() {
       order: {
         select: {
           number: true,
+          id: true,
           total: true,
           shippingDistrict: true,
           user: {
@@ -67,6 +67,8 @@ export default async function PaymentsAdminPage() {
         <Link className="textLink" href="/admin">← Panel principal</Link>
       </div>
 
+      {result && Object.hasOwn(operationMessages, result) ? <p role="status" className="adminCard">{operationMessages[result]}</p> : null}
+
       {payments.length === 0 ? (
         <div className="adminCard emptyPanel">
           <strong>No hay pagos pendientes de revisión.</strong>
@@ -84,8 +86,9 @@ export default async function PaymentsAdminPage() {
                   <div>
                     <span>{providerLabel(payment.provider)}</span>
                     <strong>{payment.order.number}</strong>
+                    <Link className="textLink" href={`/admin/pedidos/${payment.order.id}`}>Ver pedido y trazabilidad</Link>
                   </div>
-                  <strong>{formatPrice(payment.amount.toFixed(2))}</strong>
+                  <strong>{payment.currency === "PEN" ? formatPrice(payment.amount.toFixed(2)) : `${payment.currency} ${payment.amount.toFixed(2)}`}</strong>
                 </div>
 
                 <div className="paymentReviewGrid">
@@ -107,10 +110,13 @@ export default async function PaymentsAdminPage() {
                 </div>
 
                 <div className="paymentReviewActions">
-                  <form action={rejectAction}>
+                  <form action={rejectAction} className="adminRefundForm">
+                    <label>Motivo del rechazo<input name="reason" required minLength={4} maxLength={500} /></label>
+                    <label className="adminConfirmCheck"><input type="checkbox" name="confirm" value="yes" required />Confirmo el rechazo y la liberación del stock.</label>
                     <button className="button adminRejectButton" type="submit">Rechazar y liberar stock</button>
                   </form>
-                  <form action={approveAction}>
+                  <form action={approveAction} className="adminRefundForm">
+                    <label className="adminConfirmCheck"><input type="checkbox" name="confirm" value="yes" required />Verifiqué la operación y el monto en la cuenta del negocio.</label>
                     <button className="button buttonDark" type="submit">Confirmar pago</button>
                   </form>
                 </div>

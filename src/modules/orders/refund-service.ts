@@ -7,6 +7,8 @@ import {
 
 import { prisma } from "@/lib/prisma";
 import { releaseStock } from "@/modules/inventory/stock-service";
+import { AdminOperationError, assertTransactionAdmin } from "@/modules/admin/transaction-auth";
+import { refundReferenceSchema } from "@/modules/payments/reconciliation-service";
 
 const REFUNDABLE_ORDER_STATUSES = new Set<OrderStatus>([
   OrderStatus.PAID,
@@ -38,13 +40,20 @@ export async function refundPaidOrder({
   refundReference,
   now = new Date(),
 }: RefundPaidOrderInput) {
+  refundReference = refundReference.trim();
   return prisma.$transaction(async (tx) => {
+    await assertTransactionAdmin(tx, adminId);
+    if (!refundReferenceSchema.safeParse(refundReference).success) throw new AdminOperationError("INVALID_INPUT");
     const order = await tx.order.findUnique({
       where: { id: orderId },
       select: {
         id: true,
         number: true,
         status: true,
+        total: true,
+        stockReservedAt: true,
+        stockReleasedAt: true,
+        _count: { select: { payments: true } },
         items: {
           select: {
             productId: true,
@@ -56,6 +65,8 @@ export async function refundPaidOrder({
           select: {
             id: true,
             provider: true,
+            currency: true,
+            amount: true,
           },
         },
       },
@@ -72,11 +83,15 @@ export async function refundPaidOrder({
     if (manualPayments.length === 0) {
       throw new OrderRefundError("PAID_PAYMENT_NOT_FOUND");
     }
+    if (order._count.payments !== 1 || manualPayments.length !== 1 || !order.stockReservedAt || order.stockReleasedAt ||
+      manualPayments[0].currency !== "PEN" || !manualPayments[0].amount.equals(order.total)) throw new AdminOperationError("INCONSISTENT");
 
     const claimed = await tx.order.updateMany({
       where: {
         id: order.id,
         status: order.status,
+        stockReservedAt: { not: null },
+        stockReleasedAt: null,
       },
       data: {
         status: OrderStatus.REFUNDED,
@@ -89,7 +104,7 @@ export async function refundPaidOrder({
       throw new OrderRefundError("ORDER_NOT_REFUNDABLE");
     }
 
-    await tx.payment.updateMany({
+    const paymentClaim = await tx.payment.updateMany({
       where: {
         id: { in: manualPayments.map((payment) => payment.id) },
         status: PaymentStatus.PAID,
@@ -103,6 +118,7 @@ export async function refundPaidOrder({
         notes: "Reembolso manual registrado por el administrador.",
       },
     });
+    if (paymentClaim.count !== 1) throw new AdminOperationError("STATE_CHANGED");
 
     const stockAfterByProduct = await releaseStock(tx, order.items);
 
@@ -117,6 +133,9 @@ export async function refundPaidOrder({
         note: `Reposición por reembolso del pedido ${order.number}`,
       })),
     });
+    await tx.orderEvent.create({ data: { orderId: order.id, actorUserId: adminId,
+      kind: "PAYMENT_REFUNDED", note: `Devolución externa íntegra PEN ${order.total.toFixed(2)}; referencia ${refundReference.trim()}.`, createdAt: now,
+    } });
 
     return {
       orderNumber: order.number,

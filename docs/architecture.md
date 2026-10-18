@@ -64,6 +64,7 @@ Nunca se almacenarán números completos de tarjeta ni CVV.
 - Roles `CUSTOMER` y `ADMIN`.
 - Validación servidor con Zod.
 - Rutas administrativas protegidas por sesión y rol.
+- S1-05 comprueba también el rol ADMIN vigente en BD en las transacciones administrativas.
 - `.env` excluido de Git.
 
 ## Persistencia local
@@ -115,3 +116,22 @@ no se exige al recuperar un resultado anterior. Replays no extienden plazos ni m
 Históricos conservan NULL, sin deduplicación retroactiva. No hay TTL de identidad mientras exista la orden.
 El formulario hidratado conserva sus datos si falla la respuesta; las redirecciones de Next se relanzan
 al framework. La acción nativa permite envío sin JavaScript. No se incorporan servicios/dependencias.
+
+## Revisión y conciliación — S1-05
+
+Implementado en rama dependiente de S1-04. [ADR 0005](decisions/0005-revision-conciliacion.md)
+y [guía operativa](operacion-pagos-manuales.md). La migración 10 agrega `OrderEvent` y
+`PaymentReconciliation`, sin cambiar estados/importes anteriores ni inventar historial.
+Los servicios comprueban el rol vigente, reclaman el pedido antes de pago/productos y
+guardan el evento en la misma transacción. Aprobar exige un único pago manual, PEN,
+importe exacto, operación y reserva no liberada. Rechazar requiere motivo y libera una vez.
+Reembolsar registra dinero ya devuelto externamente, solo antes de despacho, y repone una vez.
+El avance de cumplimiento vincula el estado esperado al formulario: reintentar no avanza otro paso.
+Las acciones revalidan panel, inventario y detalles propios y muestran resultados/conflictos.
+
+Un pedido cancelado puede tener un ingreso verificado tardío/discrepante. Se registra
+el importe realmente recibido (Decimal) y la operación única del proveedor; después,
+la referencia de devolución íntegra externa. Ni abrir ni cerrar conciliación cambia
+estado comercial o inventario. Un caso por pago, sin edición del importe ni reasignación
+de referencias. No hay pasarela, comisión ni servicio adicional con este flujo.
+El historial incluye comunicación de pago, cancelación y vencimiento desde esta entrega.

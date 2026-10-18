@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/money";
+import { isCurrentAdmin } from "@/modules/admin/auth";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -45,10 +46,11 @@ export default async function OrderPage({ params, searchParams }: Props) {
     redirect(`/iniciar-sesion?callbackUrl=${encodeURIComponent(`/pedidos/${route.number}`)}`);
   }
 
+  const admin = await isCurrentAdmin(session);
   const order = await prisma.order.findFirst({
     where: {
       number: route.number,
-      ...(session.user.role === "ADMIN" ? {} : { userId: session.user.id }),
+      ...(admin ? {} : { userId: session.user.id }),
     },
     select: {
       number: true,
@@ -104,7 +106,6 @@ export default async function OrderPage({ params, searchParams }: Props) {
 
   const payment = order.payments[0];
   const canCustomerCancel =
-    session.user.role === "CUSTOMER" &&
     order.userId === session.user.id && order.status === "PENDING_PAYMENT" &&
     Boolean(order.stockReservedAt && !order.stockReleasedAt);
   const canContinuePayment = order.userId === session.user.id && order.status === "PENDING_PAYMENT";

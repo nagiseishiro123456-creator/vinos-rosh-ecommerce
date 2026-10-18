@@ -1,12 +1,12 @@
 # Punto de avance
 
-- Fase: 2. Sprint: 1. S1-01 a S1-04 verificadas en ramas.
-- Fecha de este punto de avance: 2026-10-16 (America/Lima).
-- Base S1-04: `b35a57896ba06eb35402f5b4d404f3233846df95` de S1-03 (PR #5).
-- Rama actual: `fase-2/sprint-01-idempotencia`, basada en S1-03.
-- Estado: S1-04 implementada y verificada; lista para revisión, integración pendiente. El Sprint 1 sigue abierto.
-- PR actual: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/6
-- Código verificado: `184feaba3d17da1741b7ef16caf8839a5375a428`.
+- Fase: 2. Sprint: 1. Cinco historias implementadas y verificadas en ramas (26 SP).
+- Fecha de este punto de avance: 2026-10-17 (America/Lima).
+- Base S1-05: `a457caf92fa1038bdaa6a1fc21fd8c96edddc86e` de S1-04 (PR #6).
+- Rama actual: `fase-2/sprint-01-revision-conciliacion`, basada en S1-04.
+- Estado: revisión integral e integración en curso; RI-01 de permisos verificado, RI-02 de respaldo corregido y pendiente de CI antes de fusionar. Sprint 1 formalmente abierto.
+- PR actual: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/7
+- Código S1-05 verificado: `2e90b606436d55d6e4f59cb8634a347a15e8b8d6`.
 
 ## S1-01 conservada
 Instalación reproducible, 7 migraciones, 15 pruebas y 2 smoke aprobados en su entrega.
@@ -29,7 +29,7 @@ Pagos en revisión mantienen reserva y requieren conciliación. Migración aditi
 CI: 40 pruebas, 6 casos de navegador y 8 migraciones aprobados, incluido contrato SQL sobre datos antiguos.
 16 capturas revisadas y conservadas con hashes. [QA S1-03](testing/s1-03-reserva.md).
 
-## Última historia entregada: S1-04
+## S1-04 conservada
 Clave estable por cliente/resumen y huella completa persistidas con UNIQUE en la orden.
 Reintentos idénticos recuperan la misma orden antes de leer carrito/configuración; contenido
 distinto produce conflicto sin sobrescribir ni reservar. Los estados cerrados no renuevan reservas.
@@ -37,19 +37,33 @@ El formulario conserva datos ante respuesta perdida y mantiene envío nativo con
 CI: 53 pruebas, 10 casos de navegador, 9 migraciones y dos contratos SQL aprobados.
 Ocho capturas nuevas revisadas y conservadas con hashes. [QA S1-04](testing/s1-04-idempotencia.md).
 
+## Última historia entregada: S1-05
+ADR 0005, transacciones de revisión/reembolso, avance con estado esperado e historial.
+Conciliación de ingresos sobre pedidos cancelados sin reactivar pedido ni modificar stock.
+Rol ADMIN vigente comprobado en BD, motivos/confirmaciones/resultados y guía de operación.
+CI final [38970804257](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/38970804257):
+66 pruebas, 14 casos de navegador, 10 migraciones, tres contratos SQL, tipos/lint/build
+y auditoría de producción (0 hallazgos) aprobados. Corregidas validación monetaria y
+altura del formulario móvil detectadas en QA. Diez capturas nuevas revisadas con hashes.
+[QA S1-05](testing/s1-05-revision.md), [guía operativa](operacion-pagos-manuales.md)
+y [cierre técnico del sprint](sprints/cierre-sprint-01.md). 54 capturas conservadas en total.
+
 ## Siguiente acción
-Iniciar S1-05: documentar primero transiciones autorizadas y conciliación de pagos tardíos;
-revisar aprobación/rechazo/reembolso/mantenimiento concurrentes y sus movimientos de inventario.
-Añadir pruebas de permisos y conflictos de administración, evidencias y guía operativa.
-Revisar los hallazgos de herramientas pendientes antes de declarar cerrado el Sprint 1.
-Cadena de integración: PR #3 → #4 → #5 → #6. Tras integrar cada base, retargetear el siguiente PR
+Validar RI-01 con sesión ADMIN revocada (pedidos ajenos, envíos y API de respaldo),
+conservar evidencia e integrar después en orden. [Registro de revisión](testing/revision-integracion-sprint-01.md).
+CI 39095406481 aprobó RI-01: 66 pruebas y 16 casos de navegador. RI-02 añade historial
+y conciliaciones al exportador comercial y una prueba específica de sus datos.
+Cadena de integración: PR #3 → #4 → #5 → #6 → #7. Tras integrar cada base, retargetear el siguiente PR
 a main y revisar el diff. No se han fusionado ramas ni desplegado estos cambios.
+Render comprobado en My Workspace: web y PostgreSQL suspendidos; mantener estado y
+usar `[skip render]` en fusiones. No se reactivan ni migran recursos remotos.
+Tras integración/aceptación: refinar Sprint 2, UX móvil y accesibilidad, antes de programarlo.
 
 ## Riesgos abiertos
-- Conciliación tardía y revisión administrativa ampliada: S1-05.
+- Conciliación ampliada: varias operaciones por pago, correcciones y devoluciones parciales/despachadas fuera del alcance actual.
 - Docker y PowerShell no ejecutados en este contenedor; ver límites de S1-01.
-- Instalación completa de CI informa 5 vulnerabilidades altas incluyendo herramientas;
-  auditoría solo de producción informa 0. Revisar dependencias de desarrollo antes de cerrar el sprint.
+- Dependencias de desarrollo revisadas: 5 avisos altos propagados desde braces, sin parche publicado.
+  Auditoría de producción: 0. Seguimiento antes del lanzamiento, sin downgrade incompatible de Next.
 - Ajustes de UX móvil registrados en QA S1-02/S1-03. S1-03 traduce estados de pago/comprobante
   y fechas del detalle; falta normalizar la fecha del prefijo del número interno de pedido.
 - La liberación de reservas abandonadas requiere ejecutar mantenimiento o acceder al pedido;
