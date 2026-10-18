@@ -21,6 +21,9 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 15. [Guía de pagos, devoluciones y conciliación](operacion-pagos-manuales.md)
 16. [Cierre técnico, revisión y continuidad del Sprint 1](sprints/cierre-sprint-01.md)
 17. [Revisión integral e integración del Sprint 1](testing/revision-integracion-sprint-01.md)
+18. [Sprint 2: plan, historias y aceptación](sprints/fase-2-sprint-02.md)
+19. [Recorrido de compra y diagnóstico UX](ux/sprint-02-recorrido-compra.md)
+20. [QA S2-01](testing/s2-01-recorrido.md) · [Baseline visual S2-01](evidencias/sprint-02/s2-01/README.md)
 
 ## Cuándo documentar
 

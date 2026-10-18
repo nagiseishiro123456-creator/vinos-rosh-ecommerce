@@ -18,7 +18,27 @@ Dependencias de entrega: S1-01 → S1-02 → S1-03 → S1-04 → S1-05.
 Documentación y pruebas forman parte de cada historia.
 Las cinco historias suman 26 SP revisados e integrados; ver [cierre técnico](sprints/cierre-sprint-01.md)
 y [registro de integración](testing/revision-integracion-sprint-01.md). Aceptación funcional del
-Product Owner por registrar. Próximo trabajo: refinamiento de Sprint 2; Render permanece suspendido.
+Product Owner por registrar. Sprint 2 iniciado en S2-01 documental; Render no se reanuda con este trabajo.
+
+## Sprint 2 — Compra móvil, carrito y accesibilidad (26 SP preliminares)
+
+Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
+[Plan y aceptación por historia](sprints/fase-2-sprint-02.md) ·
+[Recorrido y hallazgos](ux/sprint-02-recorrido-compra.md).
+
+| ID | Historia | SP | Estado |
+| --- | --- | ---: | --- |
+| S2-01 | Diagnosticar y documentar recorrido, estados y baseline. | 3 | Documentada y verificada en rama; integración pendiente |
+| S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | Pendiente; siguiente historia |
+| S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | Pendiente |
+| S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | Pendiente; ADR y contrato antes del código |
+| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Pendiente |
+| S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Pendiente |
+
+Los puntos no son horas ni velocidad garantizada. Si el refinamiento revela más alcance,
+dividir y reestimar antes de comprometerlo. S2-01 no implementa todavía funciones de carrito.
+16 capturas de main revisadas como baseline, separadas de las 56 del Sprint 1.
+Cuenta obligatoria antes del checkout; stock solo se reserva al confirmar, no al añadir/unir.
 
 ## Secuencia posterior, sujeta a refinamiento
 
@@ -39,6 +59,7 @@ No se activan servicios de pago ni se modifica la política de costos con este b
 
 Dependencias de desarrollo revisadas en S1-05: cinco avisos altos por braces sin parche
 publicado; seguimiento registrado, sin downgrade de Next. Producción: cero hallazgos.
-Pendientes de UX para Sprint 2: traducir
-estados técnicos, evitar saltos de línea en moneda/importe y revisar controles flotantes,
-posición del resumen y CTA móvil. Ver [QA S1-02](testing/s1-02-dinero.md).
+Pendientes de UX heredados: evitar cortes de moneda/importe y revisar controles flotantes,
+posición del resumen/CTA móvil y selección de direcciones con teclado. `En revisión`
+y `Boleta` ya aparecen traducidos en main; conservar regresión sin duplicar trabajo.
+Ver [diagnóstico actualizado](ux/sprint-02-recorrido-compra.md) y [QA S1-02](testing/s1-02-dinero.md).

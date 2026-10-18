@@ -15,6 +15,10 @@ Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, aute
 - Render gratuito como preview, con servicio Node.js y PostgreSQL separados
 - Motion pendiente de incorporar; no está instalado en S1-01
 
+Estado comprobado al iniciar Sprint 2 (2026-10-18): Sprint 1 integrado en main
+`16074e1fd97fc62f51fb863cfb3f46230a3df3d2`; Motion y carrito invitado/lateral siguen
+sin implementar. [Diseño propuesto de Sprint 2](ux/sprint-02-recorrido-compra.md).
+
 ## Ejecución del backend
 Server Actions (`src/modules/*/actions.ts`) para operaciones de formularios;
 Route Handlers (`src/app/api/**/route.ts`) para HTTP, autenticación y health check.
@@ -71,7 +75,7 @@ Nunca se almacenarán números completos de tarjeta ni CVV.
 Desarrollo utiliza PostgreSQL 16 mediante Docker Compose. El script `scripts/setup-dev.ps1` automatiza secretos locales, arranque de BD, migración, seed y typecheck.
 
 ## Flujo de compra
-Flujo implementado y verificado en rama S1-03 (integración pendiente; ver [QA](testing/s1-03-reserva.md)):
+Flujo implementado desde S1-03 e integrado con Sprint 1 (ver [QA histórico](testing/s1-03-reserva.md)):
 1. Catálogo → carrito persistente del usuario autenticado.
 2. Dirección con cobertura → resumen y comprobante/método, todavía sin datos bancarios.
 3. Confirmar: transacción Serializable de snapshot firmado, orden PENDING_PAYMENT,
@@ -89,7 +93,7 @@ abrir instrucciones o comunicar después del plazo ejecuta la misma liberación 
 Sin mantenimiento/acceso, la liberación puede demorarse. No se agrega cron de pago.
 La migración 8 reconoce stock de pedidos históricos activos sin asignarles nuevos plazos.
 Pendientes históricos sin marca de reserva se bloquean para revisión operativa; no se infiere su stock.
-Ver [ADR 0003](decisions/0003-reserva-previa.md). Idempotencia de creación implementada y verificada en rama S1-04.
+Ver [ADR 0003](decisions/0003-reserva-previa.md). Idempotencia de creación implementada desde S1-04 e integrada en main.
 
 ## Importes y confirmación — S1-02
 Ver [ADR 0002](decisions/0002-dinero-y-confirmacion.md). El cálculo comercial usa
@@ -101,7 +105,7 @@ comprueba la firma del resumen y guarda líneas, subtotal, envío, total y pago 
 mismo snapshot. Los cambios de contenido exigen revisar la pantalla actualizada.
 Las acciones de administración rechazan precisión monetaria extra.
 S1-02 no modificó el esquema. S1-03 incorpora la reserva previa; idempotencia persistida
-se implementa y verifica en rama S1-04. La firma confirma contenido y la clave identifica la operación.
+se implementa desde S1-04 y está integrada. La firma confirma contenido y la clave identifica la operación.
 
 ## Confirmación idempotente — S1-04
 Ver [ADR 0004](decisions/0004-idempotencia-reserva.md) y [QA](testing/s1-04-idempotencia.md).
@@ -119,7 +123,7 @@ al framework. La acción nativa permite envío sin JavaScript. No se incorporan 
 
 ## Revisión y conciliación — S1-05
 
-Implementado en rama dependiente de S1-04. [ADR 0005](decisions/0005-revision-conciliacion.md)
+Implementado desde S1-05 e integrado en main. [ADR 0005](decisions/0005-revision-conciliacion.md)
 y [guía operativa](operacion-pagos-manuales.md). La migración 10 agrega `OrderEvent` y
 `PaymentReconciliation`, sin cambiar estados/importes anteriores ni inventar historial.
 Los servicios comprueban el rol vigente, reclaman el pedido antes de pago/productos y
