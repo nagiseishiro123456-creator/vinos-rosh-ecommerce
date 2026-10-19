@@ -36,5 +36,5 @@ Los dos recortes de banner/header excluyen el contenido con imágenes externas q
 
 La evidencia visual complementa las aserciones de DOM, geometría, teclado y hit testing;
 no demuestra por sí sola accesibilidad completa ni concurrencia transaccional.
-[Resumen de validación local](validacion-local.txt). CI oficial pendiente al documentar;
-estado final y checks consultables en el [PR #10](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/10).
+[Resumen de validación local](validacion-local.txt). CI oficial posteriormente aprobada: [registro](validacion-ci.txt), 67/67 servidor y 20/20 navegador.
+Checks consultables en el [PR #10](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/10).

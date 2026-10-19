@@ -249,5 +249,18 @@
       "sha256": "629304c5cdfca1e8e8dcf062398d03194b8dc2b26981c8b3703539c5c2cad3d1",
       "captured_at": "2026-10-19T11:18:28.018193-05:00"
     }
-  ]
+  ],
+  "official_ci_verification": {
+    "verified_date": "2026-10-19",
+    "run_id": 39284747193,
+    "job_id": 118167401977,
+    "head_sha": "9c59839c03cbf0d9ac9d2fbf984a0d30fc5376f6",
+    "conclusion": "success",
+    "node": "22.23.3",
+    "database": "PostgreSQL 16",
+    "server_tests": "67/67",
+    "browser_tests": "20/20",
+    "checks": "types/lint/build, 10 migrations, 3 SQL contracts, production audit: 0 findings",
+    "note": "Historical capture metadata and queued-at-documentation fields preserved."
+  }
 }

@@ -3,7 +3,7 @@
 Fecha: 2026-10-19 (America/Lima). Base: S2-01 `97042fd…`, PR #9.
 Entrega: [PR #10](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/10),
 rama `fase-2/sprint-02-ux-movil`, dependiente de #9. Sin merge ni despliegue.
-Estado: implementación y validación local; CI canónica pendiente de ejecución.
+Estado: cierre técnico verificado por CI canónica; revisión e integración pendientes.
 
 ## Cambios y motivo
 
@@ -25,7 +25,7 @@ decimales que cruzan al servidor mantienen su formato y cálculo existentes.
 
 `tests/smoke/ux-mobile.spec.ts` se ejecuta en los proyectos desktop (1440×1000), mobile
 (390×844), small-mobile (320×740) y tablet (768×1024). Los dos proyectos nuevos solo
-ejecutan ese archivo; la suite canónica pasa de 16 a **20 casos previstos**, no 20 ya aprobados.
+ejecutan ese archivo; la suite canónica pasa de 16 a **20 casos**, aprobados en el run oficial indicado abajo.
 
 Se comprueban: opciones de consentimiento y separación del header en Home/catálogo; ancho de página y controles; Tab/Shift+Tab, flechas y foco; acciones
 de 44 px; hit testing; resumen antes del formulario; líneas de dinero; nombres largos;
@@ -72,11 +72,11 @@ importe en una segunda fila y se añadió una aserción de legibilidad antes de 
 | Compilación local | Webpack aprobado; Turbopack local bloqueado por persistencia del entorno. |
 | Navegador local | 8/8 aprobados: baseline y dinero en escritorio/móvil, más UX en cuatro tamaños. Fuente `8c6fc0e…`; capturas del rerun final. |
 | Inspección | 24 PNG finales revisados visualmente; originales y manifiesto en [galería](../evidencias/sprint-02/s2-02/README.md). |
-| CI oficial | [Run 39284101122](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39284101122) en cola al documentar. No se declara aprobada. |
+| CI oficial | [Run 39284747193](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39284747193), cabecera `9c59839…`: 67/67 servidor y 20/20 navegador, tipos/lint/build, 10 migraciones, tres contratos SQL y auditoría de producción sin hallazgos. |
 
 El primer commit añadió regresiones antes de corregir, pero su run quedó en cola;
-no se afirma haber obtenido una CI roja. Tampoco se cuentan como aprobadas las 67
-pruebas de servidor ni los 20 casos canónicos hasta que la CI de esta entrega los ejecute.
+no se afirma haber obtenido una CI roja. La cola se resolvió: el run final terminó correctamente
+el 2026-10-19 a las 11:23 en Perú. [Registro oficial](../evidencias/sprint-02/s2-02/validacion-ci.txt).
 
 Para repetir el caso nuevo en el entorno estándar: configurar la **BD QA aislada** según
 [la guía](../desarrollo-reproducible.md), con Node/npm fijados y nunca la BD comercial;
@@ -102,10 +102,10 @@ instrucciones y pago en revisión. Se conserva el original por cada viewport, ju
 las capturas de 320/768 y las comprobaciones de foco. Cliente, dirección, operaciones,
 cuentas y productos son sintéticos; no hubo pagos reales ni uso de BD de Render.
 
-## Pendientes para cerrar S2-02
+## Cierre técnico y pendientes
 
-- Completar la CI oficial de la cabecera del PR y revisar cualquier fallo real.
+- CI oficial aprobada sobre `9c59839…`; los commits posteriores de cierre solo documentan el resultado.
 - Contraste medido, lector de pantalla, zoom y Safari/Firefox no ejecutados; no afirmar certificación completa.
 - Mantener #9/#10 sin fusionar hasta revisión/integración del incremento. No reactivar Render.
-- Después del cierre de QA: S2-03, ADR de persistencia/estado antes del carrito invitado;
+- Siguiente historia: S2-03, ADR de persistencia/estado antes del carrito invitado;
   la unión de carritos y el panel siguen en historias posteriores.

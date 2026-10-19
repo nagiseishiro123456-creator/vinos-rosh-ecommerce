@@ -2,7 +2,7 @@
 
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
-Estado: S2-01 documentada; S2-02 implementada con verificación local y CI pendiente;
+Estado: S2-01 documentada; S2-02 verificada por CI, revisión/integración pendientes;
 S2-03–S2-06 pendientes de implementación.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
@@ -170,6 +170,6 @@ aislado no equivalen a certificación completa de accesibilidad ni a aceptación
 - S2-01: entregables documentales y 16 capturas base revisadas; publicación y checks en
   la rama `fase-2/sprint-02-recorrido-base`. [Resultados](../testing/s2-01-recorrido.md).
 - S2-02: implementada en PR #10; [QA](../testing/s2-02-ux-movil.md) y
-  [capturas antes/después](../evidencias/sprint-02/s2-02/README.md). CI pendiente de ejecución;
-  historia todavía abierta. La evidencia local no sustituye el runner canónico.
-- S2-03–S2-06: pendientes. Siguiente acción: comprobar CI de S2-02 antes del ADR y código de carrito invitado.
+  [capturas antes/después](../evidencias/sprint-02/s2-02/README.md). CI oficial aprobada:
+  67/67 servidor y 20/20 navegador; revisión/integración pendientes.
+- S2-03–S2-06: pendientes. Siguiente acción: ADR y código del carrito invitado (S2-03).

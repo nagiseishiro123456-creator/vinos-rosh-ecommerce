@@ -108,7 +108,7 @@ y registro de aceptación funcional del Product Owner.
 Sprint 2 iniciado el 2026-10-18: [plan](docs/sprints/fase-2-sprint-02.md),
 [diagnóstico del recorrido](docs/ux/sprint-02-recorrido-compra.md) y
 [16 capturas base](docs/evidencias/sprint-02/s2-01/README.md). S2-02 implementa correcciones
-de UI con [QA local y CI oficial pendiente](docs/testing/s2-02-ux-movil.md) y
+de UI con [QA y CI oficial aprobada](docs/testing/s2-02-ux-movil.md) y
 [comparación visual](docs/evidencias/sprint-02/s2-02/README.md).
 Carrito invitado, unión y panel lateral siguen pendientes de sus historias.
 
