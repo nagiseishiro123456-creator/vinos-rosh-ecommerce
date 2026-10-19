@@ -8,14 +8,22 @@ const consentEvent = "rosh-analytics-consent-change";
 
 type Consent = "accepted" | "rejected" | null;
 type ConsentSnapshot = Consent | "loading";
+let memoryConsent: Consent | undefined;
 
 function readConsent(): Consent {
-  const stored = window.localStorage.getItem(consentKey);
-  return stored === "accepted" || stored === "rejected" ? stored : null;
+  if (memoryConsent !== undefined) return memoryConsent;
+  try {
+    const stored = window.localStorage.getItem(consentKey);
+    return stored === "accepted" || stored === "rejected" ? stored : null;
+  } catch {
+    // Inaccessible storage must not crash the storefront or enable trackers.
+    return "rejected";
+  }
 }
 
 function subscribeConsent(callback: () => void) {
-  function handleChange() {
+  function handleChange(event: Event) {
+    if (event instanceof StorageEvent && (event.key === consentKey || event.key === null)) memoryConsent = undefined;
     callback();
   }
 
@@ -42,7 +50,8 @@ export function AnalyticsConsent() {
   if (!enabled || consent === "loading") return null;
 
   function decide(value: Exclude<Consent, null>) {
-    window.localStorage.setItem(consentKey, value);
+    try { window.localStorage.setItem(consentKey, value); memoryConsent = undefined; }
+    catch { memoryConsent = value; }
     window.dispatchEvent(new Event(consentEvent));
   }
 

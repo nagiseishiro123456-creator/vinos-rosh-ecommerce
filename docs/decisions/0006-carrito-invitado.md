@@ -38,6 +38,8 @@ al recargar/cerrar y se comunica en la UI. No se borra por un fallo de red del s
 Eventos storage actualizan otras pestañas con política de última escritura; no se
 promete una suma transaccional entre pestañas. La memoria degradada no se sustituye
 silenciosamente por una copia antigua del disco. La unión idempotente es otra operación.
+El banner opcional también tolera almacenamiento bloqueado: si no puede leer, no carga
+trackers; si falla una escritura, conserva la elección explícita solo en memoria.
 
 ## Consulta al servidor
 

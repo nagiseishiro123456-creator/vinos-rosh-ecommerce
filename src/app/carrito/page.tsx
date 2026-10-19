@@ -2,8 +2,8 @@ import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
+import { GuestCart } from "@/components/guest-cart";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { calculateAmounts } from "@/modules/checkout/pricing";
@@ -18,7 +18,10 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
   const params = await searchParams;
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
-    redirect("/iniciar-sesion?callbackUrl=/carrito");
+    return <main className="cartPage purchaseFlow">
+      <div className="catalogHeaderWrap compact"><StoreHeader /></div>
+      <GuestCart />
+    </main>;
   }
 
   const cart = await prisma.cart.findUnique({

@@ -4,10 +4,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
 
+import { GuestAddToCart } from "@/components/guest-add-to-cart";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { siteConfig } from "@/lib/site";
+import { authOptions } from "@/lib/auth";
 import { addToCart } from "@/modules/cart/actions";
 import { getProductBySlug } from "@/modules/products/queries";
 
@@ -40,7 +43,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, session] = await Promise.all([getProductBySlug(slug), getServerSession(authOptions)]);
   if (!product) notFound();
 
   const imageUrl =
@@ -89,11 +92,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           {product.stock > 0 ? (
-            <form action={addAction}>
+            session?.user?.id ? <form action={addAction}>
               <button className="button buttonDark productAddButton" type="submit">
                 Agregar al carrito
               </button>
-            </form>
+            </form> : <GuestAddToCart productId={product.id} />
           ) : (
             <button className="button buttonDisabled productAddButton" type="button" disabled>
               Sin stock

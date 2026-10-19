@@ -1,0 +1,17 @@
+.guestCartIntro, .guestCartStatus { color: var(--muted); line-height: 1.6; }
+.guestCartIntro { max-width: 620px; }
+.guestCartStatus { margin-block: 12px; }
+.guestCartStatus:empty { margin: 0; }
+.guestCart .cartItems { margin-block: 20px; }
+.guestCart .checkoutError { margin-bottom: 20px; }
+.guestCart .checkoutError .button { margin-top: 12px; }
+.guestCart .cartItemTotal { flex-wrap: wrap; }
+.guestCart .cartSummary .summaryRow,
+.guestCart .cartSummary .summaryTotal { flex-wrap: wrap; gap: 8px; }
+.guestCart .cartSummary strong { margin-left: auto; }
+.guestCart .cartMain > h1:focus-visible { outline: 3px solid var(--wine); outline-offset: 6px; }
+.guestImagePlaceholder { min-width: 92px; min-height: 92px; border-radius: 12px; background: var(--ivory); }
+.guestCart .cartItemInfo { min-width: 0; overflow-wrap: anywhere; }
+.guestCart .cartItemInfo span { white-space: normal; }
+.guestRefresh { margin-block: 12px; padding-block: 8px; border-color: var(--line); color: var(--wine); background: white; }
+.productAddButton:disabled { cursor: not-allowed; opacity: .7; }
