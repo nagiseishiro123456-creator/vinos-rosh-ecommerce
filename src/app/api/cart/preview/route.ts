@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     if (!parsed.success) return json({ message: "Revisa los productos y cantidades. Puedes seleccionar hasta 50 productos y 99 unidades de cada uno." }, 400);
     return json(await previewGuestCart(parsed.data.items));
   } catch (error) {
-    console.error("GUEST_CART_PREVIEW_ERROR", error);
+    if (!request.signal.aborted) console.error("GUEST_CART_PREVIEW_ERROR", error);
     return json({ message: "No pudimos verificar los precios y la disponibilidad. Conservamos tu selección; vuelve a intentarlo." }, 503);
   }
 }

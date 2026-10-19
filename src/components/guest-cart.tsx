@@ -82,7 +82,7 @@ export function GuestCart() {
   const subtotal = ready && items.length === 0 ? "0.00" : quote?.subtotal;
 
   return (
-    <section className="cartLayout shell guestCart" aria-busy={pending}>
+    <section className="cartLayout shell guestCart" aria-busy={!ready || pending}>
       <div className="cartMain">
         <p className="eyebrow wine">TU SELECCIÓN</p>
         <h1 ref={heading} tabIndex={-1}>Carrito</h1>

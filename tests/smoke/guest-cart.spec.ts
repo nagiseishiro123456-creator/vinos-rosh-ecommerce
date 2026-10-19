@@ -149,7 +149,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
     await expect(corrupt.locator(".summaryTotal strong")).toHaveText("S/ 29.90");
 
     const blocked = await open("blocked"); await addGuest(blocked);
-    await expect(blocked.getByRole("alert")).toContainText("No podemos guardar tu selección");
+    await expect(blocked.locator(".guestCart").getByRole("alert")).toContainText("No podemos guardar tu selección");
     await blocked.locator(".guestCart input[name=quantity]").fill("2");
     await blocked.getByRole("button", { name: "Actualizar", exact: true }).click();
     await expect(blocked.locator(".summaryTotal strong")).toHaveText("S/ 59.80");
@@ -157,7 +157,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
     await blocked.reload(); await expect(blocked.getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
 
     const quota = await open("quota"); await addGuest(quota);
-    await expect(quota.getByRole("alert")).toContainText("No podemos guardar tu selección");
+    await expect(quota.locator(".guestCart").getByRole("alert")).toContainText("No podemos guardar tu selección");
     await quota.evaluate(() => { localStorage.removeItem("rosh-analytics-consent-v1"); window.dispatchEvent(new Event("rosh-analytics-consent-change")); });
     if (process.env.NEXT_PUBLIC_GA_ID) {
       await quota.getByRole("button", { name: "Rechazar", exact: true }).click();
@@ -168,7 +168,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
     const network = await open("normal"); let fail = true;
     await network.route("**/api/cart/preview", (route) => fail ? route.abort() : route.continue());
     await network.goto(productPath); await network.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
-    await expect(network.getByRole("alert")).toContainText("Conservamos tu selección");
+    await expect(network.locator(".guestCart").getByRole("alert")).toContainText("Conservamos tu selección");
     await expect(network.locator(".summaryTotal strong")).toHaveText("Por verificar");
     expect(await network.evaluate((key) => JSON.parse(localStorage.getItem(key)!).items[0].quantity, GUEST_CART_KEY)).toBe(1);
     await capture(network, info, "35-invitado-error-red"); fail = false;
