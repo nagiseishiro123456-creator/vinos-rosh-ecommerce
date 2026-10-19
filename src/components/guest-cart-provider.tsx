@@ -16,5 +16,5 @@ export function useGuestCart() {
   if (!store) throw new Error("GuestCartProvider is required");
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
   return { ...snapshot, add: store.add, update: store.update, remove: store.remove,
-    replace: store.replace, getSnapshot: store.getSnapshot };
+    replace: store.replace, getSnapshot: store.getSnapshot, beginImport: store.beginImport, confirmImport: store.confirmImport };
 }

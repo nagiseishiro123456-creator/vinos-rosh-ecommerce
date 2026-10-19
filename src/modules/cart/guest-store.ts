@@ -1,98 +1,129 @@
-import { GUEST_CART_KEY, MAX_GUEST_ITEMS, MAX_GUEST_QUANTITY, normalizeGuestItems,
-  readGuestSelection, serializeGuestSelection, type GuestLine } from "./guest-selection";
+import { GUEST_CART_KEY, MAX_GUEST_ITEMS, MAX_GUEST_QUANTITY, normalizeGuestItems, serializeGuestSelection, type GuestLine } from "./guest-selection";
+import { decodeGuestState, encodeGuestState, newGuestRevision, type GuestState } from "./guest-persistence";
 
-type Snapshot = {
-  items: readonly GuestLine[];
-  ready: boolean;
-  storage: "loading" | "persistent" | "memory";
-  warning: string;
-  message: string;
+type Snapshot = GuestState & {
+  ready: boolean; busy: boolean; storage: "loading" | "persistent" | "memory"; warning: string; message: string;
 };
 type StorageAdapter = Pick<Storage, "getItem" | "setItem">;
-type Dependencies = {
-  storage?: () => StorageAdapter;
-  listen?: (receive: (raw: string | null) => void) => () => void;
-};
-const serverSnapshot: Snapshot = { items: [], ready: false, storage: "loading", warning: "", message: "" };
-const memoryWarning = "No podemos guardar tu selección en este navegador. Puedes seguir durante esta visita, pero podrías perderla al recargar o cerrar la página.";
+type Lock = <T>(action: () => Promise<T>) => Promise<T>;
+type Dependencies = { storage?: () => StorageAdapter; lock?: Lock; listen?: (receive: () => void) => () => void };
+const serverSnapshot: Snapshot = { revision: "", items: [], pending: null, ready: false, busy: false, storage: "loading", warning: "", message: "" };
+const memoryWarning = "No podemos guardar tu selección de forma segura en este navegador. Puedes seguir durante esta visita, pero podrías perderla al recargar o cerrar la página.";
+export class GuestImportAccountError extends Error {}
 
-/** One instance per provider; no singleton containing data across SSR requests/users. */
-export function createGuestCartStore({ storage = () => window.localStorage, listen = (receive) => {
-  const onStorage = (event: StorageEvent) => {
-    if (event.key === GUEST_CART_KEY || event.key === null) receive(event.newValue);
-  };
+/** Per-provider state. Web Locks serialize all disk mutations; network never holds the lock. */
+export function createGuestCartStore({ storage = () => window.localStorage, lock = async (action) => {
+  if (!navigator.locks) throw new Error("Web Locks unavailable");
+  return navigator.locks.request(`${GUEST_CART_KEY}:lock`, action);
+}, listen = (receive) => {
+  const onStorage = (event: StorageEvent) => { if (event.key === GUEST_CART_KEY || event.key === null) receive(); };
   window.addEventListener("storage", onStorage);
   return () => window.removeEventListener("storage", onStorage);
 } }: Dependencies = {}) {
   let snapshot = serverSnapshot;
+  let savedRaw: string | null | undefined;
+  let queue: Promise<unknown> = Promise.resolve();
+  let queued = 0;
   const listeners = new Set<() => void>();
   let stopListening: (() => void) | undefined;
   const emit = () => listeners.forEach((listener) => listener());
+  function memory() { snapshot = { ...snapshot, storage: "memory", warning: memoryWarning }; }
   function persist() {
     if (snapshot.storage === "memory") return;
-    try { storage().setItem(GUEST_CART_KEY, serializeGuestSelection(snapshot.items)); }
-    catch { snapshot = { ...snapshot, storage: "memory", warning: memoryWarning }; }
+    try { const raw = encodeGuestState(snapshot); storage().setItem(GUEST_CART_KEY, raw); savedRaw = raw; }
+    catch { memory(); }
   }
-  function hydrate(refresh = false) {
-    if ((snapshot.ready && !refresh) || snapshot.storage === "memory") return;
+  async function hydrate() {
+    if (snapshot.ready && snapshot.storage === "memory") return;
     try {
       const raw = storage().getItem(GUEST_CART_KEY);
-      const decoded = readGuestSelection(raw);
-      snapshot = { ...decoded, ready: true, storage: "persistent", warning: "" };
-      // Read before any write. Repair invalid/extra fields only after decoding the saved selection.
-      if (raw !== null && raw !== serializeGuestSelection(snapshot.items)) persist();
+      if (snapshot.ready && raw === savedRaw) return;
+      const decoded = await decodeGuestState(raw);
+      snapshot = { ...snapshot, ...decoded.state, ready: true, message: decoded.message,
+        storage: snapshot.storage === "memory" ? "memory" : "persistent" };
+      savedRaw = raw;
+      if (raw !== encodeGuestState(snapshot)) persist();
     } catch {
-      snapshot = { ...snapshot, ready: true, storage: "memory", warning: memoryWarning };
+      memory();
+      snapshot = { ...snapshot, ready: true, revision: snapshot.revision || newGuestRevision() };
     }
   }
+  function enqueue<T>(action: () => T | Promise<T>): Promise<T> {
+    queued++;
+    snapshot = { ...snapshot, busy: true }; emit();
+    const task = queue.then(async () => {
+      const run = async () => { await hydrate(); return action(); };
+      if (snapshot.storage === "memory") return run();
+      let entered = false;
+      try { return await lock(async () => { entered = true; return run(); }); }
+      catch (error) {
+        if (entered) throw error;
+        // Without a cross-tab lock recover readable selection once, without disk writes.
+        memory(); return run();
+      }
+    }).finally(() => {
+      queued--;
+      snapshot = { ...snapshot, busy: queued > 0 }; emit();
+    });
+    queue = task.catch(() => undefined);
+    return task;
+  }
   function commit(items: GuestLine[], message: string) {
-    snapshot = { ...snapshot, items, message };
+    const changed = serializeGuestSelection(items) !== serializeGuestSelection(snapshot.items);
+    snapshot = { ...snapshot, items, revision: changed ? newGuestRevision() : snapshot.revision, message };
     persist();
-    emit();
   }
   return {
     getSnapshot: () => snapshot,
     getServerSnapshot: () => serverSnapshot,
+    whenIdle: () => queue,
     subscribe(listener: () => void) {
-      const first = listeners.size === 0;
       listeners.add(listener);
-      hydrate(first && snapshot.ready);
-      if (!stopListening) stopListening = listen((raw) => {
-        if (snapshot.storage === "memory") return;
-        const decoded = readGuestSelection(raw);
-        snapshot = { ...snapshot, ...decoded };
-        emit();
-      });
-      return () => {
-        listeners.delete(listener);
-        if (!listeners.size) { stopListening?.(); stopListening = undefined; }
-      };
+      if (!stopListening) {
+        stopListening = listen(() => { void enqueue(() => {}); });
+        void enqueue(() => {});
+      }
+      return () => { listeners.delete(listener); if (!listeners.size) { stopListening?.(); stopListening = undefined; } };
     },
-    add(productId: string) {
-      if (!snapshot.ready || !normalizeGuestItems([{ productId, quantity: 1 }])) return;
+    add(productId: string) { return enqueue(() => {
+      if (!normalizeGuestItems([{ productId, quantity: 1 }])) return;
       const existing = snapshot.items.find((item) => item.productId === productId);
       if (!existing && snapshot.items.length >= MAX_GUEST_ITEMS) {
-        snapshot = { ...snapshot, message: "Tu carrito admite hasta 50 productos distintos. Elimina uno antes de añadir otro." }; emit(); return;
+        snapshot = { ...snapshot, message: "Tu carrito admite hasta 50 productos distintos. Elimina uno antes de añadir otro." }; return;
       }
-      const items = existing ? snapshot.items.map((item) => item.productId === productId
+      commit(existing ? snapshot.items.map((item) => item.productId === productId
         ? { ...item, quantity: Math.min(MAX_GUEST_QUANTITY, item.quantity + 1) } : item)
-        : [...snapshot.items, { productId, quantity: 1 }];
-      commit(items, "Producto añadido al carrito. La disponibilidad se verifica antes de comprar.");
-    },
-    update(productId: string, quantity: number) {
-      if (!snapshot.ready || !normalizeGuestItems([{ productId, quantity }])) return;
+        : [...snapshot.items, { productId, quantity: 1 }], "Producto añadido al carrito. La disponibilidad se verifica antes de comprar.");
+    }); },
+    update(productId: string, quantity: number) { return enqueue(() => {
+      if (!normalizeGuestItems([{ productId, quantity }])) return;
       commit(snapshot.items.map((item) => item.productId === productId ? { productId, quantity } : item), "Cantidad actualizada.");
-    },
-    remove(productId: string) {
-      if (!snapshot.ready) return;
+    }); },
+    remove(productId: string) { return enqueue(() => {
       commit(snapshot.items.filter((item) => item.productId !== productId), "Producto eliminado del carrito.");
-    },
-    replace(value: readonly GuestLine[], message?: string) {
+    }); },
+    replace(value: readonly GuestLine[], message?: string, expectedSelection?: string) { return enqueue(() => {
+      if (expectedSelection !== undefined && serializeGuestSelection(snapshot.items) !== expectedSelection) return;
       const items = normalizeGuestItems(value);
-      if (!snapshot.ready || !items) return;
-      if (serializeGuestSelection(snapshot.items) === serializeGuestSelection(items)
-        && (message === undefined || message === snapshot.message)) return;
+      if (!items) return;
+      if (serializeGuestSelection(snapshot.items) === serializeGuestSelection(items) && (message === undefined || message === snapshot.message)) return;
       commit(items, message ?? snapshot.message);
-    },
+    }); },
+    beginImport(userId: string) { return enqueue(() => {
+      if (snapshot.pending) {
+        if (snapshot.pending.userId !== userId) throw new GuestImportAccountError();
+        return snapshot.pending;
+      }
+      if (!snapshot.items.length) return null;
+      const pending = { userId, importId: snapshot.revision, items: snapshot.items };
+      snapshot = { ...snapshot, pending, items: [], revision: newGuestRevision(), message: "Tu selección está pendiente de integrarse a tu cuenta." };
+      persist(); return pending;
+    }); },
+    confirmImport(userId: string, importId: string) { return enqueue(() => {
+      if (snapshot.pending?.userId === userId && snapshot.pending.importId === importId) {
+        snapshot = { ...snapshot, pending: null, message: "Tu selección se integró al carrito de tu cuenta." };
+        persist();
+      }
+    }); },
   };
 }

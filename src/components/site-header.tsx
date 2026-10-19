@@ -28,7 +28,7 @@ export function SiteHeader({
   isAdmin = false,
 }: SiteHeaderProps) {
   const guest = useGuestCart();
-  const count = isAuthenticated ? cartCount : guest.items.reduce((sum, item) => sum + item.quantity, 0);
+  const count = isAuthenticated ? cartCount : [...guest.items, ...(guest.pending?.items ?? [])].reduce((sum, item) => sum + item.quantity, 0);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 

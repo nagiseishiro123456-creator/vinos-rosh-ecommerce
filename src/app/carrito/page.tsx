@@ -1,22 +1,27 @@
+import { randomUUID } from "node:crypto";
+import type { Route } from "next";
 import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 
 import { GuestCart } from "@/components/guest-cart";
+import { CartMergeBoundary } from "@/components/cart-merge-boundary";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { calculateAmounts } from "@/modules/checkout/pricing";
 import { prisma } from "@/lib/prisma";
 import { siteConfig } from "@/lib/site";
 import { removeCartItem, updateCartItem } from "@/modules/cart/actions";
+import { safeInternalDestination } from "@/modules/auth/destination";
 
 
 export const dynamic = "force-dynamic";
 
-export default async function CartPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+export default async function CartPage({ searchParams }: { searchParams: Promise<{ error?: string; continuar?: string }> }) {
   const params = await searchParams;
   const session = await getServerSession(authOptions);
+  const continuation = safeInternalDestination(params.continuar, "/checkout");
   if (!session?.user?.id) {
     return <main className="cartPage purchaseFlow">
       <div className="catalogHeaderWrap compact"><StoreHeader /></div>
@@ -65,7 +70,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
         <StoreHeader />
       </div>
 
-      <section className="cartLayout shell">
+      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()}><section className="cartLayout shell">
         <div className="cartMain">
           <p className="eyebrow wine">TU COMPRA</p>
           <h1>Carrito</h1>
@@ -142,8 +147,8 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
           <p className="summaryNote">El costo de envío se confirmará antes del pago.</p>
 
           {items.length > 0 && !hasInvalidItems ? (
-            <Link className="button buttonPrimary fullButton" href="/checkout">
-              Continuar al checkout
+            <Link className="button buttonPrimary fullButton" href={(continuation === "/carrito" ? "/checkout" : continuation) as Route}>
+              {continuation === "/checkout" || continuation === "/carrito" ? "Continuar al checkout" : "Continuar con mi compra"}
             </Link>
           ) : (
             <button className="button buttonDisabled fullButton" type="button" disabled>
@@ -151,7 +156,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
             </button>
           )}
         </aside>
-      </section>
+      </section></CartMergeBoundary>
     </main>
   );
 }

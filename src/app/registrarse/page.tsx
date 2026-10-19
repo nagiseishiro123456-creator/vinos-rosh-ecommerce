@@ -1,14 +1,20 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { useGuestCart } from "@/components/guest-cart-provider";
+import { authenticationDestination, safeInternalDestination } from "@/modules/auth/destination";
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const guest = useGuestCart();
+  const destination = safeInternalDestination(searchParams.get("callbackUrl"));
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +32,8 @@ export default function RegisterPage() {
       password: form.get("password"),
     };
 
-    const response = await fetch("/api/auth/register", {
+    try {
+      const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -47,12 +54,16 @@ export default function RegisterPage() {
     });
 
     if (result?.ok) {
-      router.push("/mi-cuenta");
+      const selection = guest.getSnapshot();
+      router.push(authenticationDestination(destination, Boolean(selection.items.length || selection.pending)) as Route);
       router.refresh();
       return;
     }
 
     setMessage("La cuenta fue creada. Ahora inicia sesión.");
+    } catch {
+      setMessage("No pudimos completar el registro o ingreso. Revisa tu conexión; si la cuenta ya se creó, puedes iniciar sesión.");
+    }
     setLoading(false);
   }
 
@@ -101,17 +112,21 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {message ? <div className="authError">{message}</div> : null}
+          {message ? <div className="authError" role="alert">{message}</div> : null}
 
           <button className="authSubmit" disabled={loading} type="submit">
             {loading ? "Creando cuenta..." : "Crear cuenta"}
           </button>
 
           <div className="authSwitch">
-            ¿Ya tienes cuenta? <Link href="/iniciar-sesion">Inicia sesión</Link>
+            ¿Ya tienes cuenta? <Link href={`/iniciar-sesion?callbackUrl=${encodeURIComponent(destination)}`}>Inicia sesión</Link>
           </div>
         </form>
       </section>
     </main>
   );
+}
+
+export default function RegisterPage() {
+  return <Suspense fallback={<main className="authPage" aria-busy="true" />}><RegisterContent /></Suspense>;
 }

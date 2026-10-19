@@ -1,9 +1,11 @@
+import { randomUUID } from "node:crypto";
 import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { CheckoutAddressSelector } from "@/components/checkout-address-selector";
+import { CartMergeBoundary } from "@/components/cart-merge-boundary";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
@@ -39,7 +41,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
         <StoreHeader />
       </div>
 
-      <section className="checkoutShell shell">
+      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()}><section className="checkoutShell shell">
         <div className="checkoutHeading">
           <div>
             <p className="eyebrow wine">CHECKOUT · PASO 1</p>
@@ -150,7 +152,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <WhatsAppFab />
+      <WhatsAppFab /></CartMergeBoundary>
     </main>
   );
 }

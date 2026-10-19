@@ -7,10 +7,14 @@ import { signIn } from "next-auth/react";
 import { FormEvent, Suspense, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { useGuestCart } from "@/components/guest-cart-provider";
+import { authenticationDestination, safeInternalDestination } from "@/modules/auth/destination";
 
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const guest = useGuestCart();
+  const destination = safeInternalDestination(searchParams.get("callbackUrl"));
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -22,25 +26,24 @@ function LoginContent() {
     setLoading(true);
 
     const form = new FormData(event.currentTarget);
-    const result = await signIn("credentials", {
+    try {
+      const result = await signIn("credentials", {
       email: form.get("email"),
       password: form.get("password"),
       redirect: false,
     });
 
     if (result?.ok) {
-      const callbackUrl = searchParams.get("callbackUrl");
-      const safeCallback: Route =
-        callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
-          ? (callbackUrl as Route)
-          : "/mi-cuenta";
-
-      router.push(safeCallback);
+      const selection = guest.getSnapshot();
+      router.push(authenticationDestination(destination, Boolean(selection.items.length || selection.pending)) as Route);
       router.refresh();
       return;
     }
 
     setError("Correo o contraseña incorrectos.");
+    } catch {
+      setError("No pudimos completar el ingreso. Revisa tu conexión e inténtalo nuevamente.");
+    }
     setLoading(false);
   }
 
@@ -84,14 +87,14 @@ function LoginContent() {
             </div>
           </div>
 
-          {error ? <div className="authError">{error}</div> : null}
+          {error ? <div className="authError" role="alert">{error}</div> : null}
 
           <button className="authSubmit" disabled={loading} type="submit">
             {loading ? "Ingresando..." : "Iniciar sesión"}
           </button>
 
           <div className="authSwitch">
-            ¿Aún no tienes cuenta? <Link href="/registrarse">Crear cuenta</Link>
+            ¿Aún no tienes cuenta? <Link href={`/registrarse?callbackUrl=${encodeURIComponent(destination)}`}>Crear cuenta</Link>
           </div>
         </form>
       </section>
