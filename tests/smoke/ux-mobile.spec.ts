@@ -24,7 +24,10 @@ async function checkLayout(page: Page, label: string) {
 }
 
 async function checkFocusedControl(control: Locator, label: string) {
-  await control.focus(); // Native focus scrolling, rather than a screenshot-only scroll position.
+  await control.focus();
+  await control.page().keyboard.press("Shift+Tab");
+  await control.page().keyboard.press("Tab");
+  await expect(control).toBeFocused(); // Actual keyboard navigation and native focus scrolling.
   const metrics = await control.evaluate((node) => {
     const r = node.getBoundingClientRect();
     const style = getComputedStyle(node);
@@ -42,6 +45,8 @@ async function checkFocusedControl(control: Locator, label: string) {
   expect.soft(metrics.top, `${label}: above viewport`).toBeGreaterThanOrEqual(-1);
   expect.soft(metrics.bottom, `${label}: below viewport`).toBeLessThanOrEqual(metrics.viewportHeight + 1);
   expect.soft(metrics.visible, `${label}: covered at hit-test points`).toBe(true);
+  expect.soft(metrics.outline, `${label}: focus outline width`).toBeGreaterThanOrEqual(2);
+  expect.soft(metrics.outlineStyle, `${label}: focus outline style`).not.toBe("none");
 }
 
 async function checkMoneyLines(page: Page) {
@@ -79,6 +84,7 @@ test("S2-02: keyboard, unobscured controls, reading order and long money across 
     await viewportCapture(page, info, "23-carrito-foco-visible");
 
     await page.getByRole("link", { name: "Continuar al checkout" }).click();
+    await expect(page.getByRole("heading", { name: "Entrega y envío", exact: true })).toBeVisible();
     await checkLayout(page, "delivery");
     const radios = page.locator(".checkoutAddressCard input[type='radio']");
     expect.soft(await radios.count(), "addresses use native radios").toBe(2);
@@ -89,6 +95,7 @@ test("S2-02: keyboard, unobscured controls, reading order and long money across 
       await page.keyboard.press("ArrowDown");
       const nextId = await page.locator(".checkoutAddressCard input:checked").getAttribute("value");
       expect.soft(nextId).not.toBe(originalId);
+      expect.soft(await page.getByRole("link", { name: "Revisar pedido", exact: true }).getAttribute("href")).toContain(nextId);
       await expect(page.locator(".checkoutAddressCard input:checked")).toBeFocused();
       const outline = await page.locator(".checkoutAddressCard:focus-within").evaluate((n) => getComputedStyle(n).outlineStyle);
       expect.soft(outline, "address card has visible focus").not.toBe("none");

@@ -40,14 +40,16 @@ export default async function ReservedPaymentPage({ params, searchParams }: {
     invalid: "Ingresa un código de operación de entre 4 y 80 caracteres.",
     "too-many": "Se detectaron demasiados intentos. Espera unos minutos o contacta a la tienda si ya pagaste.",
   };
-  return <main className="checkoutPage">
+  return <main className="checkoutPage purchaseFlow">
     <div className="catalogHeaderWrap compact"><StoreHeader /></div>
     <section className="paymentLayout shell">
       <div className="paymentMain">
         <div className="checkoutHeading"><div>
-          <p className="eyebrow wine">PEDIDO {order.number} · PASO 3</p>
+          <p className="eyebrow wine">PAGO · PASO 3</p>
+          <p className="orderIdentifier"><span>Identificador del pedido</span><strong>{order.number}</strong></p>
           <h1>Paga tu pedido reservado</h1>
           <p>El importe de este pedido ya está confirmado. Tu reserva no representa un pago recibido.</p>
+          <p>Creado el {order.createdAt.toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</p>
         </div></div>
         {query.reserved && canReport ? <div className="orderCreatedBanner" role="status"><strong>Botellas reservadas.</strong><span>Ahora puedes pagar y comunicar la operación de este pedido.</span></div> : null}
         {query.recovered && canReport ? <div className="orderCreatedBanner" role="status"><strong>Recuperamos tu pedido existente.</strong><span>Es la misma reserva, con el mismo importe y plazo. Realiza un solo pago.</span></div> : null}

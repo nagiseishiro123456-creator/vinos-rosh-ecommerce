@@ -1,9 +1,7 @@
 .analyticsConsent {
-  position: fixed;
-  z-index: 90;
-  left: 14px;
-  right: 14px;
-  bottom: 14px;
+  position: relative;
+  width: min(1180px, calc(100% - 28px));
+  margin: 14px auto;
   padding: 18px;
   display: grid;
   gap: 15px;
@@ -46,10 +44,8 @@
 
 @media (min-width: 720px) {
   .analyticsConsent {
-    left: auto;
-    right: 24px;
-    bottom: 24px;
-    width: min(520px, calc(100vw - 48px));
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     padding: 20px;
   }
 

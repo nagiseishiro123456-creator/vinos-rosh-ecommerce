@@ -13,5 +13,5 @@ export function addMoney(...values: string[]): string {
 export function formatPrice(value: string): string {
   cents(value);
   const [whole, fraction] = value.split(".");
-  return `S/ ${new Intl.NumberFormat("es-PE").format(BigInt(whole))}.${fraction}`;
+  return `S/\u00a0${new Intl.NumberFormat("es-PE").format(BigInt(whole))}.${fraction}`;
 }

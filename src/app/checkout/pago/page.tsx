@@ -77,13 +77,13 @@ export default async function PaymentPage({ searchParams }: Props) {
   const total = amounts.total.toFixed(2);
 
   return (
-    <main className="checkoutPage">
+    <main className="checkoutPage purchaseFlow">
       <div className="catalogHeaderWrap compact">
         <StoreHeader />
       </div>
 
-      <section className="paymentLayout shell">
-        <div className="paymentMain">
+      <section className="paymentLayout paymentConfirmationLayout shell">
+        <div className="paymentConfirmationHeading">
           <div className="checkoutHeading">
             <div>
               <p className="eyebrow wine">CHECKOUT · PASO 2</p>
@@ -97,18 +97,11 @@ export default async function PaymentPage({ searchParams }: Props) {
             <div className="checkoutError" role="alert">{errorMessage(params.error)}</div>
           ) : null}
 
-          <ReservationForm
-            addressId={address.id}
-            total={total}
-            checkoutQuote={checkoutQuote}
-            checkoutKey={checkoutKey}
-            yapeEnabled={commerce.yape.ready}
-            transferEnabled={commerce.transfer.ready}
-          />
         </div>
 
-        <aside className="orderReviewCard">
-          <p className="eyebrow wine">TU PEDIDO</p>
+        <aside className="orderReviewCard" aria-labelledby="order-review-heading">
+          <p className="eyebrow wine">ANTES DE CONFIRMAR</p>
+          <h2 id="order-review-heading">Tu pedido</h2>
           <div className="orderReviewAddress">
             <strong>{address.recipient}</strong>
             <span>{address.addressLine1}</span>
@@ -129,6 +122,17 @@ export default async function PaymentPage({ searchParams }: Props) {
           <div className="summaryRow"><span>Envío a {shippingZone.district}</span><strong>{formatPrice(shippingAmount)}</strong></div>
           <div className="summaryTotal"><span>Total</span><strong>{formatPrice(total)}</strong></div>
         </aside>
+
+        <div className="paymentMain">
+          <ReservationForm
+            addressId={address.id}
+            total={total}
+            checkoutQuote={checkoutQuote}
+            checkoutKey={checkoutKey}
+            yapeEnabled={commerce.yape.ready}
+            transferEnabled={commerce.transfer.ready}
+          />
+        </div>
       </section>
 
       <WhatsAppFab />

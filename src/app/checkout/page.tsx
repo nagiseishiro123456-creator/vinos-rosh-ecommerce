@@ -34,7 +34,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
   }
 
   return (
-    <main className="checkoutPage">
+    <main className="checkoutPage purchaseFlow">
       <div className="catalogHeaderWrap compact">
         <StoreHeader />
       </div>
