@@ -127,6 +127,17 @@ body:has(.purchaseFlow) {
   color: var(--wine);
 }
 
+@media (max-width: 479px) {
+  .purchaseFlow .orderReviewItems > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .purchaseFlow .orderReviewItems strong {
+    justify-self: end;
+  }
+}
+
 @media (max-width: 979px) {
   .purchaseFlow .cartSummary {
     position: static;

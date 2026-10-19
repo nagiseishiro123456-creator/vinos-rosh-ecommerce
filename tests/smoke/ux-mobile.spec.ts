@@ -126,6 +126,8 @@ test("S2-02: keyboard, unobscured controls, reading order and long money across 
     await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 98,999,909.50");
     await checkLayout(page, "long name and near-limit total");
     await checkMoneyLines(page);
+    expect.soft(await page.locator(".orderReviewItems span").first().evaluate((n) => n.getBoundingClientRect().width),
+      "long product names retain a readable column").toBeGreaterThanOrEqual(120);
     await capture(page, info, "27-importes-y-nombre-largo");
 
     if (process.env.NEXT_PUBLIC_GA_ID) {
