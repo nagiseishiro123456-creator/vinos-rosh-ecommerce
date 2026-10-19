@@ -76,7 +76,8 @@ Header invitado refleja unidades seleccionadas, sin copiar el carrito privado de
 Sin JS se explica la limitación y se ofrecen catálogo e ingreso al carrito de cuenta.
 
 S2-03 no importa aún la selección al identificarse. La UI lo explica: al ingresar se
-abre el carrito de cuenta y la selección invitada permanece en este navegador. No se
+abre el carrito de cuenta y la selección invitada permanece si el almacenamiento funciona.
+En memoria se advierte que podría perderse al ingresar. No se
 ofrece un botón que prometa continuar automáticamente con esa selección. S2-04 debe
 definir identidad/contenido/unicidad y transacción de importación antes de cambiar ese
 comportamiento; salir/cambiar de cuenta nunca exporta el carrito privado al invitado.

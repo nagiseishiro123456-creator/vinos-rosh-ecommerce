@@ -30,7 +30,7 @@ Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 | --- | --- | ---: | --- |
 | S2-01 | Diagnosticar y documentar recorrido, estados y baseline. | 3 | Documentada y verificada en rama; integración pendiente |
 | S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | CI 67/67 y 20/20 aprobada; revisión/integración pendientes (#10) |
-| S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | Pendiente |
+| S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | CI 80/80 y 28/28 aprobada; revisión/integración pendientes (#11) |
 | S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | Pendiente; ADR y contrato antes del código |
 | S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Pendiente |
 | S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Pendiente |

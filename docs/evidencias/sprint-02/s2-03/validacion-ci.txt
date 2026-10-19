@@ -1,0 +1,13 @@
+S2-03 — CI oficial y evidencia
+Código: a71c295a4e1a8bcca52f826846c951e7944b7db2
+Run: 39332792422
+Job validate: 118334826891
+URL: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39332792422
+Conclusión: success. Servidor 80/80; navegador 28/28.
+Node 22.23.3 / npm 11.9.0 / PostgreSQL 16 / build habitual / Playwright 1.64.1.
+Tipos/lint/build aprobados; 10 migraciones, tres contratos SQL; producción: 0 hallazgos.
+Artefacto 12224354833; ZIP SHA-256: 3d4bf6d64adcb8d6e2a0edbca5a91397fac4575b757d9d59bb7415cf66be462e.
+22 PNG originales conservados; dimensiones, timestamps y hashes en manifest.json.
+Fixtures sintéticos: sin stock reservado, pagos reales, merge o acciones en Render.
+La captura de cuenta sin JS prueba formularios con sesión existente; no promete ingreso sin JS.
+Lectores de pantalla, contraste medido, zoom y Safari/Firefox no ejecutados.

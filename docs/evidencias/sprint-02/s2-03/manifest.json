@@ -1,0 +1,280 @@
+{
+  "story": "S2-03",
+  "review_date": "2026-10-19",
+  "timezone": "America/Lima",
+  "source_commit": "a71c295a4e1a8bcca52f826846c951e7944b7db2",
+  "source_kind": "Original Playwright screenshots from the compiled application in isolated GitHub Actions QA",
+  "ci": {
+    "run_id": 39332792422,
+    "job_id": 118334826891,
+    "conclusion": "success",
+    "artifact_id": 12224354833,
+    "artifact_name": "sprint-01-smoke-39332792422",
+    "artifact_sha256": "3d4bf6d64adcb8d6e2a0edbca5a91397fac4575b757d9d59bb7415cf66be462e",
+    "artifact_expires_at": "2026-11-02T22:11:25Z"
+  },
+  "toolchain": {
+    "node": "22.23.3",
+    "npm": "11.9.0",
+    "next": "16.3.8",
+    "build": "next build",
+    "database": "PostgreSQL 16",
+    "playwright": "1.64.1",
+    "browser": "Chrome for Testing 156.0.8078.4, Chromium v1248"
+  },
+  "projects": {
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "small-mobile": [
+      320,
+      740
+    ],
+    "tablet": [
+      768,
+      1024
+    ]
+  },
+  "checks": {
+    "server": "80/80",
+    "browser": "28/28",
+    "migrations": 10,
+    "sql_contracts": 3,
+    "types_lint_build": "success",
+    "production_audit": "0 vulnerabilities"
+  },
+  "motion_preference_new_cases": "reduce",
+  "timestamps_note": "ZIP entry timestamps from the UTC CI runner; file copies preserve PNG bytes, not local mtimes.",
+  "images": [
+    {
+      "file": "ci-desktop-30-invitado-agregado.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-desktop/30-invitado-agregado.png",
+      "bytes": 199972,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "b5683b21a1a3c3d68d4b5cb6763117eefa6a21d8da9db38c88bf5f47636c13c6",
+      "archive_timestamp_utc": "2026-10-19T22:10:16+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:16-05:00"
+    },
+    {
+      "file": "ci-desktop-31-invitado-ajuste-servidor.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-desktop/31-invitado-ajuste-servidor.png",
+      "bytes": 205586,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "11f4025f5f4c1bd0abb771871e1073efbe65ca5563ce494683d4dd29c55f6d2f",
+      "archive_timestamp_utc": "2026-10-19T22:10:18+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:18-05:00"
+    },
+    {
+      "file": "ci-desktop-32-invitado-producto-retirado.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-desktop/32-invitado-producto-retirado.png",
+      "bytes": 153812,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "07b63d6da43ca8b4c53b7b320e96d2b07b1850658ad39c315126f9223f3c9139",
+      "archive_timestamp_utc": "2026-10-19T22:10:18+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:18-05:00"
+    },
+    {
+      "file": "ci-desktop-33-invitado-recuperacion-formato.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/33-invitado-recuperacion-formato.png",
+      "bytes": 157637,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "362e225bd0bff0aa62eb7051ae0f991ce0c7568e07930d2d99bbaad7d80d5815",
+      "archive_timestamp_utc": "2026-10-19T22:10:18+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:18-05:00"
+    },
+    {
+      "file": "ci-desktop-34-invitado-memoria.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/34-invitado-memoria.png",
+      "bytes": 215243,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "756a195e9faabc248d6c9dd815e2ef526ba94068e94390c086b1fa93872bdf92",
+      "archive_timestamp_utc": "2026-10-19T22:10:20+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:20-05:00"
+    },
+    {
+      "file": "ci-desktop-35-invitado-error-red.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/35-invitado-error-red.png",
+      "bytes": 187618,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e81dd84394dfecc59895a145e08141074f0d841872331cc0317a70fecc040559",
+      "archive_timestamp_utc": "2026-10-19T22:10:20+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:20-05:00"
+    },
+    {
+      "file": "ci-desktop-36-cuenta-formulario-nativo.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/36-cuenta-formulario-nativo.png",
+      "bytes": 172503,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "f1de96b950adb621d99b9912b73378af4f873deff7197083912871e123326c59",
+      "archive_timestamp_utc": "2026-10-19T22:10:22+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:22-05:00"
+    },
+    {
+      "file": "ci-desktop-37-invitado-cuota.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/37-invitado-cuota.png",
+      "bytes": 219351,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "339905a9fed1497d0172d4bbd60e7ec39954d452af7a4e166de4ee1c2a69298b",
+      "archive_timestamp_utc": "2026-10-19T22:10:20+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:20-05:00"
+    },
+    {
+      "file": "ci-desktop-38-invitado-sin-javascript.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/38-invitado-sin-javascript.png",
+      "bytes": 123695,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "6305ddc771a889b7494741cc142fa39986ebac03587dcc2f25964ccda5f82e00",
+      "archive_timestamp_utc": "2026-10-19T22:10:22+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:22-05:00"
+    },
+    {
+      "file": "ci-mobile-30-invitado-agregado.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-mobile/30-invitado-agregado.png",
+      "bytes": 125542,
+      "width": 390,
+      "height": 1240,
+      "sha256": "1fedaf1ebd99091f790c3c7c98732568c7e172cd3586d4a3f6c61451e7cd0646",
+      "archive_timestamp_utc": "2026-10-19T22:10:50+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:50-05:00"
+    },
+    {
+      "file": "ci-mobile-31-invitado-ajuste-servidor.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-mobile/31-invitado-ajuste-servidor.png",
+      "bytes": 130891,
+      "width": 390,
+      "height": 1303,
+      "sha256": "a3122f3a3baecdda636f54eefe8a291917a06be99754721bca5080f1df961bff",
+      "archive_timestamp_utc": "2026-10-19T22:10:50+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:50-05:00"
+    },
+    {
+      "file": "ci-mobile-32-invitado-producto-retirado.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-mobile/32-invitado-producto-retirado.png",
+      "bytes": 85897,
+      "width": 390,
+      "height": 993,
+      "sha256": "3b3171c78d2665892bf9b067d1cf69ec3ff6357a57d6210a44be7aa6584e6ea4",
+      "archive_timestamp_utc": "2026-10-19T22:10:50+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:50-05:00"
+    },
+    {
+      "file": "ci-mobile-33-invitado-recuperacion-formato.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/33-invitado-recuperacion-formato.png",
+      "bytes": 91122,
+      "width": 390,
+      "height": 1044,
+      "sha256": "b80a23da8329cc0ac5bef6467d0c98ef5647e90ef71e9462c7b368366727323d",
+      "archive_timestamp_utc": "2026-10-19T22:10:52+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:52-05:00"
+    },
+    {
+      "file": "ci-mobile-34-invitado-memoria.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/34-invitado-memoria.png",
+      "bytes": 140942,
+      "width": 390,
+      "height": 1417,
+      "sha256": "3b8e5d9bfc00a855f2d8742443bda96d7b679013d21d3ab8da7fd0b28a059ae8",
+      "archive_timestamp_utc": "2026-10-19T22:10:52+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:52-05:00"
+    },
+    {
+      "file": "ci-mobile-35-invitado-error-red.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/35-invitado-error-red.png",
+      "bytes": 118658,
+      "width": 390,
+      "height": 1406,
+      "sha256": "52fabf8462c4674106eab047dfad2c32ca3d16ae88b621a1dae9c2bb7080d206",
+      "archive_timestamp_utc": "2026-10-19T22:10:54+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:54-05:00"
+    },
+    {
+      "file": "ci-mobile-36-cuenta-formulario-nativo.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/36-cuenta-formulario-nativo.png",
+      "bytes": 98629,
+      "width": 390,
+      "height": 977,
+      "sha256": "373df09f2f28a0bf5bbc6b57a98d6a51cc9d922e4dba107a349b186e73ed5774",
+      "archive_timestamp_utc": "2026-10-19T22:10:54+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:54-05:00"
+    },
+    {
+      "file": "ci-mobile-37-invitado-cuota.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/37-invitado-cuota.png",
+      "bytes": 145658,
+      "width": 390,
+      "height": 1442,
+      "sha256": "f7543466bc493f330b78b7cf25d1eb0e0c8df065a54698d4ed9b3ab4490331f7",
+      "archive_timestamp_utc": "2026-10-19T22:10:52+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:52-05:00"
+    },
+    {
+      "file": "ci-mobile-38-invitado-sin-javascript.png",
+      "archive_path": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/38-invitado-sin-javascript.png",
+      "bytes": 58641,
+      "width": 390,
+      "height": 844,
+      "sha256": "f5acf6c62ced868cc10c607e354ecdb0c6bd24d1e6eda8194e705e4975fdd8e0",
+      "archive_timestamp_utc": "2026-10-19T22:10:54+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:10:54-05:00"
+    },
+    {
+      "file": "ci-small-mobile-30-invitado-agregado.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-small-mobile/30-invitado-agregado.png",
+      "bytes": 121186,
+      "width": 320,
+      "height": 1304,
+      "sha256": "427f1db4411e8909a0d5675d71bef842ff7bba2ca512341b1a41f15608e80d27",
+      "archive_timestamp_utc": "2026-10-19T22:11:08+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:11:08-05:00"
+    },
+    {
+      "file": "ci-small-mobile-31-invitado-ajuste-servidor.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-small-mobile/31-invitado-ajuste-servidor.png",
+      "bytes": 126517,
+      "width": 320,
+      "height": 1368,
+      "sha256": "488aef892ad2535aac361b8d4821537566b414b62ee02b1ac7a9ea4582d2e5ff",
+      "archive_timestamp_utc": "2026-10-19T22:11:08+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:11:08-05:00"
+    },
+    {
+      "file": "ci-tablet-30-invitado-agregado.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-tablet/30-invitado-agregado.png",
+      "bytes": 153133,
+      "width": 768,
+      "height": 1109,
+      "sha256": "50faa0ec736450272c73ff51ebd106b6c464647a0f086ea800cecada52b72e06",
+      "archive_timestamp_utc": "2026-10-19T22:11:16+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:11:16-05:00"
+    },
+    {
+      "file": "ci-tablet-31-invitado-ajuste-servidor.png",
+      "archive_path": "test-results/guest-cart-S2-03-guest-sel-2200f--separate-from-account-cart-tablet/31-invitado-ajuste-servidor.png",
+      "bytes": 158494,
+      "width": 768,
+      "height": 1147,
+      "sha256": "1c77d030b86d7e94383063d4394c0e4107eb40a0d1327d1b7ce6a9bba7780003",
+      "archive_timestamp_utc": "2026-10-19T22:11:18+00:00",
+      "archive_timestamp_lima": "2026-10-19T17:11:18-05:00"
+    }
+  ],
+  "visual_review": {
+    "images_reviewed": 22,
+    "date": "2026-10-19",
+    "notes": "Desktop/mobile states, 320/768 layouts, storage/network warnings, no-JS guest fallback and authenticated native forms reviewed."
+  }
+}

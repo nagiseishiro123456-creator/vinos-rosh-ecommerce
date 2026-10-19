@@ -17,7 +17,8 @@ Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, aute
 
 Estado comprobado al iniciar Sprint 2 (2026-10-18): Sprint 1 integrado en main
 `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`; Motion y carrito invitado/lateral siguen
-sin implementar. [Diseño propuesto de Sprint 2](ux/sprint-02-recorrido-compra.md).
+sin implementar en esa base. [Diseño de Sprint 2](ux/sprint-02-recorrido-compra.md).
+La evolución posterior se documenta al final de este archivo y en los PR dependientes.
 
 ## Ejecución del backend
 Server Actions (`src/modules/*/actions.ts`) para operaciones de formularios;
@@ -139,3 +140,17 @@ la referencia de devolución íntegra externa. Ni abrir ni cerrar conciliación 
 estado comercial o inventario. Un caso por pago, sin edición del importe ni reasignación
 de referencias. No hay pasarela, comisión ni servicio adicional con este flujo.
 El historial incluye comunicación de pago, cancelación y vencimiento desde esta entrega.
+
+## Carrito invitado — S2-03 (rama de PR #11)
+
+[ADR 0006](decisions/0006-carrito-invitado.md), [QA](testing/s2-03-carrito-invitado.md).
+Un proveedor cliente pequeño comparte una selección de IDs/cantidades y usa
+useSyncExternalStore para hidratar/persistir sin incluir Prisma o consultas en el cliente.
+Las páginas de catálogo/producto y el carrito de cuenta siguen renderizándose en servidor.
+`POST /api/cart/preview` valida y consulta catálogo en lote, con precios/aritmética del
+servidor. No crea un carrito de BD ni reserva stock; solo el limitador utiliza su tabla.
+
+El visitante edita su selección local y puede recuperarse ante almacenamiento o red
+fallidos. Los importes no verificados se identifican como pendientes. Las Server Actions
+de cuenta y el checkout mantienen sus reglas y permisos. S2-04 definirá/importará la
+selección de forma transaccional e idempotente; todavía no se efectúa esa unión.

@@ -3,7 +3,7 @@
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
 Estado: S2-01 documentada; S2-02 verificada por CI, revisión/integración pendientes;
-S2-03–S2-06 pendientes de implementación.
+S2-03 verificada por CI; S2-04–S2-06 pendientes de implementación.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
 ## Sprint Goal
@@ -172,4 +172,6 @@ aislado no equivalen a certificación completa de accesibilidad ni a aceptación
 - S2-02: implementada en PR #10; [QA](../testing/s2-02-ux-movil.md) y
   [capturas antes/después](../evidencias/sprint-02/s2-02/README.md). CI oficial aprobada:
   67/67 servidor y 20/20 navegador; revisión/integración pendientes.
-- S2-03–S2-06: pendientes. Siguiente acción: ADR y código del carrito invitado (S2-03).
+- S2-03: ADR 0006 e implementación en PR #11; [QA aprobada](../testing/s2-03-carrito-invitado.md):
+  80/80 servidor y 28/28 navegador, 22 capturas conservadas; integración pendiente.
+- S2-04–S2-06: pendientes. Siguiente acción: ADR de unión antes del código de S2-04.
