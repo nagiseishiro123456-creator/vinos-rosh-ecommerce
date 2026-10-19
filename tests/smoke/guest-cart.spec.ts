@@ -150,6 +150,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
 
     const blocked = await open("blocked"); await addGuest(blocked);
     await expect(blocked.locator(".guestCart").getByRole("alert")).toContainText("No podemos guardar tu selección");
+    await expect(blocked.getByText(/Esta selección no se guardó/)).toBeVisible();
     await blocked.locator(".guestCart input[name=quantity]").fill("2");
     await blocked.getByRole("button", { name: "Actualizar", exact: true }).click();
     await expect(blocked.locator(".summaryTotal strong")).toHaveText("S/ 59.80");
@@ -158,6 +159,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
 
     const quota = await open("quota"); await addGuest(quota);
     await expect(quota.locator(".guestCart").getByRole("alert")).toContainText("No podemos guardar tu selección");
+    await expect(quota.getByText(/Esta selección no se guardó/)).toBeVisible();
     await quota.evaluate(() => { localStorage.removeItem("rosh-analytics-consent-v1"); window.dispatchEvent(new Event("rosh-analytics-consent-change")); });
     if (process.env.NEXT_PUBLIC_GA_ID) {
       await quota.getByRole("button", { name: "Rechazar", exact: true }).click();

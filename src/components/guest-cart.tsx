@@ -34,7 +34,7 @@ function GuestQuantity({ productId, name, quantity, update }: {
 }
 
 export function GuestCart() {
-  const { items, ready, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
+  const { items, ready, storage, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
   const [revision, setRevision] = useState(0);
   const [validation, setValidation] = useState<Validation | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -133,7 +133,9 @@ export function GuestCart() {
         {items.length > 0 ? <>
           <button className="button guestRefresh fullButton" type="button" onClick={() => setRevision((value) => value + 1)}>Actualizar precios y disponibilidad</button>
           <Link className="button buttonPrimary fullButton" href="/iniciar-sesion?callbackUrl=/carrito">Ingresar a mi cuenta</Link>
-          <p className="summaryNote">Al ingresar verás el carrito de tu cuenta. Esta selección como invitado permanece en este navegador.</p>
+          <p className="summaryNote">Al ingresar verás el carrito de tu cuenta. {storage === "memory"
+            ? "Esta selección no se guardó. Podrías perderla al ingresar."
+            : "Esta selección como invitado permanece en este navegador."}</p>
         </> : null}
       </aside>
     </section>
