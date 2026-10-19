@@ -82,15 +82,18 @@ export function GuestCart() {
   const subtotal = ready && items.length === 0 ? "0.00" : quote?.subtotal;
 
   return (
-    <section className="cartLayout shell guestCart" aria-busy={!ready || pending}>
+    <section className="cartLayout shell guestCart" aria-busy={ready ? pending : undefined}>
       <div className="cartMain">
         <p className="eyebrow wine">TU SELECCIÓN</p>
         <h1 ref={heading} tabIndex={-1}>Carrito</h1>
         <p className="guestCartIntro">Selecciona tus productos sin iniciar sesión. Añadirlos no reserva disponibilidad.</p>
         {warning ? <p className="checkoutError" role="alert">{warning}</p> : null}
         <p className="guestCartStatus" role="status" aria-live="polite">{message}</p>
-        <noscript><p className="checkoutError">El carrito invitado necesita JavaScript. Puedes explorar el catálogo o <Link href="/iniciar-sesion?callbackUrl=/carrito">ir al ingreso de tu cuenta</Link>.</p></noscript>
-        {!ready ? <p role="status">Recuperando tu selección…</p> : null}
+        <noscript>
+          <style>{".guestCart .guestLoading, .guestCart .cartSummary { display: none; }"}</style>
+          <p className="checkoutError">El carrito invitado necesita JavaScript. Puedes <Link href="/productos">explorar el catálogo</Link> o <Link href="/iniciar-sesion?callbackUrl=/carrito">ir al ingreso de tu cuenta</Link>.</p>
+        </noscript>
+        {!ready ? <p className="guestLoading" role="status">Recuperando tu selección…</p> : null}
         {error ? <div className="checkoutError" role="alert"><p>{error}</p>
           <button className="button buttonDark" type="button" onClick={() => setRevision((value) => value + 1)}>Reintentar verificación</button></div> : null}
         {ready && !items.length ? (

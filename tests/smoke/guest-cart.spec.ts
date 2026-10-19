@@ -176,7 +176,11 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
     await expect(network.locator(".summaryTotal strong")).toHaveText("S/ 29.90");
 
     const native = await open("nojs"); await native.goto("/carrito");
-    await expect(native.getByText("El carrito invitado necesita JavaScript.", { exact: false })).toBeVisible();
+    await expect(native.locator("noscript .checkoutError")).toBeVisible();
+    await expect(native.locator("noscript .checkoutError")).toContainText("El carrito invitado necesita JavaScript.");
+    await expect(native.locator(".guestLoading")).toBeHidden();
+    await expect(native.locator(".cartSummary")).toBeHidden();
+    await capture(native, info, "38-invitado-sin-javascript");
     await native.goto(productPath);
     await expect(native.getByRole("button", { name: "Agregar al carrito", exact: true })).toBeDisabled();
     await loginCustomer(network);
