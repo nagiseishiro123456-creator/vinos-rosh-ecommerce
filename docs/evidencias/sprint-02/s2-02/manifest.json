@@ -1,0 +1,253 @@
+{
+  "story": "S2-02",
+  "review_date": "2026-10-19",
+  "timezone": "America/Lima",
+  "source_commit": "8c6fc0e2ae8602a39e8bc2cfd72ff6366836b215",
+  "source_kind": "Playwright local sobre la aplicación compilada; datos sintéticos",
+  "build": "Next.js 16.3.8 webpack",
+  "node": "24.19.0",
+  "browser": "Chromium 153.0.0 (@sparticuz/chromium)",
+  "database": "PGlite 0.5.10 con pglite-socket 0.2.13; instancia efímera aislada; no sustituye PostgreSQL 16 para concurrencia",
+  "viewport_projects": {
+    "small-mobile": [
+      320,
+      740
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "tablet": [
+      768,
+      1024
+    ],
+    "desktop": [
+      1440,
+      1000
+    ]
+  },
+  "ui_result": "8/8 casos aprobados: baseline y dinero en escritorio/móvil, UX en cuatro tamaños",
+  "motion_preference_ux_cases": "reduce",
+  "ci_run_id": 39284101122,
+  "ci_status_when_documented": "queued",
+  "images": [
+    {
+      "file": "local-desktop-03-producto-qa.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-desktop/03-producto-qa.png",
+      "bytes": 574785,
+      "width": 1440,
+      "height": 1664,
+      "sha256": "00cfcf1b0b777eea3f20c47aa301e5d937687f891664703d59e437f2056bae60",
+      "captured_at": "2026-10-19T11:18:01.445684-05:00"
+    },
+    {
+      "file": "local-desktop-04-acceso.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-desktop/04-acceso.png",
+      "bytes": 351863,
+      "width": 1440,
+      "height": 1147,
+      "sha256": "2100ae6d67cddd5f32d84765184472e5cce8334c8a413de320d805f382dee531",
+      "captured_at": "2026-10-19T11:18:02.085696-05:00"
+    },
+    {
+      "file": "local-mobile-03-producto-qa.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-mobile/03-producto-qa.png",
+      "bytes": 285891,
+      "width": 390,
+      "height": 2151,
+      "sha256": "f646b054b2cab02faad8d239c50bd236968f44586fb29bdfbdbd8b4df4a5fb1f",
+      "captured_at": "2026-10-19T11:18:21.290064-05:00"
+    },
+    {
+      "file": "local-mobile-04-acceso.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-mobile/04-acceso.png",
+      "bytes": 155007,
+      "width": 390,
+      "height": 1305,
+      "sha256": "06f78c764d51be082b6abc42fb548ad4acc5db26777b22baf6795d03d66faa09",
+      "captured_at": "2026-10-19T11:18:21.574069-05:00"
+    },
+    {
+      "file": "local-desktop-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/05-carrito-exacto.png",
+      "bytes": 201663,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "3255e7b3a2bd8167b0ccfa4a953f13956154092c11cc407791345a8f2db2fc1c",
+      "captured_at": "2026-10-19T11:18:04.457741-05:00"
+    },
+    {
+      "file": "local-desktop-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/06-entrega-exacta.png",
+      "bytes": 274201,
+      "width": 1440,
+      "height": 1396,
+      "sha256": "fb1c4b29b3931c2fe8579b937fa81aee0ccc173378bb0468981f941cac4ce563",
+      "captured_at": "2026-10-19T11:18:05.129753-05:00"
+    },
+    {
+      "file": "local-desktop-07-confirmacion-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/07-confirmacion-exacta.png",
+      "bytes": 286059,
+      "width": 1440,
+      "height": 1487,
+      "sha256": "bf0c74fab0a42fbd7fdc8f273526905bb4b21c7638920bb142d87eeff0429042",
+      "captured_at": "2026-10-19T11:18:05.737765-05:00"
+    },
+    {
+      "file": "local-desktop-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/08-resumen-actualizado.png",
+      "bytes": 297868,
+      "width": 1440,
+      "height": 1591,
+      "sha256": "0a39eeee850e0f2e589ad1c53298ced6e5ed3d7170271f6abb87a2db60471d2c",
+      "captured_at": "2026-10-19T11:18:06.753786-05:00"
+    },
+    {
+      "file": "local-desktop-09-reserva-confirmada.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/09-reserva-confirmada.png",
+      "bytes": 388369,
+      "width": 1440,
+      "height": 1549,
+      "sha256": "999af4f8d635412ad97ef01636399fbf24aac5b28706bc12979ddca220d5b808",
+      "captured_at": "2026-10-19T11:18:07.917809-05:00"
+    },
+    {
+      "file": "local-desktop-10-operacion-en-revision.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/10-operacion-en-revision.png",
+      "bytes": 255005,
+      "width": 1440,
+      "height": 1276,
+      "sha256": "36d01ebb51e70f3bf3bddfbfcbb9f5218e635aa4332f93cb7a130c29da6d6330",
+      "captured_at": "2026-10-19T11:18:09.121832-05:00"
+    },
+    {
+      "file": "local-mobile-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/05-carrito-exacto.png",
+      "bytes": 124547,
+      "width": 390,
+      "height": 1261,
+      "sha256": "e82a1f72dfc6071fc4428f199de811d4f5d25ac3406c28507e098547140ba9d5",
+      "captured_at": "2026-10-19T11:18:23.422105-05:00"
+    },
+    {
+      "file": "local-mobile-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/06-entrega-exacta.png",
+      "bytes": 191478,
+      "width": 390,
+      "height": 2313,
+      "sha256": "93948013e79f29e4dfd07fb5272151700e7863bb1801208496b0144962aa283d",
+      "captured_at": "2026-10-19T11:18:23.718110-05:00"
+    },
+    {
+      "file": "local-mobile-07-confirmacion-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/07-confirmacion-exacta.png",
+      "bytes": 201283,
+      "width": 390,
+      "height": 2321,
+      "sha256": "1e603d93b39fd7fab903f588a6a771f1539aa4eb1dc3b20a0d0f93466279b844",
+      "captured_at": "2026-10-19T11:18:24.202120-05:00"
+    },
+    {
+      "file": "local-mobile-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/08-resumen-actualizado.png",
+      "bytes": 214804,
+      "width": 390,
+      "height": 2499,
+      "sha256": "44dd6c9eae7c621dfbeaa92175aafea35f40ebc421f75c72147c0c06136b4e66",
+      "captured_at": "2026-10-19T11:18:24.574127-05:00"
+    },
+    {
+      "file": "local-mobile-09-reserva-confirmada.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/09-reserva-confirmada.png",
+      "bytes": 268994,
+      "width": 390,
+      "height": 2300,
+      "sha256": "3f11f0437f4c0db6dd463c369e90a9abe9813c9222cfcf653ead36a8e62c542f",
+      "captured_at": "2026-10-19T11:18:24.990135-05:00"
+    },
+    {
+      "file": "local-mobile-10-operacion-en-revision.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/10-operacion-en-revision.png",
+      "bytes": 175073,
+      "width": 390,
+      "height": 1984,
+      "sha256": "f7e3d64e836efa14c13eef4553562df86869e4cb29106228c543c8d134011aa9",
+      "captured_at": "2026-10-19T11:18:26.498163-05:00"
+    },
+    {
+      "file": "local-desktop-24-direccion-teclado.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-desktop/24-direccion-teclado.png",
+      "bytes": 238245,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e53001d6cab13a2a011a3507376f19fe051626bc0702bd70119f23f2117a186a",
+      "captured_at": "2026-10-19T11:18:14.525935-05:00"
+    },
+    {
+      "file": "local-mobile-28-consentimiento-sin-superposicion.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-mobile/28-consentimiento-sin-superposicion.png",
+      "bytes": 65185,
+      "width": 390,
+      "height": 844,
+      "sha256": "0b85abea6452f69be8e616a06397e3b742579c61af64b56d4fd1be4b02ff272b",
+      "captured_at": "2026-10-19T11:18:31.194253-05:00"
+    },
+    {
+      "file": "local-small-mobile-26-confirmacion-responsive.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-small-mobile/26-confirmacion-responsive.png",
+      "bytes": 171799,
+      "width": 320,
+      "height": 2188,
+      "sha256": "ffff91e0de058413ca40df25a840f63fe5d552eb93940f3d057095dce99c9bd8",
+      "captured_at": "2026-10-19T11:18:38.322389-05:00"
+    },
+    {
+      "file": "local-small-mobile-27-importes-y-nombre-largo.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-small-mobile/27-importes-y-nombre-largo.png",
+      "bytes": 183385,
+      "width": 320,
+      "height": 2260,
+      "sha256": "272e685e46476b596dd4b4cbc61b654021739af58b664cb33b66abcdb9bb6609",
+      "captured_at": "2026-10-19T11:18:39.314408-05:00"
+    },
+    {
+      "file": "local-tablet-26-confirmacion-responsive.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-tablet/26-confirmacion-responsive.png",
+      "bytes": 206355,
+      "width": 768,
+      "height": 1809,
+      "sha256": "bafd673ca0d87c5cfa9bde4fc39826a8e6602401dc25945381d23fd6fc237d72",
+      "captured_at": "2026-10-19T11:18:48.622585-05:00"
+    },
+    {
+      "file": "local-tablet-27-importes-y-nombre-largo.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-tablet/27-importes-y-nombre-largo.png",
+      "bytes": 218587,
+      "width": 768,
+      "height": 1833,
+      "sha256": "ebef1d8d0433c31ae3f06b67d6e0d7a15419c3e3cdd9f3a0941699ce39a68291",
+      "captured_at": "2026-10-19T11:18:49.070593-05:00"
+    },
+    {
+      "file": "local-desktop-21-inicio-consentimiento.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-desktop/21-inicio-consentimiento.png",
+      "capture_area": "Recorte de navegador: banner y header, sin edición de imagen",
+      "bytes": 100437,
+      "width": 1440,
+      "height": 225,
+      "sha256": "ed6e7a6df6f04da9cfc2a0a217f4e3487652204f508ab518c9642ea8390d09ba",
+      "captured_at": "2026-10-19T11:18:10.457858-05:00"
+    },
+    {
+      "file": "local-mobile-22-catalogo-consentimiento.png",
+      "source": "test-results/ux-mobile-S2-02-keyboard-u-7125f-ey-across-the-purchase-flow-mobile/22-catalogo-consentimiento.png",
+      "capture_area": "Recorte de navegador: banner y header, sin edición de imagen",
+      "bytes": 52909,
+      "width": 390,
+      "height": 353,
+      "sha256": "629304c5cdfca1e8e8dcf062398d03194b8dc2b26981c8b3703539c5c2cad3d1",
+      "captured_at": "2026-10-19T11:18:28.018193-05:00"
+    }
+  ]
+}

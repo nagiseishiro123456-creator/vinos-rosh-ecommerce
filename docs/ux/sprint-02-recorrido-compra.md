@@ -125,3 +125,13 @@ Reproducir con viewport/scroll reales UX-201/202/203/207, corregir jerarquía y 
 sin alterar totales/stock, capturar los mismos ocho estados antes/después y añadir
 aserciones pertinentes de layout/foco. Guardar resultados y defectos nuevos en QA de
 S2-02, actualizar progreso y revisar el PR antes de seguir con carrito invitado.
+
+## Actualización S2-02 — 2026-10-19
+
+Las observaciones anteriores conservan la base del diagnóstico. S2-02 implementa
+correcciones de UX-201/202/203/207/209 en una rama dependiente de S2-01. Header y
+ayuda en flujo; barra inferior oculta en el embudo; consentimiento sin posición fija;
+resumen anterior al formulario; radios nativos y foco; dinero sin cortes y nombres
+con espacio legible. No se alteran números históricos ni lógica transaccional.
+[Resultados, límites y CI pendiente](../testing/s2-02-ux-movil.md).
+Los hallazgos de carrito invitado/unión/panel siguen pendientes para sus historias.

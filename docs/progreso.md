@@ -1,14 +1,18 @@
 # Punto de avance
 
-- Fase: 2. Sprint: 2. S2-01 documentada y verificada en rama (3 SP); restantes historias pendientes.
-- Fecha de este punto de avance: 2026-10-18 (America/Lima).
+- Fase: 2. Sprint: 2. S2-01 documentada (3 SP); S2-02 implementada (3 SP), CI pendiente.
+- Fecha de este punto de avance: 2026-10-19 (America/Lima).
 - Inicio de Sprint 2 autorizado tras la propuesta de seis historias (26 SP preliminares).
 - Base: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, Sprint 1 integrado por PR #3–#8.
 - CI final de esa base: [39096709609](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39096709609),
   67/67 pruebas, 16/16 casos de navegador y checks completos aprobados.
-- Rama de entrega: `fase-2/sprint-02-recorrido-base`; integración pendiente. Los checks y
-  el resultado de CI de esta entrega se registran en su PR.
-- Alcance actual: documentos y capturas base; sin cambios en UI, lógica, dependencias ni esquema.
+- Rama de entrega: `fase-2/sprint-02-ux-movil`, [PR #10](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/10),
+  basado en S2-01 `97042fd…` / PR #9. Ambos pendientes de integración.
+- S2-02: resumen antes del formulario, navegación/ayuda en flujo, importes indivisibles,
+  radios nativos y foco/acciones de tamaño usable. No cambia lógica transaccional ni esquema.
+- Verificación local: tipos/lint, 5/5 pruebas de dinero y build webpack; 8/8 casos UI
+  a cuatro tamaños. 24 capturas nuevas revisadas, con fuente y hashes conservados.
+  CI oficial en cola al documentar: no se declara aprobada ni se cierra la historia todavía.
 - Render no se reanuda ni despliega. La aceptación comercial/UAT no se infiere del inicio del sprint.
 
 ## S2-01 — Recorrido y referencia visual
@@ -22,6 +26,19 @@ No son nuevas capturas de una interfaz modificada; las 56 históricas del Sprint
 Prioridades: overlays móviles, resumen posterior al botón, cortes de moneda, radios de
 dirección y continuidad de registro. `En revisión`/`Boleta` ya están traducidos. El carrito
 invitado, su unión y el panel lateral son propuestas para S2-03–S2-05, aún sin implementar.
+
+## S2-02 — Cambios de UI y comprobación local
+
+[QA y límites](testing/s2-02-ux-movil.md) · [Antes/después](evidencias/sprint-02/s2-02/README.md).
+Los ocho estados de S2-01 se comparan con nuevas capturas locales y casos de 320/768 px,
+teclado, consentimiento e importes largos. La fuente y los resultados están en el manifiesto.
+El banner opcional de QA ahora está activado con un ID ficticio y se presenta en flujo;
+su presencia difiere de la base anterior y no representa una métrica de conversión.
+
+Entorno alternativo temporal: Node 24, webpack, Chromium 153 y PGlite aislado, sin nuevas
+dependencias del producto. No prueba concurrencia PostgreSQL 16. La comprobación oficial
+requiere la CI habitual de Node 22/Turbopack/PostgreSQL 16, aún pendiente en los checks del PR.
+No se obtuvieron resultados de una supuesta CI roja: el run inicial tampoco salió de cola.
 
 ## S1-01 conservada
 Instalación reproducible, 7 migraciones, 15 pruebas y 2 smoke aprobados en su entrega.
@@ -87,10 +104,10 @@ reanudaciones, cambios de configuración ni migraciones remotas. El build config
 en Render todavía usa `npm install`: sincronizar antes de un futuro despliegue.
 
 ## Siguiente acción
-S2-02: reproducir overlays con scroll/foco reales y corregir jerarquía móvil, importes y
-selección de direcciones. Mantener reglas de dinero/reserva y rutas del checkout.
-Comparar con los ocho estados del baseline, añadir pruebas pertinentes y documentar
-el antes/después. Antes de S2-03/S2-04: ADR de persistencia/estado y unión idempotente.
+Completar la CI oficial de S2-02 y revisar cualquier fallo antes de dar por terminada
+la historia o integrar. El PR permanece en borrador mientras falte esa comprobación.
+Después: S2-03, ADR de persistencia/estado antes del carrito invitado; ADR de unión
+idempotente antes de S2-04. Mantener dinero/reserva y rutas del checkout.
 Durante cada historia: decisiones y estados en el PR. Al cerrar: QA, capturas con fuente,
 backlog y este archivo. Motion sigue pendiente para S2-05; Home inmersivo queda en Sprint 5.
 
@@ -99,8 +116,9 @@ backlog y este archivo. Motion sigue pendiente para S2-05; Home inmersivo queda 
 - Docker y PowerShell no ejecutados en este contenedor; ver límites de S1-01.
 - Dependencias de desarrollo revisadas: 5 avisos altos propagados desde braces, sin parche publicado.
   Auditoría de producción: 0. Seguimiento antes del lanzamiento, sin downgrade incompatible de Next.
-- Ajustes móviles y de accesibilidad registrados en el diagnóstico S2-01. Separar el ID de
-  pedido de su fecha comercial; conservar los identificadores históricos.
+- QA oficial de los ajustes móviles de S2-02 pendiente; contraste medido, lector de
+  pantalla, zoom y otros navegadores quedan sin validar en esta entrega.
 - La liberación de reservas abandonadas requiere ejecutar mantenimiento o acceder al pedido;
   no se añadió programación periódica ni servicios de pago.
 - Render sigue suspendido como preview; main integrado no implica app desplegada. No se utilizó su BD.
+- La CI de S2-02 sigue pendiente; los resultados y capturas locales no son la suite oficial.
