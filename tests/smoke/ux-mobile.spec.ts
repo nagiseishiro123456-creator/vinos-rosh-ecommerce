@@ -5,9 +5,11 @@ import { loginCustomer, prisma, resetCheckoutFixture } from "./checkout-fixture"
 
 test.afterAll(() => prisma.$disconnect());
 
-async function viewportCapture(page: Page, info: TestInfo, name: string) {
+async function viewportCapture(page: Page, info: TestInfo, name: string, clipHeight?: number) {
   const path = info.outputPath(`${name}.png`);
-  await page.screenshot({ path, animations: "disabled" });
+  await page.screenshot({ path, animations: "disabled", ...(clipHeight ? {
+    clip: { x: 0, y: 0, width: page.viewportSize()!.width, height: Math.ceil(clipHeight) },
+  } : {}) });
   await info.attach(name, { path, contentType: "image/png" });
 }
 
@@ -73,6 +75,25 @@ test("S2-02: keyboard, unobscured controls, reading order and long money across 
     addressLine1: "Segunda dirección sintética", isDefault: false,
   } });
   try {
+    if (process.env.NEXT_PUBLIC_GA_ID) {
+      for (const [path, name] of [["/", "21-inicio-consentimiento"], ["/productos", "22-catalogo-consentimiento"]] as const) {
+        await page.goto(path, { waitUntil: "domcontentloaded" });
+        await page.evaluate(() => {
+          localStorage.removeItem("rosh-analytics-consent-v1");
+          window.dispatchEvent(new Event("rosh-analytics-consent-change"));
+        });
+        const consent = page.getByRole("dialog", { name: "Preferencias de analítica" });
+        await expect(consent).toBeVisible();
+        await checkFocusedControl(page.getByRole("button", { name: "Rechazar", exact: true }), `${path}: reject analytics`);
+        await checkFocusedControl(page.getByRole("button", { name: "Aceptar analítica", exact: true }), `${path}: analytics choice`);
+        const banner = await consent.boundingBox();
+        const header = await page.locator(".siteHeader").boundingBox();
+        expect(header!.y, `${path}: header follows consent banner`).toBeGreaterThanOrEqual(banner!.y + banner!.height);
+        await viewportCapture(page, info, name, header!.y + header!.height);
+        await page.getByRole("button", { name: "Rechazar", exact: true }).click();
+      }
+    }
+
     await loginCustomer(page);
     await checkLayout(page, "cart");
     await page.getByLabel("Cantidad", { exact: true }).focus();

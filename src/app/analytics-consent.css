@@ -13,6 +13,11 @@
   backdrop-filter: blur(14px);
 }
 
+/* Keep the header in its hero/container while the unanswered banner is in flow. */
+body:has(.analyticsConsent) main:not(.purchaseFlow) .siteHeader {
+  position: absolute;
+}
+
 .analyticsConsent strong {
   color: var(--wine-dark);
   font-family: Georgia, serif;
