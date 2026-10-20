@@ -81,3 +81,14 @@ selección nueva con contenido idéntico y valida tipo de callback de query repe
 La previsualización exige también la revisión vigente dentro de su escritura en cola.
 17/17 casos locales de estado/destinos aprobados; se verifica de nuevo la cabecera final
 antes de seleccionar el artefacto definitivo, sin atribuirle resultados de otro commit.
+
+Cuarta ejecución: `288a523a76cde208c0c7d17a6c265e77b7e9691b`,
+[CI 39362644486](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39362644486),
+job `118432111685`: **98/98 servidor y 44/44 navegador**, checks completos aprobados.
+Revisión visual de 32 PNG: controles y estados legibles en cuatro tamaños. Se ajusta
+el aviso tras éxito en memoria para distinguir selecciones invitadas futuras del carrito
+ya guardado en cuenta; el caso E2E también recarga para comprobar su persistencia real.
+El contrato legacy se afina con tablas `Cart`/`CartItem` y FKs fieles al modelo, y
+aserciones por conteo que también detectan desaparición de filas (sin ambigüedad NULL).
+Se conservan los resultados previos como historial; el artefacto final se tomará del
+commit que incluya este texto corregido y la comprobación de recarga.

@@ -170,7 +170,12 @@ test("S2-04: registration keeps purchase destination, invalid callbacks stay int
     await inMemory.getByRole("link", { name: "Ingresar a mi cuenta", exact: true }).click(); await credentials(inMemory);
     await expect(inMemory.locator(".summaryTotal strong")).toHaveText("S/ 149.50");
     await expect(inMemory.locator(".cartMergeResult")).toContainText("No podemos guardar");
+    await expect(inMemory.locator(".cartMergeResult")).toContainText("Tu carrito ya quedó guardado en tu cuenta.");
     await capture(inMemory, info, "46-union-desde-memoria");
+    await inMemory.reload();
+    await expect(inMemory.locator(".summaryTotal strong")).toHaveText("S/ 149.50");
+    await expect(inMemory.locator(".cartButton .cartCount")).toHaveText("5");
+    expect(await prisma.cartImport.count({ where: { userId: f.user.id } })).toBe(1);
     expect(await cartQuantity(f.cart.id, f.product.id)).toBe(5);
   } finally {
     await memory.close(); await prisma.user.deleteMany({ where: { email } }); await resetCheckoutFixture();

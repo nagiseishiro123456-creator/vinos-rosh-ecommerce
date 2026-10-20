@@ -77,7 +77,7 @@ export function CartMergeBoundary({ userId, renderId, returnTo = "/carrito", chi
         <ul>{result.result.changes.map((change) => <li key={change.productId}>{change.kind === "unavailable"
           ? "Se retiró un producto que ya no está disponible." : `Se ajustó un producto a ${change.quantity} unidades por disponibilidad o límite de compra.`}</li>)}</ul></>
         : <p>Revisa las cantidades y el total actuales antes de continuar. Todavía no se reservó stock.</p>}
-      {warning ? <p>{warning}</p> : null}
+      {warning ? <p>Tu carrito ya quedó guardado en tu cuenta. No podemos guardar nuevas selecciones invitadas en este navegador; podrías perder esas selecciones al recargar o cerrar.</p> : null}
     </section> : null}
     <div className="cartMergeProtected" data-merge-blocked={blocked ? "true" : undefined}>{children}</div>
   </>;

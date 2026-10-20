@@ -1,9 +1,12 @@
 DO $$ BEGIN
   IF (SELECT count(*) FROM "CartImport") <> 0 THEN RAISE EXCEPTION 'Historical data must not create import receipts'; END IF;
-  IF (SELECT quantity FROM "Cart" WHERE id = 'legacy-cart') <> 3 OR
-     (SELECT stock FROM "Product" WHERE id = 'legacy-product') <> 10 OR
+  IF (SELECT count(*) FROM "Cart") <> 1 OR
+     (SELECT count(*) FROM "Cart" WHERE id = 'legacy-cart' AND "userId" = 'legacy-user') <> 1 OR
+     (SELECT count(*) FROM "CartItem") <> 1 OR
+     (SELECT count(*) FROM "CartItem" WHERE id = 'legacy-item' AND "cartId" = 'legacy-cart' AND "productId" = 'legacy-product' AND quantity = 3) <> 1 OR
+     (SELECT count(*) FROM "Product" WHERE id = 'legacy-product' AND stock = 10) <> 1 OR
      (SELECT count(*) FROM "Order") <> 1 OR (SELECT count(*) FROM "Payment") <> 1 OR
-     (SELECT count(*) FROM "User") <> 2 THEN RAISE EXCEPTION 'Historical commerce data changed'; END IF;
+     (SELECT count(*) FROM "User" WHERE id IN ('legacy-user', 'other-user')) <> 2 THEN RAISE EXCEPTION 'Historical commerce data changed'; END IF;
 END $$;
 INSERT INTO "CartImport" (id, "userId", "importId", "requestHash", result)
 VALUES ('receipt-a', 'legacy-user', 'g2_' || repeat('a', 32), repeat('b', 64), '{"lines":[],"changes":[]}');
