@@ -32,8 +32,8 @@ Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 | S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | CI 67/67 y 20/20 aprobada; revisión/integración pendientes (#10) |
 | S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | CI 80/80 y 28/28 aprobada; revisión/integración pendientes (#11) |
 | S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | CI 98/98 y 44/44 aprobada; revisión/integración pendientes (#12) |
-| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Implementada en #13; QA en curso |
-| S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Pendiente |
+| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | CI 116/116 y 64/64 aprobada; 36 capturas; revisión/integración pendientes (#13) |
+| S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Siguiente historia |
 
 Los puntos no son horas ni velocidad garantizada. Si el refinamiento revela más alcance,
 dividir y reestimar antes de comprometerlo. S2-01 no implementa todavía funciones de carrito.
@@ -55,15 +55,19 @@ S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 Reglas de Motion para los sprints de UI: componentes con `'use client'` en primera línea;
 scroll/parallax solo en Home desktop (>=768px) sin preferencia de movimiento reducido;
 producto con microinteracciones y CTA inmediato; catálogo/carrito/checkout sin scroll complejo.
-`useReducedMotion` y equivalente CSS obligatorios. Motion sigue pendiente de instalar.
+`useReducedMotion` y equivalente CSS obligatorios. Motion 14.4.0 incorporado en S2-05,
+bajo demanda y solo para entrada/salida del panel. La preferencia se actualiza en vivo.
 
 No se activan servicios de pago ni se modifica la política de costos con este backlog.
 
-Dependencias de desarrollo: S1-05 registró cinco avisos altos por braces y su seguimiento;
-comprobar el estado del parche antes del lanzamiento. Producción en la CI actual:
-cero hallazgos, sin cambios de paquetes.
+Dependencias de desarrollo: la instalación de CI S2-05 mantiene cinco avisos altos heredados;
+revisar antes del lanzamiento. Auditoría de producción: cero hallazgos. Motion/lock exactos
+incorporados sin cambios de entradas anteriores; ver [QA S2-05](testing/s2-05-carrito-lateral.md).
 Los hallazgos heredados de importes, controles flotantes, resumen/CTA móvil y teclado
 se abordaron en S2-02, con [QA y límites](testing/s2-02-ux-movil.md); conservar regresión.
 `En revisión` y `Boleta` ya aparecen traducidos en main.
-S2-05 agrega panel/estado compartido e incrementos concurrentes; S2-06 revisa e integra.
+S2-05 entrega panel/estado compartido y comandos concurrentes idempotentes: [QA](testing/s2-05-carrito-lateral.md),
+[ADR previo](decisions/0008-carrito-lateral.md) y [36 capturas](evidencias/sprint-02/s2-05/README.md).
+S2-01–S2-05 suman 24 SP entregados en ramas, sin atribuir integración ni aceptación comercial.
+S2-06 revisa e integra los PR #9–#13, comprueba main y registra el cierre (2 SP).
 Ver [diagnóstico](ux/sprint-02-recorrido-compra.md) y [plan actual](sprints/fase-2-sprint-02.md).

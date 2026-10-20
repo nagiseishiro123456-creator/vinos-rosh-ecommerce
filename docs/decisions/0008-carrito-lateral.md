@@ -1,7 +1,8 @@
 # ADR 0008 — Carrito lateral, estado compartido y comandos de cuenta
 
 Fecha: 2026-10-19 (America/Lima). Historia S2-05, 5 SP previstos.
-Estado: aceptado técnicamente antes del código; implementación y QA pendientes.
+Estado: aceptado y registrado antes del código en `8ba1d6b…`; implementado y verificado
+con CI/evidencia en PR #13. Revisión/integración del incremento pendientes en S2-06.
 Base: S2-04 `3c7f012fe1e92b63c5b71d5405589c2b6621b09a`, PR #12 sin fusionar.
 
 ## Problema y alternativas
@@ -65,7 +66,8 @@ de datos agravaría la divergencia y una respuesta perdida podría duplicar un r
 ## Diálogo y movimiento
 
 - `<dialog>.showModal()` con nombre, título enfocable, cierre visible, Escape y backdrop.
-  El navegador contiene el foco y vuelve inerte el fondo. Se prueban Tab/Shift+Tab y
+  El navegador vuelve inerte el fondo; un manejador explícito contiene Tab/Shift+Tab.
+  Se prueban navegación contenida y
   devolución al disparador; si desaparece, se busca un destino conectado apropiado.
 - Bloquear scroll del documento durante el modal; conservar/restaurar estilos y posición.
   Panel de hasta 480 px en desktop y ancho disponible en móvil; scroll interno, controles
@@ -77,7 +79,8 @@ de datos agravaría la divergencia y una respuesta perdida podría duplicar un r
   sin Motion+. Panel se carga bajo demanda. Solo AnimatePresence de entrada/salida,
   opacidad y pequeño desplazamiento desktop, sin drag/layout/scroll/parallax. Componentes
   animados llevan `'use client'` en primera línea. `useReducedMotion` y CSS reducen a
-  duración cero/sin desplazamientos; controles y foco no esperan fin de animación.
+  duración cero/sin desplazamientos; matchMedia actualiza cambios de preferencia en vivo.
+  Los controles y el foco no esperan fin de animación.
 - Estados explícitos: vacío, verificación/carga, guardando, ajuste/sin disponibilidad,
   fallo recuperable, comando incierto y sesión vencida. Invitado pendiente de unión
   remite a `/carrito` antes de mutar/continuar con cuenta.
@@ -107,3 +110,22 @@ de datos agravaría la divergencia y una respuesta perdida podría duplicar un r
 
 La versión/peers/licencia se vuelven a comprobar en el paquete instalado y lockfile.
 Tamaño de bundle real se registra en QA; no se copian cifras teóricas como medición propia.
+
+## Resultado y ajustes comprobados (2026-10-20)
+
+- [QA](../testing/s2-05-carrito-lateral.md): 116/116 servidor y 64/64 navegador;
+  12 migraciones y cinco contratos SQL. [36 PNG](../evidencias/sprint-02/s2-05/README.md)
+  originales con procedencia/dimensiones/SHA-256 comprobados e inspección visual.
+- React.cache deduplica el snapshot de layout/página en una petición RSC. Los renders
+  viejos no restauran información privada invalidada ni sustituyen una revisión confirmada.
+- La prueba real de foco requirió contención explícita de Tab. Cerrar enlaces en captura
+  interrumpía Next Link y recargaba el documento; se usa burbujeo y se verifica SPA.
+  Solo se restaura scroll/foco del disparador si se permanece en la misma ruta.
+- La preferencia de movimiento se escucha en vivo; useReducedMotion inicia el valor.
+  El nombre del producto conserva al menos 160 px en las geometrías de prueba y la
+  cantidad/total tienen sus propias filas en panel, independientemente del viewport.
+- Cambiar de sesión en otra pestaña invalida el contenido anterior; header/producto
+  contrastan la identidad del servidor y el proveedor antes de nuevas acciones.
+- El límite de 50 aplica a nuevas líneas de comandos de cuenta; no se atribuye al
+  histórico ni se altera el contrato de unión. Los comprobantes no tienen TTL aquí.
+  Rendimiento CWV, lector de pantalla y aceptación comercial no se declaran probados.

@@ -28,7 +28,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 22. [ADR 0006: carrito invitado](decisions/0006-carrito-invitado.md) · [QA S2-03](testing/s2-03-carrito-invitado.md) · [Capturas](evidencias/sprint-02/s2-03/README.md)
 23. [ADR 0007: unión idempotente](decisions/0007-union-carritos.md) · [QA S2-04](testing/s2-04-union-carritos.md) · [32 capturas](evidencias/sprint-02/s2-04/README.md)
 
-24. [ADR 0008: panel y comandos de cuenta](decisions/0008-carrito-lateral.md) · [QA S2-05 en curso](testing/s2-05-carrito-lateral.md)
+24. [ADR 0008: panel y comandos de cuenta](decisions/0008-carrito-lateral.md) · [QA S2-05](testing/s2-05-carrito-lateral.md) · [36 capturas revisadas](evidencias/sprint-02/s2-05/README.md)
 
 ## Cuándo documentar
 

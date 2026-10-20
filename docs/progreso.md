@@ -1,26 +1,32 @@
 # Punto de avance
 
-## En curso — S2-05 (2026-10-20, America/Lima)
+## Estado actual — S2-05 verificada (2026-10-20, America/Lima)
 
-- Rama `fase-2/sprint-02-carrito-lateral`, [PR #13](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/13) en borrador, sobre #12.
-- [ADR previo](decisions/0008-carrito-lateral.md) en `8ba1d6b…`; implementación conservada
-  en GitHub después de quedar indisponible el entorno anterior. Sin dependencia de archivos locales.
-- [QA y registro de CI](testing/s2-05-carrito-lateral.md). Comandos de cuenta y revisión:
-  115/115 servidor en `aba53bf…`; navegador pendiente. La nueva cabecera amplía
-  privacidad/cambio de cuenta y prevé 116/64, aún sin declarar aprobación.
-- Página/panel/contador comparten estado; Motion 14.4.0 bajo demanda, diálogo nativo,
-  transacciones y comprobantes de cuenta; 12 migraciones y cinco contratos SQL.
-- Siguiente acción: terminar CI y revisar PNG originales; después documentar resultado
-  y preparar revisión. Integración solo en S2-06; sin merge, Render ni migraciones remotas.
+- Fase 2, Sprint 2: S2-01–S2-05 implementadas/documentadas y verificadas en sus ramas.
+  **S2-06 — revisión e integración — es la siguiente historia.** El Sprint 2 aún no está cerrado.
+- Rama `fase-2/sprint-02-carrito-lateral`, [PR #13](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/13), sobre #12.
+  Cadena de revisión/integración: #9 → #10 → #11 → #12 → #13.
+- Código fuente `f06b4ad41c424216dc67f45b7b904a64421c184d`; [CI 39493524715](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39493524715):
+  **116/116 servidor, 64/64 navegador**, 12 migraciones, cinco contratos SQL, Prisma,
+  tipos/lint/build y auditoría de producción (0 hallazgos) aprobados.
+- [ADR 0008 previo](decisions/0008-carrito-lateral.md), [QA y límites](testing/s2-05-carrito-lateral.md),
+  [36 capturas originales revisadas](evidencias/sprint-02/s2-05/README.md).
+  Se conservan las 150 anteriores sin cambios; total 186 PNG.
+- Panel/página/contador comparten estado. Comandos de cuenta transaccionales e idempotentes;
+  diálogo con teclado/foco/scroll y movimiento reducido en vivo. Motion 14.4.0 bajo demanda.
+- Main permanece en `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, con Sprint 1 integrado.
+  S2-05 se valida en BD aislada de CI; no implica despliegue ni aceptación comercial.
+- Este cierre solo añade documentación/evidencia al código validado; los checks de #13
+  deben comprobar también esa cabecera antes de marcarlo listo para revisión.
 
 ## Referencia del cierre S2-04 (histórico)
 
 - Fase 2, Sprint 2: S2-01 documentada (3 SP); S2-02 (3 SP), S2-03 (5 SP) y S2-04 (8 SP)
-  verificadas por CI; revisión/integración pendientes. S2-05/S2-06 siguen pendientes.
+  verificadas por CI; revisión/integración pendientes. En ese hito S2-05/S2-06 aún estaban pendientes.
 - Fecha: 2026-10-19 (America/Lima). Inicio del Sprint 2 autorizado tras la propuesta de seis historias.
 - Main sigue en `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, Sprint 1 integrado (#3–#8).
   Su CI de cierre 39096709609 aprobó 67/67 servidor y 16/16 navegador.
-- Rama actual `fase-2/sprint-02-union-carritos`, [PR #12](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/12),
+- Rama de aquella entrega: `fase-2/sprint-02-union-carritos`, [PR #12](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/12),
   base S2-03 `b74c607…` / #11. Cadena pendiente de integrar: #9 → #10 → #11 → #12.
 - Código S2-04 validado: `55f470e73395c8efc135ddee3491344079487b5b`; árbol `b8869b0c4ed1abed6f90c86a4cab65054b271231`.
   [CI 39363492611](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39363492611): **98/98 servidor, 44/44 navegador**, 11 migraciones,
@@ -90,7 +96,7 @@ El formulario conserva datos ante respuesta perdida y mantiene envío nativo con
 CI: 53 pruebas, 10 casos de navegador, 9 migraciones y dos contratos SQL aprobados.
 Ocho capturas nuevas revisadas y conservadas con hashes. [QA S1-04](testing/s1-04-idempotencia.md).
 
-## Última historia entregada: S1-05
+## S1-05 conservada
 ADR 0005, transacciones de revisión/reembolso, avance con estado esperado e historial.
 Conciliación de ingresos sobre pedidos cancelados sin reactivar pedido ni modificar stock.
 Rol ADMIN vigente comprobado en BD, motivos/confirmaciones/resultados y guía de operación.
@@ -126,27 +132,29 @@ en Render todavía usa `npm install`: sincronizar antes de un futuro despliegue.
 
 ## Siguiente acción
 
-S2-04 supera QA y conserva sus resultados/capturas. Comprobar la CI de la cabecera
-con documentación/evidencia antes de dejar #12 listo para revisión. No fusionar aún:
-la revisión/integración del incremento completo corresponde a S2-06.
+**S2-06 — Regresión, revisión e integración del Sprint 2 (2 SP).**
 
-Siguiente historia: **S2-05 — Carrito lateral accesible**. Documentar el ADR antes de
-implementar: un único estado para panel/página/contador, mutaciones de cuenta con
-confirmación del servidor y protección de incrementos concurrentes. Diálogo con nombre,
-foco inicial/contenido, Escape, devolución de foco, fondo inerte y restauración de scroll.
-Instalar Motion solo para entrada/salida, con `useReducedMotion`; sin scroll complejo.
-Las consultas y el precio de páginas siguen en servidor. Home inmersivo queda en Sprint 5.
+1. Registrar un plan de revisión y commit de partida antes de cambiar/integrar código.
+2. Revisar el incremento completo y sus PR dependientes; conservar regresiones de dinero,
+   reserva, última botella, permisos, unión, respuesta perdida y panel accesible.
+3. Registrar hallazgos reales, corregirlos en un PR identificable y volver a validar.
+4. Integrar en orden solo dentro de esa historia, con `[skip render]`, comprobar main
+   y conservar resultados/evidencia. El estado integrado se documenta después de verificarlo.
+5. Cerrar backlog/progreso y dejar los límites y decisiones pendientes para Sprint 3
+   (pagos automáticos/notificaciones), antes de comenzar su implementación.
 
-Durante la historia: decisiones/estados/incidencias en el PR. Al cerrar: pruebas, capturas
-originales/manifiesto, backlog y este archivo. S2-06 regresará el flujo completo e integrará
-PRs en orden, conservando evidencia y verificando main con `[skip render]`.
+No hay que reinstalar ni rediseñar S2-05. El ADR, las migraciones, el contrato y la galería
+ya están versionados. Home inmersivo y medición de Core Web Vitals siguen en Sprint 5.
+No se solicita ni se ejecuta un despliegue con este cierre.
 
 ## Riesgos abiertos
 - Conciliación ampliada: varias operaciones por pago, correcciones y devoluciones parciales/despachadas fuera del alcance actual.
 - Docker y PowerShell no ejecutados en este contenedor; ver límites de S1-01.
-- Dependencias de desarrollo: S1-05 registró cinco avisos altos de braces y su seguimiento.
-  El estado del parche no se vuelve a afirmar aquí; comprobarlo antes del lanzamiento.
-  Auditoría de producción de esta entrega: cero hallazgos, sin cambios de paquetes.
+- Dependencias de desarrollo: la instalación de CI sigue notificando cinco avisos altos,
+  heredados y pendientes de revisión antes del lanzamiento. No se ejecutó una nueva auditoría
+  detallada de desarrollo. Auditoría de producción de S2-05: cero hallazgos; Motion añade
+  cuatro paquetes y seis entradas opcionales al lock, más la dependencia raíz; sin actualizar
+  versiones/resoluciones de paquetes anteriores.
 - QA automatizada de S2-02 aprobada; contraste medido, lector de pantalla, zoom y
   otros navegadores quedan sin validar en esta entrega.
 - La liberación de reservas abandonadas requiere ejecutar mantenimiento o acceder al pedido;
@@ -156,4 +164,7 @@ PRs en orden, conservando evidencia y verificando main con `[skip render]`.
 - S2-02 está verificada pero no integrada; las capturas locales conservan su origen y límites.
 - S2-04 verificada y sin integrar. Pendiente de otra cuenta exige volver al usuario original;
   sin storage/locks se usa memoria y no se promete sincronización/persistencia invitada.
-- Incrementos concurrentes de formularios de cuenta anteriores y diálogo lateral siguen en S2-05.
+- S2-05 verificada, todavía sin integrar. Los comandos inciertos de cuenta se conservan en
+  memoria durante la visita; cerrar/recargar recupera el carrito de BD y no reenvía una intención nueva.
+- Los chunks solicitados al abrir el panel se miden en QA; eso no constituye medición de
+  Core Web Vitals. Revisión manual con lector de pantalla, zoom y otros motores pendiente.

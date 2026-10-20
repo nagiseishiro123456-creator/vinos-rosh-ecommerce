@@ -1,0 +1,113 @@
+{
+  "story": "S2-05",
+  "sourceCommit": "f06b4ad41c424216dc67f45b7b904a64421c184d",
+  "runId": 39493524715,
+  "source": "Response bodies of script requests observed after the first opening; gzipSync estimate in the Playwright test.",
+  "limits": "Not network transfer bytes, Motion-only bundle size, Lighthouse or Core Web Vitals.",
+  "projects": [
+    {
+      "project": "desktop",
+      "loadedOnOpen": [
+        {
+          "path": "/_next/static/chunks/3f8k2i4c-gca2.js",
+          "rawBytes": 12992,
+          "gzipBytes": 3974
+        },
+        {
+          "path": "/_next/static/chunks/0ppu1zgsvpe0t.js",
+          "rawBytes": 25269,
+          "gzipBytes": 9107
+        },
+        {
+          "path": "/_next/static/chunks/02zoifrh-hn11.js",
+          "rawBytes": 141122,
+          "gzipBytes": 47289
+        }
+      ],
+      "note": "Raw JS response and reproducible gzip estimate; not a Core Web Vitals measurement.",
+      "totals": {
+        "project": "desktop",
+        "rawBytes": 179383,
+        "gzipBytes": 60370
+      }
+    },
+    {
+      "project": "tablet",
+      "loadedOnOpen": [
+        {
+          "path": "/_next/static/chunks/3f8k2i4c-gca2.js",
+          "rawBytes": 12992,
+          "gzipBytes": 3974
+        },
+        {
+          "path": "/_next/static/chunks/0ppu1zgsvpe0t.js",
+          "rawBytes": 25269,
+          "gzipBytes": 9107
+        },
+        {
+          "path": "/_next/static/chunks/02zoifrh-hn11.js",
+          "rawBytes": 141122,
+          "gzipBytes": 47289
+        }
+      ],
+      "note": "Raw JS response and reproducible gzip estimate; not a Core Web Vitals measurement.",
+      "totals": {
+        "project": "tablet",
+        "rawBytes": 179383,
+        "gzipBytes": 60370
+      }
+    },
+    {
+      "project": "small-mobile",
+      "loadedOnOpen": [
+        {
+          "path": "/_next/static/chunks/3f8k2i4c-gca2.js",
+          "rawBytes": 12992,
+          "gzipBytes": 3974
+        },
+        {
+          "path": "/_next/static/chunks/0ppu1zgsvpe0t.js",
+          "rawBytes": 25269,
+          "gzipBytes": 9107
+        },
+        {
+          "path": "/_next/static/chunks/02zoifrh-hn11.js",
+          "rawBytes": 141122,
+          "gzipBytes": 47289
+        }
+      ],
+      "note": "Raw JS response and reproducible gzip estimate; not a Core Web Vitals measurement.",
+      "totals": {
+        "project": "small-mobile",
+        "rawBytes": 179383,
+        "gzipBytes": 60370
+      }
+    },
+    {
+      "project": "mobile",
+      "loadedOnOpen": [
+        {
+          "path": "/_next/static/chunks/3f8k2i4c-gca2.js",
+          "rawBytes": 12992,
+          "gzipBytes": 3974
+        },
+        {
+          "path": "/_next/static/chunks/0ppu1zgsvpe0t.js",
+          "rawBytes": 25269,
+          "gzipBytes": 9107
+        },
+        {
+          "path": "/_next/static/chunks/02zoifrh-hn11.js",
+          "rawBytes": 141122,
+          "gzipBytes": 47289
+        }
+      ],
+      "note": "Raw JS response and reproducible gzip estimate; not a Core Web Vitals measurement.",
+      "totals": {
+        "project": "mobile",
+        "rawBytes": 179383,
+        "gzipBytes": 60370
+      }
+    }
+  ]
+}

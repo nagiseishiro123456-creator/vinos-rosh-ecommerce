@@ -2,8 +2,8 @@
 
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
-Estado: S2-01 documentada; S2-02 verificada por CI, revisión/integración pendientes;
-S2-03 verificada por CI; S2-04 verificada por CI; S2-05–S2-06 pendientes de implementación.
+Estado al 2026-10-20: S2-01–S2-05 documentadas/implementadas y verificadas en sus ramas;
+revisión e integración del incremento completo pendientes en **S2-06**, siguiente historia.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
 ## Sprint Goal
@@ -111,6 +111,11 @@ Como comprador, quiero revisar mi selección y seguir explorando sin perder el c
   desactivar desplazamientos. No retrasar el acceso a controles con la animación.
 - DoD: pruebas de teclado, foco, movimiento reducido, coherencia página/panel/contador y capturas.
 
+Entrega técnica S2-05: [ADR previo](../decisions/0008-carrito-lateral.md),
+[QA 116/116 + 64/64](../testing/s2-05-carrito-lateral.md) y
+[36 capturas](../evidencias/sprint-02/s2-05/README.md); PR #13 sobre #12, sin integrar.
+Incluye comandos concurrentes/idempotentes y comprobación de sesión entre cuentas.
+
 ### S2-06 — Regresión y cierre (2 SP)
 
 Como equipo, quiero verificar el incremento completo y dejar un punto de continuidad claro.
@@ -135,7 +140,7 @@ Las estimaciones se revisan con lo aprendido; no usar la suma del sprint anterio
 | Momento | Registro y verificación |
 | --- | --- |
 | Antes de S2-02 | Este plan, flujo, lista de hallazgos y baseline del main integrado. |
-| Antes de S2-03/S2-04 | ADR de persistencia/estado y fusión con alternativas, fallos y contrato; aprobar técnicamente el diseño antes del código. |
+| Antes de S2-03/S2-04/S2-05 | ADR de persistencia/unión/panel con alternativas, fallos y contrato; registrar el diseño antes del código. |
 | Durante cada historia | Cambio, criterios, incidencias y pruebas pertinentes en su PR. |
 | Al terminar cada historia | QA, capturas originales y manifiesto con commit/run/hashes; backlog y progreso. |
 | Al integrar/cerrar | Checks de main, revisión funcional, límites y pendientes del sprint siguiente. |
@@ -151,8 +156,9 @@ Conservar identidad visual y contenido real. El catálogo actual se presenta com
 de uva sin alcohol; las muestras de QA son ficticias. No inventar añadas, graduaciones,
 reseñas, certificaciones ni notas de cata. La ampliación editorial requiere datos del negocio.
 
-Motion aún no está instalado; se prevé incorporar su núcleo en S2-05 tras revisar
-compatibilidad, licencia y tamaño. Catálogo/carrito/checkout sin scroll complejo;
+Motion 14.4.0 incorporado y fijado en S2-05 tras revisar compatibilidad y licencia MIT.
+El panel se carga bajo demanda; el coste real de sus chunks se registra en QA, sin
+confundirlo con una medición de Core Web Vitals. Catálogo/carrito/checkout sin scroll complejo;
 producto con interacción moderada y CTA inmediato. Home inmersivo/parallax queda en Sprint 5,
 solo desktop >=768 px y sin preferencia de movimiento reducido.
 
@@ -178,5 +184,10 @@ aislado no equivalen a certificación completa de accesibilidad ni a aceptación
   80/80 servidor y 28/28 navegador, 22 capturas conservadas; integración pendiente.
 - S2-04: ADR 0007 e implementación en PR #12; [QA aprobada](../testing/s2-04-union-carritos.md):
   98/98 servidor y 44/44 navegador, 32 capturas conservadas; revisión/integración pendientes.
-- S2-05–S2-06: pendientes. Siguiente acción: ADR del carrito lateral antes del código
-  de S2-05; revisión e integración del incremento completo en S2-06.
+- S2-05: ADR 0008 anterior al código e implementación en PR #13; [QA aprobada](../testing/s2-05-carrito-lateral.md):
+  116/116 servidor y 64/64 navegador, 36 capturas revisadas y 12 migraciones/cinco contratos SQL.
+  Página/panel/contador coherentes, teclado, movimiento reducido, respuesta perdida y cambio
+  de cuenta verificados. Revisión/integración pendientes; código `f06b4ad…`.
+- S2-06: siguiente historia. Registrar plan de revisión, comprobar el incremento completo,
+  resolver hallazgos, integrar PRs en orden y verificar main. Documentar cierre/pendientes
+  antes de iniciar Sprint 3; el Sprint 2 todavía no se declara cerrado.

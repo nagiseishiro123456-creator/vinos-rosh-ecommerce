@@ -7,7 +7,7 @@ E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular
 
 ## Stack
 - Next.js + React + TypeScript estricto
-- Tailwind CSS
+- Tailwind CSS + Motion 14.4.0 (panel bajo demanda, movimiento reducido)
 - PostgreSQL + Prisma ORM
 - Auth.js / NextAuth Credentials + bcryptjs
 - Zod
@@ -80,7 +80,7 @@ npm run prisma:studio
 - Los pagos manuales y Culqi comparten una abstracción `Payment`.
 
 ## Modelo principal
-`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `CartImport`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `OrderEvent`, `PaymentReconciliation`, `Review`.
+`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `CartImport`, `CartMutation`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `OrderEvent`, `PaymentReconciliation`, `Review`.
 
 ## Preview gratuito en Render
 
@@ -117,7 +117,12 @@ Unión idempotente implementada en PR #12, con [ADR previo](docs/decisions/0007-
 y [QA aprobada](docs/testing/s2-04-union-carritos.md): 98 pruebas de servidor y 44 de navegador.
 El carrito de cuenta y su registro de importación se confirman juntos; los reintentos
 no repiten la suma. [32 capturas nuevas](docs/evidencias/sprint-02/s2-04/README.md) conservadas;
-integración pendiente. Siguiente historia: panel lateral accesible, S2-05.
+integración pendiente.
+Panel lateral implementado en PR #13, con [ADR previo](docs/decisions/0008-carrito-lateral.md),
+[QA aprobada](docs/testing/s2-05-carrito-lateral.md): 116 pruebas de servidor y 64 de navegador,
+[36 capturas revisadas](docs/evidencias/sprint-02/s2-05/README.md). Página, panel y contador
+comparten estado; las adiciones concurrentes y los reintentos no pierden ni duplican unidades.
+**Siguiente: S2-06 — revisión e integración del Sprint 2.** Los PR #9–#13 siguen sin fusionar.
 
 ## Verificación y evidencias
 
