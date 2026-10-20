@@ -1,11 +1,13 @@
 import { randomUUID } from "node:crypto";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import type { AccountCartSnapshot } from "@/modules/cart/account-contract";
 import { GuestCart } from "@/components/guest-cart";
 import { AccountCart, type NativeCartActions } from "@/components/account-cart";
 import { CartMergeBoundary } from "@/components/cart-merge-boundary";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
-import { readAccountCart } from "@/modules/cart/account-service";
+import { CartCommandError, readAccountCart } from "@/modules/cart/account-service";
 import { removeCartItem, updateCartItem } from "@/modules/cart/actions";
 import { safeInternalDestination } from "@/modules/auth/destination";
 
@@ -18,7 +20,12 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
     <div className="catalogHeaderWrap compact"><StoreHeader /></div><GuestCart />
   </main>;
   const userId = session.user.id;
-  const snapshot = await readAccountCart(userId);
+  let snapshot: AccountCartSnapshot;
+  try { snapshot = await readAccountCart(userId); }
+  catch (error) {
+    if (error instanceof CartCommandError && error.code === "UNAUTHORIZED") redirect("/iniciar-sesion?callbackUrl=/carrito");
+    throw error;
+  }
   const actions: NativeCartActions = Object.fromEntries(snapshot.items.map((item) => [item.productId, {
     update: updateCartItem.bind(null, item.productId, randomUUID(), userId),
     remove: removeCartItem.bind(null, item.productId, randomUUID(), userId),

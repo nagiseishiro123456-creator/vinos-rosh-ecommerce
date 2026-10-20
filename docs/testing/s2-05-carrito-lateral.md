@@ -63,3 +63,18 @@ ejecución aprobada debe ejecutar y superar todos los casos. No se añaden reint
 
 Cierre: completar este QA, galería, arquitectura/backlog/progreso y checks de cabecera
 antes de marcar #13 listo. Integración en S2-06; sin Render ni BD remota.
+
+## Primera ejecución completa de navegador
+
+`04992db…`, CI 39487865177: **115/115 servidor, 48/60 navegador**. La ejecución
+terminó antes de la cabecera siguiente. Cuatro fallos de Tab detectan salida del foco
+del modal; ocho regresiones de almacenamiento bloqueado/memoria detectan pérdida de
+selección al seguir el enlace del panel. No se atribuyen fallos a las pruebas nativas.
+
+Se añade contención explícita de Tab/Shift+Tab sobre los controles visibles del diálogo.
+El cierre por enlaces se mueve de captura a burbujeo, después del manejador de Next:
+así se conserva la navegación SPA y la selección en memoria. La prueba comprueba también
+que el documento no se recarga y que cerrar al navegar no restaura scroll de otra página.
+La restitución de scroll se mide después de desplazar el disparador a la vista; también
+se comprueba al cerrar un panel abierto desde el botón de producto. La aserción de foco
+incluye elemento activo para diagnóstico y no se relaja.

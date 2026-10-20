@@ -7,7 +7,7 @@ function walk(directory) { return readdirSync(directory, { withFileTypes: true }
 let count = 0;
 for (const file of walk(root).sort()) {
   const path = relative(root, file).replaceAll("\\", "/");
-  if (!path.startsWith("test-results/") || !path.includes("cart-drawer-")) continue;
+  if (!path.startsWith("test-results/") || !path.includes("cart-drawer-") || path.includes("/attachments/")) continue;
   const directory = path.split("/").find((part) => part.includes("cart-drawer-")) ?? "";
   const found = ["small-mobile", "desktop", "mobile", "tablet"].find((name) => directory.endsWith("-" + name));
   if (found !== project) continue;

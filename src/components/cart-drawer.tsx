@@ -32,7 +32,21 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
     const originalPadding = Number.parseFloat(getComputedStyle(document.body).paddingRight) || 0;
     document.body.style.overflow = "hidden";
     if (gap > 0) document.body.style.paddingRight = String(originalPadding + gap) + "px";
+    const containFocus = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !element.open) return;
+      const controls = Array.from(element.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]"))
+        .filter((control) => control.tabIndex >= 0 && control.getClientRects().length > 0 && getComputedStyle(control).visibility !== "hidden");
+      const first = controls[0], last = controls[controls.length - 1], active = document.activeElement;
+      if (!first) { event.preventDefault(); title.current?.focus({ preventScroll: true }); return; }
+      if (event.shiftKey && (active === first || active === title.current || !element.contains(active))) {
+        event.preventDefault(); last.focus({ preventScroll: true });
+      } else if (!event.shiftKey && (active === last || !element.contains(active))) {
+        event.preventDefault(); first.focus({ preventScroll: true });
+      }
+    };
+    document.addEventListener("keydown", containFocus, true);
     restore.current = () => {
+      document.removeEventListener("keydown", containFocus, true);
       document.body.style.overflow = overflow; document.body.style.paddingRight = padding;
       if (window.location.pathname !== path) return;
       const target = trigger.current?.isConnected ? trigger.current : document.querySelector<HTMLElement>("main h1") ?? document.querySelector<HTMLElement>(".cartButton");
@@ -49,8 +63,11 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
     : guest.ready && Boolean(guest.items.length) && Boolean(quote.quote) && !quote.pending && !quote.error && !quote.quote?.exceedsOrderLimit && !guest.pending);
   return <dialog ref={dialog} id="cart-drawer" className="cartDialog" aria-labelledby="cart-drawer-title"
     onCancel={(event) => { event.preventDefault(); onClose(); }}
-    onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
-    onClickCapture={(event) => { if (event.target instanceof Element && event.target.closest("a")) onClose(); }}>
+    onClick={(event) => {
+      if (event.target === event.currentTarget) onClose();
+      else if (event.target instanceof Element && event.target.closest("a") && event.button === 0
+        && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) onClose();
+    }}>
     <AnimatePresence onExitComplete={finishClose}>
       {open ? <motion.section key="cart-panel" className="cartDrawerPanel flex h-full w-full max-w-[30rem] flex-col bg-[var(--paper)] text-[var(--ink)] shadow-2xl"
         data-reduced-motion={reduced ? "true" : "false"}

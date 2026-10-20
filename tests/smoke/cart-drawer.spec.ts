@@ -51,13 +51,18 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await page.goto(productPath); await expect(page.getByRole("button", { name: "Agregar al carrito", exact: true })).toBeEnabled();
   const beforeScripts = new Set(scripts.map((response) => response.url()));
   await page.evaluate(() => window.scrollTo({ top: 300, behavior: "instant" }));
+  const opener = page.viewportSize()!.width < 768 ? page.locator(".mobileBottomCart") : page.locator(".cartButton");
+  await opener.scrollIntoViewIfNeeded();
   const original = await page.evaluate(() => ({ y: scrollY, overflow: document.body.style.overflow, padding: document.body.style.paddingRight }));
-  await open(page); await expect(total(page)).toHaveText("S/ 0.00"); await geometry(page);
+  await opener.click(); await expect(panel(page)).toBeVisible();
+  await expect(panel(page).getByRole("heading", { name: "Tu carrito", exact: true })).toBeFocused();
+  await expect(total(page)).toHaveText("S/ 0.00"); await geometry(page);
   await expect(panel(page).locator(".cartDrawerPanel")).toHaveAttribute("data-reduced-motion", "false");
   await expect(panel(page).getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
   for (let index = 0; index < 16; index++) {
     await page.keyboard.press(index < 8 ? "Tab" : "Shift+Tab");
-    expect(await page.evaluate(() => document.querySelector("#cart-drawer")!.contains(document.activeElement))).toBe(true);
+    const focus = await page.evaluate(() => ({ inside: document.querySelector("#cart-drawer")!.contains(document.activeElement), active: document.activeElement?.outerHTML.slice(0,300) }));
+    expect(focus.inside, "Tab " + index + ": " + focus.active).toBe(true);
   }
   expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
   await shot(page, info, "52-panel-vacio");
@@ -69,10 +74,13 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await writeFile(metricPath, JSON.stringify({ project: info.project.name, loadedOnOpen: loaded,
     note: "Raw JS response and reproducible gzip estimate; not a Core Web Vitals measurement." }));
   await info.attach("s205-drawer-chunks", { path: metricPath, contentType: "application/json" });
-  await page.keyboard.press("Escape"); await expect(panel(page)).toBeHidden(); await expect(page.locator(".cartButton")).toBeFocused();
+  await page.keyboard.press("Escape"); await expect(panel(page)).toBeHidden(); await expect(opener).toBeFocused();
   expect(await page.evaluate(() => ({ y: scrollY, overflow: document.body.style.overflow, padding: document.body.style.paddingRight }))).toEqual(original);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
+  const addButton = page.getByRole("button", { name: "Agregar al carrito", exact: true });
+  await addButton.scrollIntoViewIfNeeded();
+  const addScroll = await page.evaluate(() => scrollY);
+  await addButton.click();
   await expect(panel(page)).toBeVisible(); await expect(total(page)).toHaveText("S/ 29.90");
   await expect(page).toHaveURL((url) => url.pathname === productPath);
   await expect(panel(page).locator(".cartDrawerPanel")).toHaveAttribute("data-reduced-motion", "true");
@@ -82,9 +90,16 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await panel(page).getByRole("button", { name: "Actualizar", exact: true }).click();
   await expect(total(page)).toHaveText("S/ 59.80"); await expect(page.locator(".cartButton .cartCount")).toHaveText("2");
   await geometry(page); await shot(page, info, "54-panel-cantidad");
+  await panel(page).getByRole("button", { name: "Continuar comprando", exact: true }).click();
+  await expect(panel(page)).toBeHidden(); await expect(addButton).toBeFocused();
+  expect(await page.evaluate(() => scrollY)).toBe(addScroll);
+  await open(page);
+  const token = randomUUID();
+  await page.evaluate((value) => { (window as Window & { qaDocument?: string }).qaDocument = value; }, token);
   await panel(page).getByRole("link", { name: "Ver carrito completo", exact: true }).click();
   await expect(page).toHaveURL((url) => url.pathname === "/carrito"); await expect(panel(page)).toBeHidden();
   await expect(page.getByRole("heading", { name: "Carrito", exact: true })).toBeInViewport();
+  expect(await page.evaluate(() => (window as Window & { qaDocument?: string }).qaDocument)).toBe(token);
   await expect(page.locator(".guestCart input[name=quantity]")).toHaveValue("2");
   await expect(page.locator(".guestCart .summaryTotal strong")).toHaveText("S/ 59.80");
   await open(page); await expect(total(page)).toHaveText("S/ 59.80");
@@ -231,5 +246,8 @@ test("S2-05: switching the shared session clears the previous account without mu
     expect(await quantity(f.cart.id, f.product.id)).toBe(3); expect(await quantity(other.cart!.id, f.product.id)).toBe(1);
     expect(await prisma.cartMutation.count({ where: { userId: { in: [f.user.id, other.id] } } })).toBe(0);
     await geometry(page); await shot(page, info, "65-panel-cuenta-distinta");
-  } finally { await second.close(); await prisma.user.delete({ where: { id: other.id } }); await resetCheckoutFixture(); }
+    await prisma.user.delete({ where: { id: other.id } });
+    await page.goto("/carrito");
+    await expect(page).toHaveURL((url) => url.pathname === "/iniciar-sesion" && url.searchParams.get("callbackUrl") === "/carrito");
+  } finally { await second.close(); await prisma.user.deleteMany({ where: { id: other.id } }); await resetCheckoutFixture(); }
 });
