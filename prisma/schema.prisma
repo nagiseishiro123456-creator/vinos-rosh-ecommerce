@@ -78,6 +78,7 @@ model User {
   addresses           Address[]
   cart                Cart?
   cartImports         CartImport[]
+  cartMutations       CartMutation[]
   orders              Order[]
   reviews             Review[]
   reviewedPayments    Payment[]            @relation("PaymentReviewedBy")
@@ -216,6 +217,7 @@ model ProductImage {
 }
 
 model Cart {
+  revision  Int      @default(0)
   id        String   @id @default(cuid())
   userId    String   @unique
   createdAt DateTime @default(now())
@@ -465,4 +467,15 @@ model ContactMessage {
   @@index([status])
   @@index([createdAt])
   @@index([email])
+}
+
+model CartMutation {
+  id          String   @id @default(cuid())
+  userId      String
+  operationId String   @db.Uuid
+  requestHash String   @db.Char(64)
+  result      Json     @db.JsonB
+  createdAt   DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, operationId])
 }

@@ -96,6 +96,7 @@ export async function reserveManualOrder(userId: string, submitted: ManualOrderI
           })),
         });
         await tx.cartItem.deleteMany({ where: { cartId: cart.id, id: { in: cart.items.map((item) => item.id) } } });
+        await tx.cart.update({ where: { id: cart.id }, data: { revision: { increment: 1 } } });
         return { ...order, replayed: false };
       }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
     } catch (error) {

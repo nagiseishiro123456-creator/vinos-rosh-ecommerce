@@ -57,6 +57,7 @@ export async function mergeGuestCart(userId: string, submitted: z.infer<typeof g
             create: { cartId: cart.id, productId: item.productId, quantity }, update: { quantity } });
           result.lines.push({ productId: item.productId, quantity });
         }
+        await tx.cart.update({ where: { id: cart.id }, data: { revision: { increment: 1 } } });
         await tx.cartImport.create({ data: { userId, importId, requestHash, result } });
         return { userId, importId, replayed: false, result };
       }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
