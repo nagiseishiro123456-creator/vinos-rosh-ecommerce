@@ -58,6 +58,9 @@ No basta un indicador local de «ya importado»: puede fallar después del commi
   **solo el sobre pendiente coincidente**, conservando íntegra la selección nueva.
   Así la respuesta anterior nunca vacía ediciones posteriores. La UI distingue una
   selección en proceso de las nuevas adiciones; no permite editar el sobre enviado.
+- También se vincula cada respuesta de previsualización a contenido **y revisión**.
+  Retirar y volver a añadir las mismas cantidades no permite que una respuesta antigua
+  reduzca o retire esa selección nueva, incluso mientras espera su turno de escritura.
 - Coordinar lectura/edición/escritura entre pestañas con Web Locks, sin paquetes nuevos;
   además, una cola por instancia conserva el orden de acciones rápidas. Toda mutación
   lee el estado persistido vigente bajo el mismo lock. No mantener el lock durante red.

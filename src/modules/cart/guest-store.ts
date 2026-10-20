@@ -102,8 +102,9 @@ export function createGuestCartStore({ storage = () => window.localStorage, lock
     remove(productId: string) { return enqueue(() => {
       commit(snapshot.items.filter((item) => item.productId !== productId), "Producto eliminado del carrito.");
     }); },
-    replace(value: readonly GuestLine[], message?: string, expectedSelection?: string) { return enqueue(() => {
+    replace(value: readonly GuestLine[], message?: string, expectedSelection?: string, expectedRevision?: string) { return enqueue(() => {
       if (expectedSelection !== undefined && serializeGuestSelection(snapshot.items) !== expectedSelection) return;
+      if (expectedRevision !== undefined && snapshot.revision !== expectedRevision) return;
       const items = normalizeGuestItems(value);
       if (!items) return;
       if (serializeGuestSelection(snapshot.items) === serializeGuestSelection(items) && (message === undefined || message === snapshot.message)) return;

@@ -1,13 +1,18 @@
 # Punto de avance
 
-- Fase: 2. Sprint: 2. S2-01 documentada (3 SP); S2-02 (3 SP) y S2-03 (5 SP) verificadas por CI; integración pendiente.
+- Fase: 2. Sprint: 2. S2-01 documentada (3 SP); S2-02 (3 SP) y S2-03 (5 SP) verificadas por CI; S2-04 (8 SP) en QA. Integración pendiente.
 - Fecha de este punto de avance: 2026-10-19 (America/Lima).
 - Inicio de Sprint 2 autorizado tras la propuesta de seis historias (26 SP preliminares).
 - Base: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, Sprint 1 integrado por PR #3–#8.
 - CI final de esa base: [39096709609](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39096709609),
   67/67 pruebas, 16/16 casos de navegador y checks completos aprobados.
-- Rama de entrega: `fase-2/sprint-02-carrito-invitado`, [PR #11](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/11),
-  basada en el cierre S2-02 `496b8f4…` / PR #10. #9/#10/#11 pendientes de integración.
+- Rama de entrega: `fase-2/sprint-02-union-carritos`, [PR #12](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/12),
+  basada en S2-03 `b74c607…` / PR #11. #9/#10/#11/#12 pendientes de integración.
+- S2-04 implementada con [ADR previo](decisions/0007-union-carritos.md) y
+  [QA en curso](testing/s2-04-union-carritos.md). Código `0ca6b38…` aprobó CI 39362087358:
+  97/97 servidor y 44/44 navegador. Corregidos origen público, fallback sin JS y valor
+  DOM de cantidad tras sumar. Refuerzo final de revisión de selección/callback en validación;
+  17/17 casos locales aprobados, evidencia final por conservar.
 - S2-03 verificada: selección invitada/persistencia, consulta de precio/stock,
   recuperación en memoria y contador. [ADR](decisions/0006-carrito-invitado.md),
   [QA](testing/s2-03-carrito-invitado.md). CI final 39332792422: 80/80 servidor, 28/28
@@ -112,9 +117,11 @@ en Render todavía usa `npm install`: sincronizar antes de un futuro despliegue.
 ## Siguiente acción
 S2-02 supera también la CI del cierre documental (39328457959); PR #10 listo para revisión.
 S2-03 supera la CI oficial y conserva [22 capturas](evidencias/sprint-02/s2-03/README.md).
-Siguiente historia: S2-04, ADR de unión idempotente antes de implementar. Definir identidad
-de importación ligada a usuario/contenido, unicidad y transacción, respuesta perdida y
-ediciones concurrentes antes de limpiar selección local. Mantener dinero/reserva y checkout.
+Acción actual: validar el refuerzo final de S2-04; comprobar CI, conservar y revisar
+capturas originales/manifiesto, registrar resultados y dejar #12 listo para revisión.
+Solo después, S2-05: diseño del panel lateral accesible, sincronización con carrito de
+cuenta y corrección/prueba de incrementos concurrentes, Motion solo entrada/salida y
+movimiento reducido. Mantener dinero/reserva y checkout.
 Durante cada historia: decisiones y estados en el PR. Al cerrar: QA, capturas con fuente,
 backlog y este archivo. Motion sigue pendiente para S2-05; Home inmersivo queda en Sprint 5.
 
@@ -129,5 +136,5 @@ backlog y este archivo. Motion sigue pendiente para S2-05; Home inmersivo queda 
   no se añadió programación periódica ni servicios de pago.
 - Render sigue suspendido como preview; main integrado no implica app desplegada. No se utilizó su BD.
 - S2-02 está verificada pero no integrada; las capturas locales conservan su origen y límites.
-- S2-03 verificada y sin integrar; el salto al carrito de cuenta está explicado y aún no importa
-  la selección invitada. No confundir esta entrega con la unión prevista en S2-04.
+- S2-03 verificada y sin integrar; su entrega histórica no importaba selección. S2-04 ya
+  implementa esa evolución, pero espera CI/evidencia final y revisión antes de integrarse.

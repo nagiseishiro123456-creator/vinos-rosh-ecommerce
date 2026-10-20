@@ -134,3 +134,13 @@ test("a later identical selection has a fresh identity; a stale preview cannot e
   const second = await store.beginImport(id(9)); assert.notEqual(first!.importId, second!.importId);
   assert.deepEqual(first!.items, second!.items); assert.equal(encodeGuestState(store.getSnapshot()).includes("price"), false); stop();
 });
+
+test("an old preview cannot clamp a new selection even if IDs and quantities happen to match again", async () => {
+  const f = fixture(serializeGuestSelection(lines)); const { store, stop } = await open(f);
+  const original = store.getSnapshot(); const content = serializeGuestSelection(original.items);
+  await store.remove(id(1)); await store.add(id(1)); await store.update(id(1), 2);
+  assert.equal(serializeGuestSelection(store.getSnapshot().items), content);
+  assert.notEqual(store.getSnapshot().revision, original.revision);
+  await store.replace([{ productId: id(1), quantity: 1 }], "Old response", content, original.revision);
+  assert.deepEqual(store.getSnapshot().items, lines); assert.notEqual(store.getSnapshot().message, "Old response"); stop();
+});

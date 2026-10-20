@@ -3,7 +3,7 @@
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
 Estado: S2-01 documentada; S2-02 verificada por CI, revisión/integración pendientes;
-S2-03 verificada por CI; S2-04–S2-06 pendientes de implementación.
+S2-03 verificada por CI; S2-04 implementada en QA; S2-05–S2-06 pendientes de implementación.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
 ## Sprint Goal

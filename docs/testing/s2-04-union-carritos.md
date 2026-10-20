@@ -71,3 +71,13 @@ no controlado mantenía el valor DOM 1 aunque el atributo `value` ya era 3. Se r
 únicamente ese input cuando cambia la cantidad confirmada por servidor, conservando
 formulario/botón y envío nativo. No se debilita la aserción del valor real.
 Además se comprueba foco en el resultado y se evita anidar retornos sucesivos al carrito.
+
+Tercera ejecución: `0ca6b388cfb9c5b91147c8babdd1e8d2a996b4b0`,
+[CI 39362087358](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39362087358),
+job `118430342117`: **97/97 servidor y 44/44 navegador**, checks completos aprobados.
+Cantidad DOM, suma 2 + 1, foco, ajustes de stock/precio, logout y las regresiones sin JS
+quedan verificados. La revisión posterior añade una prueba de respuesta antigua ante
+selección nueva con contenido idéntico y valida tipo de callback de query repetida.
+La previsualización exige también la revisión vigente dentro de su escritura en cola.
+17/17 casos locales de estado/destinos aprobados; se verifica de nuevo la cabecera final
+antes de seleccionar el artefacto definitivo, sin atribuirle resultados de otro commit.

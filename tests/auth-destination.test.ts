@@ -4,7 +4,8 @@ import { authenticationDestination, safeInternalDestination } from "../src/modul
 
 test("authentication preserves normalized internal destinations and rejects origin/encoding escapes", () => {
   for (const value of ["https://evil.example/", "//evil.example", "/\\evil.example", "/%5cevil.example", "/%2f%2fevil.example", "/%252fevil.example",
-    "/\nevil.example", "/a/..//evil.example", "/a/%2e%2e//evil.example", "javascript:alert(1)", "/api/auth/signout", "/registrarse", "/iniciar-sesion", " /checkout", null]) {
+    "/\nevil.example", "/a/..//evil.example", "/a/%2e%2e//evil.example", "javascript:alert(1)", "/api/auth/signout", "/registrarse", "/iniciar-sesion", " /checkout", null,
+    ["/checkout"] as unknown as string, {} as unknown as string]) {
     assert.equal(safeInternalDestination(value), "/mi-cuenta", String(value));
   }
   assert.equal(safeInternalDestination("/productos/../checkout?addressId=abc#entrega"), "/checkout?addressId=abc#entrega");

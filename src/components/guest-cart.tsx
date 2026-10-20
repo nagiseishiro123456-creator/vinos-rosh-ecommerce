@@ -34,7 +34,7 @@ function GuestQuantity({ productId, name, quantity, update }: {
 }
 
 export function GuestCart() {
-  const { items, pending: pendingImport, ready, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
+  const { items, revision: selectionRevision, pending: pendingImport, ready, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
   const [revision, setRevision] = useState(0);
   const [validation, setValidation] = useState<Validation | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -51,7 +51,7 @@ export function GuestCart() {
     if (!ready || !items.length) return;
     const controller = new AbortController();
     let cancelled = false;
-    const stillCurrent = () => !cancelled && serializeGuestSelection(getSnapshot().items) === key;
+    const stillCurrent = () => !cancelled && getSnapshot().revision === selectionRevision && serializeGuestSelection(getSnapshot().items) === key;
     fetch("/api/cart/preview", { method: "POST", credentials: "omit", cache: "no-store", signal: controller.signal,
       headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items }) })
       .then(async (response) => {
@@ -65,14 +65,14 @@ export function GuestCart() {
         const changes = preview.changes.map((change) => change.kind === "unavailable"
           ? "Se retiró un producto que ya no está disponible."
           : `La disponibilidad cambió: se ajustó un producto a ${change.quantity} unidades.`).join(" ");
-        void replace(normalized, changes || undefined, key);
+        void replace(normalized, changes || undefined, key, selectionRevision);
       })
       .catch((error: unknown) => {
         if (!stillCurrent()) return;
         setValidation((previous) => ({ key, revision, data: previous?.data, error: error instanceof PreviewError ? error.message : unavailable }));
       });
     return () => { cancelled = true; controller.abort(); };
-  }, [items, key, ready, revision, replace, getSnapshot]);
+  }, [items, key, ready, revision, selectionRevision, replace, getSnapshot]);
 
   const current = validation?.key === key && validation.revision === revision;
   const error = current ? validation?.error : undefined;
