@@ -44,9 +44,9 @@ export function AccountCart({ initial, actions = {}, variant = "page", continuat
       {items.length === 0 && cart.status !== "expired" ? <div className="emptyPanel"><strong>Tu carrito está vacío.</strong>
         <p>Explora el catálogo y agrega los productos que quieras revisar antes de comprar.</p><Link className="button buttonDark" href="/productos">Ver productos</Link></div>
         : <div className="cartItems">{items.map((item) => <article className="cartItem" key={item.id}>
-          <Link className="cartItemImage" href={"/productos/" + item.slug}><Image src={item.imageUrl ?? siteConfig.prototypeAssetsBase + "/products.jpg"}
+          <Link className="cartItemImage" href={("/productos/" + item.slug) as Route}><Image src={item.imageUrl ?? siteConfig.prototypeAssetsBase + "/products.jpg"}
             alt={item.imageAlt ?? item.name} fill sizes="110px" /></Link>
-          <div className="cartItemInfo"><Link href={"/productos/" + item.slug}><strong>{item.name}</strong></Link>
+          <div className="cartItemInfo"><Link href={("/productos/" + item.slug) as Route}><strong>{item.name}</strong></Link>
             <span>{item.unitPrice ? formatPrice(item.unitPrice) + " c/u" : "Precio no disponible"}</span>
             {!item.available ? <small className="cartWarning">Este producto ya no está disponible.</small>
               : item.quantity > item.maxQuantity ? <small className="cartWarning">Solo quedan {item.maxQuantity} unidades disponibles.</small> : null}

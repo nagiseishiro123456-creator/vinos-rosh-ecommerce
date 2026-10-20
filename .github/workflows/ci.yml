@@ -64,11 +64,6 @@ jobs:
       - name: Use pinned npm
         run: npm install --global npm@11.9.0
 
-      - name: Resolve Motion lockfile for recovery
-        run: |
-          npm install --package-lock-only --ignore-scripts --no-fund --no-audit
-          node scripts/qa-motion-lock.mjs
-
       - name: Install dependencies
         run: npm ci --include=dev
 
@@ -119,6 +114,12 @@ jobs:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: |
           cat tests/sql/cart-import-migration-before.sql prisma/migrations/20261019223000_guest_cart_import/migration.sql tests/sql/cart-import-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
+      - name: Verify cart commands migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/cart-commands-migration-before.sql prisma/migrations/20261020040500_cart_commands/migration.sql tests/sql/cart-commands-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
       - name: Tests
         run: npm test
