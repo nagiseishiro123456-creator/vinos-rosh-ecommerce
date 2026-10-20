@@ -61,6 +61,7 @@ test("S2-04: login merges 2 plus 1 once, keeps destination and shows later stock
     await expect(page.getByLabel("Cantidad", { exact: true })).toHaveValue("3");
     await expect(page.locator(".cartButton .cartCount")).toHaveText("3");
     await expect(page.locator(".cartMergeResult")).toContainText("Tu selección se integró");
+    await expect(page.getByRole("region", { name: "Resultado de la integración" })).toBeFocused();
     expect((await saved(page)).pending).toBe(null); expect((await saved(page)).items).toEqual([]);
     const receipt = await prisma.cartImport.findFirstOrThrow({ where: { userId: f.user.id } });
     const replay = await page.request.post("/api/cart/merge", { headers: { origin: "http://127.0.0.1:3000" },
@@ -90,7 +91,7 @@ test("S2-04: login merges 2 plus 1 once, keeps destination and shows later stock
     await capture(changed, info, "49-union-ajuste-disponibilidad");
     expect((await prisma.product.findUniqueOrThrow({ where: { id: f.product.id } })).stock).toBe(4);
     expect(await prisma.order.count({ where: { userId: f.user.id } })).toBe(0);
-    if ((info.project.use.viewport?.width ?? 1440) < 1024) await page.getByRole("button", { name: "Abrir menú", exact: true }).click();
+    if (await page.getByRole("button", { name: "Abrir menú", exact: true }).isVisible()) await page.getByRole("button", { name: "Abrir menú", exact: true }).click();
     await page.getByRole("button", { name: "Cerrar sesión", exact: true }).click();
     await expect(page).toHaveURL((url) => url.pathname === "/"); await page.goto("/carrito");
     await expect(page.getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
@@ -125,6 +126,7 @@ test("S2-04: lost response and two tabs retry the same receipt without erasing n
     expect(waiting.items).toEqual([{ productId: f.product.id, quantity: 1 }]);
     await page.getByRole("button", { name: "Reintentar integración", exact: true }).click();
     await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 179.40");
+    await expect(page.getByRole("region", { name: "Resultado de la integración" })).toBeFocused();
     await expect(second.locator(".summaryTotal strong")).toHaveText("S/ 179.40");
     expect(await cartQuantity(f.cart.id, f.product.id)).toBe(6);
     expect(await prisma.cartImport.count({ where: { userId: f.user.id } })).toBe(2);

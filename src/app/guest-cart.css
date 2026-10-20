@@ -26,3 +26,4 @@
 .cartMergeResult p, .cartMergeResult ul, .guestPendingSelection p { margin-top: .7rem; }
 .cartMergeResult ul { padding-left: 1.3rem; }
 .cartMergeGate :focus-visible { outline: 3px solid #ac7446; outline-offset: 3px; }
+.cartMergeResult:focus-visible { outline: 3px solid #ac7446; outline-offset: 3px; }

@@ -152,5 +152,40 @@ servidor. No crea un carrito de BD ni reserva stock; solo el limitador utiliza s
 
 El visitante edita su selección local y puede recuperarse ante almacenamiento o red
 fallidos. Los importes no verificados se identifican como pendientes. Las Server Actions
-de cuenta y el checkout mantienen sus reglas y permisos. S2-04 definirá/importará la
-selección de forma transaccional e idempotente; todavía no se efectúa esa unión.
+de cuenta y el checkout mantienen sus reglas y permisos. En la entrega de S2-03 aún
+no se efectuaba la unión; la evolución de S2-04 se describe a continuación.
+
+## Unión de selección — S2-04 (rama de PR #12)
+
+[ADR 0007](decisions/0007-union-carritos.md) anterior al código y
+[QA](testing/s2-04-union-carritos.md). La migración 11 agrega `CartImport` con
+UNIQUE `(userId, importId)`, huella SHA-256 del contenido canónico/usuario y resultado
+JSON de la operación. En una transacción Serializable se recupera el comprobante o
+se suman las líneas enviadas al carrito y se guarda su resultado. Misma identidad/
+contenido recupera; diferente contenido genera conflicto. Los reintentos son acotados.
+La lectura de productos es por lote; las escrituras por línea están limitadas a 50.
+No se altera stock, pedidos ni pagos. El precio actual continúa en el render servidor
+y el checkout conserva su firma, dinero exacto y reserva condicional.
+
+`POST /api/cart/merge` exige sesión, usuario esperado, origen público configurado,
+JSON estricto y límite real de 16 KiB/rate limit por usuario. El origen no se infiere
+de Host ni del Origin enviado por el cliente. La configuración pública contempla la
+normalización de loopback de Next y el acceso detrás de un proxy. Sin CORS habilitado.
+El namespace pertenece al usuario autenticado; no se recuperan resultados de otra cuenta.
+
+El formato local pasa a versión 2 manteniendo su clave anterior para migración. Revisión
+aleatoria para selecciones nuevas y huella determinista para formato 1. Antes de enviar,
+la selección activa se mueve a un sobre inmutable ligado al usuario; las adiciones nuevas
+permanecen en otra selección activa. Solo la confirmación coincidente elimina ese sobre.
+Web Locks serializa operaciones de disco entre pestañas; una cola local preserva acciones
+rápidas. El lock nunca abarca la petición de red. Si storage/locks fallan se usa memoria
+con aviso; no se persisten precios ni resultados del carrito privado. Un pendiente de otra
+cuenta conserva su vínculo y bloquea la unión hasta ingresar con la cuenta original.
+
+Ingreso y registro comparten validación de destino interno normalizado. Con selección se
+abre el carrito para revisar el resultado y continuar al destino conservado. Barreras cliente
+en carrito/entrega/confirmación ocultan acciones de compra hasta unir y refrescar datos SSR;
+un resultado confirmado en otra pestaña también exige refresco. El fallback sin JS restituye
+los formularios nativos e informa que no importa selección local. Los componentes de
+consulta y precio siguen siendo Server Components. No se incorpora Motion ni paquetes nuevos.
+La carrera de incrementos de los formularios de cuenta anteriores sigue prevista en S2-05.

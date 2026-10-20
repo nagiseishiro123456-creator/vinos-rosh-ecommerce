@@ -12,6 +12,6 @@ export function safeInternalDestination(value: string | null | undefined, fallba
 }
 export function authenticationDestination(callback: string, hasGuestSelection: boolean) {
   const safe = safeInternalDestination(callback);
-  if (!hasGuestSelection || safe === "/carrito") return safe;
+  if (!hasGuestSelection || new URL(safe, "https://rosh.invalid").pathname === "/carrito") return safe;
   return `/carrito?continuar=${encodeURIComponent(safe)}`;
 }

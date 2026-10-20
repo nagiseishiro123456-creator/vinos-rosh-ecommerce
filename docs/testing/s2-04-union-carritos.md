@@ -61,3 +61,13 @@ Artefacto inicial `12226934877`, ZIP 174720872 bytes; SHA-256
 `6466bbd85f356b9d07e2378f6169b86789e4318fac111110d46d7529735ec70e` verificado.
 Se inspeccionaron HTML/CSS, errores y captura nativa para identificar las causas;
 estas capturas de fallo no constituyen la evidencia final de aceptación.
+
+Segunda ejecución: `7eadc38…`, [CI 39361542665](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39361542665),
+job `118428631177`: **97/97 servidor y 40/44 navegador**. Se recuperan las pruebas de
+origen y formularios nativos; pasan dos pestañas, respuesta perdida, registro, memoria,
+expiración y otra cuenta a los cuatro tamaños. Los cuatro fallos restantes comprueban
+un defecto visible: tras sumar 1 + 2, total/cantidad en BD eran 3 pero el input nativo
+no controlado mantenía el valor DOM 1 aunque el atributo `value` ya era 3. Se remonta
+únicamente ese input cuando cambia la cantidad confirmada por servidor, conservando
+formulario/botón y envío nativo. No se debilita la aserción del valor real.
+Además se comprueba foco en el resultado y se evita anidar retornos sucesivos al carrito.

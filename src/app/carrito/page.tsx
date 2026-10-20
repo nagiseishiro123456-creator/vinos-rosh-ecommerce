@@ -115,6 +115,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
                       <label htmlFor={`qty-${item.id}`}>Cantidad</label>
                       <div>
                         <input
+                          key={item.quantity}
                           id={`qty-${item.id}`}
                           name="quantity"
                           type="number"

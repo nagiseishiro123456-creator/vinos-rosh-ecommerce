@@ -15,6 +15,7 @@ test("authentication preserves normalized internal destinations and rejects orig
 test("guest authentication keeps the purchase destination for review after merging", () => {
   assert.equal(authenticationDestination("/checkout?addressId=abc", true), "/carrito?continuar=%2Fcheckout%3FaddressId%3Dabc");
   assert.equal(authenticationDestination("/carrito", true), "/carrito");
+  assert.equal(authenticationDestination("/carrito?continuar=%2Fcheckout%3FaddressId%3Dabc", true), "/carrito?continuar=%2Fcheckout%3FaddressId%3Dabc");
   assert.equal(authenticationDestination("/checkout", false), "/checkout");
   assert.equal(authenticationDestination("//evil.example", false), "/mi-cuenta");
 });

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useGuestCart } from "@/components/guest-cart-provider";
 import { GuestImportAccountError } from "@/modules/cart/guest-store";
 import { safeInternalDestination } from "@/modules/auth/destination";
@@ -14,6 +14,7 @@ type Failure = { key: string; message: string; signIn: boolean };
 export function CartMergeBoundary({ userId, renderId, returnTo = "/carrito", children }: { userId: string; renderId: string; returnTo?: string; children: ReactNode }) {
   const { ready, busy, items, pending, revision, warning, beginImport, confirmImport } = useGuestCart();
   const router = useRouter();
+  const resultRegion = useRef<HTMLElement>(null);
   const [retry, setRetry] = useState(0);
   const [failure, setFailure] = useState<Failure | null>(null);
   const [result, setResult] = useState<CartMergeResponse | null>(null);
@@ -54,6 +55,9 @@ export function CartMergeBoundary({ userId, renderId, returnTo = "/carrito", chi
   }, [ready, workKey, retry, userId, renderId, beginImport, confirmImport, router]);
 
   const blocked = !ready || busy || Boolean(workKey) || refreshing;
+  useEffect(() => {
+    if (!blocked && result && document.visibilityState === "visible") resultRegion.current?.focus({ preventScroll: true });
+  }, [blocked, result]);
   const error = failure?.key === workKey ? failure : null;
   const adjusted = result?.result.changes.length ?? 0;
   return <>
@@ -67,9 +71,9 @@ export function CartMergeBoundary({ userId, renderId, returnTo = "/carrito", chi
       </div> : <p role="status">{refreshing ? "Actualizando el carrito de tu cuenta…" : "Integrando tu selección con el carrito de tu cuenta…"}</p>}
       <p className="summaryNote">Verificamos disponibilidad y cantidades antes de continuar. Esta operación no reserva botellas.</p>
       {warning ? <p className="checkoutError" role="alert">{warning}</p> : null}
-    </section> : result ? <section className="cartMergeResult shell" aria-label="Resultado de la integración" role="status">
-      <strong>{result.replayed ? "Tu selección ya se había integrado. Comprobamos el resultado sin volver a sumarla." : "Tu selección se integró al carrito de tu cuenta."}</strong>
-      {adjusted ? <><p>La disponibilidad o el límite de cantidad cambió. Revisa estos ajustes antes de continuar:</p>
+    </section> : result ? <section ref={resultRegion} tabIndex={-1} className="cartMergeResult shell" aria-label="Resultado de la integración">
+      <strong role="status">{result.replayed ? "Tu selección ya se había integrado. Comprobamos el resultado sin volver a sumarla." : "Tu selección se integró al carrito de tu cuenta."}</strong>
+      {adjusted ? <><p>{result.replayed ? "Estos ajustes corresponden a la integración anterior; abajo verás el carrito actual:" : "La disponibilidad o el límite de cantidad cambió. Revisa estos ajustes antes de continuar:"}</p>
         <ul>{result.result.changes.map((change) => <li key={change.productId}>{change.kind === "unavailable"
           ? "Se retiró un producto que ya no está disponible." : `Se ajustó un producto a ${change.quantity} unidades por disponibilidad o límite de compra.`}</li>)}</ul></>
         : <p>Revisa las cantidades y el total actuales antes de continuar. Todavía no se reservó stock.</p>}
