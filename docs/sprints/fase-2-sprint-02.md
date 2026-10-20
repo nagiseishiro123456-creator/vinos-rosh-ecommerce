@@ -176,4 +176,7 @@ aislado no equivalen a certificación completa de accesibilidad ni a aceptación
   67/67 servidor y 20/20 navegador; revisión/integración pendientes.
 - S2-03: ADR 0006 e implementación en PR #11; [QA aprobada](../testing/s2-03-carrito-invitado.md):
   80/80 servidor y 28/28 navegador, 22 capturas conservadas; integración pendiente.
-- S2-04–S2-06: pendientes. Siguiente acción: ADR de unión antes del código de S2-04.
+- S2-04: ADR 0007 e implementación en PR #12; [QA aprobada](../testing/s2-04-union-carritos.md):
+  98/98 servidor y 44/44 navegador, 32 capturas conservadas; revisión/integración pendientes.
+- S2-05–S2-06: pendientes. Siguiente acción: ADR del carrito lateral antes del código
+  de S2-05; revisión e integración del incremento completo en S2-06.
