@@ -15,7 +15,14 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
   const dialog = useRef<HTMLDialogElement>(null); const title = useRef<HTMLHeadingElement>(null);
   const restore = useRef<(() => void) | null>(null);
   const account = useAccountCart(); const { userId } = useCartPanel(); const guest = useGuestCart(); const quote = useGuestCartQuote();
-  const reduced = useReducedMotion() !== false;
+  const initialReduced = useReducedMotion();
+  const [reduced, setReduced] = useState(() => initialReduced ?? window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const change = () => setReduced(preference.matches);
+    preference.addEventListener("change", change);
+    return () => preference.removeEventListener("change", change);
+  }, []);
   const [desktop, setDesktop] = useState(() => window.matchMedia("(min-width: 768px)").matches);
   useEffect(() => { const media = window.matchMedia("(min-width: 768px)"); const change = () => setDesktop(media.matches);
     media.addEventListener("change", change); return () => media.removeEventListener("change", change); }, []);

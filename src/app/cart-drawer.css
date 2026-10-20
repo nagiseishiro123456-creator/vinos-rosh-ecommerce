@@ -38,6 +38,7 @@
   .drawerFooterLinks .textLink { font-size: .84rem; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .cartDialog .button:hover { transform: none !important; }
   .cartDrawerPanel { transform: none !important; opacity: 1 !important; animation: none !important; transition: none !important; }
   .cartDialog *, .cartDialog *::before, .cartDialog *::after { scroll-behavior: auto !important; animation-duration: 0s !important; transition-duration: 0s !important; }
 }

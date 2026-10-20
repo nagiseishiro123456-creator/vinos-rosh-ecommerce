@@ -51,7 +51,7 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await page.goto(productPath); await expect(page.getByRole("button", { name: "Agregar al carrito", exact: true })).toBeEnabled();
   const beforeScripts = new Set(scripts.map((response) => response.url()));
   await page.evaluate(() => window.scrollTo({ top: 300, behavior: "instant" }));
-  const opener = page.viewportSize()!.width < 768 ? page.locator(".mobileBottomCart") : page.locator(".cartButton");
+  const opener = page.locator(".cartButton");
   await opener.scrollIntoViewIfNeeded();
   const original = await page.evaluate(() => ({ y: scrollY, overflow: document.body.style.overflow, padding: document.body.style.paddingRight }));
   await opener.click(); await expect(panel(page)).toBeVisible();
@@ -85,6 +85,10 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await expect(page).toHaveURL((url) => url.pathname === productPath);
   await expect(panel(page).locator(".cartDrawerPanel")).toHaveAttribute("data-reduced-motion", "true");
   expect(await panel(page).locator(".cartDrawerPanel").evaluate((element) => getComputedStyle(element).transform)).toBe("none");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(panel(page).locator(".cartDrawerPanel")).toHaveAttribute("data-reduced-motion", "false");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(panel(page).locator(".cartDrawerPanel")).toHaveAttribute("data-reduced-motion", "true");
   await geometry(page); await shot(page, info, "53-panel-invitado");
   await panel(page).locator("input[name=quantity]").fill("2");
   await panel(page).getByRole("button", { name: "Actualizar", exact: true }).click();
@@ -108,6 +112,13 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await expect(panel(page).getByRole("heading", { name: "Tu selección", exact: true })).toBeFocused();
   await panel(page).getByRole("button", { name: "Continuar comprando", exact: true }).click();
   await expect(panel(page)).toBeHidden(); await expect(page.locator(".guestCart").getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
+  if (page.viewportSize()!.width < 768) {
+    await page.goto("/productos");
+    const bottom = page.locator(".mobileBottomCart");
+    await expect(bottom).toBeVisible(); await bottom.click(); await expect(panel(page)).toBeVisible();
+    await expect(panel(page).getByRole("heading", { name: "Tu carrito", exact: true })).toBeFocused();
+    await page.keyboard.press("Escape"); await expect(panel(page)).toBeHidden(); await expect(bottom).toBeFocused();
+  }
   expect(errors).toEqual([]);
 });
 

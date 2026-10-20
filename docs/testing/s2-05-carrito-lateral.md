@@ -78,3 +78,22 @@ que el documento no se recarga y que cerrar al navegar no restaura scroll de otr
 La restitución de scroll se mide después de desplazar el disparador a la vista; también
 se comprueba al cerrar un panel abierto desde el botón de producto. La aserción de foco
 incluye elemento activo para diagnóstico y no se relaja.
+
+## Revisión de foco, navegación y preferencia
+
+`8b7e045…`, CI 39489132716: 116/116 servidor; navegador se detuvo con 21 aprobados,
+cuatro fallos de los problemas ya descritos y 39 sin ejecutar. No es una aceptación parcial.
+
+`c7cb13b…`, CI 39489876832: 116/116 servidor, 49 navegador aprobados, cuatro fallos
+y 11 sin ejecutar. El bucle de Tab ya pasa y las regresiones ejecutadas de memoria ya
+conservan la selección. Los cuatro fallos pertenecen al caso nuevo: el cambio en vivo
+de prefers-reduced-motion no actualizaba el valor del panel en esta ejecución; dos
+proyectos móviles además intentaban usar una barra inferior oculta intencionalmente
+en la ficha de producto.
+
+Se conserva useReducedMotion como valor inicial y se escucha el cambio de matchMedia
+durante la visita, con cleanup. La prueba cambia en ambos sentidos y comprueba la
+transformación reducida. CSS también elimina el desplazamiento hover del CTA en ese modo.
+Se abre desde el header visible en ficha, y el acceso inferior se comprueba en catálogo,
+donde forma parte del diseño. El cierre desde el CTA sigue verificando scroll/foco.
+No se elimina la preferencia ni se deshabilitan las aserciones de teclado o memoria.
