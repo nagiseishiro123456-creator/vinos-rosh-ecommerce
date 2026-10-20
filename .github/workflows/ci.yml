@@ -64,6 +64,11 @@ jobs:
       - name: Use pinned npm
         run: npm install --global npm@11.9.0
 
+      - name: Resolve Motion lockfile for recovery
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-fund --no-audit
+          node scripts/qa-motion-lock.mjs
+
       - name: Install dependencies
         run: npm ci --include=dev
 

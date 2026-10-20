@@ -1,4 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { getServerSession } from "next-auth";
+import { CartProvider } from "@/components/cart-provider";
+import { GuestCartQuoteProvider } from "@/components/guest-cart-quote-provider";
+import { authOptions } from "@/lib/auth";
+import { readAccountCart } from "@/modules/cart/account-service";
+import type { AccountCartSnapshot } from "@/modules/cart/account-contract";
 
 import { AnalyticsConsent } from "@/components/analytics-consent";
 import { GuestCartProvider } from "@/components/guest-cart-provider";
@@ -22,6 +28,7 @@ import "./history-faq.css";
 import "./admin-backup.css";
 import "./purchase-flow.css";
 import "./guest-cart.css";
+import "./cart-drawer.css";
 
 const previewMode = process.env.PREVIEW_MODE === "true";
 
@@ -55,12 +62,21 @@ export const viewport: Viewport = {
   themeColor: "#3e0a0f",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id ?? null;
+  let initial: AccountCartSnapshot | null = null;
+  if (userId) {
+    try { initial = await readAccountCart(userId); }
+    catch (error) { console.error("ROOT_CART_ERROR", error); }
+  }
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <body>
         <AnalyticsConsent />
-        <GuestCartProvider>{children}</GuestCartProvider>
+        <GuestCartProvider><GuestCartQuoteProvider>
+          <CartProvider key={userId ?? "guest"} userId={userId} initial={initial}>{children}</CartProvider>
+        </GuestCartQuoteProvider></GuestCartProvider>
       </body>
     </html>
   );

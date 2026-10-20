@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import { calculateAmounts, MAX_ORDER_AMOUNT } from "@/modules/checkout/pricing";
 import type { AccountCartSnapshot, CartCommandRequest, CartCommandResponse, CartCommandResult } from "./account-contract";
@@ -36,9 +37,9 @@ async function snapshot(tx: Prisma.TransactionClient, userId: string): Promise<A
     hasInvalidItems: items.some((item) => !item.available || item.quantity > item.maxQuantity),
     exceedsOrderLimit: subtotal.gt(MAX_ORDER_AMOUNT) };
 }
-export async function readAccountCart(userId: string) {
+export const readAccountCart = cache(async (userId: string) => {
   return prisma.$transaction((tx) => snapshot(tx, userId), { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
-}
+});
 export async function executeCartCommand(userId: string, submitted: CartCommandRequest): Promise<CartCommandResponse> {
   const parsed = cartCommandSchema.safeParse(submitted);
   if (!parsed.success) throw new CartCommandError("INVALID");

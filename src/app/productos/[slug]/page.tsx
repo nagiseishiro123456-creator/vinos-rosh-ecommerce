@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+import { AccountAddToCart } from "@/components/account-add-to-cart";
 import { formatPrice } from "@/lib/money";
 import { BadgeCheck, Star } from "lucide-react";
 import type { Metadata } from "next";
@@ -48,7 +50,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const imageUrl =
     product.images[0]?.url ?? `${siteConfig.prototypeAssetsBase}/products.jpg`;
-  const addAction = addToCart.bind(null, product.id, product.slug);
+  const addAction = addToCart.bind(null, product.id, product.slug, randomUUID(), session?.user?.id ?? "");
 
   return (
     <main className="productPage purchaseFlow">
@@ -92,11 +94,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           {product.stock > 0 ? (
-            session?.user?.id ? <form action={addAction}>
-              <button className="button buttonDark productAddButton" type="submit">
-                Agregar al carrito
-              </button>
-            </form> : <GuestAddToCart productId={product.id} />
+            session?.user?.id ? <AccountAddToCart productId={product.id} action={addAction} /> : <GuestAddToCart productId={product.id} />
           ) : (
             <button className="button buttonDisabled productAddButton" type="button" disabled>
               Sin stock
