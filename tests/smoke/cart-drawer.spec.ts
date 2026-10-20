@@ -28,6 +28,16 @@ async function geometry(page: Page) {
     if (!await button.isVisible()) continue;
     const rect = await button.boundingBox(); expect(rect!.width).toBeGreaterThanOrEqual(44); expect(rect!.height).toBeGreaterThanOrEqual(44);
   }
+  for (const item of await panel(page).locator(".cartItem").all()) {
+    const image = await item.locator(".cartItemImage, .guestImagePlaceholder").boundingBox();
+    const info = await item.locator(".cartItemInfo").boundingBox();
+    const quantity = await item.locator(".quantityForm").boundingBox();
+    const lineTotal = await item.locator(".cartItemTotal").boundingBox();
+    expect(info!.x).toBeGreaterThanOrEqual(image!.x + image!.width + 6);
+    expect(info!.width, "Product name must remain readable inside a narrow drawer").toBeGreaterThanOrEqual(160);
+    expect(quantity!.y).toBeGreaterThanOrEqual(info!.y + info!.height - 1);
+    expect(lineTotal!.y).toBeGreaterThanOrEqual(quantity!.y + quantity!.height - 1);
+  }
   const footer = await panel(page).locator(".cartDrawerFooter").boundingBox();
   expect(footer!.y + footer!.height).toBeLessThanOrEqual(page.viewportSize()!.height + 1);
 }

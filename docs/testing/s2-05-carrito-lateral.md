@@ -110,3 +110,17 @@ oculta el contador anterior y refresca la sesión del layout. La acción de prod
 comprueba esa identidad antes de enviar. La página no muestra datos de un proveedor de
 otra cuenta. E2E comprueba red fallida después de 401 y cambio de sesión seguido de
 navegación SPA: se recupera la cuenta nueva, sin modificar ni mostrar la selección anterior.
+
+## Revisión visual tras CI aprobada
+
+`6fc3661…`, [CI 39492192210](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39492192210):
+116/116 servidor, 64/64 navegador, tipos/lint/build y auditoría de producción aprobados.
+Se verificaron SHA-256, dimensiones y procedencia de los 36 PNG originales. La inspección
+de tablet/escritorio detectó una distribución demasiado estrecha del nombre: la fila
+explícita del total heredada del carrito completo desplazaba la información del producto.
+Esa evidencia no se acepta como entrega visual final.
+
+El panel ahora fija columnas y filas propias para imagen, información, cantidad y total,
+restablece la alineación/bordes del total y añade espacio interior. La prueba geométrica
+exige nombre de al menos 160 px y cantidad/total debajo de la información en los cuatro
+anchos. Se conserva toda la cobertura funcional y se regeneran las capturas en CI.

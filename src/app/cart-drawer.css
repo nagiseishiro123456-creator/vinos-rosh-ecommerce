@@ -16,16 +16,16 @@
 .drawerCart .cartMain > .eyebrow { display: none; }
 .drawerCart .cartMain > h3 { margin: 0 0 12px; font-size: 1.15rem; }
 .drawerCart .cartItems { gap: 16px; margin-top: 14px; }
-.drawerCart .cartItem { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 16px 0; }
-.drawerCart .cartItemImage { width: 64px; height: 84px; grid-row: span 2; }
-.drawerCart .guestImagePlaceholder { width: 64px; min-height: 84px; grid-row: span 2; }
-.drawerCart .cartItemInfo { min-width: 0; }
+.drawerCart .cartItem { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 14px; align-items: start; }
+.drawerCart .cartItemImage { width: 64px; height: 84px; grid-column: 1; grid-row: 1 / span 2; align-self: start; }
+.drawerCart .guestImagePlaceholder { width: 64px; min-height: 84px; grid-column: 1; grid-row: 1 / span 2; }
+.drawerCart .cartItemInfo { grid-column: 2; grid-row: 1; min-width: 0; align-content: start; }
 .drawerCart .cartItemInfo strong { overflow-wrap: anywhere; }
-.drawerCart .quantityForm { grid-column: 2; min-width: 0; }
+.drawerCart .quantityForm { grid-column: 2; grid-row: 2; min-width: 0; }
 .drawerCart .quantityForm > div { display: flex; flex-wrap: wrap; gap: 6px; }
 .drawerCart .quantityForm input { width: 64px; min-width: 0; min-height: 44px; }
 .drawerCart .quantityForm button, .drawerCart .removeButton { min-width: 44px; min-height: 44px; }
-.drawerCart .cartItemTotal { grid-column: 2; align-items: flex-start; gap: 2px; }
+.drawerCart .cartItemTotal { grid-column: 2; grid-row: 3; min-width: 0; align-self: auto; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0 0; border-top: 1px solid #f0e8e3; border-left: 0; }
 .drawerCart .emptyPanel { padding: 20px 0; background: transparent; border: 0; }
 .drawerCart .checkoutError .button { white-space: normal; }
 .accountCartStatus:empty { display: none; }
