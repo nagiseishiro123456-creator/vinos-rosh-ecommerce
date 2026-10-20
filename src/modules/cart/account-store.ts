@@ -40,7 +40,7 @@ export function createAccountCartStore(userId: string | null, initial: AccountCa
   async function refresh() {
     if (!userId || running || disposed) return false;
     const token = ++sequence;
-    if (!state.pending) set({ status: "loading", error: "" });
+    if (!state.pending && state.status !== "expired") set({ status: "loading", error: "" });
     try {
       const response = await request("/api/cart", { credentials: "same-origin", cache: "no-store" });
       const data: unknown = await response.json();
@@ -51,11 +51,11 @@ export function createAccountCartStore(userId: string | null, initial: AccountCa
       }
       if (!response.ok || !validCart(data, userId)) throw new Error("Read failed");
       const changed = data.revision !== state.data?.revision;
-      accept(data); set(state.pending ? {} : { status: "idle", error: "" });
+      accept(data); set(state.pending ? { status: "error", error: uncertain } : { status: "idle", error: "" });
       if (changed) onChange();
       return true;
     } catch {
-      if (token === sequence && !disposed) set({ status: "error", error: state.pending ? uncertain : "No pudimos verificar el carrito. Reintenta antes de continuar." });
+      if (token === sequence && !disposed && state.status !== "expired") set({ status: "error", error: state.pending ? uncertain : "No pudimos verificar el carrito. Reintenta antes de continuar." });
       return false;
     }
   }

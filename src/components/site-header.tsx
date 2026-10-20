@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, type MouseEvent } from "react";
 import { useAccountCart, useCartPanel } from "./cart-provider";
 
@@ -18,21 +19,27 @@ import { useGuestCart } from "@/components/guest-cart-provider";
 import { SignOutButton } from "@/components/sign-out-button";
 
 type SiteHeaderProps = {
+  userId: string | null;
   isAuthenticated?: boolean;
   isAdmin?: boolean;
 };
 
 export function SiteHeader({
+  userId,
   isAuthenticated = false,
   isAdmin = false,
 }: SiteHeaderProps) {
   const guest = useGuestCart();
-  const account = useAccountCart(); const panel = useCartPanel();
-  const count = isAuthenticated ? account.data?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0
+  const account = useAccountCart(); const panel = useCartPanel(); const router = useRouter();
+  const ownerMismatch = userId !== panel.userId;
+  useEffect(() => { if (ownerMismatch) router.refresh(); }, [ownerMismatch, router]);
+  const count = isAuthenticated ? ownerMismatch ? 0 : account.data?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0
     : [...guest.items, ...(guest.pending?.items ?? [])].reduce((sum, item) => sum + item.quantity, 0);
   function openCart(event: MouseEvent<HTMLAnchorElement>) {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault(); setMenuOpen(false); panel.openCart(event.currentTarget);
+    event.preventDefault(); setMenuOpen(false);
+    if (ownerMismatch) { router.refresh(); return; }
+    panel.openCart(event.currentTarget);
   }
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);

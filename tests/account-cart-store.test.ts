@@ -58,8 +58,11 @@ test("out of order reads and another user payload never replace the account cart
   assert.equal(store.getSnapshot().data, null); assert.equal(store.getSnapshot().status, "expired");
 });
 test("401 removes private data and disposed or old server replies cannot restore it", async () => {
-  const store = createAccountCartStore(userId, cart(), { listen: noEvents, request: async () => json({}, 401) });
-  await store.refresh(); store.adopt(cart(5, 9));
+  let authRequests = 0;
+  const store = createAccountCartStore(userId, cart(), { listen: noEvents, request: async () => {
+    if (++authRequests === 1) return json({}, 401); throw new Error("Offline after expiry");
+  } });
+  await store.refresh(); await store.refresh(); store.adopt(cart(5, 9));
   assert.equal(store.getSnapshot().data, null); assert.equal(store.getSnapshot().status, "expired");
   let release!: (response: Response) => void, changes = 0;
   const old = createAccountCartStore(userId, cart(), { operationId: () => operationId, listen: noEvents, onChange: () => changes++,

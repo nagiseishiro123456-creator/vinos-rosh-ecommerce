@@ -94,7 +94,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           {product.stock > 0 ? (
-            session?.user?.id ? <AccountAddToCart productId={product.id} action={addAction} /> : <GuestAddToCart productId={product.id} />
+            session?.user?.id ? <AccountAddToCart productId={product.id} action={addAction} expectedUserId={session.user.id} /> : <GuestAddToCart productId={product.id} />
           ) : (
             <button className="button buttonDisabled productAddButton" type="button" disabled>
               Sin stock

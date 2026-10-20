@@ -25,23 +25,25 @@ export function AccountCart({ initial, actions = {}, variant = "page", continuat
 }) {
   const cart = useAccountCart(); const { store } = useCartPanel(); const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => { if (initial) store.adopt(initial); }, [initial, store]);
-  const data = cart.data ?? (cart.status === "expired" ? null : initial);
+  const ownerMatches = !initial || cart.userId === initial.userId;
+  const data = ownerMatches ? cart.data : null;
+  const loading = !ownerMatches || cart.status === "loading";
   const Heading = variant === "page" ? "h1" : "h3";
   const saving = cart.status === "saving";
-  const disabled = saving || Boolean(cart.pending) || cart.status === "expired";
-  const verified = cart.status === "idle" && !cart.pending;
+  const disabled = !ownerMatches || saving || Boolean(cart.pending) || cart.status === "expired";
+  const verified = ownerMatches && cart.status === "idle" && !cart.pending;
   const items = data?.items ?? [];
-  return <section className={"cartLayout accountCart " + (variant === "page" ? "shell" : "drawerCart")} aria-busy={saving || cart.status === "loading"}>
+  return <section className={"cartLayout accountCart " + (variant === "page" ? "shell" : "drawerCart")} aria-busy={saving || loading}>
     <div className="cartMain">
       <p className="eyebrow wine">TU COMPRA</p><Heading ref={heading} tabIndex={-1}>{variant === "page" ? "Carrito" : "En tu cuenta"}</Heading>
       {pageError ? <div className="checkoutError" role="alert">{pageError === "too-many" ? "Espera un momento antes de volver a modificar el carrito." : "La disponibilidad, el importe o la cantidad cambió. Revisa el carrito antes de continuar."}</div> : null}
       <p className="accountCartStatus" role="status" aria-live="polite">{saving ? "Guardando el cambio en tu cuenta…"
-        : cart.status === "loading" ? "Verificando el carrito de tu cuenta…" : cart.message}</p>
+        : loading ? "Verificando el carrito de tu cuenta…" : cart.message}</p>
       {cart.error ? <div className="checkoutError" role="alert"><p>{cart.error}</p>
         {cart.status === "expired" ? <Link className="button buttonDark" href="/iniciar-sesion?callbackUrl=/carrito">Volver a ingresar</Link>
           : <button className="button buttonDark" type="button" onClick={() => { void cart.retry(); }}>{cart.pending ? "Reintentar cambio" : "Actualizar carrito"}</button>}
       </div> : null}
-      {items.length === 0 && cart.status !== "expired" ? <div className="emptyPanel"><strong>Tu carrito está vacío.</strong>
+      {items.length === 0 && !loading && cart.status !== "expired" ? <div className="emptyPanel"><strong>Tu carrito está vacío.</strong>
         <p>Explora el catálogo y agrega los productos que quieras revisar antes de comprar.</p><Link className="button buttonDark" href="/productos">Ver productos</Link></div>
         : <div className="cartItems">{items.map((item) => <article className="cartItem" key={item.id}>
           <Link className="cartItemImage" href={("/productos/" + item.slug) as Route}><Image src={item.imageUrl ?? siteConfig.prototypeAssetsBase + "/products.jpg"}

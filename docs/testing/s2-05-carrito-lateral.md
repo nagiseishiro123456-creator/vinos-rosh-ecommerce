@@ -97,3 +97,16 @@ transformación reducida. CSS también elimina el desplazamiento hover del CTA e
 Se abre desde el header visible en ficha, y el acceso inferior se comprueba en catálogo,
 donde forma parte del diseño. El cierre desde el CTA sigue verificando scroll/foco.
 No se elimina la preferencia ni se deshabilitan las aserciones de teclado o memoria.
+
+## Revalidación tras sesión vencida y navegación entre cuentas
+
+La revisión elimina el fallback visual al snapshot inicial después de que el store
+lo haya invalidado. Un 401/cuenta distinta permanece invalidado también si la siguiente
+revalidación falla por red; un render viejo no restaura datos privados. GET válido de la
+misma cuenta sí permite recuperar el estado y resolver el comando incierto.
+
+El header contrasta la identidad de su render servidor con el proveedor; un desacuerdo
+oculta el contador anterior y refresca la sesión del layout. La acción de producto también
+comprueba esa identidad antes de enviar. La página no muestra datos de un proveedor de
+otra cuenta. E2E comprueba red fallida después de 401 y cambio de sesión seguido de
+navegación SPA: se recupera la cuenta nueva, sin modificar ni mostrar la selección anterior.

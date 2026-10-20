@@ -211,6 +211,10 @@ test("S2-05: loading, saving, stock changes, network failure and expired session
     await expect(panel(page).locator(".cartItem")).toHaveCount(0); await expect(total(page)).toHaveText("Por verificar");
     await expect(panel(page).getByRole("link", { name: "Volver a ingresar", exact: true })).toHaveAttribute("href", "/iniciar-sesion?callbackUrl=/carrito");
     await geometry(page); await shot(page, info, "62-panel-sesion-vencida");
+    await page.route("**/api/cart", (route) => route.abort());
+    await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(panel(page).getByRole("alert")).toContainText("Tu sesión venció");
+    await expect(page.locator(".accountCart .cartItem")).toHaveCount(0);
     expect(await quantity(f.cart.id, f.product.id)).toBe(4);
   } finally { releaseRead(); releaseWrite(); await page.unrouteAll({ behavior: "ignoreErrors" }); await resetCheckoutFixture(); }
 });
@@ -257,6 +261,13 @@ test("S2-05: switching the shared session clears the previous account without mu
     expect(await quantity(f.cart.id, f.product.id)).toBe(3); expect(await quantity(other.cart!.id, f.product.id)).toBe(1);
     expect(await prisma.cartMutation.count({ where: { userId: { in: [f.user.id, other.id] } } })).toBe(0);
     await geometry(page); await shot(page, info, "65-panel-cuenta-distinta");
+    await panel(page).getByRole("button", { name: "Cerrar carrito", exact: true }).click();
+    await expect(panel(page)).toBeHidden();
+    await page.getByRole("link", { name: "Ir al inicio de Vinos ROSH", exact: true }).click();
+    await expect(page).toHaveURL((url) => url.pathname === "/");
+    await expect(page.locator(".cartButton .cartCount")).toHaveText("1");
+    await open(page); await expect(total(page)).toHaveText("S/ 29.90");
+    await expect(panel(page).getByLabel("Cantidad", { exact: true })).toHaveValue("1");
     await prisma.user.delete({ where: { id: other.id } });
     await page.goto("/carrito");
     await expect(page).toHaveURL((url) => url.pathname === "/iniciar-sesion" && url.searchParams.get("callbackUrl") === "/carrito");
