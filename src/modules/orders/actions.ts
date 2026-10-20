@@ -72,6 +72,7 @@ export async function reserveOrder(formData: FormData) {
     throw error;
   }
 
+  revalidatePath("/", "layout");
   revalidatePath("/carrito");
   revalidatePath("/checkout");
   revalidatePath("/mi-cuenta");

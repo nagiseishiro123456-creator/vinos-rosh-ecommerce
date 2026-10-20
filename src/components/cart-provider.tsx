@@ -16,6 +16,11 @@ export function CartProvider({ userId, initial, children }: { userId: string | n
   const [isOpen, setOpen] = useState(false); const [activated, setActivated] = useState(false);
   const [lastPath, setLastPath] = useState(pathname);
   const trigger = useRef<HTMLElement | null>(null);
+  const observedPath = useRef(pathname);
+  useEffect(() => {
+    if (observedPath.current === pathname) return;
+    observedPath.current = pathname; void store.refresh();
+  }, [pathname, store]);
   if (lastPath !== pathname) { setLastPath(pathname); setOpen(false); }
   useEffect(() => { store.adopt(initial); }, [store, initial]);
   const closeCart = () => setOpen(false);
