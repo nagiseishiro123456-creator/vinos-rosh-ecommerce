@@ -38,3 +38,26 @@ previa a checkout; precio y reserva siguen determinados por el servidor.
 
 Al cerrar se sustituirá este estado por resultados de commits/runs exactos, incidentes,
 galería con hashes y siguiente acción. No marcar la historia terminada antes de revisar CI.
+
+## Primera ejecución y correcciones
+
+Código `afa9f4c0967b1f99a063095b345800ba0752f747`, árbol
+`8b835e6521b3cfe8b38379df8fbfb3b92d9f7aa9`: [CI 39337485869](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39337485869),
+job `118350497192`. **96/96 servidor**, 11 migraciones, cuatro contratos SQL,
+tipos/lint/build y auditoría de producción aprobados. Navegador: **18/44**, no aprobado.
+
+- 24 casos de selección/unión encontraron rechazo 403 de origen legítimo: NextURL
+  normaliza loopback. La corrección usa el origen público configurado, sin confiar en
+  Host ni relajar el rechazo externo; se agrega una prueba del escenario de proxy.
+- Dos regresiones de confirmación sin JS detectaron el contenido oculto. El HTML y CSS
+  originales del trace muestran que `[hidden]` de Preflight en capa con `!important`
+  prevalece sobre la restauración sin capa. Se cambia a un atributo de datos con CSS y
+  alternativa `<noscript>`, conservando barrera JS y pruebas de formulario nativo.
+- Revisión local adicional: impedir que una normalización de `/a/..//host` produzca
+  un destino `//host`; permitir query interna codificada y conservar retorno tras sesión
+  vencida. Se añaden aserciones de estos casos, sin permitir navegación externa.
+
+Artefacto inicial `12226934877`, ZIP 174720872 bytes; SHA-256
+`6466bbd85f356b9d07e2378f6169b86789e4318fac111110d46d7529735ec70e` verificado.
+Se inspeccionaron HTML/CSS, errores y captura nativa para identificar las causas;
+estas capturas de fallo no constituyen la evidencia final de aceptación.

@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { useGuestCart } from "@/components/guest-cart-provider";
 import { GuestImportAccountError } from "@/modules/cart/guest-store";
+import { safeInternalDestination } from "@/modules/auth/destination";
 import type { CartMergeResponse } from "@/modules/cart/guest-merge";
 
 class MergeResponseError extends Error { constructor(message: string, public status: number) { super(message); } }
 type Failure = { key: string; message: string; signIn: boolean };
 
-export function CartMergeBoundary({ userId, renderId, children }: { userId: string; renderId: string; children: ReactNode }) {
+export function CartMergeBoundary({ userId, renderId, returnTo = "/carrito", children }: { userId: string; renderId: string; returnTo?: string; children: ReactNode }) {
   const { ready, busy, items, pending, revision, warning, beginImport, confirmImport } = useGuestCart();
   const router = useRouter();
   const [retry, setRetry] = useState(0);
@@ -56,13 +57,13 @@ export function CartMergeBoundary({ userId, renderId, children }: { userId: stri
   const error = failure?.key === workKey ? failure : null;
   const adjusted = result?.result.changes.length ?? 0;
   return <>
-    <noscript><style>{".cartMergeProtected[hidden] { display: contents !important; } .cartMergeGate { display: none !important; }"}</style>
+    <noscript><style>{".cartMergeProtected[data-merge-blocked] { display: contents !important; } .cartMergeGate { display: none !important; }"}</style>
       <p className="shell summaryNote">La selección invitada necesita JavaScript para integrarse. Puedes utilizar el carrito de tu cuenta con los formularios de esta página.</p></noscript>
     {blocked ? <section className="cartMergeGate shell" aria-label="Integración de tu selección" aria-busy={!error}>
       <p className="eyebrow wine">TU COMPRA</p><h1>Conservamos tu selección</h1>
       {error ? <div className="checkoutError" role="alert"><p>{error.message}</p>
         <button className="button buttonDark" type="button" onClick={() => { setFailure(null); setRetry((value) => value + 1); }}>Reintentar integración</button>
-        {error.signIn ? <Link className="textLink" href="/iniciar-sesion?callbackUrl=/carrito">Volver a ingresar</Link> : null}
+        {error.signIn ? <Link className="textLink" href={`/iniciar-sesion?callbackUrl=${encodeURIComponent(safeInternalDestination(returnTo, "/carrito"))}`}>Volver a ingresar</Link> : null}
       </div> : <p role="status">{refreshing ? "Actualizando el carrito de tu cuenta…" : "Integrando tu selección con el carrito de tu cuenta…"}</p>}
       <p className="summaryNote">Verificamos disponibilidad y cantidades antes de continuar. Esta operación no reserva botellas.</p>
       {warning ? <p className="checkoutError" role="alert">{warning}</p> : null}
@@ -74,6 +75,6 @@ export function CartMergeBoundary({ userId, renderId, children }: { userId: stri
         : <p>Revisa las cantidades y el total actuales antes de continuar. Todavía no se reservó stock.</p>}
       {warning ? <p>{warning}</p> : null}
     </section> : null}
-    <div className="cartMergeProtected" hidden={blocked}>{children}</div>
+    <div className="cartMergeProtected" data-merge-blocked={blocked ? "true" : undefined}>{children}</div>
   </>;
 }

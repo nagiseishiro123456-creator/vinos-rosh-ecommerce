@@ -21,7 +21,9 @@ No basta un indicador local de «ya importado»: puede fallar después del commi
   Máximo 50 IDs únicos/99 unidades por línea y 16 KiB reales, incluidos streams.
   No admite precios, datos de pago ni usuario de destino arbitrario.
 - Sesión NextAuth obligatoria; `expectedUserId` debe coincidir. Comprobar también
-  existencia del usuario. Origin debe coincidir con el origen de la petición; rechazar
+  existencia del usuario. Origin debe coincidir con el origen público configurado
+  (`NEXT_PUBLIC_APP_URL`, fallback `NEXTAUTH_URL`; URL de petición solo si no hay ambos),
+  nunca con Host/Origin suministrado por el cliente; rechazar
   `Sec-Fetch-Site: cross-site`. Sin CORS habilitado. Respuesta `no-store` y rate limit.
 - Revisión nueva `g2_` + 32 caracteres hex aleatorios. La migración desde formato 1 usa
   `g1_` + SHA-256 de selección canónica ordenada: dos pestañas antiguas obtienen la misma
@@ -102,3 +104,12 @@ mantienen los formularios nativos autenticados existentes. No hay animaciones de
 La carrera de añadir desde formularios de cuenta existentes sigue en S2-05 según su
 aceptación; esta historia prueba transacciones concurrentes de **importación**. No afirmar
 soporte comprobado en navegadores distintos de los que se ejecuten en QA.
+
+## Ajustes confirmados durante QA
+
+La primera CI comprobó que NextURL 16.3.8 normaliza `127.0.0.1` a `localhost` en la URL
+interna. Comparar con `request.url` rechazaba tráfico legítimo: se usa el origen público
+configurado y se añade un caso de proxy/URL interna, conservando rechazo de origen ajeno.
+El bloqueo visual usa un atributo de datos y CSS: el `[hidden]` de Tailwind Preflight
+con `!important` dentro de una capa impedía restaurar el formulario nativo con la regla
+sin capa de `<noscript>`. No se quita la protección JS ni la regresión sin JavaScript.

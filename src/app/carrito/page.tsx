@@ -70,7 +70,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
         <StoreHeader />
       </div>
 
-      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()}><section className="cartLayout shell">
+      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()} returnTo={params.continuar ? `/carrito?continuar=${encodeURIComponent(continuation)}` : "/carrito"}><section className="cartLayout shell">
         <div className="cartMain">
           <p className="eyebrow wine">TU COMPRA</p>
           <h1>Carrito</h1>

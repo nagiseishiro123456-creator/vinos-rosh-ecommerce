@@ -6,9 +6,12 @@ import { CartMergeError, guestMergeRequest, mergeGuestCart } from "./guest-merge
 function json(value: unknown, status = 200, headers?: Record<string, string>) {
   return NextResponse.json(value, { status, headers: { "Cache-Control": "no-store", ...headers } });
 }
-export function createGuestMergeHandler(authenticate: () => Promise<string | null>) {
+export function createGuestMergeHandler(authenticate: () => Promise<string | null>, publicUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXTAUTH_URL) {
   return async function POST(request: Request) {
-    if (request.headers.get("origin") !== new URL(request.url).origin || request.headers.get("sec-fetch-site") === "cross-site") {
+    // NextURL normalizes loopback hostnames and a proxy may use an internal address.
+    // The configured public origin is authoritative; never infer it from Origin/Host.
+    const expectedOrigin = new URL(publicUrl ?? request.url).origin;
+    if (request.headers.get("origin") !== expectedOrigin || request.headers.get("sec-fetch-site") === "cross-site") {
       return json({ message: "La solicitud debe realizarse desde esta tienda." }, 403);
     }
     if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") {

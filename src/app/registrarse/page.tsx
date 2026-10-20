@@ -34,33 +34,33 @@ function RegisterContent() {
 
     try {
       const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      setMessage(data.message ?? "No se pudo crear la cuenta.");
-      setLoading(false);
-      return;
-    }
+      if (!response.ok) {
+        setMessage(data.message ?? "No se pudo crear la cuenta.");
+        setLoading(false);
+        return;
+      }
 
-    const result = await signIn("credentials", {
-      email: payload.email,
-      password: payload.password,
-      redirect: false,
-    });
+      const result = await signIn("credentials", {
+        email: payload.email,
+        password: payload.password,
+        redirect: false,
+      });
 
-    if (result?.ok) {
-      const selection = guest.getSnapshot();
-      router.push(authenticationDestination(destination, Boolean(selection.items.length || selection.pending)) as Route);
-      router.refresh();
-      return;
-    }
+      if (result?.ok) {
+        const selection = guest.getSnapshot();
+        router.push(authenticationDestination(destination, Boolean(selection.items.length || selection.pending)) as Route);
+        router.refresh();
+        return;
+      }
 
-    setMessage("La cuenta fue creada. Ahora inicia sesión.");
+      setMessage("La cuenta fue creada. Ahora inicia sesión.");
     } catch {
       setMessage("No pudimos completar el registro o ingreso. Revisa tu conexión; si la cuenta ya se creó, puedes iniciar sesión.");
     }

@@ -23,7 +23,7 @@ async function quantity(f: Awaited<ReturnType<typeof checkoutFixture>>) {
 }
 function api(t: TestContext, userId: string | null) {
   if (userId) t.after(() => clearRateLimit("guest-cart-merge", userId));
-  const handler = createGuestMergeHandler(async () => userId);
+  const handler = createGuestMergeHandler(async () => userId, "http://localhost:3000");
   return (body: unknown, extra: Record<string, string> = {}, raw = false) => handler(new Request("http://localhost:3000/api/cart/merge", {
     method: "POST", headers: { origin: "http://localhost:3000", "content-type": "application/json", ...extra },
     body: raw ? body as string : JSON.stringify(body),
@@ -131,4 +131,17 @@ test("merge endpoint enforces session, origin, strict bounded JSON and retry-saf
   await prisma.rateLimitBucket.update({ where: { key }, data: { count: 60 } });
   const limited = await send(request); assert.equal(limited.status, 429); assert.ok(Number(limited.headers.get("retry-after")) > 0);
   assert.equal(await quantity(f), 5); assert.deepEqual(await state(f), before);
+});
+
+test("configured public origin remains valid when Next or the reverse proxy changes the internal URL", async (t) => {
+  const f = await checkoutFixture(t);
+  t.after(() => clearRateLimit("guest-cart-merge", f.user.id));
+  const handler = createGuestMergeHandler(async () => f.user.id, "https://tienda.rosh.example");
+  const request = (origin: string) => new Request("http://localhost:3000/api/cart/merge", {
+    method: "POST", headers: { origin, "content-type": "application/json", host: "untrusted.example" }, body: JSON.stringify(input(f)),
+  });
+  assert.equal((await handler(request("https://untrusted.example"))).status, 403);
+  assert.equal((await handler(request("http://localhost:3000"))).status, 403);
+  assert.equal((await handler(request("https://tienda.rosh.example"))).status, 200);
+  assert.equal(await quantity(f), 5);
 });

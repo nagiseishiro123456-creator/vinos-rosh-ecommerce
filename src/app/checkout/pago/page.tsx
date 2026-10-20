@@ -84,7 +84,7 @@ export default async function PaymentPage({ searchParams }: Props) {
         <StoreHeader />
       </div>
 
-      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()}><section className="paymentLayout paymentConfirmationLayout shell">
+      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()} returnTo={`/checkout/pago?addressId=${address.id}`}><section className="paymentLayout paymentConfirmationLayout shell">
         <div className="paymentConfirmationHeading">
           <div className="checkoutHeading">
             <div>

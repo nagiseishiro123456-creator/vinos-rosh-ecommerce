@@ -41,7 +41,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
         <StoreHeader />
       </div>
 
-      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()}><section className="checkoutShell shell">
+      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()} returnTo="/checkout"><section className="checkoutShell shell">
         <div className="checkoutHeading">
           <div>
             <p className="eyebrow wine">CHECKOUT · PASO 1</p>

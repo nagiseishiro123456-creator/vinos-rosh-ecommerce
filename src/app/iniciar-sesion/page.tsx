@@ -28,19 +28,19 @@ function LoginContent() {
     const form = new FormData(event.currentTarget);
     try {
       const result = await signIn("credentials", {
-      email: form.get("email"),
-      password: form.get("password"),
-      redirect: false,
-    });
+        email: form.get("email"),
+        password: form.get("password"),
+        redirect: false,
+      });
 
-    if (result?.ok) {
-      const selection = guest.getSnapshot();
-      router.push(authenticationDestination(destination, Boolean(selection.items.length || selection.pending)) as Route);
-      router.refresh();
-      return;
-    }
+      if (result?.ok) {
+        const selection = guest.getSnapshot();
+        router.push(authenticationDestination(destination, Boolean(selection.items.length || selection.pending)) as Route);
+        router.refresh();
+        return;
+      }
 
-    setError("Correo o contraseña incorrectos.");
+      setError("Correo o contraseña incorrectos.");
     } catch {
       setError("No pudimos completar el ingreso. Revisa tu conexión e inténtalo nuevamente.");
     }
