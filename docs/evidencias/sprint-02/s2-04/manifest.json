@@ -1,0 +1,437 @@
+{
+  "story": "S2-04",
+  "review_date": "2026-10-19",
+  "timezone": "America/Lima",
+  "source_commit": "55f470e73395c8efc135ddee3491344079487b5b",
+  "source_tree": "b8869b0c4ed1abed6f90c86a4cab65054b271231",
+  "source_kind": "Unmodified Playwright PNGs from the built application in isolated GitHub Actions QA",
+  "ci": {
+    "run_id": 39363492611,
+    "job_id": 118434835042,
+    "conclusion": "success"
+  },
+  "artifact": {
+    "id": 12238880998,
+    "name": "sprint-01-smoke-39363492611",
+    "size_in_bytes": 85571315,
+    "url": "https://api.github.com/repos/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/artifacts/12238880998",
+    "archive_download_url": "https://api.github.com/repos/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/artifacts/12238880998/zip",
+    "expired": false,
+    "created_at": "2026-10-20T03:22:11Z",
+    "expires_at": "2026-11-03T03:22:08Z",
+    "updated_at": "2026-10-20T03:22:11Z",
+    "digest": "sha256:e60114f1a87bc400d6402e4d06196f1240030e13032b4e89609049f5d87250ba",
+    "workflow_run": {
+      "id": 39363492611,
+      "repository_id": 1398630629,
+      "head_repository_id": 1398630629,
+      "head_branch": "fase-2/sprint-02-union-carritos",
+      "head_sha": "55f470e73395c8efc135ddee3491344079487b5b"
+    }
+  },
+  "toolchain": {
+    "node": "22.23.3",
+    "npm": "11.9.0",
+    "next": "16.3.8",
+    "build": "next build",
+    "database": "PostgreSQL 16",
+    "playwright": "1.64.1",
+    "browser": "Chrome for Testing 156.0.8078.4, Chromium v1248"
+  },
+  "projects": {
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "small-mobile": [
+      320,
+      740
+    ],
+    "tablet": [
+      768,
+      1024
+    ]
+  },
+  "checks": {
+    "server": "98/98",
+    "browser": "44/44",
+    "migrations": 11,
+    "sql_contracts": 4,
+    "types": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "production_audit": "0 findings"
+  },
+  "visual_review": {
+    "status": "reviewed",
+    "images": 32,
+    "reviewer": "Codex visual inspection",
+    "review_date": "2026-10-19",
+    "scope": "All 32 original PNGs inspected at the four recorded viewports; text, amounts, quantity fields, controls, recovery states and native-form regressions reviewed.",
+    "limits": "No measured contrast, screen reader, zoom, Safari or Firefox validation."
+  },
+  "timestamp_source": "ZIP entry timestamp, recorded by the UTC GitHub runner; two-second ZIP precision",
+  "limits": [
+    "No real payments, deliveries or Render access.",
+    "State 51 is a synthetic reservation from the existing no-JavaScript regression; the S2-04 merge itself does not reserve stock.",
+    "No claim of full accessibility certification or Safari/Firefox validation."
+  ],
+  "files": [
+    {
+      "path": "ci-desktop-40-union-confirmada.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-desktop/40-union-confirmada.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 185367,
+      "sha256": "24e79900da81c08eb653f7a5160ff34764cabd6a0106aa69934a23e1d4eb7585",
+      "zip_timestamp_utc": "2026-10-20T03:19:44+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:44-05:00"
+    },
+    {
+      "path": "ci-desktop-41-resumen-tras-union.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-desktop/41-resumen-tras-union.png",
+      "width": 1440,
+      "height": 1340,
+      "bytes": 246229,
+      "sha256": "2f63e101bb4feaa7558aba3f83060abea7ea1732002fd403994d968e7c51efc9",
+      "zip_timestamp_utc": "2026-10-20T03:19:46+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:46-05:00"
+    },
+    {
+      "path": "ci-desktop-42-union-respuesta-perdida.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-lost-resp-34b9d-thout-erasing-new-additions-desktop/42-union-respuesta-perdida.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 129942,
+      "sha256": "ffbf6092d65d4495c5d9ad9dd0429fb363fe7e13719b3f7485d0839c08df4392",
+      "zip_timestamp_utc": "2026-10-20T03:19:48+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:48-05:00"
+    },
+    {
+      "path": "ci-desktop-43-union-con-nuevas-adiciones.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-lost-resp-34b9d-thout-erasing-new-additions-desktop/43-union-con-nuevas-adiciones.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 184234,
+      "sha256": "4b4313d541b7eed8062effb3c95b343c9954d8671e80bf391f17e0a419f38207",
+      "zip_timestamp_utc": "2026-10-20T03:19:50+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:50-05:00"
+    },
+    {
+      "path": "ci-desktop-44-registro-destino-conservado.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-registrat-d1332-d-memory-survives-SPA-login-desktop/44-registro-destino-conservado.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 342308,
+      "sha256": "3109e72ead9ca2d852185e3b83f7253fd141d91f7a3e8f45f0daa6979dd2e742",
+      "zip_timestamp_utc": "2026-10-20T03:19:50+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:50-05:00"
+    },
+    {
+      "path": "ci-desktop-45-cuenta-creada-con-seleccion.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-registrat-d1332-d-memory-survives-SPA-login-desktop/45-cuenta-creada-con-seleccion.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 185531,
+      "sha256": "385738e1ef6e88160ed19b17f0d0bc357ee92e3370987ac8195e3f8d897a4a70",
+      "zip_timestamp_utc": "2026-10-20T03:19:52+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:52-05:00"
+    },
+    {
+      "path": "ci-desktop-46-union-desde-memoria.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-registrat-d1332-d-memory-survives-SPA-login-desktop/46-union-desde-memoria.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 194692,
+      "sha256": "c941dbd317be19c67d73b272a1b8b750024cc8260c7941b2f2e01df73120fef5",
+      "zip_timestamp_utc": "2026-10-20T03:19:54+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:54-05:00"
+    },
+    {
+      "path": "ci-desktop-47-pendiente-otra-cuenta.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-session-e-e028e-ection-without-reassignment-desktop/47-pendiente-otra-cuenta.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 131322,
+      "sha256": "ced7fba01d9ceb91e7f42ca1267b59a0ce4e6892a7a80702a5e4d31225d1b365",
+      "zip_timestamp_utc": "2026-10-20T03:19:56+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:56-05:00"
+    },
+    {
+      "path": "ci-desktop-48-pendiente-recuperado.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-session-e-e028e-ection-without-reassignment-desktop/48-pendiente-recuperado.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 184211,
+      "sha256": "3f5cd0ceb183947336bff7c94658ccb26a21081af3354447dd02b0388ffdb67a",
+      "zip_timestamp_utc": "2026-10-20T03:19:56+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:56-05:00"
+    },
+    {
+      "path": "ci-desktop-49-union-ajuste-disponibilidad.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-desktop/49-union-ajuste-disponibilidad.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 190435,
+      "sha256": "38ab79a5a22163f5e45a41b16276fc3f73721fbbf2d17c1b26da99df52d56ffc",
+      "zip_timestamp_utc": "2026-10-20T03:19:46+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:19:46-05:00"
+    },
+    {
+      "path": "ci-desktop-50-cuenta-carrito-sin-javascript.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-desktop/36-cuenta-formulario-nativo.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 179012,
+      "sha256": "54e62f5e28a7a3e588d7ed07d9519152ed6a3d3f1768c730c433fa90b2488aac",
+      "zip_timestamp_utc": "2026-10-20T03:20:04+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:04-05:00"
+    },
+    {
+      "path": "ci-desktop-51-reserva-sin-javascript.png",
+      "project": "desktop",
+      "source_zip_entry": "test-results/idempotency-S1-04-native-f-fddf7--hydrated-retry-recovers-it-desktop/16-reserva-sin-javascript.png",
+      "width": 1440,
+      "height": 1330,
+      "bytes": 346144,
+      "sha256": "3ef7a6e0ca23cae2c5a562896b0a391a26f22df13c2d39953abb1aee006069a7",
+      "zip_timestamp_utc": "2026-10-20T03:20:10+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:10-05:00"
+    },
+    {
+      "path": "ci-mobile-40-union-confirmada.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-mobile/40-union-confirmada.png",
+      "width": 390,
+      "height": 1212,
+      "bytes": 112544,
+      "sha256": "fbd179c681be85877d2887e2c44a7497831f48fe046c0e36d7af27bff2548ac0",
+      "zip_timestamp_utc": "2026-10-20T03:20:42+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:42-05:00"
+    },
+    {
+      "path": "ci-mobile-41-resumen-tras-union.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-mobile/41-resumen-tras-union.png",
+      "width": 390,
+      "height": 1954,
+      "bytes": 166575,
+      "sha256": "6970f951f6ba36d4427dc01dd69d6ff3680760d79d38efb8f7b1eb2dd4211040",
+      "zip_timestamp_utc": "2026-10-20T03:20:42+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:42-05:00"
+    },
+    {
+      "path": "ci-mobile-42-union-respuesta-perdida.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-lost-resp-34b9d-thout-erasing-new-additions-mobile/42-union-respuesta-perdida.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 63609,
+      "sha256": "979112a75df172bf6f137028c5206df6e7d165bb3ccda70427e463c6a196ebea",
+      "zip_timestamp_utc": "2026-10-20T03:20:46+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:46-05:00"
+    },
+    {
+      "path": "ci-mobile-43-union-con-nuevas-adiciones.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-lost-resp-34b9d-thout-erasing-new-additions-mobile/43-union-con-nuevas-adiciones.png",
+      "width": 390,
+      "height": 1212,
+      "bytes": 111587,
+      "sha256": "cd03079b304639a6c0d6bea8e7e42da4f84ed525a70d00e19b1813d4c487f5fb",
+      "zip_timestamp_utc": "2026-10-20T03:20:46+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:46-05:00"
+    },
+    {
+      "path": "ci-mobile-44-registro-destino-conservado.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-registrat-d1332-d-memory-survives-SPA-login-mobile/44-registro-destino-conservado.png",
+      "width": 390,
+      "height": 1359,
+      "bytes": 152966,
+      "sha256": "2792ecfb7bead40c6a2efe055b1283a6edc81c0b1d367a90a7d536a9dc59707d",
+      "zip_timestamp_utc": "2026-10-20T03:20:46+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:46-05:00"
+    },
+    {
+      "path": "ci-mobile-45-cuenta-creada-con-seleccion.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-registrat-d1332-d-memory-survives-SPA-login-mobile/45-cuenta-creada-con-seleccion.png",
+      "width": 390,
+      "height": 1212,
+      "bytes": 112658,
+      "sha256": "ecca420e1d8de6b2510a4e6d6050c4aae383c6dd0045b07362be3b357925ddc3",
+      "zip_timestamp_utc": "2026-10-20T03:20:48+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:48-05:00"
+    },
+    {
+      "path": "ci-mobile-46-union-desde-memoria.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-registrat-d1332-d-memory-survives-SPA-login-mobile/46-union-desde-memoria.png",
+      "width": 390,
+      "height": 1320,
+      "bytes": 124873,
+      "sha256": "6bf69654ed7ec283b66e08d4c5067973257b89be51be39f54439c8708105094d",
+      "zip_timestamp_utc": "2026-10-20T03:20:50+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:50-05:00"
+    },
+    {
+      "path": "ci-mobile-47-pendiente-otra-cuenta.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-session-e-e028e-ection-without-reassignment-mobile/47-pendiente-otra-cuenta.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 66126,
+      "sha256": "cea4d9514141e63dfce2fbee618a409cab88879aab10e26fe6121ac8dd4209d1",
+      "zip_timestamp_utc": "2026-10-20T03:20:52+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:52-05:00"
+    },
+    {
+      "path": "ci-mobile-48-pendiente-recuperado.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-session-e-e028e-ection-without-reassignment-mobile/48-pendiente-recuperado.png",
+      "width": 390,
+      "height": 1212,
+      "bytes": 111614,
+      "sha256": "e230ae95b697b1f099466791f8f58081943849028a3a7d5646990d71e7d9a338",
+      "zip_timestamp_utc": "2026-10-20T03:20:52+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:52-05:00"
+    },
+    {
+      "path": "ci-mobile-49-union-ajuste-disponibilidad.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-mobile/49-union-ajuste-disponibilidad.png",
+      "width": 390,
+      "height": 1272,
+      "bytes": 118064,
+      "sha256": "0ad6189da5628bd9fa62aa1629ea52bd9d5910f9d5f96e42cd9e47292fb71507",
+      "zip_timestamp_utc": "2026-10-20T03:20:44+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:20:44-05:00"
+    },
+    {
+      "path": "ci-mobile-50-cuenta-carrito-sin-javascript.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/guest-cart-S2-03-corrupt-b-01137-ticated-forms-remain-usable-mobile/36-cuenta-formulario-nativo.png",
+      "width": 390,
+      "height": 1035,
+      "bytes": 106365,
+      "sha256": "594b30236faa974d7cd36a4241b07351a373f9bbb382a2c3bd6466fd7633e43a",
+      "zip_timestamp_utc": "2026-10-20T03:21:00+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:00-05:00"
+    },
+    {
+      "path": "ci-mobile-51-reserva-sin-javascript.png",
+      "project": "mobile",
+      "source_zip_entry": "test-results/idempotency-S1-04-native-f-fddf7--hydrated-retry-recovers-it-mobile/16-reserva-sin-javascript.png",
+      "width": 390,
+      "height": 1965,
+      "bytes": 231746,
+      "sha256": "2fa68a729f9d2949a64eb6f2eb0a0a68088da195ef17759b8f35208ed3a53df4",
+      "zip_timestamp_utc": "2026-10-20T03:21:06+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:06-05:00"
+    },
+    {
+      "path": "ci-small-mobile-40-union-confirmada.png",
+      "project": "small-mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-small-mobile/40-union-confirmada.png",
+      "width": 320,
+      "height": 1232,
+      "bytes": 107340,
+      "sha256": "b23c7124bc1d50f04d16c83bd7a0302907b5fe8c860f04417bd2fece3a6ce365",
+      "zip_timestamp_utc": "2026-10-20T03:21:18+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:18-05:00"
+    },
+    {
+      "path": "ci-small-mobile-42-union-respuesta-perdida.png",
+      "project": "small-mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-lost-resp-34b9d-thout-erasing-new-additions-small-mobile/42-union-respuesta-perdida.png",
+      "width": 320,
+      "height": 740,
+      "bytes": 60871,
+      "sha256": "29529705ed534052e9b51268b5b9722ba548e9b708811cd0b28b915f359576b2",
+      "zip_timestamp_utc": "2026-10-20T03:21:22+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:22-05:00"
+    },
+    {
+      "path": "ci-small-mobile-47-pendiente-otra-cuenta.png",
+      "project": "small-mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-session-e-e028e-ection-without-reassignment-small-mobile/47-pendiente-otra-cuenta.png",
+      "width": 320,
+      "height": 740,
+      "bytes": 63437,
+      "sha256": "4a0da0f69c1252eedafea612bf1874dad9e42a4c5586eb6da818650eac494e30",
+      "zip_timestamp_utc": "2026-10-20T03:21:28+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:28-05:00"
+    },
+    {
+      "path": "ci-small-mobile-49-union-ajuste-disponibilidad.png",
+      "project": "small-mobile",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-small-mobile/49-union-ajuste-disponibilidad.png",
+      "width": 320,
+      "height": 1315,
+      "bytes": 113077,
+      "sha256": "1cc7a4c97b9debe999e6870ea2489c1427ce7b48ae01668a4ae4fb95b8381b63",
+      "zip_timestamp_utc": "2026-10-20T03:21:20+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:20-05:00"
+    },
+    {
+      "path": "ci-tablet-40-union-confirmada.png",
+      "project": "tablet",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-tablet/40-union-confirmada.png",
+      "width": 768,
+      "height": 1115,
+      "bytes": 142950,
+      "sha256": "017c1d5175ce37b7b73d1899da0e6fb3270e97b3a51d65230587e34dc335b684",
+      "zip_timestamp_utc": "2026-10-20T03:21:42+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:42-05:00"
+    },
+    {
+      "path": "ci-tablet-42-union-respuesta-perdida.png",
+      "project": "tablet",
+      "source_zip_entry": "test-results/cart-merge-S2-04-lost-resp-34b9d-thout-erasing-new-additions-tablet/42-union-respuesta-perdida.png",
+      "width": 768,
+      "height": 1024,
+      "bytes": 91378,
+      "sha256": "72b0ee46d54d985902d541e1e199a0c172d6a2e4c703cd56a2897a87b6e739cc",
+      "zip_timestamp_utc": "2026-10-20T03:21:46+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:46-05:00"
+    },
+    {
+      "path": "ci-tablet-47-pendiente-otra-cuenta.png",
+      "project": "tablet",
+      "source_zip_entry": "test-results/cart-merge-S2-04-session-e-e028e-ection-without-reassignment-tablet/47-pendiente-otra-cuenta.png",
+      "width": 768,
+      "height": 1024,
+      "bytes": 93846,
+      "sha256": "c0a27e28f5f9749e451cee86454292ab2bc2d73e166443fb1598ce0f790b32c6",
+      "zip_timestamp_utc": "2026-10-20T03:21:54+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:54-05:00"
+    },
+    {
+      "path": "ci-tablet-49-union-ajuste-disponibilidad.png",
+      "project": "tablet",
+      "source_zip_entry": "test-results/cart-merge-S2-04-login-mer-70198-adjustments-before-checkout-tablet/49-union-ajuste-disponibilidad.png",
+      "width": 768,
+      "height": 1150,
+      "bytes": 148248,
+      "sha256": "c53a28c8eeb41e6972f7e7cb06fd92bfc1d82477dec0dad07884f93c5d684bcd",
+      "zip_timestamp_utc": "2026-10-20T03:21:44+00:00",
+      "zip_timestamp_lima": "2026-10-19T22:21:44-05:00"
+    }
+  ]
+}

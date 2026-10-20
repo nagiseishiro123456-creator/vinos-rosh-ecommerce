@@ -3,7 +3,7 @@
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
 Estado: S2-01 documentada; S2-02 verificada por CI, revisión/integración pendientes;
-S2-03 verificada por CI; S2-04 implementada en QA; S2-05–S2-06 pendientes de implementación.
+S2-03 verificada por CI; S2-04 verificada por CI; S2-05–S2-06 pendientes de implementación.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
 ## Sprint Goal
@@ -89,6 +89,8 @@ sin pérdidas ni duplicaciones al identificarme o repetir una petición.
   usar migración aditiva y pruebas sobre datos históricos.
 - DoD: integración con PostgreSQL para carreras/reintentos, E2E de ingreso/registro y
   permisos; ADR, contrato, mensajes, migración si aplica y capturas incluidos.
+
+Entrega técnica S2-04: [ADR previo](../decisions/0007-union-carritos.md), [QA 98/98 + 44/44](../testing/s2-04-union-carritos.md) y [32 capturas](../evidencias/sprint-02/s2-04/README.md); PR #12 pendiente de revisión/integración.
 
 ### S2-05 — Carrito lateral accesible (5 SP)
 

@@ -1,43 +1,102 @@
 # S2-04 — QA de unión de carritos
 
-Fecha de apertura: 2026-10-19 (America/Lima). Estado: implementación preparada;
-validación oficial y evidencia visual pendientes. Base S2-03 `b74c607…`, PR #11.
+Fecha de cierre técnico: 2026-10-19 (America/Lima). **Verificada**, revisión/integración
+pendientes. [PR #12](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/12),
+rama `fase-2/sprint-02-union-carritos`, sobre S2-03 `b74c607…` / PR #11.
 [ADR 0007](../decisions/0007-union-carritos.md) registrado antes del código en `6e66a55…`.
 
-## Alcance implementado para verificar
+Código fuente de aceptación y capturas: `55f470e73395c8efc135ddee3491344079487b5b`.
+Árbol: `b8869b0c4ed1abed6f90c86a4cab65054b271231`. [CI 39363492611](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39363492611), job `118434835042`.
+La cabecera documental posterior conserva el mismo código; sus checks se comprueban
+antes de dejar el PR listo para revisión. No implica integración en main ni despliegue.
 
-Comprobante de importación por usuario/revisión en la misma transacción Serializable
-que las cantidades. API autenticada con Origin, JSON estricto, límites reales y rate limit.
-Formato local 2, sobre pendiente inmutable, Web Locks/cola y confirmación selectiva.
-Fallback en memoria sin escrituras inseguras. Continuidad ingreso/registro y barrera
-previa a checkout; precio y reserva siguen determinados por el servidor.
+## Comportamiento verificado
 
-## Matriz de aceptación
+- Ingreso y registro conservan destino interno; con selección se revisa primero el carrito.
+  Se rechazan destinos externos, barras invertidas, controles, rutas protocol-relative
+  tras normalización y tipos inesperados de query. Reingresar no anida retornos al carrito.
+- Suma 2 invitado + 1 cuenta = 3; misma identidad recupera sin otra suma. Las líneas ajenas
+  a la selección se conservan. Stock actual/99 ajustan cantidades y se explican retirados.
+- `CartImport` UNIQUE por usuario/identidad, huella de contenido y resultado se guardan
+  en la misma transacción Serializable que las cantidades. Replays se consultan antes
+  del catálogo; otro contenido con la misma identidad produce conflicto sin otra mutación.
+- API con sesión/usuario esperado, origen público configurado, JSON/Zod estricto, UTF-8,
+  límite real de 16 KiB y rate limit. El cliente no decide precios ni destino de cuenta.
+- Formato local 2, migración canónica desde 1, Web Locks y cola. El sobre enviado permanece
+  pendiente e inmutable hasta confirmar; se eliminan solo sus datos y se conservan nuevas
+  adiciones. Una respuesta antigua de preview exige contenido y revisión aún vigentes.
+- Red fallida/respuesta perdida permite reintentar sin duplicar. Otra cuenta no reasigna
+  el pendiente ni obtiene su resultado. Cerrar sesión no copia carrito privado al invitado.
+- Carrito/entrega/confirmación bloquean acciones visibles hasta unir y refrescar SSR;
+  otra pestaña que confirma también provoca refresco. Cantidad real del input, contador
+  y total coinciden. El foco vuelve al resultado después de confirmar.
+- Con almacenamiento bloqueado, la selección en memoria sobrevive al ingreso SPA; el
+  carrito ya integrado queda guardado en cuenta y persiste al recargar. El aviso diferencia
+  esas botellas de selecciones invitadas futuras que el navegador no puede conservar.
+- Sin JS no se importa selección local; explicación y formularios autenticados nativos
+  conservados. La unión no reserva botellas ni genera pedidos/pagos. El checkout mantiene
+  dinero exacto, firma, idempotencia, permisos y reserva del Sprint 1.
 
-| Área | Casos previstos | Estado |
-| --- | --- | --- |
-| Estado y destinos | Migración, duplicados, formato/corrupción, hidratación, límites, storage/locks, cola, dos pestañas, confirmación fallida, nuevas ediciones, cuenta diferente, URL interna | 16/16 locales aprobados, Node 24.19.0; no sustituyen PostgreSQL ni navegador. |
-| Servicio/API | Suma y otras líneas intactas, replay, conflicto/carreras, stock/topes/retirados, rollback, usuario, origen/sesión, JSON/UTF-8/tamaño y rate limit | Pendiente CI PostgreSQL 16. |
-| Migración | Adición sobre fixtures antiguos sin cambiar carritos/stock/pedidos/pagos; UNIQUE por usuario y FK/cascade | Pendiente contrato SQL y aplicación de 11 migraciones en CI. |
-| E2E | Ingreso/registro/destino, dinero exacto, replay, dos pestañas/nuevas adiciones, respuesta perdida, ajustes, memoria, logout/expiración y otra cuenta | Pendiente CI en 320/390/768/1440 px y regresiones S1/S2. |
-| Visual | Capturas originales de resultados, recuperación, registro, memoria y ajustes; revisión real y manifiesto | Pendiente ejecución y revisión. |
+## Resultados
 
-## Límites de la entrega
+| Comprobación | Resultado real |
+| --- | --- |
+| Estado y destinos, local | 17/17 aprobados con Node 24.19.0; también se ejecutan dentro de CI con Node 22. |
+| Pruebas de servidor CI | **98/98**, incluidas nueve de servicio/API/unión con PostgreSQL 16 y las regresiones anteriores. |
+| Navegador CI | **44/44**: cuatro casos nuevos S2-04 en 320/390/768/1440 px, más 28 regresiones de S1/S2. |
+| Migraciones/contratos SQL | **11 migraciones y cuatro contratos**; el nuevo usa Cart/CartItem y FKs de fixtures antiguos, UNIQUE por usuario y cascade del comprobante. |
+| Tipos/lint/build | Aprobados; build habitual `next build`, Node 22.23.3/npm 11.9.0. |
+| Auditoría de producción | **0 hallazgos**. Sin cambio de paquetes/lockfile; seguimiento de desarrollo heredado en progreso. |
+| Evidencia | **32 PNG originales revisados**; dimensiones/SHA-256 y origen conservados, 118 PNG históricos intactos. |
 
-- Sin Web Locks no se promete persistencia/sincronización entre pestañas: se recupera lo
-  legible en memoria y se avisa. Sin JS no hay importación local; se conservan formularios
-  autenticados. El modo memoria se conserva por navegación SPA, no por recarga/cierre.
-- Los comprobantes no expiran automáticamente. El resultado de replay es histórico;
-  la página refresca el carrito/precio vigente antes de habilitar compra.
-- El pendiente ligado a otra cuenta no se reasigna. No se guarda el carrito privado ni
-  el resultado de cuenta en almacenamiento local. No se limpian selecciones por timeout.
-- La transacción solo normaliza productos enviados; otras líneas de cuenta conservan sus
-  reglas anteriores. La carrera de añadir mediante formularios de cuenta queda en S2-05.
-- No se afirman pruebas de lector de pantalla, contraste medido, zoom ni Safari/Firefox.
-- Sin paquetes de pago, cobros reales, servicios nuevos, merge o acciones en Render.
+Integración cubre suma/replay tras cambios de precio/stock/carrito, mismo ID con otro
+contenido, carreras de igual/distinta identidad, retirada/topes, rollback al fallar el
+comprobante, usuario inexistente/ajeno, origen/proxy y rate limit con Retry-After.
+E2E cubre ingreso/registro/destino, checkout exacto, respuesta perdida después del commit,
+dos pestañas con adición posterior (6 unidades/dos identidades), stock/precio cambiado,
+memoria y recarga, logout/expiración, otra cuenta y recuperación con la cuenta original.
+Las pruebas nativas de carrito y reserva sin JS también pasan; no se sustituyen por capturas.
 
-Al cerrar se sustituirá este estado por resultados de commits/runs exactos, incidentes,
-galería con hashes y siguiente acción. No marcar la historia terminada antes de revisar CI.
+## Evidencia y procedencia
+
+[Galería](../evidencias/sprint-02/s2-04/README.md),
+[manifiesto](../evidencias/sprint-02/s2-04/manifest.json) y
+[registro de validación](../evidencias/sprint-02/s2-04/validacion-ci.txt).
+Artefacto `12238880998` (`sprint-01-smoke-39363492611`),
+85571315 bytes. ZIP SHA-256 verificado:
+`e60114f1a87bc400d6402e4d06196f1240030e13032b4e89609049f5d87250ba`.
+
+Las 32 imágenes provienen del commit final de aplicación indicado arriba, sin retoque
+ni recompresión: 12 escritorio, 12 móvil, cuatro de 320 y cuatro de 768 px. Las imágenes
+50/51 son nuevas ejecuciones de las regresiones nativas sobre el código actual.
+La 51 crea una reserva **sintética** de QA; no es una reserva causada por la unión.
+El total en Git asciende a 150 PNG de evidencia; no se sobrescriben los históricos.
+
+## Límites y continuidad
+
+- Sin storage/Web Locks se recupera lo legible en memoria y se avisa. No se promete
+  persistencia/sincronización entre pestañas en ese modo ni carrito invitado offline/sin JS.
+- Los comprobantes no expiran automáticamente. El replay es histórico; la página
+  refrescada muestra carrito y precio actuales. No se persisten resultados privados al disco.
+- Un pendiente de otra cuenta bloquea la unión hasta volver a la cuenta original. No se
+  descarta ni se reasigna por timeout/error; no se afirma un flujo de recuperación de
+  cuentas eliminadas o de almacenamiento manipulado que cambie identidad/contenido.
+- Solo se normalizan las líneas enviadas; otras líneas conservan reglas previas. La
+  carrera de añadir por formularios de cuenta anteriores corresponde a S2-05.
+- Casos nuevos con movimiento reducido. Sin Motion ni animaciones de scroll añadidos.
+  Lector de pantalla, contraste medido, zoom y Safari/Firefox no ejecutados.
+- PostgreSQL, pedidos y stock de QA aislados. Sin pagos/entregas reales, servicios de pago,
+  merges, configuración/migraciones remotas o acciones en Render. UAT/producción pendientes.
+
+Siguiente: **S2-05**, ADR del panel lateral antes del código, estado compartido de cuenta,
+incrementos concurrentes, diálogo/foco/Escape y Motion solo entrada/salida con movimiento
+reducido. S2-06 revisará e integrará el incremento completo; no se declara cerrado Sprint 2.
+
+## Historial de QA
+
+Los bloques siguientes conservan el estado y decisiones de cada ejecución anterior.
+El resultado de aceptación vigente está arriba; sus incidentes no se ocultan ni se
+atribuyen a la cabecera final.
 
 ## Primera ejecución y correcciones
 
@@ -92,3 +151,8 @@ El contrato legacy se afina con tablas `Cart`/`CartItem` y FKs fieles al modelo,
 aserciones por conteo que también detectan desaparición de filas (sin ambigüedad NULL).
 Se conservan los resultados previos como historial; el artefacto final se tomará del
 commit que incluya este texto corregido y la comprobación de recarga.
+
+Quinta ejecución y fuente final de aplicación: `55f470e73395c8efc135ddee3491344079487b5b`, [CI 39363492611](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39363492611),
+job `118434835042`: **98/98 y 44/44**; migraciones/contratos, tipos/lint/build y producción
+sin hallazgos. Se comprueba aviso de cuenta guardada y recarga en memoria, junto con
+el contrato legacy afinado. 32 capturas de esta ejecución revisadas y conservadas.

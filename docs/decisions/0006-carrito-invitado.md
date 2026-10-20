@@ -95,3 +95,11 @@ inaccesible/corrupto y ausencia de errores de hidratación; conservar regresione
 Durante implementación: cambios y resultados en PR dependiente de #10. Al cerrar:
 QA, capturas originales/manifiesto, backlog y progreso; registrar límites de cobertura.
 No fusionar PRs ni reactivar/desplegar Render con esta historia.
+
+## Evolución posterior — S2-04
+
+El formato 1 y los carritos separados descritos aquí corresponden a la entrega S2-03.
+S2-04 migra la persistencia al formato 2, añade coordinación de pestañas/sobre pendiente
+y unión idempotente con cuenta. Ver [ADR 0007](0007-union-carritos.md) y
+[QA S2-04](../testing/s2-04-union-carritos.md). Los resultados históricos de S2-03
+se conservan vinculados a su commit y capturas originales.
