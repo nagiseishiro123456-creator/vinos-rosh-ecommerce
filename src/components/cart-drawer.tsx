@@ -26,7 +26,7 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
   useEffect(() => {
     if (!open || !dialog.current || dialog.current.open) return;
     const element = dialog.current;
-    const y = window.scrollY, x = window.scrollX;
+    const y = window.scrollY, x = window.scrollX, path = window.location.pathname;
     const overflow = document.body.style.overflow, padding = document.body.style.paddingRight;
     const gap = window.innerWidth - document.documentElement.clientWidth;
     const originalPadding = Number.parseFloat(getComputedStyle(document.body).paddingRight) || 0;
@@ -34,7 +34,8 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
     if (gap > 0) document.body.style.paddingRight = String(originalPadding + gap) + "px";
     restore.current = () => {
       document.body.style.overflow = overflow; document.body.style.paddingRight = padding;
-      const target = trigger.current?.isConnected ? trigger.current : document.querySelector<HTMLElement>(".cartButton");
+      if (window.location.pathname !== path) return;
+      const target = trigger.current?.isConnected ? trigger.current : document.querySelector<HTMLElement>("main h1") ?? document.querySelector<HTMLElement>(".cartButton");
       target?.focus({ preventScroll: true }); window.scrollTo({ top: y, left: x, behavior: "instant" });
     };
     element.showModal(); title.current?.focus({ preventScroll: true });

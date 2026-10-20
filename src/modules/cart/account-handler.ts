@@ -42,7 +42,7 @@ export function createAccountCartHandlers(authenticate: () => Promise<string | n
       catch { return json({ message: messages.INVALID }, 400); }
       const parsed = cartCommandSchema.safeParse(data);
       if (!parsed.success) return json({ message: messages.INVALID }, 400);
-      if (parsed.data.expectedUserId !== userId) return json({ message: "La cuenta cambió. Vuelve a ingresar con la cuenta de esta operación." }, 409);
+      if (parsed.data.expectedUserId !== userId) return json({ code: "ACCOUNT_CHANGED", message: "La cuenta cambió. Vuelve a ingresar con la cuenta de esta operación." }, 409);
       return json(await executeCartCommand(userId, parsed.data));
     } catch (error) {
       if (error instanceof CartCommandError) return json({ message: messages[error.code] }, error.code === "UNAUTHORIZED" ? 401

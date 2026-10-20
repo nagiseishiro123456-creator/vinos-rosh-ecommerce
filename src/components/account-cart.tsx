@@ -34,7 +34,7 @@ export function AccountCart({ initial, actions = {}, variant = "page", continuat
   return <section className={"cartLayout accountCart " + (variant === "page" ? "shell" : "drawerCart")} aria-busy={saving || cart.status === "loading"}>
     <div className="cartMain">
       <p className="eyebrow wine">TU COMPRA</p><Heading ref={heading} tabIndex={-1}>{variant === "page" ? "Carrito" : "En tu cuenta"}</Heading>
-      {pageError ? <div className="checkoutError" role="alert">La disponibilidad, el importe o la cantidad cambió. Revisa el carrito antes de continuar.</div> : null}
+      {pageError ? <div className="checkoutError" role="alert">{pageError === "too-many" ? "Espera un momento antes de volver a modificar el carrito." : "La disponibilidad, el importe o la cantidad cambió. Revisa el carrito antes de continuar."}</div> : null}
       <p className="accountCartStatus" role="status" aria-live="polite">{saving ? "Guardando el cambio en tu cuenta…"
         : cart.status === "loading" ? "Verificando el carrito de tu cuenta…" : cart.message}</p>
       {cart.error ? <div className="checkoutError" role="alert"><p>{cart.error}</p>

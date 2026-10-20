@@ -1,5 +1,20 @@
 # Punto de avance
 
+## En curso — S2-05 (2026-10-20, America/Lima)
+
+- Rama `fase-2/sprint-02-carrito-lateral`, [PR #13](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/pull/13) en borrador, sobre #12.
+- [ADR previo](decisions/0008-carrito-lateral.md) en `8ba1d6b…`; implementación conservada
+  en GitHub después de quedar indisponible el entorno anterior. Sin dependencia de archivos locales.
+- [QA y registro de CI](testing/s2-05-carrito-lateral.md). Comandos de cuenta y revisión:
+  115/115 servidor en `aba53bf…`; navegador pendiente. La nueva cabecera amplía
+  privacidad/cambio de cuenta y prevé 116/64, aún sin declarar aprobación.
+- Página/panel/contador comparten estado; Motion 14.4.0 bajo demanda, diálogo nativo,
+  transacciones y comprobantes de cuenta; 12 migraciones y cinco contratos SQL.
+- Siguiente acción: terminar CI y revisar PNG originales; después documentar resultado
+  y preparar revisión. Integración solo en S2-06; sin merge, Render ni migraciones remotas.
+
+## Referencia del cierre S2-04 (histórico)
+
 - Fase 2, Sprint 2: S2-01 documentada (3 SP); S2-02 (3 SP), S2-03 (5 SP) y S2-04 (8 SP)
   verificadas por CI; revisión/integración pendientes. S2-05/S2-06 siguen pendientes.
 - Fecha: 2026-10-19 (America/Lima). Inicio del Sprint 2 autorizado tras la propuesta de seis historias.

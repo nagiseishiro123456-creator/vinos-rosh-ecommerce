@@ -32,7 +32,7 @@ Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 | S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | CI 67/67 y 20/20 aprobada; revisión/integración pendientes (#10) |
 | S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | CI 80/80 y 28/28 aprobada; revisión/integración pendientes (#11) |
 | S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | CI 98/98 y 44/44 aprobada; revisión/integración pendientes (#12) |
-| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Pendiente |
+| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Implementada en #13; QA en curso |
 | S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Pendiente |
 
 Los puntos no son horas ni velocidad garantizada. Si el refinamiento revela más alcance,

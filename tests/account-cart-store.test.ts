@@ -55,7 +55,7 @@ test("out of order reads and another user payload never replace the account cart
   const first = store.refresh(), second = store.refresh(); resolvers[1](json(cart(3, 7))); await second;
   resolvers[0](json(cart(1, 4))); await first; assert.equal(store.getSnapshot().data?.revision, 3);
   const third = store.refresh(); resolvers[2](json({ ...cart(4, 9), userId: "another-user" })); await third;
-  assert.equal(store.getSnapshot().data?.items[0].quantity, 7); assert.equal(store.getSnapshot().status, "error");
+  assert.equal(store.getSnapshot().data, null); assert.equal(store.getSnapshot().status, "expired");
 });
 test("401 removes private data and disposed or old server replies cannot restore it", async () => {
   const store = createAccountCartStore(userId, cart(), { listen: noEvents, request: async () => json({}, 401) });
@@ -82,7 +82,7 @@ test("definite refusal can be verified; invalid success remains uncertain", asyn
   const store = createAccountCartStore(userId, cart(), { operationId: () => operationId, listen: noEvents,
     request: async (_url, options) => {
       if (!options?.method) return json(cart());
-      return ++attempt === 1 ? json({ message: "Sin disponibilidad" }, 409) : json({ userId: "wrong-owner", cart: cart(1, 4) });
+      return ++attempt === 1 ? json({ message: "Sin disponibilidad" }, 409) : json({ userId, operationId: "wrong-identity", cart: cart(1, 4) });
     } });
   await store.command({ action: "add", productId }); assert.equal(store.getSnapshot().pending, null);
   assert.match(store.getSnapshot().error, /disponibilidad/); await store.retry(); assert.equal(store.getSnapshot().status, "idle");
@@ -97,4 +97,13 @@ test("invalidation re-reads; subscriptions release browser resources", async () 
   assert.equal(store.getSnapshot().data?.items[0].quantity, 4);
   await store.command({ action: "add", productId }); assert.equal(publishes, 1); assert.equal(requests, 2);
   stop(); assert.equal(stops, 1);
+});
+
+test("account change clears private data while retaining the original command owner", async () => {
+  const store = createAccountCartStore(userId, cart(), { operationId: () => operationId, listen: noEvents,
+    request: async () => json({ code: "ACCOUNT_CHANGED", message: "La cuenta cambió" }, 409) });
+  await store.command({ action: "add", productId });
+  assert.equal(store.getSnapshot().data, null); assert.equal(store.getSnapshot().status, "expired");
+  assert.equal(store.getSnapshot().pending?.expectedUserId, userId);
+  store.adopt(cart(9, 8)); assert.equal(store.getSnapshot().data, null);
 });

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { authOptions } from "@/lib/auth";
+import { consumeRateLimit } from "@/lib/rate-limit";
 import { CartCommandError, executeCartCommand } from "./account-service";
 import type { CartCommand } from "./account-contract";
 
@@ -12,6 +13,8 @@ async function execute(command: CartCommand, operationId: string, expectedUserId
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) redirect("/iniciar-sesion?callbackUrl=/carrito");
   if (session.user.id !== expectedUserId) redirect("/carrito?error=cart-changed");
+  const limit = await consumeRateLimit({ scope: "account-cart-write", identifier: session.user.id, limit: 120, windowMs: 60_000 });
+  if (!limit.allowed) redirect("/carrito?error=too-many");
   try { await executeCartCommand(session.user.id, { ...command, expectedUserId: session.user.id, operationId }); }
   catch (error) {
     if (error instanceof CartCommandError) redirect("/carrito?error=cart-changed");

@@ -46,6 +46,9 @@ export function createAccountCartStore(userId: string | null, initial: AccountCa
       const data: unknown = await response.json();
       if (token !== sequence || disposed) return false;
       if (response.status === 401) { set({ data: null, status: "expired", error: "Tu sesión venció. Vuelve a ingresar para revisar tu carrito." }); return false; }
+      if (response.ok && data && typeof data === "object" && "userId" in data && data.userId !== userId) {
+        set({ data: null, status: "expired", error: "La cuenta cambió. Vuelve a ingresar para revisar tu carrito." }); return false;
+      }
       if (!response.ok || !validCart(data, userId)) throw new Error("Read failed");
       const changed = data.revision !== state.data?.revision;
       accept(data); set(state.pending ? {} : { status: "idle", error: "" });
@@ -67,6 +70,9 @@ export function createAccountCartStore(userId: string | null, initial: AccountCa
       const data = await response.json();
       if (disposed || token !== sequence) return false;
       if (response.status === 401) { set({ data: null, status: "expired", error: "Tu sesión venció. Ingresa con la cuenta de esta operación para comprobarla." }); return false; }
+      if (response.status === 409 && data.code === "ACCOUNT_CHANGED" || response.ok && typeof data.userId === "string" && data.userId !== userId) {
+        set({ data: null, status: "expired", error: "La cuenta cambió. Ingresa con la cuenta de esta operación para comprobarla." }); return false;
+      }
       if (!response.ok) {
         const rejected = [400, 403, 409, 413, 415].includes(response.status);
         set({ status: "error", pending: rejected ? null : command,
@@ -95,6 +101,7 @@ export function createAccountCartStore(userId: string | null, initial: AccountCa
     },
     adopt(data: AccountCartSnapshot | null) {
       if (disposed || running || state.pending || state.status === "expired" || !data || data.userId !== userId) return;
+      if (state.data && data.revision <= state.data.revision) return;
       accept(data); set({});
     },
     refresh, retry,

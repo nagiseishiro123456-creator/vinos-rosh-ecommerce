@@ -12,7 +12,7 @@ for (const file of walk(root).sort()) {
   const found = ["small-mobile", "desktop", "mobile", "tablet"].find((name) => directory.endsWith("-" + name));
   if (found !== project) continue;
   if (basename(file) === "drawer-chunks.json") { console.log("S205_METRIC " + readFileSync(file, "utf8")); continue; }
-  if (!/^(5[2-9]|6[0-4])-.*\.png$/.test(basename(file)) && basename(file) !== "test-failed-1.png") continue;
+  if (!/^(5[2-9]|6[0-5])-.*\.png$/.test(basename(file)) && basename(file) !== "test-failed-1.png") continue;
   const bytes = readFileSync(file);
   const meta = { project, path, file: basename(file), bytes: bytes.length, width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20),
     sha256: createHash("sha256").update(bytes).digest("hex"),

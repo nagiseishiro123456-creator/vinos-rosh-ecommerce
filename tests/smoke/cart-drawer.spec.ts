@@ -84,6 +84,7 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await geometry(page); await shot(page, info, "54-panel-cantidad");
   await panel(page).getByRole("link", { name: "Ver carrito completo", exact: true }).click();
   await expect(page).toHaveURL((url) => url.pathname === "/carrito"); await expect(panel(page)).toBeHidden();
+  await expect(page.getByRole("heading", { name: "Carrito", exact: true })).toBeInViewport();
   await expect(page.locator(".guestCart input[name=quantity]")).toHaveValue("2");
   await expect(page.locator(".guestCart .summaryTotal strong")).toHaveText("S/ 59.80");
   await open(page); await expect(total(page)).toHaveText("S/ 59.80");
@@ -209,4 +210,26 @@ test("S2-05: editing from checkout refreshes the server quote and reservation cl
     if (["desktop", "mobile"].includes(info.project.name)) await capture(page, info, "64-reserva-tras-panel");
     await open(page); await expect(panel(page).getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
   } finally { await resetCheckoutFixture(); }
+});
+
+test("S2-05: switching the shared session clears the previous account without mutating another cart", async ({ page, context }, info) => {
+  test.setTimeout(120_000); const f = await resetCheckoutFixture();
+  const other = await prisma.user.create({ data: { email: "drawer-" + randomUUID() + "@example.com",
+    passwordHash: f.user.passwordHash, firstName: "QA", lastName: "Otra cuenta",
+    cart: { create: { items: { create: { productId: f.product.id, quantity: 1 } } } } }, include: { cart: true } });
+  const second = await context.newPage();
+  try {
+    await loginCustomer(page); await open(page); await expect(total(page)).toHaveText("S/ 89.70");
+    await loginCustomer(second, other.email);
+    await page.bringToFront(); await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(panel(page).getByRole("alert")).toContainText("La cuenta cambió");
+    await expect(panel(page).locator(".cartItem")).toHaveCount(0); await expect(total(page)).toHaveText("Por verificar");
+    await expect(page.locator(".cartButton .cartCount")).toHaveCount(0);
+    const rejected = await page.request.post("/api/cart", { headers: { origin: "http://127.0.0.1:3000" },
+      data: { expectedUserId: f.user.id, operationId: randomUUID(), productId: f.product.id, action: "add" } });
+    expect(rejected.status()).toBe(409); expect((await rejected.json()).code).toBe("ACCOUNT_CHANGED");
+    expect(await quantity(f.cart.id, f.product.id)).toBe(3); expect(await quantity(other.cart!.id, f.product.id)).toBe(1);
+    expect(await prisma.cartMutation.count({ where: { userId: { in: [f.user.id, other.id] } } })).toBe(0);
+    await geometry(page); await shot(page, info, "65-panel-cuenta-distinta");
+  } finally { await second.close(); await prisma.user.delete({ where: { id: other.id } }); await resetCheckoutFixture(); }
 });
