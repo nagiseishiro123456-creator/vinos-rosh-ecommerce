@@ -1,0 +1,10 @@
+S2-02 — 2026-10-19 (America/Lima)
+Código: 8c6fc0e2ae8602a39e8bc2cfd72ff6366836b215
+Tipos: PASS
+ESLint (fuente; artefactos Playwright excluidos): PASS
+Dinero: 5/5 PASS
+Build webpack local: PASS
+Navegador local: 8/8 PASS; 4 tamaños
+CI canónica: pendiente, run 39284101122 en cola al documentar
+Limitaciones: Node 24 / Chromium 153 / PGlite local, no equivalentes al runner Node 22 / Chromium Playwright / PostgreSQL 16. No se afirma concurrencia real con PGlite.
+Home/catálogo: opciones de consentimiento y header comprobados a cuatro tamaños.

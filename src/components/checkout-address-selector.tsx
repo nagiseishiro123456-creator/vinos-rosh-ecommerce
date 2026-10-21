@@ -53,30 +53,40 @@ export function CheckoutAddressSelector({
 
   return (
     <div className="checkoutSelector">
-      <div className="checkoutAddressList" role="radiogroup" aria-label="Dirección de entrega">
+      <fieldset className="checkoutAddressList">
+        <legend className="sr-only">Dirección de entrega</legend>
         {addresses.map((address) => {
           const active = address.id === selectedAddressId;
           return (
-            <button
+            <label
               className={`checkoutAddressCard${active ? " active" : ""}`}
               key={address.id}
-              type="button"
-              role="radio"
-              aria-checked={active}
-              onClick={() => setSelectedAddressId(address.id)}
             >
-              <span className="checkoutAddressTopline">
-                <strong>{address.label || "Dirección"}</strong>
-                {address.isDefault ? <small>Predeterminada</small> : null}
+              <input
+                type="radio"
+                name="deliveryAddress"
+                value={address.id}
+                checked={active}
+                onChange={() => setSelectedAddressId(address.id)}
+                aria-labelledby={`address-title-${address.id}`}
+                aria-describedby={`address-details-${address.id}`}
+              />
+              <span className="checkoutAddressContent">
+                <span className="checkoutAddressTopline" id={`address-title-${address.id}`}>
+                  <strong>{address.label || "Dirección"}</strong>
+                  {address.isDefault ? <small>Predeterminada</small> : null}
+                </span>
+                <span className="checkoutAddressDetails" id={`address-details-${address.id}`}>
+                  <span>{address.recipient}</span>
+                  <span>{address.addressLine1}</span>
+                  <span>{address.district}, {address.province}</span>
+                  <span>{address.phone}</span>
+                </span>
               </span>
-              <span>{address.recipient}</span>
-              <span>{address.addressLine1}</span>
-              <span>{address.district}, {address.province}</span>
-              <span>{address.phone}</span>
-            </button>
+            </label>
           );
         })}
-      </div>
+      </fieldset>
 
       <aside className="checkoutSummaryCard">
         <p className="eyebrow wine">RESUMEN</p>

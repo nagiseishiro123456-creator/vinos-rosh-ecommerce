@@ -42,7 +42,7 @@ test("invalid precision, quantities and database overflow are rejected", () => {
 
 test("client-side formatting and preview sum remain exact for large amounts", () => {
   assert.equal(addMoney("99999999.99", "0.01"), "100000000.00");
-  assert.equal(formatPrice("98.20"), "S/ 98.20");
-  assert.equal(formatPrice("100000000.00"), "S/ 100,000,000.00");
+  assert.equal(formatPrice("98.20"), "S/\u00a098.20");
+  assert.equal(formatPrice("100000000.00"), "S/\u00a0100,000,000.00");
   assert.throws(() => addMoney("29.9"));
 });

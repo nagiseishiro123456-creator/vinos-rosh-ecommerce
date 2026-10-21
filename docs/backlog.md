@@ -29,7 +29,7 @@ Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 | ID | Historia | SP | Estado |
 | --- | --- | ---: | --- |
 | S2-01 | Diagnosticar y documentar recorrido, estados y baseline. | 3 | Documentada y verificada en rama; integración pendiente |
-| S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | Pendiente; siguiente historia |
+| S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | CI 67/67 y 20/20 aprobada; revisión/integración pendientes (#10) |
 | S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | Pendiente |
 | S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | Pendiente; ADR y contrato antes del código |
 | S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Pendiente |
@@ -39,6 +39,8 @@ Los puntos no son horas ni velocidad garantizada. Si el refinamiento revela más
 dividir y reestimar antes de comprometerlo. S2-01 no implementa todavía funciones de carrito.
 16 capturas de main revisadas como baseline, separadas de las 56 del Sprint 1.
 Cuenta obligatoria antes del checkout; stock solo se reserva al confirmar, no al añadir/unir.
+S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
+[QA de S2-02](testing/s2-02-ux-movil.md), con CI oficial aprobada y cierre técnico documentado.
 
 ## Secuencia posterior, sujeta a refinamiento
 

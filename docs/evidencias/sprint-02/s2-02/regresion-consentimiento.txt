@@ -1,0 +1,24 @@
+S2-02 — Regresión local de consentimiento (2026-10-19, America/Lima)
+
+Aplicación compilada: 3d2f436ceb881790f5baee9a4c3809cfcb650c48.
+Prueba: ampliación de ux-mobile.spec.ts en la copia de trabajo, antes del ajuste de CSS;
+las aserciones ampliadas se conservan en el commit 8c6fc0e… . La prueba preliminar
+usaba expectativas suaves y seguía al clic; la publicada detiene el caso al detectar
+superposición. No es un resultado de GitHub Actions.
+
+Entorno: el mismo Node 24 / webpack / Chromium 153 / PGlite efímero del manifiesto,
+GA_ID ficticio, movimiento reducido, trackers abortados, viewport 1440×1000.
+
+Resultado observado en Home:
+- /: reject analytics: covered at hit-test points — Expected true, Received false.
+- /: analytics choice: covered at hit-test points — Expected true, Received false.
+- /: header follows consent banner — Expected >=133.453125; Received 0.
+- El clic en Rechazar no podía completarse; caso preliminar terminó por timeout de 120 s.
+
+Corrección: mientras el banner está pendiente, fuera de purchaseFlow el header se
+posiciona dentro de su hero/contenedor. Las páginas de compra conservan su header en
+flujo. Al responder, el resto de páginas recupera su posición habitual. Se comprueban
+ambas opciones mediante teclado/hit testing y la separación geométrica en Home y
+catálogo a cuatro tamaños; no se pulsa Aceptar ni se envían datos de analítica.
+
+El resultado de la repetición final figura en validacion-local.txt y manifest.json.

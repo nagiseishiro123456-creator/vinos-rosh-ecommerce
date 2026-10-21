@@ -111,7 +111,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   const canContinuePayment = order.userId === session.user.id && order.status === "PENDING_PAYMENT";
 
   return (
-    <main className="orderPage">
+    <main className="orderPage purchaseFlow">
       <div className="catalogHeaderWrap compact">
         <StoreHeader />
       </div>
@@ -175,7 +175,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
 
         <div className="orderStatusHeader">
           <div>
-            <p className="eyebrow wine">PEDIDO {order.number}</p>
+            <p className="orderIdentifier"><span>Identificador del pedido</span><strong>{order.number}</strong></p>
             <h1>{statusLabel(order.status)}</h1>
             <p>Creado el {order.createdAt.toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</p>
             {order.status === "PENDING_PAYMENT" && order.reservationExpiresAt ? <p>Reserva hasta el {order.reservationExpiresAt.toLocaleString("es-PE", { timeZone: "America/Lima" })} (hora de Perú)</p> : null}

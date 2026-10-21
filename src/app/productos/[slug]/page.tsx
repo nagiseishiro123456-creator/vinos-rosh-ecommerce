@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const addAction = addToCart.bind(null, product.id, product.slug);
 
   return (
-    <main className="productPage">
+    <main className="productPage purchaseFlow">
       <div className="catalogHeaderWrap compact">
         <StoreHeader />
       </div>

@@ -1,0 +1,166 @@
+/* Purchase pages keep navigation/help in the document flow, away from form controls. */
+.purchaseFlow .siteHeader {
+  position: relative;
+}
+
+.purchaseFlow .mobileBottomNav {
+  display: none;
+}
+
+.purchaseFlow .whatsappFab {
+  position: static;
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 32px;
+}
+
+body:has(.purchaseFlow) {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.purchaseFlow :where(.cartMain, .cartItems, .cartItem, .paymentMain, .paymentForm,
+  .checkoutBlock, .checkoutSelector, .checkoutContentGrid, .orderReviewCard,
+  .cartSummary, .checkoutSummaryCard, .paymentConfirmationHeading, .orderStatusGrid > *) {
+  min-width: 0;
+}
+
+.purchaseFlow :where(h1, h2, p, .orderReviewAddress, .cartItemInfo, .checkoutAddressContent) {
+  overflow-wrap: anywhere;
+}
+
+.purchaseFlow :where(a, button, input, select, textarea) {
+  scroll-margin-block: 24px;
+}
+
+.purchaseFlow :where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--wine);
+  outline-offset: 3px;
+}
+
+.purchaseFlow .siteHeader :focus-visible {
+  outline-color: var(--gold);
+}
+
+.purchaseFlow .quantityForm :is(input, button),
+.purchaseFlow .removeButton {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.purchaseFlow .removeButton {
+  padding-inline: 10px;
+}
+
+.purchaseFlow .button:hover,
+.purchaseFlow .checkoutAddressCard:hover {
+  transform: none;
+}
+
+.purchaseFlow .summaryRow > :first-child,
+.purchaseFlow .orderReviewItems span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.purchaseFlow :where(.summaryRow strong, .summaryTotal strong, .orderReviewItems strong,
+  .cartItemTotal strong, .productPrice) {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.purchaseFlow .orderReviewItems > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.purchaseFlow .checkoutAddressList {
+  min-inline-size: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.purchaseFlow .checkoutAddressCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.purchaseFlow .checkoutAddressCard input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  accent-color: var(--wine);
+}
+
+.purchaseFlow .checkoutAddressCard:focus-within {
+  outline: 3px solid var(--wine);
+  outline-offset: 3px;
+}
+
+.checkoutAddressContent,
+.checkoutAddressDetails {
+  display: grid;
+  gap: 5px;
+}
+
+.checkoutAddressContent {
+  flex: 1;
+}
+
+.purchaseFlow .checkoutAddressTopline {
+  flex-wrap: wrap;
+}
+
+.purchaseFlow .orderIdentifier {
+  display: grid;
+  gap: 4px;
+  font-size: .82rem;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+
+.purchaseFlow .orderIdentifier strong {
+  color: var(--wine);
+}
+
+@media (max-width: 479px) {
+  .purchaseFlow .orderReviewItems > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .purchaseFlow .orderReviewItems strong {
+    justify-self: end;
+  }
+}
+
+@media (max-width: 979px) {
+  .purchaseFlow .cartSummary {
+    position: static;
+  }
+
+  .purchaseFlow .paymentLayout,
+  .purchaseFlow .checkoutContentGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .paymentConfirmationLayout > .paymentConfirmationHeading {
+    grid-column: 1 / -1;
+  }
+
+  .paymentConfirmationLayout > .orderReviewCard {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .paymentConfirmationLayout > .paymentMain {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}

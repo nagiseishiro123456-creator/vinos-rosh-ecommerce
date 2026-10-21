@@ -19,6 +19,7 @@ import "./mobile-performance.css";
 import "./contact.css";
 import "./history-faq.css";
 import "./admin-backup.css";
+import "./purchase-flow.css";
 
 const previewMode = process.env.PREVIEW_MODE === "true";
 
@@ -56,8 +57,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <body>
-        {children}
         <AnalyticsConsent />
+        {children}
       </body>
     </html>
   );

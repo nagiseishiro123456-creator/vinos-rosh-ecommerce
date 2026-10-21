@@ -41,6 +41,8 @@ jobs:
       ADMIN_FIRST_NAME: Admin
       ADMIN_LAST_NAME: CI
       NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+      # Synthetic public ID: consent is exercised without accepting/loading trackers.
+      NEXT_PUBLIC_GA_ID: G-QA-NO-TRACKING
       PREVIEW_MODE: "true"
       SHOW_DEMO_CATALOG: "false"
       NEXT_TELEMETRY_DISABLED: "1"

@@ -119,9 +119,21 @@ fondo inerte y scroll restaurado. Motion solo para entrada/salida, `'use client'
 `useReducedMotion`; reducir/desactivar desplazamiento según preferencia. Sin parallax
 ni scroll complejo en páginas transaccionales; Home inmersivo queda en Sprint 5.
 
-## Siguiente paso concreto: S2-02
+## Paso propuesto en el diagnóstico inicial: S2-02
 
 Reproducir con viewport/scroll reales UX-201/202/203/207, corregir jerarquía y espacio
 sin alterar totales/stock, capturar los mismos ocho estados antes/después y añadir
 aserciones pertinentes de layout/foco. Guardar resultados y defectos nuevos en QA de
 S2-02, actualizar progreso y revisar el PR antes de seguir con carrito invitado.
+
+## Actualización S2-02 — 2026-10-19
+
+Las observaciones anteriores conservan la base del diagnóstico. S2-02 implementa
+correcciones de UX-201/202/203/207/209 en una rama dependiente de S2-01. Header y
+ayuda en flujo; barra inferior oculta en el embudo; consentimiento sin posición fija;
+resumen anterior al formulario; radios nativos y foco; dinero sin cortes y nombres
+con espacio legible. No se alteran números históricos ni lógica transaccional.
+[Resultados y límites](../testing/s2-02-ux-movil.md). CI oficial aprobada sobre
+`9c59839…`: 67/67 servidor y 20/20 navegador. Siguiente paso: ADR y carrito invitado
+de S2-03; la revisión e integración del incremento siguen pendientes.
+Los hallazgos de carrito invitado/unión/panel siguen pendientes para sus historias.

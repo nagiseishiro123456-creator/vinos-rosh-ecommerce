@@ -57,7 +57,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
   );
 
   return (
-    <main className="cartPage">
+    <main className="cartPage purchaseFlow">
       <div className="catalogHeaderWrap compact">
         <StoreHeader />
       </div>

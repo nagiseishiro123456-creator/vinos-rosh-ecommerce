@@ -24,6 +24,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 18. [Sprint 2: plan, historias y aceptación](sprints/fase-2-sprint-02.md)
 19. [Recorrido de compra y diagnóstico UX](ux/sprint-02-recorrido-compra.md)
 20. [QA S2-01](testing/s2-01-recorrido.md) · [Baseline visual S2-01](evidencias/sprint-02/s2-01/README.md)
+21. [QA S2-02 y límites de validación](testing/s2-02-ux-movil.md) · [Comparación antes/después](evidencias/sprint-02/s2-02/README.md)
 
 ## Cuándo documentar
 
