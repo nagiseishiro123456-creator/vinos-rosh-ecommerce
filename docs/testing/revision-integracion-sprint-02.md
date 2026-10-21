@@ -104,3 +104,10 @@ La revisión de los selectores del recorrido distingue el encabezado de estado d
 con el mismo texto; la aserción se dirige al rol heading. No se elimina la comprobación
 ni se cambia el comportamiento de la tienda. La cabecera 3dd5b46 pasó servidor, restauración,
 tipos y lint; navegador se valida nuevamente sobre la cabecera que incorpora ese ajuste.
+
+### R2-04 — Carrera entre los dos escritores de carrito
+
+Se añade una regresión PostgreSQL específica: unión invitada de 2 y add de cuenta en
+paralelo sobre 3 producen 6, revisión 2 y un comprobante de cada tipo. Repetir ambas
+identidades conserva 6/revisión 2/stock 10 y ningún pedido. La previsión final es
+117 pruebas de servidor y 66 de navegador; los resultados se registran tras CI.
