@@ -1,5 +1,12 @@
 # Punto de avance
 
+## En curso — S2-06 (2026-10-21, America/Lima)
+
+Revisión e integración autorizadas tras cerrar S2-05. [Plan y registro](testing/revision-integracion-sprint-02.md)
+creado antes de cambios/integración; rama `fase-2/sprint-02-revision-integracion`, base `d9a0e0ea946158ee8735e71706d18ad07d003166`.
+Primero revisión del incremento y sus límites; después correcciones/CI/evidencia e integración
+ordenada con comprobación de main. Los resultados históricos siguientes se conservan como referencia.
+
 ## Estado actual — S2-05 verificada (2026-10-20, America/Lima)
 
 - Fase 2, Sprint 2: S2-01–S2-05 implementadas/documentadas y verificadas en sus ramas.

@@ -1,0 +1,51 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+const container = process.env.POSTGRES_CONTAINER;
+const database = new URL(process.env.DATABASE_URL ?? "");
+assert.equal(process.env.CI, "true", "Recovery contract runs only in isolated CI");
+assert.ok(container && /^[a-zA-Z0-9_.-]+$/.test(container));
+assert.ok(["localhost", "127.0.0.1"].includes(database.hostname));
+assert.equal(database.pathname, "/vinos_rosh_ci");
+
+const scratch = mkdtempSync(join(tmpdir(), "rosh-cart-restore-"));
+const contextPath = join(scratch, "context.json");
+const source = "rosh_s206_source_" + process.pid;
+const target = "rosh_s206_target_" + process.pid;
+const created = [];
+
+function run(command, args, options = {}) {
+  const result = spawnSync(command, args, { maxBuffer: 64 * 1024 * 1024, timeout: 120_000, ...options });
+  if (result.error) throw result.error;
+  assert.equal(result.status, 0, command + " failed: " + (result.stderr?.toString() ?? ""));
+  return result.stdout;
+}
+function docker(...args) { return run("docker", ["exec", container, ...args]); }
+function environment(name) {
+  const url = new URL(database);
+  url.pathname = "/" + name;
+  return { ...process.env, DATABASE_URL: url.href, S206_CONTEXT_PATH: contextPath };
+}
+try {
+  for (const name of [source, target]) {
+    docker("createdb", "-U", "postgres", name);
+    created.push(name);
+  }
+  run(process.execPath, ["node_modules/prisma/build/index.js", "migrate", "deploy"], { env: environment(source) });
+  run(process.execPath, ["--import", "tsx", "tests/helpers/cart-restore.ts", "seed"], { env: environment(source) });
+
+  // Same native dump/restore flags as scripts/backup-db.ts and restore-db.ts.
+  const dump = docker("pg_dump", "-U", "postgres", "-d", source, "--clean", "--if-exists", "--no-owner", "--no-privileges");
+  assert.ok(dump.length > 0);
+  run("docker", ["exec", "-i", container, "psql", "-U", "postgres", "-d", target, "-v", "ON_ERROR_STOP=1"], { input: dump });
+  const verification = run(process.execPath, ["--import", "tsx", "tests/helpers/cart-restore.ts", "verify"], { env: environment(target) });
+  process.stdout.write(verification);
+  console.log("S206_RESTORE_DUMP " + JSON.stringify({ bytes: dump.length, sha256: createHash("sha256").update(dump).digest("hex") }));
+} finally {
+  for (const name of created.reverse()) docker("dropdb", "-U", "postgres", "--force", name);
+  rmSync(scratch, { recursive: true, force: true });
+}

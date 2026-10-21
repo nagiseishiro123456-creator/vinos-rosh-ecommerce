@@ -26,6 +26,28 @@ test("two concurrent account additions preserve both increments without reservin
   assert.equal(await prisma.order.count({ where: { userId: f.user.id } }), 0);
   assert.equal(await prisma.inventoryMovement.count({ where: { actorUserId: f.user.id } }), 0);
 });
+test("S2-06: guest merge and account add serialize together and replay without another increment", async (t) => {
+  const f = await checkoutFixture(t), command = add(f);
+  const selection = { expectedUserId: f.user.id, importId: "g2_" + randomUUID().replaceAll("-", ""),
+    items: [{ productId: f.product.id, quantity: 2 }] };
+  const [imported, added] = await Promise.all([
+    mergeGuestCart(f.user.id, selection), executeCartCommand(f.user.id, command),
+  ]);
+  assert.equal(imported.replayed, false); assert.equal(added.replayed, false);
+  assert.equal(await quantity(f.cart.id, f.product.id), 6);
+  assert.equal((await readAccountCart(f.user.id)).revision, 2);
+  assert.equal(await prisma.cartImport.count({ where: { userId: f.user.id } }), 1);
+  assert.equal(await prisma.cartMutation.count({ where: { userId: f.user.id } }), 1);
+  const [importReplay, commandReplay] = await Promise.all([
+    mergeGuestCart(f.user.id, selection), executeCartCommand(f.user.id, command),
+  ]);
+  assert.equal(importReplay.replayed, true); assert.equal(commandReplay.replayed, true);
+  assert.deepEqual(commandReplay.result, added.result);
+  assert.equal(commandReplay.cart.items[0].quantity, 6); assert.equal(commandReplay.cart.revision, 2);
+  assert.equal(await quantity(f.cart.id, f.product.id), 6);
+  assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: f.product.id } })).stock, 10);
+  assert.equal(await prisma.order.count({ where: { userId: f.user.id } }), 0);
+});
 test("concurrent copies and lost-response replay use one receipt with current cart state", async (t) => {
   const f = await checkoutFixture(t), request = add(f);
   const results = await Promise.all([executeCartCommand(f.user.id, request), executeCartCommand(f.user.id, request)]);

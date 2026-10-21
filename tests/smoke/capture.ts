@@ -1,6 +1,6 @@
 import type { Page, TestInfo } from "@playwright/test";
 
-export async function capture(page: Page, testInfo: TestInfo, name: string) {
+export async function capture(page: Page, testInfo: TestInfo, name: string, options: { fullPage?: boolean } = {}) {
   await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(async () => {
@@ -10,6 +10,6 @@ export async function capture(page: Page, testInfo: TestInfo, name: string) {
     }));
   });
   const path = testInfo.outputPath(`${name}.png`);
-  await page.screenshot({ path, fullPage: true, animations: "disabled", style: "* { content-visibility: visible !important; }" });
+  await page.screenshot({ path, fullPage: options.fullPage ?? true, animations: "disabled", style: "* { content-visibility: visible !important; }" });
   await testInfo.attach(name, { path, contentType: "image/png" });
 }
