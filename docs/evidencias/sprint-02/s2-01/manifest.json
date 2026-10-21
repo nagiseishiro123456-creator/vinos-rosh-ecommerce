@@ -1,0 +1,142 @@
+{
+  "story": "S2-01",
+  "review_date": "2026-10-18",
+  "capture_date": "2026-10-17",
+  "timezone": "America/Lima",
+  "run_id": 39096709609,
+  "tested_commit": "16074e1fd97fc62f51fb863cfb3f46230a3df3d2",
+  "artifact_id": 12125430611,
+  "artifact_created_at_utc": "2026-10-18T04:22:48Z",
+  "artifact_sha256": "a2204957b26809a1273d3c62ed1be4f2a61cb177c095dd2455c531a2dd146261",
+  "capture_kind": "Originales de CI de main, conservados como baseline de Sprint 2; no nuevas capturas de interfaz modificada.",
+  "images": [
+    {
+      "file": "base-desktop-03-producto-qa.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-desktop/03-producto-qa.png",
+      "bytes": 532169,
+      "width": 1440,
+      "height": 1433,
+      "sha256": "9e34129da3e20ec2097775c67139a62b9672b3c3a44eb87d5b8e50be9122ba10"
+    },
+    {
+      "file": "base-desktop-04-acceso.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-desktop/04-acceso.png",
+      "bytes": 314903,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "2355521ad8e14b39bdd9e164e49f8afeaaf9913e8c340d9bb9bc395e70e319bd"
+    },
+    {
+      "file": "base-desktop-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/05-carrito-exacto.png",
+      "bytes": 170887,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "36804d16c8c22208554371e9671f41d001a51215ef2820c28a58c90a6a6f51f4"
+    },
+    {
+      "file": "base-desktop-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/06-entrega-exacta.png",
+      "bytes": 235522,
+      "width": 1440,
+      "height": 1165,
+      "sha256": "b9e80054e5b3b88f11aaf4b86d274ed775c9c0a9ae850c10c635d00639e92d4a"
+    },
+    {
+      "file": "base-desktop-07-confirmacion-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/07-confirmacion-exacta.png",
+      "bytes": 241582,
+      "width": 1440,
+      "height": 1252,
+      "sha256": "fe8c36109cc39daddf334a0a109fc3d9051897daba80b7fdde121bb4308a661a"
+    },
+    {
+      "file": "base-desktop-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/08-resumen-actualizado.png",
+      "bytes": 256625,
+      "width": 1440,
+      "height": 1377,
+      "sha256": "33cbff438627ee90c6b0bb87c3b5a1e510cb070faae846e3684adca9da5827cb"
+    },
+    {
+      "file": "base-desktop-09-reserva-confirmada.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/09-reserva-confirmada.png",
+      "bytes": 336912,
+      "width": 1440,
+      "height": 1254,
+      "sha256": "a03a391120f7cf4e33b4e4cad895c8053d5b3931cda87bbfe1071f7c430cb422"
+    },
+    {
+      "file": "base-desktop-10-operacion-en-revision.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-desktop/10-operacion-en-revision.png",
+      "bytes": 215779,
+      "width": 1440,
+      "height": 1099,
+      "sha256": "2c163308d9b5927456cb342c58fdae198dbe70f46f126ac22ce2ff820f902e5a"
+    },
+    {
+      "file": "base-mobile-03-producto-qa.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-mobile/03-producto-qa.png",
+      "bytes": 255092,
+      "width": 390,
+      "height": 1752,
+      "sha256": "a597aa482211fff9b7881da931eff2aa0a48bfaf2899b576552825a70a8d8e91"
+    },
+    {
+      "file": "base-mobile-04-acceso.png",
+      "source": "test-results/baseline-S1-01-storefront-baseline-with-a-connected-database-mobile/04-acceso.png",
+      "bytes": 125134,
+      "width": 390,
+      "height": 1021,
+      "sha256": "2dda4e00d2cbefff6896d31194810f58313a4983e958591826715c495ddcc191"
+    },
+    {
+      "file": "base-mobile-05-carrito-exacto.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/05-carrito-exacto.png",
+      "bytes": 102709,
+      "width": 390,
+      "height": 1023,
+      "sha256": "a2228c6823f8e604a861f6e4eef7f60f802e8d7e290c11571955e2e6c3bf23df"
+    },
+    {
+      "file": "base-mobile-06-entrega-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/06-entrega-exacta.png",
+      "bytes": 162843,
+      "width": 390,
+      "height": 1941,
+      "sha256": "56a7ae03f5c47a1c767bdafbae22c1d6749f2e323739c289cd4ccfc57d1e6e6d"
+    },
+    {
+      "file": "base-mobile-07-confirmacion-exacta.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/07-confirmacion-exacta.png",
+      "bytes": 168986,
+      "width": 390,
+      "height": 1897,
+      "sha256": "25239eeeca0c0aebd328ce92252f4b1cfc9e99423b327577fe7cc735bb126779"
+    },
+    {
+      "file": "base-mobile-08-resumen-actualizado.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/08-resumen-actualizado.png",
+      "bytes": 178517,
+      "width": 390,
+      "height": 2073,
+      "sha256": "d2a34cfb3eb63d6201e500980c8cbb86e1049f136b3db5095cb1dc4f612a5c85"
+    },
+    {
+      "file": "base-mobile-09-reserva-confirmada.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/09-reserva-confirmada.png",
+      "bytes": 229604,
+      "width": 390,
+      "height": 1945,
+      "sha256": "10bf3e66f118bfcddb836f8e17303e1a65757110fb69f1efdc1220153d854427"
+    },
+    {
+      "file": "base-mobile-10-operacion-en-revision.png",
+      "source": "test-results/money-S1-02-exact-total-ch-3d894--server-authoritative-order-mobile/10-operacion-en-revision.png",
+      "bytes": 149722,
+      "width": 390,
+      "height": 1642,
+      "sha256": "0e280b699b7ad1703828bcb46c3c2676ed2c3386f2a690afb09376e7d29b56f5"
+    }
+  ]
+}

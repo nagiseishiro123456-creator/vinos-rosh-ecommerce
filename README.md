@@ -105,6 +105,10 @@ Ver [cierre técnico](docs/sprints/cierre-sprint-01.md),
 67 pruebas y 16 casos de navegador; 56 capturas conservadas. Render permanece suspendido,
 sin despliegue de este incremento. Siguiente paso: refinamiento de Sprint 2 de UX/accesibilidad
 y registro de aceptación funcional del Product Owner.
+Sprint 2 iniciado el 2026-10-18: [plan](docs/sprints/fase-2-sprint-02.md),
+[diagnóstico del recorrido](docs/ux/sprint-02-recorrido-compra.md) y
+[16 capturas base](docs/evidencias/sprint-02/s2-01/README.md). S2-01 es documental;
+carrito invitado/lateral y las correcciones de UI todavía están pendientes.
 
 ## Verificación y evidencias
 
