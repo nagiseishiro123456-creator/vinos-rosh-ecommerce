@@ -37,3 +37,19 @@ Elimina buckets de rate limiting vencidos y tokens de recuperación de contrase�
 Antes de lanzar datos reales se debe fijar una rutina de respaldo, por ejemplo una copia diaria y una copia externa periódica. No basta con tener un script: al menos una restauración de prueba debe ejecutarse antes de producción.
 
 Nunca subir respaldos, `.env`, credenciales, datos de clientes o códigos de operación a GitHub.
+
+## Carrito e idempotencia desde Sprint 2
+
+La exportación JSON del panel es una copia comercial parcial y no permite restaurar
+íntegramente una tienda. No incluye carritos ni comprobantes técnicos de sus operaciones.
+Para recuperar la BD se necesita el dump SQL completo, incluidas Cart, CartItem,
+CartImport, CartMutation, revisiones, huellas, claves únicas y migraciones aplicadas.
+Eliminar esos comprobantes al recuperar datos puede permitir repetir una intención
+invitada que el navegador aún conserva como pendiente.
+
+S2-06 incorpora `scripts/verify-cart-restore.mjs` a CI con PostgreSQL 16. Usa bases
+temporales aisladas y los mismos flags nativos de pg_dump/psql que los scripts locales:
+genera una unión/comando con los servicios reales, restaura y comprueba replay sin suma,
+conflicto de otra huella y una edición nueva. El SQL temporal no se publica como artefacto.
+Consultar [resultados y límites](../testing/revision-integracion-sprint-02.md).
+Este contrato no sustituye la restauración operativa del entorno real antes del lanzamiento.

@@ -124,6 +124,11 @@ jobs:
       - name: Tests
         run: npm test
 
+      - name: Verify cart idempotency after PostgreSQL dump and restore
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: node scripts/verify-cart-restore.mjs
+
       - name: Typecheck
         run: npm run typecheck
 
@@ -176,4 +181,28 @@ jobs:
           name: sprint-01-smoke-${{ github.run_id }}
           path: evidence-source
       - name: Export original cart PNGs for visual review
+        run: node scripts/qa-cart-evidence.mjs evidence-source ${{ matrix.project }}
+
+  integration-evidence:
+    name: Sprint 2 evidence (${{ matrix.project }})
+    needs: validate
+    if: ${{ always() && (github.head_ref == 'fase-2/sprint-02-revision-integracion' || github.ref == 'refs/heads/main') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile]
+    env:
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      EVIDENCE_STORY: S206
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Download original QA evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: sprint-01-smoke-${{ github.run_id }}
+          path: evidence-source
+      - name: Export original integration PNGs for visual review
         run: node scripts/qa-cart-evidence.mjs evidence-source ${{ matrix.project }}

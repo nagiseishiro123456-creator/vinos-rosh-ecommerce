@@ -66,5 +66,36 @@ Los datos de QA son sintéticos y el entorno de pruebas es aislado.
 
 ## Hallazgos y resultados
 
-Pendientes de revisión/ejecución. Se actualizarán durante la historia y antes del cierre;
-este plan no es una declaración de integración ni aprobación de código nuevo.
+### R2-01 — Recorrido conjunto de las historias
+
+La cobertura previa comprueba unión, panel y comunicación de pago por separado. Se añade
+un caso de integración en escritorio/móvil: 2 unidades invitadas + 3 de cuenta = 5;
+editar a 4 desde el panel; reservar por S/ 128.10 con envío; añadir 1 unidad para otra
+compra y comunicar la operación anterior. Deben quedar pedido/pago en revisión, stock 6,
+una sola reserva y la nueva selección de 1 intacta. Se prevén 66 casos totales, sin
+atribuir resultados antes de CI. Tres capturas por proyecto documentarán este recorrido.
+
+### R2-02 — Recuperación de identidades persistidas
+
+Se añade un contrato de recuperación PostgreSQL a CI: crear dos BD temporales en el
+contenedor QA, aplicar las 12 migraciones a la fuente y generar una unión/comando con
+los servicios reales. pg_dump/psql restauran el destino; los mismos identificadores deben
+recuperar resultados sin sumar y deben permitir una edición posterior con otra identidad.
+Se comprueban cantidades/revisiones/huellas/stock/pedidos; solo se eliminan esas BD QA.
+No se añaden migraciones ni se cambia el contrato de compra.
+
+### R2-03 — Alcance del respaldo comercial
+
+La revisión confirma que JSON es una exportación comercial parcial, no una restauración
+completa, y que el dump SQL no filtra tablas. Se aclara en la guía que Cart, CartItem,
+CartImport y CartMutation deben conservarse mediante respaldo completo; no se amplía
+sin necesidad el JSON ni se presentan contraseñas/identidades técnicas como datos de negocio.
+Permisos de administrador vigente y exclusión de secretos mantienen sus regresiones.
+
+### Comprobaciones en curso
+
+Sintaxis de los scripts y whitespace comprobados localmente. El entorno local usa Node 24
+y no tiene Docker/psql; npm ci se interrumpió al descargar motores Prisma (ECONNRESET).
+No se atribuye una instalación local reproducible ni pruebas de BD a ese entorno. CI con
+Node 22.23.3/npm 11.9.0/PostgreSQL 16 es la referencia de aceptación. Resultados e integración
+se registrarán después de ejecutarlos; los PR #9–#13 todavía no se han fusionado.
