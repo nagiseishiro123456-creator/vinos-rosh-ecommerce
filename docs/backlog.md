@@ -18,9 +18,9 @@ Dependencias de entrega: S1-01 → S1-02 → S1-03 → S1-04 → S1-05.
 Documentación y pruebas forman parte de cada historia.
 Las cinco historias suman 26 SP revisados e integrados; ver [cierre técnico](sprints/cierre-sprint-01.md)
 y [registro de integración](testing/revision-integracion-sprint-01.md). Aceptación funcional del
-Product Owner por registrar. Sprint 2 en curso; Render no se reanuda con este trabajo.
+Product Owner por registrar. Sprint 2 integrado; el siguiente paso es refinar Sprint 3.
 
-## Sprint 2 — Compra móvil, carrito y accesibilidad (26 SP preliminares)
+## Sprint 2 — Compra móvil, carrito y accesibilidad (26 SP integrados)
 
 Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 [Plan y aceptación por historia](sprints/fase-2-sprint-02.md) ·
@@ -28,12 +28,12 @@ Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 
 | ID | Historia | SP | Estado |
 | --- | --- | ---: | --- |
-| S2-01 | Diagnosticar y documentar recorrido, estados y baseline. | 3 | Documentada y verificada en rama; integración pendiente |
-| S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | CI 67/67 y 20/20 aprobada; revisión/integración pendientes (#10) |
-| S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | CI 80/80 y 28/28 aprobada; revisión/integración pendientes (#11) |
-| S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | CI 98/98 y 44/44 aprobada; revisión/integración pendientes (#12) |
-| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | CI 116/116 y 64/64 aprobada; 36 capturas; revisión/integración pendientes (#13) |
-| S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Siguiente historia |
+| S2-01 | Diagnosticar y documentar recorrido, estados y baseline. | 3 | Revisada e integrada en main (#9) |
+| S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | Revisada e integrada en main (#10) |
+| S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | Revisada e integrada en main (#11) |
+| S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | Revisada e integrada en main (#12) |
+| S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Revisada e integrada en main (#13) |
+| S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Revisada e integrada en main (#14) |
 
 Los puntos no son horas ni velocidad garantizada. Si el refinamiento revela más alcance,
 dividir y reestimar antes de comprometerlo. S2-01 no implementa todavía funciones de carrito.
@@ -68,6 +68,7 @@ se abordaron en S2-02, con [QA y límites](testing/s2-02-ux-movil.md); conservar
 `En revisión` y `Boleta` ya aparecen traducidos en main.
 S2-05 entrega panel/estado compartido y comandos concurrentes idempotentes: [QA](testing/s2-05-carrito-lateral.md),
 [ADR previo](decisions/0008-carrito-lateral.md) y [36 capturas](evidencias/sprint-02/s2-05/README.md).
-S2-01–S2-05 suman 24 SP entregados en ramas, sin atribuir integración ni aceptación comercial.
-S2-06 revisa e integra los PR #9–#13, comprueba main y registra el cierre (2 SP).
+S2-01–S2-06 suman 26 SP revisados e integrados mediante PR #9–#14, sin atribuir aceptación comercial.
+[Revisión final](testing/revision-integracion-sprint-02.md): 117/117 servidor, 66/66 navegador y
+restauración PostgreSQL aprobados; [cierre](sprints/cierre-sprint-02.md). Siguiente: refinar Sprint 3.
 Ver [diagnóstico](ux/sprint-02-recorrido-compra.md) y [plan actual](sprints/fase-2-sprint-02.md).

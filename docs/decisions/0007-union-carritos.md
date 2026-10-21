@@ -2,7 +2,8 @@
 
 Fecha: 2026-10-19 (America/Lima). Historia S2-04, 8 SP. Decisión registrada antes
 del código; base S2-03 `b74c607…`. Estado: implementada y verificada en S2-04;
-revisión/integración pendientes. [QA y fuente de aceptación](../testing/s2-04-union-carritos.md).
+revisada e integrada en main mediante PR #12 durante S2-06 (2026-10-21).
+[QA y fuente de aceptación](../testing/s2-04-union-carritos.md).
 
 ## Problema y alternativas
 

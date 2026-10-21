@@ -30,6 +30,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 24. [ADR 0008: panel y comandos de cuenta](decisions/0008-carrito-lateral.md) · [QA S2-05](testing/s2-05-carrito-lateral.md) · [36 capturas revisadas](evidencias/sprint-02/s2-05/README.md)
 
+25. [Revisión e integración S2-06](testing/revision-integracion-sprint-02.md) · [Cierre técnico Sprint 2](sprints/cierre-sprint-02.md) · [Seis capturas nuevas](evidencias/sprint-02/integracion/README.md)
+
 ## Cuándo documentar
 
 | Momento | Registro |

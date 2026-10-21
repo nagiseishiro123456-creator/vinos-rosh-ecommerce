@@ -1,5 +1,15 @@
 # Changelog
 
+## Fase 2 — Sprint 2 (cierre técnico integrado, 2026-10-21)
+
+- Historias S2-01–S2-06 revisadas e integradas en main mediante PR #9–#14.
+- Compra móvil: resumen antes de reservar, importes legibles, radios y foco, controles en flujo.
+- Selección invitada y unión idempotente; panel accesible con estado compartido, comandos transaccionales y movimiento reducido en vivo.
+- Dos migraciones aditivas del sprint (12 acumuladas): CartImport y CartMutation/revisión.
+- Cierre: 117/117 pruebas de servidor, 66/66 de navegador, cinco contratos SQL y recuperación PostgreSQL aprobados en main.
+- Seis capturas nuevas conservadas con procedencia/hashes, 192 en total; [QA](docs/testing/revision-integracion-sprint-02.md) y [continuidad](docs/sprints/cierre-sprint-02.md).
+- Sin lanzamiento comercial; siguiente paso: refinar Sprint 3 antes de implementar.
+
 ## Fase 2 — Sprint 1 / S1-04 (implementado y verificado en rama, 2026-10-16)
 - Identidad de checkout estable y huella completa de la solicitud; unicidad por usuario/operación en BD.
 - Reintento recupera la orden antes de consultar carrito/configuración; conflicto no crea ni sobrescribe.

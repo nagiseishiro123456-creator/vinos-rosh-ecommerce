@@ -2,7 +2,9 @@
 
 Fecha: 2026-10-19 (America/Lima). Historia S2-03, 5 SP.
 Base: S2-02, PR #10, cierre documental `496b8f4…`.
-Decisión técnica registrada antes del código. Sin migraciones ni dependencias nuevas.
+Decisión técnica registrada antes del código. Sin migraciones ni dependencias nuevas en S2-03.
+Estado al 2026-10-21: implementada, verificada y revisada/integrada en main mediante PR #11
+durante S2-06. [Revisión del incremento](../testing/revision-integracion-sprint-02.md).
 
 ## Estado y alternativas
 

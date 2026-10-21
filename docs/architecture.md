@@ -242,4 +242,18 @@ de 768 px. useReducedMotion inicial, matchMedia en vivo y CSS eliminan efectos c
 preferencia. La rejilla propia del panel fija imagen/información/cantidad/total sin heredar
 la distribución de la página completa; controles de 44 px y footer accesible a 320 px.
 Coste JS medido al abrir documentado en QA; rendimiento y otros navegadores siguen
-teniendo sus límites de validación. Integración del incremento pendiente en S2-06.
+teniendo sus límites de validación. El incremento fue revisado e integrado en S2-06.
+
+## Incremento integrado — S2-06
+
+S2-01–S2-06 integradas en main (PR #9–#14), con árboles de merge iguales a las cabeceras
+validadas. [Registro](testing/revision-integracion-sprint-02.md) y
+[cierre técnico](sprints/cierre-sprint-02.md). La revisión no añade dependencias,
+migraciones ni comportamiento nuevo al producto; añade cobertura entre módulos y recuperación.
+
+Una unión y un add paralelos conservan ambas sumas y sus identidades. El recorrido
+invitado → unión → panel → reserva → comunicación conserva el carrito posterior y no
+reserva dos veces. Un contrato aislado de CI aplica las 12 migraciones, genera comprobantes
+con los servicios reales, restaura un dump en otra BD y comprueba replay, huellas, revisión
+y escritura posterior. El respaldo SQL conserva esos registros; JSON comercial sigue
+siendo parcial. No se modifica la política de costos ni la infraestructura de Render.

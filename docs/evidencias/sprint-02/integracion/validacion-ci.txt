@@ -1,0 +1,66 @@
+S2-06 — Código integrado y evidencia
+Fecha: 2026-10-21 (America/Lima)
+Plan previo: 7ec201e49ee1d26495441bea99d3972428666d0e
+Fuente revisada: 3d6dd51a946fba9b8c337cb1a8b63bca0e38e461
+Tree fuente: 13173db75d38b638cb0ea14b87ac6e220590efae
+Checkout PR: 009d0799e4d5e1a4a1fa069ef1615400367495dc
+Main integrado: d2efd04047bb0cc331efa6e004dba4fd927f842b
+Tree main: 13173db75d38b638cb0ea14b87ac6e220590efae (idéntico, comprobado por API Git)
+
+Fuente: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39670639919
+2026-10-21T20:30:07.7252537Z found 0 vulnerabilities
+2026-10-21T20:30:11.8586461Z 12 migrations found in prisma/migrations
+2026-10-21T20:30:12.3035450Z  S1-03 legacy migration contract passed
+2026-10-21T20:30:14.0888357Z  S1-04 idempotency migration contract passed
+2026-10-21T20:30:14.3410236Z  S1-05 reconciliation migration contract passed
+2026-10-21T20:30:14.4712921Z  S2-04 cart import migration contract passed
+2026-10-21T20:30:14.5959899Z  S2-05 cart commands migration contract passed
+2026-10-21T20:30:26.5795541Z # tests 117
+2026-10-21T20:30:26.5796371Z # pass 117
+2026-10-21T20:30:26.5797199Z # fail 0
+2026-10-21T20:30:29.4678542Z S206_RESTORE_CONTRACT {"passed":true,"migrations":12,"imports":1,"commands":2,"restoredQuantity":4,"restoredRevision":2,"finalQuantity":3,"finalRevision":3,"stock":10,"orders":0}
+2026-10-21T20:30:29.4685872Z S206_RESTORE_DUMP {"bytes":54863,"sha256":"3489f2af7f1bf24f1f75742b20d746fc9aa2d0aef3af46a8a09ce8f7d39950db"}
+2026-10-21T20:35:25.3606926Z   66 passed (3.9m)
+
+Main: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39672240551
+2026-10-21T20:41:05.5220199Z found 0 vulnerabilities
+2026-10-21T20:41:09.5597467Z 12 migrations found in prisma/migrations
+2026-10-21T20:41:09.9960919Z  S1-03 legacy migration contract passed
+2026-10-21T20:41:11.8345655Z  S1-04 idempotency migration contract passed
+2026-10-21T20:41:12.1016045Z  S1-05 reconciliation migration contract passed
+2026-10-21T20:41:12.2314080Z  S2-04 cart import migration contract passed
+2026-10-21T20:41:12.3650652Z  S2-05 cart commands migration contract passed
+2026-10-21T20:41:24.4626037Z # tests 117
+2026-10-21T20:41:24.4626770Z # pass 117
+2026-10-21T20:41:24.4627056Z # fail 0
+2026-10-21T20:41:27.3578825Z S206_RESTORE_CONTRACT {"passed":true,"migrations":12,"imports":1,"commands":2,"restoredQuantity":4,"restoredRevision":2,"finalQuantity":3,"finalRevision":3,"stock":10,"orders":0}
+2026-10-21T20:41:27.3584358Z S206_RESTORE_DUMP {"bytes":54864,"sha256":"363760966cde118eb194c12e9193380af2aea20d89f0a0f717d1f5ee97308337"}
+2026-10-21T20:46:27.1073819Z   66 passed (4.0m)
+
+Prisma/tipos/lint/build y auditoría de producción aprobados.
+Toolchain: Node 22.23.3/npm 11.9.0/PostgreSQL 16, Next 16.3.8, Prisma 6.19.3,
+Playwright 1.64.1/Chromium 156.0.8078.4; next build habitual y standalone.
+Sin reintentos de navegador. Cinco avisos altos de desarrollo heredados.
+Los hashes/tamaños de dump varían por timestamps/IDs sintéticos; no se publica el SQL.
+
+Fusiones en orden, SHA esperado y [skip render]:
+#9 head=97042fd95f35f7646f499d2d26498a7b5852cf62 merge=17cda84862e3dcc1993a8ef3520c412902a7b9b1 tree=46b1961be90c133c51457f767b297ff2c93a1269 matches=true
+#10 head=496b8f4314492b153424620c74b63f17b01f6082 merge=5e54bdebb1a5a48fd0687d11abb97aed22bbee52 tree=1e93f78a967451a49935e683d773cc8c3c977e69 matches=true
+#11 head=b74c60726c57e2e50c979eec1465937f31cad867 merge=6e453b4c49ed5dd9ec484b95bc5a4348418aaf37 tree=bf68b065d62b02efb31083e67be1cd12e3e0da89 matches=true
+#12 head=3c7f012fe1e92b63c5b71d5405589c2b6621b09a merge=f3f3be1a1d2452c890d86dbd88f530c696578e06 tree=b43193c656234c2e2fc7125bb6c518de2cf69f4d matches=true
+#13 head=d9a0e0ea946158ee8735e71706d18ad07d003166 merge=7d41b7bf64dad2e8c86a89d9b052d9b5ca32c349 tree=6f5f2c0dc573bde97a777b784666390076ea9f6a matches=true
+#14 head=3d6dd51a946fba9b8c337cb1a8b63bca0e38e461 merge=d2efd04047bb0cc331efa6e004dba4fd927f842b tree=13173db75d38b638cb0ea14b87ac6e220590efae matches=true
+
+6 PNG originales, 1178378 bytes; inspección visual y comparación con S2-01.
+Dimensiones/bytes/SHA-256 verificados con Python; blobs Git coinciden al guardar.
+186 PNG anteriores intactos; total 192. Sin retoque/recompresión/duplicados.
+ZIP fuente: sprint-01-smoke-39670639919, 106634383 bytes.
+Digest informado por GitHub: sha256:3aeee5575f7970f2b66cddc8b79f407a7c4a8d5452c83f3d9103fb55b72ab957
+Caducidad: 2026-11-04T20:35:25Z
+Ese ZIP no fue descargado/rehasheado; la verificación independiente es por PNG.
+
+Cierre posterior: solo documentación/evidencia, sin cambiar archivos de ejecución.
+Los checks y merge de esa actualización se registran en su PR. Límites en QA.
+Datos sintéticos; no Render, BD remota, pagos reales ni certificación WCAG/UAT/CWV.
+
+Enlaces de documentación: 49 Markdown / 437 enlaces relativos / 0 rotos.
