@@ -1,13 +1,28 @@
 # Punto de avance
 
-## En curso — S2-06 (2026-10-21, America/Lima)
+## Cierre técnico — Sprint 2 integrado (2026-10-21, America/Lima)
 
-Revisión e integración autorizadas tras cerrar S2-05. [Plan y registro](testing/revision-integracion-sprint-02.md)
-creado antes de cambios/integración; rama `fase-2/sprint-02-revision-integracion`, base `d9a0e0ea946158ee8735e71706d18ad07d003166`.
-Primero revisión del incremento y sus límites; después correcciones/CI/evidencia e integración
-ordenada con comprobación de main. Los resultados históricos siguientes se conservan como referencia.
+- S2-01–S2-06 revisadas e integradas en main mediante **PR #9 → #14**, conservando historial.
+  Los seis árboles de fusión coinciden con sus cabeceras validadas.
+- Código integrado: `d2efd04047bb0cc331efa6e004dba4fd927f842b`, árbol `13173db75d38b638cb0ea14b87ac6e220590efae`.
+  [CI de main 39672240551](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39672240551):
+  **117/117 servidor y 66/66 navegador**, 12 migraciones/cinco contratos SQL, restauración
+  PostgreSQL, Prisma/tipos/lint/build y auditoría de producción (0 hallazgos) aprobados.
+- [Revisión y resultados](testing/revision-integracion-sprint-02.md) ·
+  [Cierre y continuidad](sprints/cierre-sprint-02.md) ·
+  [Seis capturas nuevas](evidencias/sprint-02/integracion/README.md).
+  186 PNG históricos intactos; total 192.
+- La compra invitada, unión, panel y pago en revisión se comprueban en un recorrido conjunto;
+  una selección posterior de 1 se conserva al comunicar el pago de la reserva anterior.
+  La recuperación de PostgreSQL conserva identidades para que los reintentos no vuelvan a sumar.
+- La actualización documental posterior registra ese código integrado y añade evidencia;
+  sus checks y fusión se consultan en el PR de cierre documental. No cambia ejecución/esquema.
+- **Siguiente: refinamiento y propuesta del Sprint 3**, pagos automáticos y notificaciones,
+  antes de implementar. El lanzamiento y la aceptación comercial/UAT siguen pendientes.
+- Se usó `[skip render]` en todos los commits/fusiones. Esta entrega no accede a Render
+  ni a una BD remota y no efectúa pagos reales.
 
-## Estado actual — S2-05 verificada (2026-10-20, America/Lima)
+## Referencia del cierre S2-05 (histórico) (2026-10-20, America/Lima)
 
 - Fase 2, Sprint 2: S2-01–S2-05 implementadas/documentadas y verificadas en sus ramas.
   **S2-06 — revisión e integración — es la siguiente historia.** El Sprint 2 aún no está cerrado.
@@ -139,20 +154,19 @@ en Render todavía usa `npm install`: sincronizar antes de un futuro despliegue.
 
 ## Siguiente acción
 
-**S2-06 — Regresión, revisión e integración del Sprint 2 (2 SP).**
+**Sprint 3 — Refinar pagos automáticos y comunicación antes de codificar.**
 
-1. Registrar un plan de revisión y commit de partida antes de cambiar/integrar código.
-2. Revisar el incremento completo y sus PR dependientes; conservar regresiones de dinero,
-   reserva, última botella, permisos, unión, respuesta perdida y panel accesible.
-3. Registrar hallazgos reales, corregirlos en un PR identificable y volver a validar.
-4. Integrar en orden solo dentro de esa historia, con `[skip render]`, comprobar main
-   y conservar resultados/evidencia. El estado integrado se documenta después de verificarlo.
-5. Cerrar backlog/progreso y dejar los límites y decisiones pendientes para Sprint 3
-   (pagos automáticos/notificaciones), antes de comenzar su implementación.
+1. Presentar objetivo, historias/estimaciones, dependencias, DoD y secuencia documental.
+2. Elegir proveedor según disponibilidad para el negocio, moneda, comisiones, sandbox,
+   webhooks y calidad/precio; verificar condiciones vigentes con fuentes primarias.
+3. Registrar ADR de estados, firma/verificación de webhook, idempotencia, conciliación
+   y límites entre reserva y confirmación. Definir notificaciones/reintentos sin inventar emisión fiscal.
+4. Obtener solo la configuración de prueba necesaria cuando corresponda; mantener secretos
+   fuera de Git y costos dentro de la política autorizada.
+5. Comenzar una historia a la vez después de concretar el plan. Conservar las 117/66 regresiones.
 
-No hay que reinstalar ni rediseñar S2-05. El ADR, las migraciones, el contrato y la galería
-ya están versionados. Home inmersivo y medición de Core Web Vitals siguen en Sprint 5.
-No se solicita ni se ejecuta un despliegue con este cierre.
+No se inicia la implementación de Sprint 3 con el cierre de Sprint 2.
+Los puntos de aceptación funcional y el entorno comercial se refinan con el Product Owner.
 
 ## Riesgos abiertos
 - Conciliación ampliada: varias operaciones por pago, correcciones y devoluciones parciales/despachadas fuera del alcance actual.
@@ -168,10 +182,10 @@ No se solicita ni se ejecuta un despliegue con este cierre.
   no se añadió programación periódica ni servicios de pago.
 - En la revisión del Sprint 1 Render se comprobó suspendido; este sprint no modifica
   su configuración ni utiliza su BD. Main integrado no implica app desplegada.
-- S2-02 está verificada pero no integrada; las capturas locales conservan su origen y límites.
-- S2-04 verificada y sin integrar. Pendiente de otra cuenta exige volver al usuario original;
+- S2-02 integrada; las capturas locales históricas conservan su origen y límites.
+- S2-04 integrada. Pendiente de otra cuenta exige volver al usuario original;
   sin storage/locks se usa memoria y no se promete sincronización/persistencia invitada.
-- S2-05 verificada, todavía sin integrar. Los comandos inciertos de cuenta se conservan en
+- S2-05 integrada. Los comandos inciertos de cuenta se conservan en
   memoria durante la visita; cerrar/recargar recupera el carrito de BD y no reenvía una intención nueva.
 - Los chunks solicitados al abrir el panel se miden en QA; eso no constituye medición de
   Core Web Vitals. Revisión manual con lector de pantalla, zoom y otros motores pendiente.

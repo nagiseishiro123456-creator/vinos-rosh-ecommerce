@@ -2,8 +2,9 @@
 
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
-Estado al 2026-10-20: S2-01–S2-05 documentadas/implementadas y verificadas en sus ramas;
-revisión e integración del incremento completo pendientes en **S2-06**, siguiente historia.
+Estado al 2026-10-21: **S2-01–S2-06 revisadas e integradas en main**. Cierre técnico
+verificado: 117/117 servidor y 66/66 navegador. [Registro](../testing/revision-integracion-sprint-02.md)
+y [continuidad](cierre-sprint-02.md). Aceptación comercial/UAT por registrar.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
 ## Sprint Goal
@@ -90,7 +91,7 @@ sin pérdidas ni duplicaciones al identificarme o repetir una petición.
 - DoD: integración con PostgreSQL para carreras/reintentos, E2E de ingreso/registro y
   permisos; ADR, contrato, mensajes, migración si aplica y capturas incluidos.
 
-Entrega técnica S2-04: [ADR previo](../decisions/0007-union-carritos.md), [QA 98/98 + 44/44](../testing/s2-04-union-carritos.md) y [32 capturas](../evidencias/sprint-02/s2-04/README.md); PR #12 pendiente de revisión/integración.
+Entrega técnica S2-04: [ADR previo](../decisions/0007-union-carritos.md), [QA 98/98 + 44/44](../testing/s2-04-union-carritos.md) y [32 capturas](../evidencias/sprint-02/s2-04/README.md); PR #12 integrado en main durante S2-06.
 
 ### S2-05 — Carrito lateral accesible (5 SP)
 
@@ -113,7 +114,7 @@ Como comprador, quiero revisar mi selección y seguir explorando sin perder el c
 
 Entrega técnica S2-05: [ADR previo](../decisions/0008-carrito-lateral.md),
 [QA 116/116 + 64/64](../testing/s2-05-carrito-lateral.md) y
-[36 capturas](../evidencias/sprint-02/s2-05/README.md); PR #13 sobre #12, sin integrar.
+[36 capturas](../evidencias/sprint-02/s2-05/README.md); PR #13 integrado en main durante S2-06.
 Incluye comandos concurrentes/idempotentes y comprobación de sesión entre cuentas.
 
 ### S2-06 — Regresión y cierre (2 SP)
@@ -175,19 +176,17 @@ aislado no equivalen a certificación completa de accesibilidad ni a aceptación
 
 ## Estado de entrega
 
-- S2-01: entregables documentales y 16 capturas base revisadas; publicación y checks en
-  la rama `fase-2/sprint-02-recorrido-base`. [Resultados](../testing/s2-01-recorrido.md).
-- S2-02: implementada en PR #10; [QA](../testing/s2-02-ux-movil.md) y
-  [capturas antes/después](../evidencias/sprint-02/s2-02/README.md). CI oficial aprobada:
-  67/67 servidor y 20/20 navegador; revisión/integración pendientes.
-- S2-03: ADR 0006 e implementación en PR #11; [QA aprobada](../testing/s2-03-carrito-invitado.md):
-  80/80 servidor y 28/28 navegador, 22 capturas conservadas; integración pendiente.
-- S2-04: ADR 0007 e implementación en PR #12; [QA aprobada](../testing/s2-04-union-carritos.md):
-  98/98 servidor y 44/44 navegador, 32 capturas conservadas; revisión/integración pendientes.
-- S2-05: ADR 0008 anterior al código e implementación en PR #13; [QA aprobada](../testing/s2-05-carrito-lateral.md):
-  116/116 servidor y 64/64 navegador, 36 capturas revisadas y 12 migraciones/cinco contratos SQL.
-  Página/panel/contador coherentes, teclado, movimiento reducido, respuesta perdida y cambio
-  de cuenta verificados. Revisión/integración pendientes; código `f06b4ad…`.
-- S2-06: siguiente historia. Registrar plan de revisión, comprobar el incremento completo,
-  resolver hallazgos, integrar PRs en orden y verificar main. Documentar cierre/pendientes
-  antes de iniciar Sprint 3; el Sprint 2 todavía no se declara cerrado.
+| Historia | Integración | Evidencia de su entrega |
+| --- | --- | --- |
+| S2-01 | #9 integrado | Recorrido, criterios y 16 PNG base conservados. |
+| S2-02 | #10 integrado | 67/67 + 20/20; correcciones de lectura, foco, overlays e importes. |
+| S2-03 | #11 integrado | 80/80 + 28/28; ADR 0006 y 22 PNG. |
+| S2-04 | #12 integrado | 98/98 + 44/44; ADR 0007 y 32 PNG. |
+| S2-05 | #13 integrado | 116/116 + 64/64; ADR 0008 y 36 PNG. |
+| S2-06 | #14 integrado | 117/117 + 66/66; carrera entre escritores, recuperación y recorrido completo; seis PNG. |
+
+Los números de historias anteriores son históricos; la regresión final incluye todos los
+casos previos. Los seis árboles de merge coinciden con las cabeceras validadas. Código
+integrado `d2efd04047bb0cc331efa6e004dba4fd927f842b`; [CI main 39672240551](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39672240551) aprobada.
+192 PNG conservados en total. [Revisión](../testing/revision-integracion-sprint-02.md) y
+[cierre técnico](cierre-sprint-02.md). El siguiente paso es refinar Sprint 3 antes de codificar.

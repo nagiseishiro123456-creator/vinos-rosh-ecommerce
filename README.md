@@ -16,7 +16,8 @@ E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular
 - Yape y transferencia manuales; Culqi contemplado en el modelo, integración automática pendiente
 
 ## Estado
-Fase 2, Sprint 2: compra móvil, carrito y accesibilidad; Sprint 1 integrado en main.
+Fase 2: Sprints 1 y 2 revisados e integrados en main. Sprint 2 incorpora compra móvil,
+carrito invitado, unión idempotente y panel accesible; cierre técnico 2026-10-21.
 El trabajo se entrega por historias pequeñas: ver [avance actual](docs/progreso.md),
 [backlog](docs/backlog.md) y [plan del Sprint 1](docs/sprints/fase-2-sprint-01.md).
 La tienda sigue siendo un entorno de validación; no hay lanzamiento comercial en este hito.
@@ -95,34 +96,21 @@ El botón **Deploy to Render** de arriba usa esta configuración.
 
 > Render indica que los Web Services Free pueden suspenderse tras inactividad y que Render Postgres Free expira a los 30 días. Por eso este entorno es únicamente para demo/validación, no para producción definitiva.
 
-## Próximo hito
-Las cinco historias del Sprint 1 están revisadas e integradas en main (PR #3–#7):
-dinero exacto, reserva previa, idempotencia, revisión administrativa y conciliación.
-La revisión corrigió permisos revocados y completó el respaldo de los nuevos registros.
-Ver [cierre técnico](docs/sprints/cierre-sprint-01.md),
-[integración y CI](docs/testing/revision-integracion-sprint-01.md) y
-[guía operativa de pagos](docs/operacion-pagos-manuales.md).
-67 pruebas y 16 casos de navegador; 56 capturas conservadas. En esa revisión Render se
-comprobó suspendido; el trabajo posterior no modifica su configuración ni despliega.
-La aceptación funcional del Product Owner queda por registrar.
-Sprint 2 iniciado el 2026-10-18: [plan](docs/sprints/fase-2-sprint-02.md),
-[diagnóstico del recorrido](docs/ux/sprint-02-recorrido-compra.md) y
-[16 capturas base](docs/evidencias/sprint-02/s2-01/README.md). S2-02 implementa correcciones
-de UI con [QA y CI oficial aprobada](docs/testing/s2-02-ux-movil.md) y
-[comparación visual](docs/evidencias/sprint-02/s2-02/README.md).
-Carrito invitado implementado en la rama de S2-03, con [ADR](docs/decisions/0006-carrito-invitado.md)
-y [QA aprobada](docs/testing/s2-03-carrito-invitado.md): 80 pruebas de servidor y 28 de navegador.
-[22 capturas](docs/evidencias/sprint-02/s2-03/README.md) conservadas; integración pendiente.
-Unión idempotente implementada en PR #12, con [ADR previo](docs/decisions/0007-union-carritos.md)
-y [QA aprobada](docs/testing/s2-04-union-carritos.md): 98 pruebas de servidor y 44 de navegador.
-El carrito de cuenta y su registro de importación se confirman juntos; los reintentos
-no repiten la suma. [32 capturas nuevas](docs/evidencias/sprint-02/s2-04/README.md) conservadas;
-integración pendiente.
-Panel lateral implementado en PR #13, con [ADR previo](docs/decisions/0008-carrito-lateral.md),
-[QA aprobada](docs/testing/s2-05-carrito-lateral.md): 116 pruebas de servidor y 64 de navegador,
-[36 capturas revisadas](docs/evidencias/sprint-02/s2-05/README.md). Página, panel y contador
-comparten estado; las adiciones concurrentes y los reintentos no pierden ni duplican unidades.
-**Siguiente: S2-06 — revisión e integración del Sprint 2.** Los PR #9–#13 siguen sin fusionar.
+## Hitos integrados y siguiente paso
+
+Sprint 1 integrado: dinero exacto, reserva previa, idempotencia, revisión administrativa
+y conciliación. [Cierre](docs/sprints/cierre-sprint-01.md) y
+[guía de pagos](docs/operacion-pagos-manuales.md).
+
+Sprint 2 integrado mediante PR #9–#14: selección invitada, unión al identificarse,
+estado compartido entre panel/página/contador y compra móvil accesible.
+[QA final](docs/testing/revision-integracion-sprint-02.md): **117/117 servidor y
+66/66 navegador**, 12 migraciones/cinco contratos SQL y recuperación PostgreSQL aprobados.
+[Seis capturas de cierre](docs/evidencias/sprint-02/integracion/README.md), conservando las
+186 anteriores. [Cierre técnico y continuidad](docs/sprints/cierre-sprint-02.md).
+
+El siguiente paso es presentar y refinar el Sprint 3 (pagos automáticos/notificaciones)
+antes de implementar. El entorno comercial y la aceptación funcional/UAT siguen pendientes.
 
 ## Verificación y evidencias
 
@@ -130,4 +118,6 @@ La instalación estándar usa `npm ci --include=dev` y el lockfile versionado.
 Para preparar otra plataforma y ejecutar pruebas, seguir [la guía reproducible](docs/desarrollo-reproducible.md).
 CI valida migraciones en PostgreSQL 16, pruebas existentes, tipos, lint y build.
 También comprueba `/api/health` y genera capturas desktop/móvil con Playwright en una BD aislada.
-Los resultados ejecutados y las limitaciones se registran en [QA del Sprint 1](docs/testing/sprint-01.md).
+CI también comprueba recuperación de identidades del carrito después de pg_dump/psql.
+Resultados actuales y límites en [QA final del Sprint 2](docs/testing/revision-integracion-sprint-02.md);
+[QA histórico del Sprint 1](docs/testing/sprint-01.md) conservado.

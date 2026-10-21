@@ -2,8 +2,8 @@
 
 Fecha: 2026-10-19 (America/Lima). Historia S2-05, 5 SP previstos.
 Estado: aceptado y registrado antes del código en `8ba1d6b…`; implementado y verificado
-con CI/evidencia en PR #13. Revisión/integración del incremento pendientes en S2-06.
-Base: S2-04 `3c7f012fe1e92b63c5b71d5405589c2b6621b09a`, PR #12 sin fusionar.
+con CI/evidencia en PR #13. Revisado e integrado en main durante S2-06 (2026-10-21).
+Base del diseño: S2-04 `3c7f012fe1e92b63c5b71d5405589c2b6621b09a`; en ese momento #12 aún no estaba fusionado.
 
 ## Problema y alternativas
 
