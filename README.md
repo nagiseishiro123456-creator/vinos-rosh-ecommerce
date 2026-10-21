@@ -110,7 +110,10 @@ Sprint 2 iniciado el 2026-10-18: [plan](docs/sprints/fase-2-sprint-02.md),
 [16 capturas base](docs/evidencias/sprint-02/s2-01/README.md). S2-02 implementa correcciones
 de UI con [QA y CI oficial aprobada](docs/testing/s2-02-ux-movil.md) y
 [comparación visual](docs/evidencias/sprint-02/s2-02/README.md).
-Carrito invitado, unión y panel lateral siguen pendientes de sus historias.
+Carrito invitado implementado en la rama de S2-03, con [ADR](docs/decisions/0006-carrito-invitado.md)
+y [QA aprobada](docs/testing/s2-03-carrito-invitado.md): 80 pruebas de servidor y 28 de navegador.
+[22 capturas](docs/evidencias/sprint-02/s2-03/README.md) conservadas; integración pendiente.
+Unión y panel lateral siguen pendientes.
 
 ## Verificación y evidencias
 

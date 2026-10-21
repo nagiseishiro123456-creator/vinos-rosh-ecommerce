@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
 import { AnalyticsConsent } from "@/components/analytics-consent";
+import { GuestCartProvider } from "@/components/guest-cart-provider";
 
 import "./globals.css";
 import "./checkout.css";
@@ -20,6 +21,7 @@ import "./contact.css";
 import "./history-faq.css";
 import "./admin-backup.css";
 import "./purchase-flow.css";
+import "./guest-cart.css";
 
 const previewMode = process.env.PREVIEW_MODE === "true";
 
@@ -58,7 +60,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="es" data-scroll-behavior="smooth">
       <body>
         <AnalyticsConsent />
-        {children}
+        <GuestCartProvider>{children}</GuestCartProvider>
       </body>
     </html>
   );

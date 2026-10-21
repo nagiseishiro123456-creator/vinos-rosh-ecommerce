@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { useGuestCart } from "@/components/guest-cart-provider";
 import { SignOutButton } from "@/components/sign-out-button";
 
 type SiteHeaderProps = {
@@ -26,6 +27,8 @@ export function SiteHeader({
   isAuthenticated = false,
   isAdmin = false,
 }: SiteHeaderProps) {
+  const guest = useGuestCart();
+  const count = isAuthenticated ? cartCount : guest.items.reduce((sum, item) => sum + item.quantity, 0);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -76,9 +79,9 @@ export function SiteHeader({
             <Link className="iconButton desktopOnly" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
               <UserRound size={19} aria-hidden="true" />
             </Link>
-            <Link className="cartButton" href="/carrito" aria-label={`Carrito de compras: ${cartCount} productos`}>
+            <Link className="cartButton" href="/carrito" aria-label={`Carrito de compras: ${count} productos`}>
               <ShoppingBag size={19} aria-hidden="true" />
-              {cartCount > 0 ? <span className="cartCount" aria-hidden="true">{cartCount}</span> : null}
+              {count > 0 ? <span className="cartCount" aria-hidden="true">{count}</span> : null}
             </Link>
             {isAuthenticated ? (
               <SignOutButton className="headerLogin desktopOnly" />
@@ -123,7 +126,7 @@ export function SiteHeader({
         <Link className="mobileBottomCart" href="/carrito">
           <span className="mobileBottomCartIcon">
             <ShoppingBag size={21} aria-hidden="true" />
-            {cartCount > 0 ? <small>{cartCount}</small> : null}
+            {count > 0 ? <small>{count}</small> : null}
           </span>
           <span>Carrito</span>
         </Link>
