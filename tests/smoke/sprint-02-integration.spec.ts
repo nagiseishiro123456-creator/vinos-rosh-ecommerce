@@ -61,7 +61,7 @@ test("S2-06: guest selection, shared panel, reservation and payment report prese
     await page.getByLabel("Número o código de operación").fill(operation);
     await page.getByRole("button", { name: "Ya pagué: enviar operación a revisión", exact: true }).click();
     await expect(page).toHaveURL((url) => url.pathname === "/pedidos/" + order.number);
-    await expect(page.getByText("Pago en revisión", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Pago en revisión", exact: true })).toBeVisible();
     await expect(page.locator(".cartButton .cartCount")).toHaveText("1");
     const current = await prisma.order.findUniqueOrThrow({ where: { id: order.id }, include: { payments: true, events: true } });
     expect(current.status).toBe("PAYMENT_REVIEW"); expect(current.payments[0].status).toBe("UNDER_REVIEW");

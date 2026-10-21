@@ -99,3 +99,8 @@ y no tiene Docker/psql; npm ci se interrumpió al descargar motores Prisma (ECON
 No se atribuye una instalación local reproducible ni pruebas de BD a ese entorno. CI con
 Node 22.23.3/npm 11.9.0/PostgreSQL 16 es la referencia de aceptación. Resultados e integración
 se registrarán después de ejecutarlos; los PR #9–#13 todavía no se han fusionado.
+
+La revisión de los selectores del recorrido distingue el encabezado de estado del badge
+con el mismo texto; la aserción se dirige al rol heading. No se elimina la comprobación
+ni se cambia el comportamiento de la tienda. La cabecera 3dd5b46 pasó servidor, restauración,
+tipos y lint; navegador se valida nuevamente sobre la cabecera que incorpora ese ajuste.
