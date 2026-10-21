@@ -13,6 +13,9 @@ export async function resetCheckoutFixture() {
   await clearRateLimit("manual-order-submit", user.id);
   await clearRateLimit("manual-payment-report", user.id);
   await clearRateLimit("guest-cart-merge", user.id);
+  await clearRateLimit("account-cart-read", user.id);
+  await clearRateLimit("account-cart-write", user.id);
+  await prisma.cartMutation.deleteMany({ where: { userId: user.id } });
   await prisma.cartImport.deleteMany({ where: { userId: user.id } });
   const product = await prisma.product.findUniqueOrThrow({ where: { slug: "rosh-qa-botella-de-prueba" } });
   const zone = await prisma.shippingZone.findUniqueOrThrow({ where: {
@@ -22,7 +25,7 @@ export async function resetCheckoutFixture() {
   await prisma.inventoryMovement.deleteMany({ where: { actorUserId: user.id } });
   await prisma.product.update({ where: { id: product.id }, data: { price: "29.90", stock: 10, active: true } });
   await prisma.shippingZone.update({ where: { id: zone.id }, data: { price: "8.50" } });
-  const cart = await prisma.cart.upsert({ where: { userId: user.id }, update: {}, create: { userId: user.id } });
+  const cart = await prisma.cart.upsert({ where: { userId: user.id }, update: { revision: { increment: 1 } }, create: { userId: user.id } });
   await prisma.cartItem.upsert({
     where: { cartId_productId: { cartId: cart.id, productId: product.id } },
     update: { quantity: 3 }, create: { cartId: cart.id, productId: product.id, quantity: 3 },

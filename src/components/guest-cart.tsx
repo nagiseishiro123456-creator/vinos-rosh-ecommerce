@@ -2,30 +2,26 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { useGuestCart } from "@/components/guest-cart-provider";
 import { formatPrice } from "@/lib/money";
 import { siteConfig } from "@/lib/site";
-import { serializeGuestSelection } from "@/modules/cart/guest-selection";
-import type { GuestPreview } from "@/modules/cart/guest-preview";
-
-class PreviewError extends Error {}
-const unavailable = "No pudimos verificar los precios y la disponibilidad. Conservamos tu selección; vuelve a intentarlo.";
-type Validation = { key: string; revision: number; data?: GuestPreview; error?: string };
+import { useGuestCartQuote } from "./guest-cart-quote-provider";
 
 function GuestQuantity({ productId, name, quantity, update }: {
   productId: string; name: string; quantity: number; update: (id: string, quantity: number) => void;
 }) {
+  const inputId = useId();
   const [draft, setDraft] = useState({ original: quantity, value: String(quantity) });
   // Reset only when the accepted quantity changes; keep the same focused DOM controls.
   if (draft.original !== quantity) setDraft({ original: quantity, value: String(quantity) });
   const value = draft.original === quantity ? draft.value : String(quantity);
   return (
     <form className="quantityForm" onSubmit={(event) => { event.preventDefault(); update(productId, Number(value)); }}>
-      <label htmlFor={`guest-qty-${productId}`}>Cantidad <span className="sr-only">de {name}</span></label>
+      <label htmlFor={`guest-qty-${inputId}`}>Cantidad <span className="sr-only">de {name}</span></label>
       <div>
-        <input id={`guest-qty-${productId}`} name="quantity" type="number" min={1} max={99} step={1} required value={value}
+        <input id={`guest-qty-${inputId}`} name="quantity" type="number" min={1} max={99} step={1} required value={value}
           onChange={(event) => setDraft({ original: quantity, value: event.target.value })} />
         <button type="submit">Actualizar</button>
       </div>
@@ -33,59 +29,18 @@ function GuestQuantity({ productId, name, quantity, update }: {
   );
 }
 
-export function GuestCart() {
-  const { items, revision: selectionRevision, pending: pendingImport, ready, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
-  const [revision, setRevision] = useState(0);
-  const [validation, setValidation] = useState<Validation | null>(null);
+export function GuestCart({ variant = "page" }: { variant?: "page" | "drawer" }) {
+  const { items, pending: pendingImport, ready, warning, message, update, remove } = useGuestCart();
+  const { quote, metadata: lastPreview, pending, error, refresh } = useGuestCartQuote();
   const heading = useRef<HTMLHeadingElement>(null);
-  const key = serializeGuestSelection(items);
-
-  useEffect(() => {
-    const refresh = () => { if (document.visibilityState === "visible") setRevision((value) => value + 1); };
-    window.addEventListener("focus", refresh);
-    document.addEventListener("visibilitychange", refresh);
-    return () => { window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", refresh); };
-  }, []);
-
-  useEffect(() => {
-    if (!ready || !items.length) return;
-    const controller = new AbortController();
-    let cancelled = false;
-    const stillCurrent = () => !cancelled && getSnapshot().revision === selectionRevision && serializeGuestSelection(getSnapshot().items) === key;
-    fetch("/api/cart/preview", { method: "POST", credentials: "omit", cache: "no-store", signal: controller.signal,
-      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items }) })
-      .then(async (response) => {
-        const data = await response.json();
-        if (!response.ok) throw new PreviewError(typeof data.message === "string" ? data.message : unavailable);
-        if (!Array.isArray(data.items) || typeof data.subtotal !== "string") throw new PreviewError(unavailable);
-        if (!stillCurrent()) return;
-        const preview = data as GuestPreview;
-        const normalized = preview.items.map(({ productId, quantity }) => ({ productId, quantity }));
-        setValidation({ key: serializeGuestSelection(normalized), revision, data: preview });
-        const changes = preview.changes.map((change) => change.kind === "unavailable"
-          ? "Se retiró un producto que ya no está disponible."
-          : `La disponibilidad cambió: se ajustó un producto a ${change.quantity} unidades.`).join(" ");
-        void replace(normalized, changes || undefined, key, selectionRevision);
-      })
-      .catch((error: unknown) => {
-        if (!stillCurrent()) return;
-        setValidation((previous) => ({ key, revision, data: previous?.data, error: error instanceof PreviewError ? error.message : unavailable }));
-      });
-    return () => { cancelled = true; controller.abort(); };
-  }, [items, key, ready, revision, selectionRevision, replace, getSnapshot]);
-
-  const current = validation?.key === key && validation.revision === revision;
-  const error = current ? validation?.error : undefined;
-  const quote = current && !error ? validation?.data : undefined;
-  const pending = ready && items.length > 0 && !current;
-  const metadata = new Map(validation?.data?.items.map((item) => [item.productId, item]));
+  const Heading = variant === "page" ? "h1" : "h3";
+  const metadata = new Map(lastPreview?.items.map((item) => [item.productId, item]));
   const subtotal = ready && items.length === 0 ? "0.00" : quote?.subtotal;
-
   return (
-    <section className="cartLayout shell guestCart" aria-busy={ready ? pending : undefined}>
+    <section className={"cartLayout guestCart " + (variant === "page" ? "shell" : "drawerCart")} aria-busy={ready ? pending : undefined}>
       <div className="cartMain">
         <p className="eyebrow wine">TU SELECCIÓN</p>
-        <h1 ref={heading} tabIndex={-1}>Carrito</h1>
+        <Heading ref={heading} tabIndex={-1}>{variant === "page" ? "Carrito" : "Tu selección"}</Heading>
         <p className="guestCartIntro">Selecciona tus productos sin iniciar sesión. Añadirlos no reserva disponibilidad.</p>
         {warning ? <p className="checkoutError" role="alert">{warning}</p> : null}
         <p className="guestCartStatus" role="status" aria-live="polite">{message}</p>
@@ -100,7 +55,7 @@ export function GuestCart() {
         </noscript>
         {!ready ? <p className="guestLoading" role="status">Recuperando tu selección…</p> : null}
         {error ? <div className="checkoutError" role="alert"><p>{error}</p>
-          <button className="button buttonDark" type="button" onClick={() => setRevision((value) => value + 1)}>Reintentar verificación</button></div> : null}
+          <button className="button buttonDark" type="button" onClick={refresh}>Reintentar verificación</button></div> : null}
         {ready && !items.length && !pendingImport ? (
           <div className="emptyPanel"><strong>Tu carrito está vacío.</strong><p>Explora el catálogo y añade tus productos favoritos.</p>
             <Link className="button buttonDark" href="/productos">Ver productos</Link></div>
@@ -136,7 +91,7 @@ export function GuestCart() {
         {quote?.exceedsOrderLimit ? <p className="cartWarning" role="alert">El importe supera el máximo permitido para un pedido. Reduce productos o cantidades.</p> : null}
         <p className="summaryNote">Los precios y la disponibilidad pueden cambiar antes de confirmar. El envío se calcula durante la compra.</p>
         {items.length > 0 ? <>
-          <button className="button guestRefresh fullButton" type="button" onClick={() => setRevision((value) => value + 1)}>Actualizar precios y disponibilidad</button>
+          <button className="button guestRefresh fullButton" type="button" onClick={refresh}>Actualizar precios y disponibilidad</button>
           <Link className="button buttonPrimary fullButton" href="/iniciar-sesion?callbackUrl=/carrito">Ingresar a mi cuenta</Link>
           <p className="summaryNote">Al ingresar o crear tu cuenta integraremos esta selección con tu carrito y te mostraremos los ajustes. Añadir productos no reserva stock.</p>
         </> : null}

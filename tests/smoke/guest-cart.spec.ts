@@ -25,6 +25,9 @@ async function addGuest(page: Page) {
   await page.goto(productPath);
   await expect(page.getByRole("button", { name: "Agregar al carrito", exact: true })).toBeEnabled();
   await page.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
+  const panel = page.getByRole("dialog", { name: "Tu carrito", exact: true });
+  await expect(panel).toBeVisible();
+  await panel.getByRole("link", { name: "Ver carrito completo", exact: true }).click();
   await expect(page).toHaveURL((url) => url.pathname === "/carrito");
   await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 29.90");
 }
@@ -172,6 +175,9 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
     const network = await open("normal"); let fail = true;
     await network.route("**/api/cart/preview", (route) => fail ? route.abort() : route.continue());
     await network.goto(productPath); await network.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
+    const networkPanel = network.getByRole("dialog", { name: "Tu carrito", exact: true });
+    await expect(networkPanel).toBeVisible();
+    await networkPanel.getByRole("link", { name: "Ver carrito completo", exact: true }).click();
     await expect(network.locator(".guestCart").getByRole("alert")).toContainText("Conservamos tu selección");
     await expect(network.locator(".summaryTotal strong")).toHaveText("Por verificar");
     expect(await network.evaluate((key) => JSON.parse(localStorage.getItem(key)!).items[0].quantity, GUEST_CART_KEY)).toBe(1);

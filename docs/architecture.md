@@ -13,7 +13,7 @@ Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, aute
 - Cloudinary opcional para URLs de media; también existen imágenes locales en `public/`
 - Resend opcional por HTTP para recuperación de contraseña; notificaciones de pedidos pendientes
 - Render gratuito como preview, con servicio Node.js y PostgreSQL separados
-- Motion pendiente de incorporar; no está instalado en S1-01
+- Motion 14.4.0 fijado desde S2-05; panel cliente bajo demanda, sin scroll complejo
 
 Estado comprobado al iniciar Sprint 2 (2026-10-18): Sprint 1 integrado en main
 `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`; Motion y carrito invitado/lateral siguen
@@ -187,5 +187,59 @@ abre el carrito para revisar el resultado y continuar al destino conservado. Bar
 en carrito/entrega/confirmación ocultan acciones de compra hasta unir y refrescar datos SSR;
 un resultado confirmado en otra pestaña también exige refresco. El fallback sin JS restituye
 los formularios nativos e informa que no importa selección local. Los componentes de
-consulta y precio siguen siendo Server Components. No se incorpora Motion ni paquetes nuevos.
-La carrera de incrementos de los formularios de cuenta anteriores sigue prevista en S2-05.
+consulta y precio siguen siendo Server Components. En la entrega de S2-04 no se incorporó
+Motion ni paquetes nuevos y la carrera de formularios anteriores seguía prevista para S2-05.
+La sección siguiente describe la implementación actual.
+
+## Panel y comandos de cuenta — S2-05 (rama de PR #13)
+
+[ADR 0008](decisions/0008-carrito-lateral.md), [QA](testing/s2-05-carrito-lateral.md)
+y [evidencia](evidencias/sprint-02/s2-05/README.md). Migración 12 aditiva:
+`Cart.revision` con CHECK no negativo y `CartMutation` con UNIQUE(userId, operationId),
+huella SHA-256, resultado mínimo y FK cascade. No se cambian datos anteriores ni se
+inventan comprobantes de operaciones históricas. Se prueba backfill, unicidad y cascade.
+
+`GET /api/cart` lee solo la cuenta de la sesión; `POST` admite add/set/remove con
+usuario esperado y UUID. Origin público configurado, Sec-Fetch-Site, JSON/Zod estricto,
+límite real de 2048 bytes UTF-8 y rate limit de 120/min por usuario para lectura/escritura
+en espacios separados. Respuestas no-store; no se habilita CORS. La identidad esperada
+evita aplicar una intención creada para otra sesión y nunca sustituye a la autenticación.
+
+El servicio aplica el comando, incrementa revisión y guarda el comprobante en una
+transacción Serializable con cuatro intentos como máximo. Dos add suman dentro de la
+transacción; un replay no vuelve a sumar. Devuelve el resultado persistido y el carrito
+actual, con productos/precios actuales en lote y Decimal. Misma identidad con otro
+contenido genera conflicto. Add/set respetan stock y 99; nuevas líneas de comando
+tienen tope de 50 productos distintos. Ese tope no es una migración de carritos históricos
+ni un límite global nuevo de la unión. Eliminar una línea no depende de disponibilidad.
+No se reserva stock al añadir, editar, eliminar ni unir.
+
+El layout obtiene sesión y snapshot consistente (RepeatableRead), memoizado con
+React.cache dentro de la petición RSC. No es caché global de datos privados. Context y
+useSyncExternalStore comparten el estado entre contador, página y panel; no hay Zustand,
+Prisma en cliente ni copia persistente privada. Un único proveedor mantiene el preview
+invitado. El proveedor de cuenta usa key por usuario y guardas de identidad/revisión/
+secuencia; la selección invitada queda fuera para conservar su protocolo de ADR 0007.
+
+Las mutaciones esperan confirmación; una respuesta incierta conserva el mismo UUID en
+memoria y bloquea otra intención/checkout hasta resolverla. Recargar recupera el carrito
+de BD, sin prometer conservar ese comando en memoria ni ejecutarlo como intención nueva.
+BroadcastChannel publica solo una señal; foco/visibilidad/navegación revalidan. Un 401
+o cambio de cuenta elimina el snapshot privado incluso si después falla la red; un SSR
+antiguo no lo repone. El header contrasta su identidad servidor con la del proveedor y
+refresca el layout al detectar otra cuenta. Los botones de producto verifican ese vínculo.
+Los formularios nativos ligan usuario/UUID al render y usan el mismo servicio sin JS.
+
+Unión y consumo al reservar incrementan revisión en su propia transacción. La reserva
+revalida el layout y conserva firma/dinero/idempotencia/stock del checkout. El panel
+se importa dinámicamente al abrir; `<dialog>` vuelve inerte el fondo y la captura de
+Tab/Shift+Tab contiene el foco. Cierre por Escape/botón/backdrop, devolución de foco y
+restauración de estilos/scroll solo si se permanece en la misma ruta. Enlaces se cierran
+en burbujeo después de Next Link para preservar SPA/selección en memoria.
+
+Motion solo anima entrada/salida con opacidad y un pequeño desplazamiento a partir
+de 768 px. useReducedMotion inicial, matchMedia en vivo y CSS eliminan efectos con esa
+preferencia. La rejilla propia del panel fija imagen/información/cantidad/total sin heredar
+la distribución de la página completa; controles de 44 px y footer accesible a 320 px.
+Coste JS medido al abrir documentado en QA; rendimiento y otros navegadores siguen
+teniendo sus límites de validación. Integración del incremento pendiente en S2-06.

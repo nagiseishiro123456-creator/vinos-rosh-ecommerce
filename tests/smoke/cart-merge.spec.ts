@@ -19,6 +19,10 @@ async function guest(page: Page, quantity: number) {
   await page.goto(productPath);
   await expect(page.getByRole("button", { name: "Agregar al carrito", exact: true })).toBeEnabled();
   await page.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
+  const panel = page.getByRole("dialog", { name: "Tu carrito", exact: true });
+  await expect(panel).toBeVisible();
+  await panel.getByRole("link", { name: "Ver carrito completo", exact: true }).click();
+  await expect(page).toHaveURL((url) => url.pathname === "/carrito");
   await expect(page.locator(".guestCart .summaryTotal strong")).toHaveText("S/ 29.90");
   if (quantity !== 1) {
     await page.locator(".guestCart input[name=quantity]").fill(String(quantity));
@@ -120,6 +124,9 @@ test("S2-04: lost response and two tabs retry the same receipt without erasing n
     await layout(page); await capture(page, info, "42-union-respuesta-perdida");
     await second.route("**/api/cart/merge", (route) => route.abort());
     await second.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
+    const secondPanel = second.getByRole("dialog", { name: "Tu carrito", exact: true });
+    await expect(secondPanel).toBeVisible();
+    await secondPanel.getByRole("link", { name: "Ver carrito completo", exact: true }).click();
     await expect(second.locator(".cartMergeGate").getByRole("alert")).toBeVisible();
     const waiting = await saved(second);
     expect(waiting.pending.importId).toBe(original.importId);

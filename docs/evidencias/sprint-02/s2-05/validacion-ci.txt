@@ -1,0 +1,50 @@
+S2-05 — Validación de código y evidencia
+Fecha de revisión: 2026-10-20 (America/Lima)
+Fuente: f06b4ad41c424216dc67f45b7b904a64421c184d
+Árbol fuente: 47b23384a6678fbfae34ede155efc5326eb5dfa1
+Checkout sintético del PR: 638f902b2748b3b7e4677daa03bd48405e596d80
+Árbol del checkout: 47b23384a6678fbfae34ede155efc5326eb5dfa1 (idéntico al árbol fuente, comprobado por API Git)
+CI: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39493524715
+Validación: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39493524715/job/118872534662
+Estado de los cinco jobs: success
+Toolchain: Node 22.23.3, npm 11.9.0, PostgreSQL 16, Next 16.3.8, Prisma 6.19.3,
+Playwright 1.64.1, Chromium 156.0.8078.4, next build habitual y standalone.
+
+Resultado: 116/116 servidor; 64/64 navegador, sin reintentos; 12 migraciones y
+cinco contratos SQL; Prisma/tipos/lint/build correctos. Auditoría de producción: 0.
+La instalación conserva cinco avisos altos de desarrollo; no se afirma auditoría total limpia.
+
+Extractos reales del log del job:
+2026-10-20T20:37:57.7139842Z 5 high severity vulnerabilities
+2026-10-20T20:37:58.4855951Z found 0 vulnerabilities
+2026-10-20T20:38:02.6616897Z 12 migrations found in prisma/migrations
+2026-10-20T20:38:03.1331610Z  S1-03 legacy migration contract passed
+2026-10-20T20:38:04.9821457Z  S1-04 idempotency migration contract passed
+2026-10-20T20:38:05.2428058Z  S1-05 reconciliation migration contract passed
+2026-10-20T20:38:05.3640518Z  S2-04 cart import migration contract passed
+2026-10-20T20:38:05.4952625Z  S2-05 cart commands migration contract passed
+2026-10-20T20:38:17.8296035Z # tests 116
+2026-10-20T20:38:17.8306102Z # pass 116
+2026-10-20T20:38:17.8306406Z # fail 0
+2026-10-20T20:43:13.0330265Z   64 passed (3.9m)
+
+Evidencia: 36 PNG originales, 5750359 bytes en total. Inspección visual completada.
+SHA-256, dimensiones y tamaño verificados sobre los bytes exportados de CI.
+36/36 SHA de blobs Git recibidos al guardar coinciden con los calculados en CI.
+150 PNG históricos intactos; total 186. Sin retoques ni duplicados de attachments.
+Exportación de solo lectura: scripts/qa-cart-evidence.mjs.
+
+Artefacto: sprint-01-smoke-39493524715
+ID: 12297770231
+Bytes ZIP informados por GitHub: 103230845
+Digest informado por GitHub: sha256:ce3de7a274f76c88fd5c1ba91c8651396ec0062b638d473f74f77fd97b0f7df5
+Caducidad: 2026-11-03T20:43:13Z
+Ese ZIP no se descargó/rehasheó localmente. La verificación independiente es por PNG.
+
+Documentación: 46 Markdown, 417 enlaces relativos resueltos en el árbol de entrega.
+Lock: 10 entradas nuevas; raíz añade motion 14.4.0. Ninguna versión/resolución
+anterior modificada ni paquete eliminado (comparación con base de PR #12).
+
+Límites: Chromium automatizado y datos sintéticos; no certificación WCAG/UAT,
+Core Web Vitals ni dispositivos/otros motores. Sin Render, pagos reales, merge o BD remota.
+El cierre añade documentación/evidencia; la CI de la cabecera final del PR se comprueba aparte.

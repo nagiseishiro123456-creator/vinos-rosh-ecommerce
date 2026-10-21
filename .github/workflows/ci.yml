@@ -115,6 +115,12 @@ jobs:
         run: |
           cat tests/sql/cart-import-migration-before.sql prisma/migrations/20261019223000_guest_cart_import/migration.sql tests/sql/cart-import-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
+      - name: Verify cart commands migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/cart-commands-migration-before.sql prisma/migrations/20261020040500_cart_commands/migration.sql tests/sql/cart-commands-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Tests
         run: npm test
 
@@ -148,3 +154,26 @@ jobs:
             test-results/
           if-no-files-found: ignore
           retention-days: 14
+
+  cart-evidence:
+    name: Cart evidence (${{ matrix.project }})
+    needs: validate
+    if: ${{ always() && github.head_ref == 'fase-2/sprint-02-carrito-lateral' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile, small-mobile, tablet]
+    env:
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Download original QA evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: sprint-01-smoke-${{ github.run_id }}
+          path: evidence-source
+      - name: Export original cart PNGs for visual review
+        run: node scripts/qa-cart-evidence.mjs evidence-source ${{ matrix.project }}

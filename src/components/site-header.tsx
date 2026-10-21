@@ -10,25 +10,37 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, type MouseEvent } from "react";
+import { useAccountCart, useCartPanel } from "./cart-provider";
 
 import { BrandLogo } from "@/components/brand-logo";
 import { useGuestCart } from "@/components/guest-cart-provider";
 import { SignOutButton } from "@/components/sign-out-button";
 
 type SiteHeaderProps = {
-  cartCount?: number;
+  userId: string | null;
   isAuthenticated?: boolean;
   isAdmin?: boolean;
 };
 
 export function SiteHeader({
-  cartCount = 0,
+  userId,
   isAuthenticated = false,
   isAdmin = false,
 }: SiteHeaderProps) {
   const guest = useGuestCart();
-  const count = isAuthenticated ? cartCount : [...guest.items, ...(guest.pending?.items ?? [])].reduce((sum, item) => sum + item.quantity, 0);
+  const account = useAccountCart(); const panel = useCartPanel(); const router = useRouter();
+  const ownerMismatch = userId !== panel.userId;
+  useEffect(() => { if (ownerMismatch) router.refresh(); }, [ownerMismatch, router]);
+  const count = isAuthenticated ? ownerMismatch ? 0 : account.data?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0
+    : [...guest.items, ...(guest.pending?.items ?? [])].reduce((sum, item) => sum + item.quantity, 0);
+  function openCart(event: MouseEvent<HTMLAnchorElement>) {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); setMenuOpen(false);
+    if (ownerMismatch) { router.refresh(); return; }
+    panel.openCart(event.currentTarget);
+  }
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -79,7 +91,7 @@ export function SiteHeader({
             <Link className="iconButton desktopOnly" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
               <UserRound size={19} aria-hidden="true" />
             </Link>
-            <Link className="cartButton" href="/carrito" aria-label={`Carrito de compras: ${count} productos`}>
+            <Link className="cartButton" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart} aria-label={`Carrito de compras: ${count} productos`}>
               <ShoppingBag size={19} aria-hidden="true" />
               {count > 0 ? <span className="cartCount" aria-hidden="true">{count}</span> : null}
             </Link>
@@ -123,7 +135,7 @@ export function SiteHeader({
           <Grape size={20} aria-hidden="true" />
           <span>Productos</span>
         </Link>
-        <Link className="mobileBottomCart" href="/carrito">
+        <Link className="mobileBottomCart" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart}>
           <span className="mobileBottomCartIcon">
             <ShoppingBag size={21} aria-hidden="true" />
             {count > 0 ? <small>{count}</small> : null}

@@ -4,86 +4,32 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { consumeRateLimit } from "@/lib/rate-limit";
+import { CartCommandError, executeCartCommand } from "./account-service";
+import type { CartCommand } from "./account-contract";
 
-const productIdSchema = z.string().cuid();
-const itemIdSchema = z.string().cuid();
-const quantitySchema = z.coerce.number().int().min(1).max(99);
-
-async function requireUserId(callbackUrl: string) {
+async function execute(command: CartCommand, operationId: string, expectedUserId: string) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect(`/iniciar-sesion?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+  if (!session?.user?.id) redirect("/iniciar-sesion?callbackUrl=/carrito");
+  if (session.user.id !== expectedUserId) redirect("/carrito?error=cart-changed");
+  const limit = await consumeRateLimit({ scope: "account-cart-write", identifier: session.user.id, limit: 120, windowMs: 60_000 });
+  if (!limit.allowed) redirect("/carrito?error=too-many");
+  try { await executeCartCommand(session.user.id, { ...command, expectedUserId: session.user.id, operationId }); }
+  catch (error) {
+    if (error instanceof CartCommandError) redirect("/carrito?error=cart-changed");
+    throw error;
   }
-  return session.user.id;
+  revalidatePath("/", "layout");
 }
-
-export async function addToCart(productId: string, productSlug: string) {
-  const parsedProductId = productIdSchema.safeParse(productId);
-  if (!parsedProductId.success) return;
-
-  const userId = await requireUserId(`/productos/${productSlug}`);
-
-  const product = await prisma.product.findFirst({
-    where: { id: parsedProductId.data, active: true },
-    select: { id: true, stock: true },
-  });
-
-  if (!product || product.stock <= 0) return;
-
-  const cart = await prisma.cart.upsert({
-    where: { userId },
-    create: { userId },
-    update: {},
-    select: { id: true },
-  });
-
-  const existing = await prisma.cartItem.findUnique({
-    where: { cartId_productId: { cartId: cart.id, productId: product.id } },
-    select: { id: true, quantity: true },
-  });
-
-  const nextQuantity = Math.min((existing?.quantity ?? 0) + 1, product.stock, 99);
-
-  await prisma.cartItem.upsert({
-    where: { cartId_productId: { cartId: cart.id, productId: product.id } },
-    create: { cartId: cart.id, productId: product.id, quantity: 1 },
-    update: { quantity: nextQuantity },
-  });
-
-  revalidatePath("/carrito");
-  revalidatePath(`/productos/${productSlug}`);
-  redirect("/carrito");
+export async function addToCart(productId: string, _productSlug: string, operationId: string, expectedUserId: string) {
+  await execute({ action: "add", productId }, operationId, expectedUserId); redirect("/carrito");
 }
-
-export async function updateCartItem(itemId: string, formData: FormData) {
-  const parsedItemId = itemIdSchema.safeParse(itemId);
-  const parsedQuantity = quantitySchema.safeParse(formData.get("quantity"));
-  if (!parsedItemId.success || !parsedQuantity.success) return;
-
-  const userId = await requireUserId("/carrito");
-
-  const item = await prisma.cartItem.findFirst({
-    where: { id: parsedItemId.data, cart: { userId } },
-    select: { id: true, product: { select: { stock: true, active: true } } },
-  });
-
-  if (!item?.product.active || item.product.stock <= 0) return;
-
-  const quantity = Math.min(parsedQuantity.data, item.product.stock);
-  await prisma.cartItem.update({ where: { id: item.id }, data: { quantity } });
-  revalidatePath("/carrito");
+export async function updateCartItem(productId: string, operationId: string, expectedUserId: string, formData: FormData) {
+  const parsed = z.coerce.number().int().min(1).max(99).safeParse(formData.get("quantity"));
+  if (!parsed.success) return;
+  await execute({ action: "set", productId, quantity: parsed.data }, operationId, expectedUserId);
 }
-
-export async function removeCartItem(itemId: string) {
-  const parsedItemId = itemIdSchema.safeParse(itemId);
-  if (!parsedItemId.success) return;
-
-  const userId = await requireUserId("/carrito");
-  await prisma.cartItem.deleteMany({
-    where: { id: parsedItemId.data, cart: { userId } },
-  });
-  revalidatePath("/carrito");
+export async function removeCartItem(productId: string, operationId: string, expectedUserId: string) {
+  await execute({ action: "remove", productId }, operationId, expectedUserId);
 }
