@@ -15,3 +15,15 @@
 .guestCart .cartItemInfo span { white-space: normal; }
 .guestRefresh { margin-block: 12px; padding-block: 8px; border-color: var(--line); color: var(--wine); background: white; }
 .productAddButton:disabled { cursor: not-allowed; opacity: .7; }
+.cartMergeProtected { display: contents; }
+.cartMergeProtected[data-merge-blocked] { display: none; }
+.cartMergeGate, .cartMergeResult { margin-block: 2rem; padding: clamp(1.2rem, 4vw, 2.5rem); background: #fffaf5; border: 1px solid #d9c5b2; border-radius: 12px; }
+.cartMergeGate h1 { font-size: clamp(1.7rem, 5vw, 2.4rem); margin-bottom: 1rem; }
+.cartMergeGate .checkoutError { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.cartMergeGate .checkoutError p { flex-basis: 100%; }
+.cartMergeGate button, .cartMergeGate a, .guestPendingSelection a { min-height: 44px; min-width: 44px; }
+.cartMergeGate a { display: inline-flex; align-items: center; }
+.cartMergeResult p, .cartMergeResult ul, .guestPendingSelection p { margin-top: .7rem; }
+.cartMergeResult ul { padding-left: 1.3rem; }
+.cartMergeGate :focus-visible { outline: 3px solid #ac7446; outline-offset: 3px; }
+.cartMergeResult:focus-visible { outline: 3px solid #ac7446; outline-offset: 3px; }

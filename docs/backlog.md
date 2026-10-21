@@ -18,7 +18,7 @@ Dependencias de entrega: S1-01 → S1-02 → S1-03 → S1-04 → S1-05.
 Documentación y pruebas forman parte de cada historia.
 Las cinco historias suman 26 SP revisados e integrados; ver [cierre técnico](sprints/cierre-sprint-01.md)
 y [registro de integración](testing/revision-integracion-sprint-01.md). Aceptación funcional del
-Product Owner por registrar. Sprint 2 iniciado en S2-01 documental; Render no se reanuda con este trabajo.
+Product Owner por registrar. Sprint 2 en curso; Render no se reanuda con este trabajo.
 
 ## Sprint 2 — Compra móvil, carrito y accesibilidad (26 SP preliminares)
 
@@ -31,7 +31,7 @@ Inicio: 2026-10-18 (America/Lima), desde main `16074e1…`.
 | S2-01 | Diagnosticar y documentar recorrido, estados y baseline. | 3 | Documentada y verificada en rama; integración pendiente |
 | S2-02 | Corregir jerarquía móvil, overlays, importes y navegación accesible. | 3 | CI 67/67 y 20/20 aprobada; revisión/integración pendientes (#10) |
 | S2-03 | Preparar y conservar carrito invitado en el navegador. | 5 | CI 80/80 y 28/28 aprobada; revisión/integración pendientes (#11) |
-| S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | Pendiente; ADR y contrato antes del código |
+| S2-04 | Unir carrito al ingresar/registrarse con recuperación idempotente. | 8 | CI 98/98 y 44/44 aprobada; revisión/integración pendientes (#12) |
 | S2-05 | Ofrecer carrito lateral accesible y coherente con página completa. | 5 | Pendiente |
 | S2-06 | Verificar, revisar e integrar el incremento completo. | 2 | Pendiente |
 
@@ -59,9 +59,11 @@ producto con microinteracciones y CTA inmediato; catálogo/carrito/checkout sin 
 
 No se activan servicios de pago ni se modifica la política de costos con este backlog.
 
-Dependencias de desarrollo revisadas en S1-05: cinco avisos altos por braces sin parche
-publicado; seguimiento registrado, sin downgrade de Next. Producción: cero hallazgos.
-Pendientes de UX heredados: evitar cortes de moneda/importe y revisar controles flotantes,
-posición del resumen/CTA móvil y selección de direcciones con teclado. `En revisión`
-y `Boleta` ya aparecen traducidos en main; conservar regresión sin duplicar trabajo.
-Ver [diagnóstico actualizado](ux/sprint-02-recorrido-compra.md) y [QA S1-02](testing/s1-02-dinero.md).
+Dependencias de desarrollo: S1-05 registró cinco avisos altos por braces y su seguimiento;
+comprobar el estado del parche antes del lanzamiento. Producción en la CI actual:
+cero hallazgos, sin cambios de paquetes.
+Los hallazgos heredados de importes, controles flotantes, resumen/CTA móvil y teclado
+se abordaron en S2-02, con [QA y límites](testing/s2-02-ux-movil.md); conservar regresión.
+`En revisión` y `Boleta` ya aparecen traducidos en main.
+S2-05 agrega panel/estado compartido e incrementos concurrentes; S2-06 revisa e integra.
+Ver [diagnóstico](ux/sprint-02-recorrido-compra.md) y [plan actual](sprints/fase-2-sprint-02.md).

@@ -29,7 +29,7 @@ async function addGuest(page: Page) {
   await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 29.90");
 }
 
-test("S2-03: guest selection survives reload, revalidates stock/prices and stays separate from account cart", async ({ page }, info) => {
+test("S2-03 regression: selection survives reload, revalidates stock/prices and now integrates once with account", async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; collectErrors(page, errors);
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -55,9 +55,9 @@ test("S2-03: guest selection survives reload, revalidates stock/prices and stays
     }, { key: GUEST_CART_KEY });
     await page.reload();
     await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 89.70");
-    expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), GUEST_CART_KEY)).toEqual({
-      version: 1, items: [{ productId: f.product.id, quantity: 3 }],
-    });
+    const saved = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), GUEST_CART_KEY);
+    expect(saved).toMatchObject({ version: 2, items: [{ productId: f.product.id, quantity: 3 }], pending: null });
+    expect(saved.items[0]).not.toHaveProperty("price"); expect(saved).not.toHaveProperty("total");
 
     // Hold a real old server response; a newer edit must win, including its persisted quantity.
     let seen!: () => void, finished!: () => void;
@@ -98,12 +98,14 @@ test("S2-03: guest selection survives reload, revalidates stock/prices and stays
     await prisma.product.update({ where: { id: f.product.id }, data: { active: true, stock: 10, price: "29.90" } });
     await addGuest(page); await quantity.fill("2"); await page.getByRole("button", { name: "Actualizar", exact: true }).click();
     await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 59.80");
-    await expect(page.getByText(/Al ingresar verás el carrito de tu cuenta/)).toBeVisible();
+    await expect(page.getByText(/Al ingresar o crear tu cuenta integraremos/)).toBeVisible();
     await loginCustomer(page);
-    await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 89.70");
-    expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).items[0].quantity, GUEST_CART_KEY)).toBe(2);
+    await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 149.50");
+    expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).items, GUEST_CART_KEY)).toEqual([]);
+    expect(await prisma.cartImport.count({ where: { userId: f.user.id } })).toBe(1);
     await page.context().clearCookies(); await page.reload();
-    await expect(page.locator(".summaryTotal strong")).toHaveText("S/ 59.80");
+    await expect(page.getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
+    await addGuest(page);
     await page.getByRole("button", { name: /Eliminar ROSH QA/ }).click();
     await expect(page.getByRole("heading", { name: "Carrito", exact: true })).toBeFocused();
     await expect(page.getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
@@ -150,7 +152,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
 
     const blocked = await open("blocked"); await addGuest(blocked);
     await expect(blocked.locator(".guestCart").getByRole("alert")).toContainText("No podemos guardar tu selección");
-    await expect(blocked.getByText(/Esta selección no se guardó/)).toBeVisible();
+    await expect(blocked.locator(".guestCart").getByRole("alert")).toContainText("podrías perderla al recargar");
     await blocked.locator(".guestCart input[name=quantity]").fill("2");
     await blocked.getByRole("button", { name: "Actualizar", exact: true }).click();
     await expect(blocked.locator(".summaryTotal strong")).toHaveText("S/ 59.80");
@@ -159,7 +161,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
 
     const quota = await open("quota"); await addGuest(quota);
     await expect(quota.locator(".guestCart").getByRole("alert")).toContainText("No podemos guardar tu selección");
-    await expect(quota.getByText(/Esta selección no se guardó/)).toBeVisible();
+    await expect(quota.locator(".guestCart").getByRole("alert")).toContainText("podrías perderla al recargar");
     await quota.evaluate(() => { localStorage.removeItem("rosh-analytics-consent-v1"); window.dispatchEvent(new Event("rosh-analytics-consent-change")); });
     if (process.env.NEXT_PUBLIC_GA_ID) {
       await quota.getByRole("button", { name: "Rechazar", exact: true }).click();
@@ -189,7 +191,7 @@ test("S2-03: corrupt/blocked/full storage, network retry and native authenticate
     await native.context().addCookies(await network.context().cookies());
     await native.goto(productPath); await native.getByRole("button", { name: "Agregar al carrito", exact: true }).click();
     await expect(native).toHaveURL((url) => url.pathname === "/carrito");
-    await expect(native.getByLabel("Cantidad", { exact: true })).toHaveValue("4");
+    await expect(native.getByLabel("Cantidad", { exact: true })).toHaveValue("5");
     await native.getByLabel("Cantidad", { exact: true }).fill("2"); await native.getByRole("button", { name: "Actualizar", exact: true }).click();
     await expect(native.locator(".summaryTotal strong")).toHaveText("S/ 59.80");
     await capture(native, info, "36-cuenta-formulario-nativo");

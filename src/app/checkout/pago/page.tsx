@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -5,6 +6,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { ReservationForm } from "@/components/reservation-form";
+import { CartMergeBoundary } from "@/components/cart-merge-boundary";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
@@ -82,7 +84,7 @@ export default async function PaymentPage({ searchParams }: Props) {
         <StoreHeader />
       </div>
 
-      <section className="paymentLayout paymentConfirmationLayout shell">
+      <CartMergeBoundary key={session.user.id} userId={session.user.id} renderId={randomUUID()} returnTo={`/checkout/pago?addressId=${address.id}`}><section className="paymentLayout paymentConfirmationLayout shell">
         <div className="paymentConfirmationHeading">
           <div className="checkoutHeading">
             <div>
@@ -135,7 +137,7 @@ export default async function PaymentPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <WhatsAppFab />
+      <WhatsAppFab /></CartMergeBoundary>
     </main>
   );
 }

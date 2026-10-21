@@ -34,7 +34,7 @@ function GuestQuantity({ productId, name, quantity, update }: {
 }
 
 export function GuestCart() {
-  const { items, ready, storage, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
+  const { items, revision: selectionRevision, pending: pendingImport, ready, warning, message, update, remove, replace, getSnapshot } = useGuestCart();
   const [revision, setRevision] = useState(0);
   const [validation, setValidation] = useState<Validation | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -51,7 +51,7 @@ export function GuestCart() {
     if (!ready || !items.length) return;
     const controller = new AbortController();
     let cancelled = false;
-    const stillCurrent = () => !cancelled && serializeGuestSelection(getSnapshot().items) === key;
+    const stillCurrent = () => !cancelled && getSnapshot().revision === selectionRevision && serializeGuestSelection(getSnapshot().items) === key;
     fetch("/api/cart/preview", { method: "POST", credentials: "omit", cache: "no-store", signal: controller.signal,
       headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items }) })
       .then(async (response) => {
@@ -65,14 +65,14 @@ export function GuestCart() {
         const changes = preview.changes.map((change) => change.kind === "unavailable"
           ? "Se retiró un producto que ya no está disponible."
           : `La disponibilidad cambió: se ajustó un producto a ${change.quantity} unidades.`).join(" ");
-        replace(normalized, changes || undefined);
+        void replace(normalized, changes || undefined, key, selectionRevision);
       })
       .catch((error: unknown) => {
         if (!stillCurrent()) return;
         setValidation((previous) => ({ key, revision, data: previous?.data, error: error instanceof PreviewError ? error.message : unavailable }));
       });
     return () => { cancelled = true; controller.abort(); };
-  }, [items, key, ready, revision, replace, getSnapshot]);
+  }, [items, key, ready, revision, selectionRevision, replace, getSnapshot]);
 
   const current = validation?.key === key && validation.revision === revision;
   const error = current ? validation?.error : undefined;
@@ -89,6 +89,11 @@ export function GuestCart() {
         <p className="guestCartIntro">Selecciona tus productos sin iniciar sesión. Añadirlos no reserva disponibilidad.</p>
         {warning ? <p className="checkoutError" role="alert">{warning}</p> : null}
         <p className="guestCartStatus" role="status" aria-live="polite">{message}</p>
+        {pendingImport ? <div className="checkoutWarningPanel guestPendingSelection" role="status">
+          <strong>Tienes una selección pendiente de integrar.</strong>
+          <p>{pendingImport.items.reduce((sum, item) => sum + item.quantity, 0)} unidades siguen conservadas para comprobar su integración. Las nuevas adiciones se preparan por separado.</p>
+          <Link className="button buttonDark" href="/iniciar-sesion?callbackUrl=/carrito">Ingresar para reintentar</Link>
+        </div> : null}
         <noscript>
           <style>{".guestCart .guestLoading, .guestCart .cartSummary { display: none; }"}</style>
           <p className="checkoutError">El carrito invitado necesita JavaScript. Puedes <Link href="/productos">explorar el catálogo</Link> o <Link href="/iniciar-sesion?callbackUrl=/carrito">ir al ingreso de tu cuenta</Link>.</p>
@@ -96,7 +101,7 @@ export function GuestCart() {
         {!ready ? <p className="guestLoading" role="status">Recuperando tu selección…</p> : null}
         {error ? <div className="checkoutError" role="alert"><p>{error}</p>
           <button className="button buttonDark" type="button" onClick={() => setRevision((value) => value + 1)}>Reintentar verificación</button></div> : null}
-        {ready && !items.length ? (
+        {ready && !items.length && !pendingImport ? (
           <div className="emptyPanel"><strong>Tu carrito está vacío.</strong><p>Explora el catálogo y añade tus productos favoritos.</p>
             <Link className="button buttonDark" href="/productos">Ver productos</Link></div>
         ) : <div className="cartItems">
@@ -133,9 +138,7 @@ export function GuestCart() {
         {items.length > 0 ? <>
           <button className="button guestRefresh fullButton" type="button" onClick={() => setRevision((value) => value + 1)}>Actualizar precios y disponibilidad</button>
           <Link className="button buttonPrimary fullButton" href="/iniciar-sesion?callbackUrl=/carrito">Ingresar a mi cuenta</Link>
-          <p className="summaryNote">Al ingresar verás el carrito de tu cuenta. {storage === "memory"
-            ? "Esta selección no se guardó. Podrías perderla al ingresar."
-            : "Esta selección como invitado permanece en este navegador."}</p>
+          <p className="summaryNote">Al ingresar o crear tu cuenta integraremos esta selección con tu carrito y te mostraremos los ajustes. Añadir productos no reserva stock.</p>
         </> : null}
       </aside>
     </section>

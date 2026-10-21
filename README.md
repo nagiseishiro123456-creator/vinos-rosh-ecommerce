@@ -16,7 +16,7 @@ E-commerce real para Vinos ROSH, construido con arquitectura monolítica modular
 - Yape y transferencia manuales; Culqi contemplado en el modelo, integración automática pendiente
 
 ## Estado
-Fase 2, Sprint 1: integridad del pedido e instalación reproducible.
+Fase 2, Sprint 2: compra móvil, carrito y accesibilidad; Sprint 1 integrado en main.
 El trabajo se entrega por historias pequeñas: ver [avance actual](docs/progreso.md),
 [backlog](docs/backlog.md) y [plan del Sprint 1](docs/sprints/fase-2-sprint-01.md).
 La tienda sigue siendo un entorno de validación; no hay lanzamiento comercial en este hito.
@@ -80,7 +80,7 @@ npm run prisma:studio
 - Los pagos manuales y Culqi comparten una abstracción `Payment`.
 
 ## Modelo principal
-`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `OrderEvent`, `PaymentReconciliation`, `Review`.
+`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `CartImport`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `OrderEvent`, `PaymentReconciliation`, `Review`.
 
 ## Preview gratuito en Render
 
@@ -102,9 +102,9 @@ La revisión corrigió permisos revocados y completó el respaldo de los nuevos 
 Ver [cierre técnico](docs/sprints/cierre-sprint-01.md),
 [integración y CI](docs/testing/revision-integracion-sprint-01.md) y
 [guía operativa de pagos](docs/operacion-pagos-manuales.md).
-67 pruebas y 16 casos de navegador; 56 capturas conservadas. Render permanece suspendido,
-sin despliegue de este incremento. Siguiente paso: refinamiento de Sprint 2 de UX/accesibilidad
-y registro de aceptación funcional del Product Owner.
+67 pruebas y 16 casos de navegador; 56 capturas conservadas. En esa revisión Render se
+comprobó suspendido; el trabajo posterior no modifica su configuración ni despliega.
+La aceptación funcional del Product Owner queda por registrar.
 Sprint 2 iniciado el 2026-10-18: [plan](docs/sprints/fase-2-sprint-02.md),
 [diagnóstico del recorrido](docs/ux/sprint-02-recorrido-compra.md) y
 [16 capturas base](docs/evidencias/sprint-02/s2-01/README.md). S2-02 implementa correcciones
@@ -113,7 +113,11 @@ de UI con [QA y CI oficial aprobada](docs/testing/s2-02-ux-movil.md) y
 Carrito invitado implementado en la rama de S2-03, con [ADR](docs/decisions/0006-carrito-invitado.md)
 y [QA aprobada](docs/testing/s2-03-carrito-invitado.md): 80 pruebas de servidor y 28 de navegador.
 [22 capturas](docs/evidencias/sprint-02/s2-03/README.md) conservadas; integración pendiente.
-Unión y panel lateral siguen pendientes.
+Unión idempotente implementada en PR #12, con [ADR previo](docs/decisions/0007-union-carritos.md)
+y [QA aprobada](docs/testing/s2-04-union-carritos.md): 98 pruebas de servidor y 44 de navegador.
+El carrito de cuenta y su registro de importación se confirman juntos; los reintentos
+no repiten la suma. [32 capturas nuevas](docs/evidencias/sprint-02/s2-04/README.md) conservadas;
+integración pendiente. Siguiente historia: panel lateral accesible, S2-05.
 
 ## Verificación y evidencias
 

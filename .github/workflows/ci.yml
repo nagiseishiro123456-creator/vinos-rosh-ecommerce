@@ -109,6 +109,12 @@ jobs:
         run: |
           cat tests/sql/reconciliation-migration-before.sql prisma/migrations/20261016190000_admin_reconciliation/migration.sql tests/sql/reconciliation-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
+      - name: Verify cart import migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/cart-import-migration-before.sql prisma/migrations/20261019223000_guest_cart_import/migration.sql tests/sql/cart-import-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Tests
         run: npm test
 

@@ -26,6 +26,7 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 20. [QA S2-01](testing/s2-01-recorrido.md) · [Baseline visual S2-01](evidencias/sprint-02/s2-01/README.md)
 21. [QA S2-02 y límites de validación](testing/s2-02-ux-movil.md) · [Comparación antes/después](evidencias/sprint-02/s2-02/README.md)
 22. [ADR 0006: carrito invitado](decisions/0006-carrito-invitado.md) · [QA S2-03](testing/s2-03-carrito-invitado.md) · [Capturas](evidencias/sprint-02/s2-03/README.md)
+23. [ADR 0007: unión idempotente](decisions/0007-union-carritos.md) · [QA S2-04](testing/s2-04-union-carritos.md) · [32 capturas](evidencias/sprint-02/s2-04/README.md)
 
 ## Cuándo documentar
 

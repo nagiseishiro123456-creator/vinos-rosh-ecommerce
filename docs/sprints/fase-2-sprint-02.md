@@ -3,7 +3,7 @@
 Fecha: 2026-10-18 (America/Lima). Inicio autorizado por el usuario tras revisar el plan.
 Base de código: main `16074e1fd97fc62f51fb863cfb3f46230a3df3d2`, cierre del Sprint 1.
 Estado: S2-01 documentada; S2-02 verificada por CI, revisión/integración pendientes;
-S2-03 verificada por CI; S2-04–S2-06 pendientes de implementación.
+S2-03 verificada por CI; S2-04 verificada por CI; S2-05–S2-06 pendientes de implementación.
 Las historias y puntos son una previsión de trabajo; no representan horas ni una fecha garantizada.
 
 ## Sprint Goal
@@ -90,6 +90,8 @@ sin pérdidas ni duplicaciones al identificarme o repetir una petición.
 - DoD: integración con PostgreSQL para carreras/reintentos, E2E de ingreso/registro y
   permisos; ADR, contrato, mensajes, migración si aplica y capturas incluidos.
 
+Entrega técnica S2-04: [ADR previo](../decisions/0007-union-carritos.md), [QA 98/98 + 44/44](../testing/s2-04-union-carritos.md) y [32 capturas](../evidencias/sprint-02/s2-04/README.md); PR #12 pendiente de revisión/integración.
+
 ### S2-05 — Carrito lateral accesible (5 SP)
 
 Como comprador, quiero revisar mi selección y seguir explorando sin perder el contexto.
@@ -174,4 +176,7 @@ aislado no equivalen a certificación completa de accesibilidad ni a aceptación
   67/67 servidor y 20/20 navegador; revisión/integración pendientes.
 - S2-03: ADR 0006 e implementación en PR #11; [QA aprobada](../testing/s2-03-carrito-invitado.md):
   80/80 servidor y 28/28 navegador, 22 capturas conservadas; integración pendiente.
-- S2-04–S2-06: pendientes. Siguiente acción: ADR de unión antes del código de S2-04.
+- S2-04: ADR 0007 e implementación en PR #12; [QA aprobada](../testing/s2-04-union-carritos.md):
+  98/98 servidor y 44/44 navegador, 32 capturas conservadas; revisión/integración pendientes.
+- S2-05–S2-06: pendientes. Siguiente acción: ADR del carrito lateral antes del código
+  de S2-05; revisión e integración del incremento completo en S2-06.

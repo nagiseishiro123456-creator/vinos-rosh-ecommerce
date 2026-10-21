@@ -1,0 +1,20 @@
+S2-04 — cierre técnico 2026-10-19 (America/Lima)
+Fuente: 55f470e73395c8efc135ddee3491344079487b5b
+Árbol: b8869b0c4ed1abed6f90c86a4cab65054b271231
+CI: https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39363492611
+Job: 118434835042; resultado success
+Artefacto: 12238880998, sprint-01-smoke-39363492611
+ZIP bytes: 85571315
+ZIP SHA-256: e60114f1a87bc400d6402e4d06196f1240030e13032b4e89609049f5d87250ba (verificado)
+Toolchain: Node 22.23.3; npm 11.9.0; Next 16.3.8; next build; PostgreSQL 16;
+Playwright 1.64.1; Chrome for Testing 156.0.8078.4 / Chromium v1248.
+Servidor: 98/98; navegador: 44/44; migraciones: 11; contratos SQL: 4.
+Tipos/lint/build: aprobados. Auditoría de producción: 0 hallazgos.
+Casos nuevos S2-04 en 320/390/768/1440 px, movimiento reducido.
+32 PNG originales inspeccionados, sin retoque/recompresión; SHA/dimensiones comprobados.
+118 PNG anteriores conservados; total de evidencia: 150.
+Estado 51: reserva sintética deliberada de la regresión nativa S1-04.
+La unión S2-04 no reserva stock ni crea pedidos/pagos; no hubo pagos reales ni Render.
+No hay validación de lector de pantalla, contraste medido, zoom ni Safari/Firefox.
+Sin JS funciona el carrito/checkout autenticado; no se importa selección local.
+Sin storage/locks, selección invitada en memoria; carrito confirmado guardado en cuenta.
