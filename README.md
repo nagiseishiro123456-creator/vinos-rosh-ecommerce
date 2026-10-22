@@ -26,6 +26,8 @@ Para usar la compra: [cómo abrir el carrito](docs/guia-carrito.md).
 Sprint 3 en refinamiento: [plan e historias](docs/sprints/fase-2-sprint-03.md) y
 [comparación Yape/Izipay](docs/investigacion/pagos-yape-izipay.md).
 La pasarela automática todavía no está implementada ni el proveedor elegido.
+Izipay se evalúa para sandbox: [guía técnica y base aislada de pruebas](docs/integraciones/izipay-sandbox.md).
+Ese código preparatorio está desactivado y no se conecta todavía al checkout.
 
 Ya existe:
 - estructura Next.js

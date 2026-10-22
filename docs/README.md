@@ -37,6 +37,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 28. [Investigación: Yape, Izipay, sitios de referencia y costos](investigacion/pagos-yape-izipay.md)
 29. [ADR 0009 propuesto: pago automático](decisions/0009-pagos-automaticos.md) · [QA del refinamiento S3-01](testing/s3-01-refinamiento.md)
 
+30. [Guía del desarrollador: Izipay sandbox y familias de API](integraciones/izipay-sandbox.md) · [QA de la base aislada S3-02](testing/s3-02-base-izipay.md)
+
 ## Cuándo documentar
 
 | Momento | Registro |

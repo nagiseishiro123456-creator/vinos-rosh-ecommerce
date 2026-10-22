@@ -50,17 +50,20 @@ S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 
 | ID | Historia | SP | Estado |
 | --- | --- | ---: | --- |
-| S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Investigación y guía preparadas; elección/aceptación pendientes. |
-| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Pendiente de elección y contrato. |
+| S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
+| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte/cripto aislados preparados; endpoint/intentos/UI y sandbox externo pendientes. |
 | S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
 | S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Pendiente. |
 | S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Pendiente. |
 | S3-06 | Revisar, comprobar regresión, integrar y demostrar el incremento. | 2 | Pendiente. |
 
-«ezepay» se investiga como posible Izipay; no se da por elegido ni habilitado.
-Antes del adaptador: aceptar [ADR 0009](decisions/0009-pagos-automaticos.md) con el contrato
+Izipay se solicita expresamente para evaluar sandbox (2026-10-22); su producto web
+y habilitación siguen pendientes. [Guía técnica](integraciones/izipay-sandbox.md) y
+[QA de la primera preparación](testing/s3-02-base-izipay.md).
+Antes de conectar el adaptador al checkout: concretar [ADR 0009](decisions/0009-pagos-automaticos.md) con el contrato
 del producto real. La observación del propietario sobre encontrar el carrito mantiene
-abierta la aceptación UX. No hay nueva implementación, activación ni despliegue en S3-01.
+abierta la aceptación UX. S3-02 tiene una base aislada, desactivada y sin migraciones;
+no se contabiliza como historia terminada ni como integración externa comprobada.
 
 ## Secuencia posterior, sujeta a refinamiento
 

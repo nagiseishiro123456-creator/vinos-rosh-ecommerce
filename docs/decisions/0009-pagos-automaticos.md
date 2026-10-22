@@ -4,6 +4,12 @@ Fecha: 2026-10-21 (America/Lima).
 Estado: **propuesto, pendiente de proveedor/producto y aceptación**.
 Alcance: diseño previo del Sprint 3; ninguna migración o integración implementada aquí.
 
+Actualización 2026-10-22: se añade preparación aislada, desactivada y no conectada al
+checkout, para el contrato Mi Cuenta Web V4. No modifica BD ni registra pagos aprobados.
+Se conserva Next.js/Route Handlers como arquitectura de aplicación; Express queda
+como posible adaptador independiente, sin añadir otro servidor al proyecto.
+Ver [contrato, código y límites](../integraciones/izipay-sandbox.md).
+
 ## Contexto y alternativas
 
 La base integrada calcula importes exactos y reserva stock una vez antes de presentar
@@ -45,6 +51,25 @@ CulqiOnline es alternativa a evaluar. La elección no se da por aprobada con est
 
 El contrato de consulta, retry y ACK de IPN se fijará al identificar el producto.
 No se propone un endpoint inventado para consultar o devolver dinero.
+
+### Familias de Izipay y primera preparación
+
+La solicitud del desarrollador combina `formToken`/Basic Auth con el botón Yape del SDK.
+El contrato Mi Cuenta Web V4 y el SDK Punto Web tienen token, credenciales, script y
+firmas diferentes. La habilitación de Yape se verificará en el producto asignado.
+No se usa `api.micropayment.de` para Izipay. El importe del inicio se carga de la orden,
+no se acepta como autoridad un total enviado desde el navegador.
+
+El primer núcleo usa el endpoint oficial fijo de Mi Cuenta Web, céntimos exactos,
+Basic Auth en servidor, timeout sin retry automático, límite de respuesta y errores
+sin secretos. La verificación IPN comprueba HMAC hexadecimal con la contraseña REST;
+no confundirla con la clave de retorno del navegador ni la firma Base64 de Punto Web.
+El switch de modo TEST local no certifica que una contraseña sea de pruebas: usar
+únicamente credenciales de test de Izipay y verificar el contexto externo antes de activar.
+
+Los helpers de firma/transporte no reemplazan autenticación del cliente, identidad
+persistida del intento, validación de campos de negocio, replay ni transacción de estados.
+Por eso no se exponen aún los endpoints de inicio/webhook ni una acción `PAID`.
 
 ## Reglas de estados y concurrencia a concretar
 
