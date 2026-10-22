@@ -42,3 +42,11 @@ no habilita un bypass en una preview. El script PowerShell se revisa estáticame
 no se afirma haber ejecutado la instalación Windows del propietario ni desbloqueado su BD.
 
 [Operación y pasos](../desarrollo-registro-local.md) · [Avance](../progreso.md).
+
+## Primera ejecución y corrección del test
+
+CI 39862153144 aprobó 194/194 servidor, migraciones/contratos/restore y checks técnicos.
+Cuatro ejecuciones del caso 429 fallaron por un selector ambiguo: el role alert coincidía
+con el mensaje del formulario y el anunciador de rutas de Next.js. Se acota a authCard,
+sin cambiar la respuesta del servidor. Los resultados finales de cabecera se registran
+en la PR después de repetir CI; esos cuatro fallos no se presentan como aprobados.

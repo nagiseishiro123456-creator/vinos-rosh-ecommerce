@@ -3,7 +3,7 @@ import { unlockLocalRegistration } from "../src/modules/auth/local-registration-
 
 async function main() {
   const result = await unlockLocalRegistration(process.env, process.argv.slice(2));
-  console.log(`Registro local desbloqueado: ${result.count} límites eliminados. No se modificaron cuentas ni contraseñas.`);
+  console.log(`Registro local: se eliminaron ${result.count} límites para las IP seleccionadas. No se modificaron cuentas ni contraseñas.`);
 }
 main().catch((error: unknown) => {
   if (error instanceof Error && error.message === "LOCAL_REGISTRATION_ONLY") {

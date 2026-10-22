@@ -49,7 +49,7 @@ test("registration 429 shows a real waiting time and does not create an account"
     const body = await response.json();
     expect(body.retryAfterSeconds).toBeGreaterThan(0);
     expect(response.headers()["retry-after"]).toBe(String(body.retryAfterSeconds));
-    await expect(page.getByRole("alert")).toContainText(/Vuelve a intentarlo en \d+ minutos?\./);
+    await expect(page.locator(".authCard").getByRole("alert")).toContainText(/Vuelve a intentarlo en \d+ minutos?\./);
     await expect(page.getByRole("button", { name: "Crear cuenta", exact: true })).toBeEnabled();
     expect(await prisma.user.count({ where: { email } })).toBe(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
