@@ -50,6 +50,7 @@ DATABASE_URL="postgresql://vinos_rosh_dev:$dbPassword@localhost:5432/vinos_rosh?
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="$authSecret"
+LOCAL_REGISTRATION_TEST_MODE="true"
 SHOW_DEMO_CATALOG="true"
 NEXT_PUBLIC_WHATSAPP_PHONE=""
 NEXT_PUBLIC_CONTACT_EMAIL=""

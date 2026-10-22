@@ -12,6 +12,11 @@ Ahora detiene la preparación ante errores de comandos nativos, usa `npm ci` y a
 migraciones versionadas con `prisma migrate deploy` sin generar migraciones nuevas.
 El script PowerShell se revisó estáticamente; requiere comprobación en Windows.
 
+Para desbloquear únicamente el registro en una BD local, usar `npm run auth:unlock-local`.
+El opt-in `LOCAL_REGISTRATION_TEST_MODE=true` aplica solo a npm run dev con app/BD
+de loopback; requiere reiniciar el servidor. Los `.env` nuevos de setup:dev lo incluyen,
+los existentes se conservan. [Guía y guardas](desarrollo-registro-local.md).
+
 ## Linux/macOS y pasos explícitos
 1. Seleccionar Node con `nvm use` (si se usa nvm) y verificar `node --version`.
 2. Instalar npm fijado: `npm install --global npm@11.9.0`.

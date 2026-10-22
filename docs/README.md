@@ -45,6 +45,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 33. [Reserva automática interna TEST](integraciones/reserva-izipay.md) · [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) · [QA y recuperación S3-02](testing/s3-02-reserva.md)
 
+34. [Registro: desbloqueo y pruebas locales](desarrollo-registro-local.md) · [QA y capturas](testing/registro-local.md).
+
 ## Cuándo documentar
 
 | Momento | Registro |

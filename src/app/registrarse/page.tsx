@@ -108,7 +108,10 @@ function RegisterContent() {
             </div>
             <div className="formField full">
               <label htmlFor="password">Contraseña</label>
-              <input id="password" name="password" type="password" autoComplete="new-password" minLength={8} required />
+              <input id="password" name="password" type="password" autoComplete="new-password"
+                minLength={8} maxLength={72} pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,72}"
+                aria-describedby="registration-password-help" required />
+              <small id="registration-password-help">Usa entre 8 y 72 caracteres, con mayúscula, minúscula y número.</small>
             </div>
           </div>
 

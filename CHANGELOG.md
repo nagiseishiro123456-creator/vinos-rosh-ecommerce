@@ -1,5 +1,12 @@
 # Changelog
 
+## Corrección de registro durante desarrollo local (2026-10-22)
+
+- Desbloqueo CLI selectivo con guardas de BD/app locales; sin cambiar cuentas ni contraseñas.
+- Opt-in local de 60 solicitudes/10 minutos, solo en development; producción conserva seis/hora.
+- Respuesta 429 con tiempo restante y reglas de contraseña visibles/validadas en el navegador.
+- QA de política, almacenamiento y registro en cuatro tamaños, con capturas. Sin migraciones ni dependencias nuevas.
+
 ## Fase 2 — Sprint 3 / S3-02 (reserva automática interna, 2026-10-22)
 
 - Núcleo ACID compartido con reserva manual, entrada automática estricta, total/envío de servidor, stock condicional e idempotencia por cuenta/clave.
