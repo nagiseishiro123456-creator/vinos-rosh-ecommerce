@@ -12,12 +12,15 @@ una ruta de pago ni se marca una orden como pagada con esta preparación.
 
 Incremento siguiente: [registro persistente de intentos](../integraciones/intentos-izipay.md)
 con migración aditiva 13, guardas/concurrencia y [QA](../testing/s3-02-intentos.md).
-Es una rama aislada sin ruta/SDK; la creación de reserva automática y recuperación
-del proveedor siguen pendientes. Workspace Render confirmado; [preflight actual](../render-free-preview.md).
+En ese incremento aún no había ruta/SDK ni reserva automática; los incrementos
+posteriores se describen a continuación. La recuperación del proveedor sigue pendiente. Workspace Render confirmado; [preflight actual](../render-free-preview.md).
 
 Incremento de coordinación: [inicio protegido](../integraciones/inicio-izipay.md), ruta
 POST con opt-in independiente y sin cambios al checkout. [QA](../testing/s3-02-inicio.md).
-La API no crea ni convierte reservas manuales; la reserva automática y el SDK siguen pendientes.
+La API no crea ni convierte reservas manuales. Incremento posterior:
+[reserva automática interna](../integraciones/reserva-izipay.md), migración 14,
+[ADR 0010](../decisions/0010-reserva-automatica-sandbox.md) y
+[QA](../testing/s3-02-reserva.md). Aún sin llamador HTTP/UI, SDK o pago confirmado.
 
 ## Sprint Goal
 
@@ -51,7 +54,7 @@ integración externa aceptada. No cambiar a otro proveedor sin dejar registrada 
 | ID | Historia de usuario | SP | Criterios principales | Estado actual |
 | --- | --- | ---: | --- | --- |
 | S3-01 | Como propietario, quiero entender el carrito y comparar proveedor/producto/costos para elegir sin rehacer el checkout. | 3 | Accesos y versión explicados; estado financiero real inventariado; fuentes y alternativas verificadas; elección y condiciones registradas. | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
-| S3-02 | Como comprador, quiero iniciar un pago de mi reserva en el checkout del proveedor elegido. | 5 | Intento persistido ligado a orden/importe/moneda; token en backend; modo prueba; SDK solo bajo demanda; timeout recuperable sin generar cobro nuevo a ciegas; manuales operativos. | Transporte, intentos y ruta protegida/desactivada en rama; reserva automática, recuperación, SDK y sandbox externo pendientes. |
+| S3-02 | Como comprador, quiero iniciar un pago de mi reserva en el checkout del proveedor elegido. | 5 | Intento persistido ligado a orden/importe/moneda; token en backend; modo prueba; SDK solo bajo demanda; timeout recuperable sin generar cobro nuevo a ciegas; manuales operativos. | Transporte, intentos, ruta protegida/desactivada y reserva interna en rama; llamador autenticado, recuperación, SDK y sandbox externo pendientes. |
 | S3-03 | Como tienda, quiero confirmar resultados auténticos una sola vez incluso con eventos repetidos o tardíos. | 8 | Firma y campos verificados; IPN persistida/idempotente; transacción de estados y stock; carreras pago/vencimiento; discrepancia o ingreso tardío queda conciliable sin vender stock liberado. | Pendiente. |
 | S3-04 | Como operador, quiero comparar pagos confirmados, costos y abonos para detectar diferencias. | 3 | Consulta segura/reconciliación según API disponible o reporte verificado; bruto/comisión/neto/abono separados; datos desconocidos explícitos; pendientes y discrepancias trazables. | Pendiente. |
 | S3-05 | Como comprador, quiero confirmación de pago y pedido recuperable por correo. | 5 | Evento/outbox persistido en misma transacción; envío después del commit; reintentos registrados; caída del correo no revierte ni duplica pago; constancia sin simular emisión fiscal. | Pendiente. |

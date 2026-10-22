@@ -43,6 +43,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 32. [Inicio protegido y contrato HTTP de sandbox](integraciones/inicio-izipay.md) · [QA de coordinación y ruta S3-02](testing/s3-02-inicio.md)
 
+33. [Reserva automática interna TEST](integraciones/reserva-izipay.md) · [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) · [QA y recuperación S3-02](testing/s3-02-reserva.md)
+
 ## Cuándo documentar
 
 | Momento | Registro |

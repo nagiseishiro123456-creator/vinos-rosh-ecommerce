@@ -1,5 +1,13 @@
 # Changelog
 
+## Fase 2 — Sprint 3 / S3-02 (reserva automática interna, 2026-10-22)
+
+- Núcleo ACID compartido con reserva manual, entrada automática estricta, total/envío de servidor, stock condicional e idempotencia por cuenta/clave.
+- Migración 14 aditiva con marcador explícito y NULL histórico; no se crean pagos ni se convierten órdenes manuales. Plazo TEST provisional local de 15 minutos.
+- Cinco casos deterministas, doce PostgreSQL, séptimo contrato SQL y dump/restore de orden/intento. Las fixtures de inicio usan reservas automáticas reales.
+- ADR, contrato, QA, backlog y avance en el mismo PR. Sin nueva UI, SDK, webhook, cobro ni cambio en Render.
+- La auditoría inicial bloqueó Next.js 16.3.8 por avisos críticos: Next.js y su configuración ESLint se fijan en 16.4.2 y se regenera el lockfile, manteniendo el control CI.
+
 ## Fase 2 — Sprint 3 / S3-02 (inicio de sandbox protegido, 2026-10-22)
 
 - Route Handler POST de inicio con opt-in separado/desactivado, sesión, origen, validación estricta, límites de body/tiempo/tráfico y respuestas privadas.

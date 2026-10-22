@@ -1,5 +1,33 @@
 # Punto de avance
 
+## Sprint 3 — Reserva automática interna y recuperación (2026-10-22, America/Lima)
+
+- Se continúa mientras el propietario prueba en local. Rama `fase-2/sprint-03-reserva-automatica`,
+  sobre PR #19 `8424493ebdf099b029c9d066ab50869125ccdaf6`.
+  [CI base 39808132000](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39808132000):
+  **165/165 servidor y 68/68 navegador**, 13 migraciones/seis contratos SQL y restore aprobados.
+- [Reserva automática interna](integraciones/reserva-izipay.md) comparte el núcleo ACID manual.
+  Importe/envío/stock del servidor, misma clave recupera, cambio de método conflictivo,
+  cuenta esperada y datos fiscales validados. No inicia red ni crea un pago aprobado.
+- Migración 14: marcador MICUENTAWEB_V4 explícito, NULL en históricos. El inicio exige
+  ese marcador; las fixtures positivas ya no borran pagos manuales. Plazo local provisional
+  TEST de 15 minutos, no TTL garantizado por Izipay; replay no extiende la fecha.
+- [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) y [QA](testing/s3-02-reserva.md):
+  cinco casos deterministas, doce PostgreSQL, contrato SQL de históricos y segundo
+  dump/restore (orden/intento). Resultados de cabecera y SHA se registran en el PR.
+  Las 192 capturas históricas se conservan; no hay UI nueva que fotografiar.
+- S3-02 sigue parcial: servicio interno sin nueva ruta/acción de reserva ni SDK, con
+  inicio desactivado. S3-03/IPN no se ha implementado. Producto/test keys, recuperación
+  y prueba externa pendientes. Main y Render no cambian.
+- El primer CI de esta rama (39847337080) se detuvo en auditoría antes de migrar/probar:
+  Next.js 16.3.8 apareció afectado por avisos críticos recién incorporados al feed.
+  Se fijan Next.js/eslint-config-next 16.4.2 y lockfile actualizado; la nueva cabecera
+  debe repetir todos los checks. Auditoría local de producción 0 hallazgos; aviso
+  transitivo de braces en lint registrado en backlog. [Fuentes y alcance](testing/s3-02-reserva.md).
+- **Siguiente:** revisar este incremento; confirmar producto/paquete de pruebas y
+  contrato de recuperación; conectar reserva autenticada y formulario oficial, y
+  preparar la IPN transaccional con tratamiento de pagos tardíos. No activar cobros aún.
+
 ## Sprint 3 — Coordinación del token y ruta protegida (2026-10-22, America/Lima)
 
 - El propietario pide continuar mientras revisa en local. Se conserva su revisión

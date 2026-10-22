@@ -4,6 +4,8 @@ import test, { after, type TestContext } from "node:test";
 import { prisma } from "../src/lib/prisma";
 import { clearRateLimit } from "../src/lib/rate-limit";
 import { checkoutFixture } from "./helpers/checkout";
+import { automaticInputFor, automaticSandbox as environment } from "./helpers/automatic-checkout";
+import { reserveMicuentawebSandboxOrder } from "../src/modules/orders/automatic-order-service";
 import { reserveManualOrder } from "../src/modules/orders/manual-order-service";
 import { cancelUnpaidReservation, expireUnpaidReservation } from "../src/modules/orders/reservation-service";
 import { canRequestMicuentawebToken } from "../src/modules/payments/izipay/attempt-service";
@@ -11,11 +13,6 @@ import { requestMicuentawebSandboxFormToken } from "../src/modules/payments/izip
 import { initiateMicuentawebSandboxPayment, type InitiationPorts } from "../src/modules/payments/izipay/initiation-service";
 import { createMicuentawebInitiationHandler } from "../src/modules/payments/izipay/initiation-handler";
 
-const environment = {
-  PAYMENTS_IZIPAY_ENABLED: "true", IZIPAY_MCW_INITIATE_ENABLED: "true", IZIPAY_INTEGRATION: "MICUENTAWEB_V4", IZIPAY_MODE: "TEST",
-  IZIPAY_MCW_MERCHANT_ID: "qa-merchant", IZIPAY_MCW_REST_TEST_PASSWORD: "qa-not-a-credential",
-  IZIPAY_MCW_PUBLIC_TEST_KEY: "qa-not-a-public-key", NEXT_PUBLIC_APP_URL: "https://rosh.example.test",
-};
 const fakeToken = "opaque-fixture-token-not-from-izipay";
 const reply = () => Response.json({ status: "SUCCESS", answer: { formToken: fakeToken } });
 type Transport = NonNullable<NonNullable<Parameters<typeof requestMicuentawebSandboxFormToken>[2]>["fetch"]>;
@@ -24,9 +21,8 @@ after(() => prisma.$disconnect());
 
 async function fixture(t: TestContext, manual = false) {
   const f = await checkoutFixture(t);
-  const order = await reserveManualOrder(f.user.id, f.input);
-  // QA-only shape of a future automatic reservation; production never deletes manual payments.
-  if (!manual) await prisma.payment.deleteMany({ where: { orderId: order.id } });
+  const order = manual ? await reserveManualOrder(f.user.id, f.input)
+    : await reserveMicuentawebSandboxOrder(f.user.id, automaticInputFor(f), environment);
   t.after(() => clearRateLimit("izipay-sandbox-initiate", f.user.id));
   return { ...f, order };
 }

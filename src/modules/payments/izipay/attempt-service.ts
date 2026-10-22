@@ -24,13 +24,13 @@ function view(attempt: PaymentAttempt) {
 }
 
 const eligibilitySelect = {
-  userId: true, status: true, total: true, stockReservedAt: true, reservationExpiresAt: true,
+  userId: true, status: true, total: true, paymentIntegration: true, stockReservedAt: true, reservationExpiresAt: true,
   stockReleasedAt: true, reservationExpiredAt: true, paidAt: true,
   payments: { select: { id: true } },
 } as const;
 type EligibleOrder = Prisma.OrderGetPayload<{ select: typeof eligibilitySelect }>;
 function eligible(order: EligibleOrder, now = new Date()) {
-  return order.status === "PENDING_PAYMENT" && !!order.stockReservedAt && order.stockReservedAt <= now
+  return order.paymentIntegration === "MICUENTAWEB_V4" && order.status === "PENDING_PAYMENT" && !!order.stockReservedAt && order.stockReservedAt <= now
     && !!order.reservationExpiresAt && order.reservationExpiresAt > now && !order.stockReleasedAt
     && !order.reservationExpiredAt && !order.paidAt && order.payments.length === 0;
 }

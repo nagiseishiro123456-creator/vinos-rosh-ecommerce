@@ -1,0 +1,13 @@
+BEGIN;
+CREATE SCHEMA rosh_automatic_reservation_migration_qa;
+SET LOCAL search_path TO rosh_automatic_reservation_migration_qa;
+CREATE TABLE "Order" (id TEXT PRIMARY KEY, total NUMERIC(10,2), status TEXT, "checkoutKey" TEXT);
+CREATE TABLE "Payment" (id TEXT PRIMARY KEY, "orderId" TEXT, status TEXT);
+CREATE TABLE "PaymentAttempt" (id TEXT PRIMARY KEY, "orderId" TEXT, "providerReference" TEXT);
+CREATE TABLE "Product" (id TEXT PRIMARY KEY, stock INTEGER);
+CREATE TABLE "CartItem" (id TEXT PRIMARY KEY, quantity INTEGER);
+INSERT INTO "Order" VALUES ('legacy-order',98.20,'PENDING_PAYMENT','legacy-identity');
+INSERT INTO "Payment" VALUES ('legacy-payment','legacy-order','PENDING');
+INSERT INTO "PaymentAttempt" VALUES ('legacy-attempt','legacy-order','preserved-reference');
+INSERT INTO "Product" VALUES ('legacy-product',7);
+INSERT INTO "CartItem" VALUES ('later-item',2);

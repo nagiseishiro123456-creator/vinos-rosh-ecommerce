@@ -310,6 +310,7 @@ model Order {
   reservationExpiredAt DateTime?
   checkoutKey          String? @db.VarChar(68)
   checkoutRequestHash  String? @db.Char(64)
+  paymentIntegration   String? @db.VarChar(32)
 
   paidAt      DateTime?
   shippedAt   DateTime?

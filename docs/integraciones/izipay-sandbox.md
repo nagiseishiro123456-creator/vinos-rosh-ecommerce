@@ -4,7 +4,8 @@ Fecha: 2026-10-22 (America/Lima).
 Alcance de esta entrega: evaluación del requerimiento y primera base técnica aislada.
 La [ruta de inicio preparada](inicio-izipay.md) está desactivada; no hay cambio de
 estado bancario ni checkout/SDK incorporado. Hay [intentos persistentes](intentos-izipay.md)
-en rama. S3-01 y S3-02 continúan parcialmente pendientes.
+en rama y [reserva automática interna](reserva-izipay.md), todavía sin llamador HTTP/UI.
+S3-01 y S3-02 continúan parcialmente pendientes.
 
 ## Recomendación de arquitectura
 
@@ -89,7 +90,7 @@ Ejemplo del DTO interno, con datos ficticios:
 
 ```ts
 const snapshot = {
-  orderReference: "QA_ROSH_ATTEMPT_1", // referencia del intento persistido, todavía por implementar
+  orderReference: "QA_ROSH_ATTEMPT_1", // referencia generada y persistida por el servicio de intentos
   total: "98.20",                    // total cargado de la orden, no de req.body
   currency: "PEN" as const,
   customerEmail: "buyer@example.test",
@@ -100,8 +101,9 @@ const snapshot = {
 ### Ruta de inicio preparada, desactivada
 
 Incremento posterior: [dominio persistente de intentos](intentos-izipay.md), con guardas,
-unicidad por orden y estados de preparación. Está aislado y no crea todavía una
-reserva automática ni implementa recuperación en el proveedor; ver sus límites antes de conectarlo.
+unicidad por orden y estados de preparación. La reserva automática interna ya existe
+con marcador explícito y núcleo ACID compartido. Ambos siguen aislados del checkout
+y no implementan recuperación en el proveedor; ver sus límites antes de conectarlos.
 
 `POST /api/payment/initiate` es un Route Handler Node.js con opt-in separado. Recibe
 identidad de orden y cuenta esperada, exige sesión/origen y comprueba propiedad,

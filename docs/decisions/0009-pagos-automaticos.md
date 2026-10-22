@@ -17,8 +17,10 @@ de pedidos manuales. El ADR de integración comercial sigue propuesto.
 
 Preparación posterior: [ruta protegida y coordinación del token](../integraciones/inicio-izipay.md),
 con opt-in desactivado e independiente, guardas HTTP y revalidación de orden al finalizar.
-No conecta SDK/checkout, crea reservas automáticas ni confirma pagos. La elección
-comercial y los contratos de recuperación/IPN aún necesitan aceptación y prueba externa.
+Ese incremento no conecta SDK/checkout ni confirma pagos. El incremento posterior
+añade [reserva automática interna](../integraciones/reserva-izipay.md), decidida en
+[ADR 0010](0010-reserva-automatica-sandbox.md), sin ruta/UI nueva. La elección comercial
+y los contratos de recuperación/IPN siguen pendientes de aceptación y prueba externa.
 
 ## Contexto y alternativas
 
@@ -79,7 +81,8 @@ El switch de modo TEST local no certifica que una contraseña sea de pruebas: us
 
 Los helpers de firma/transporte no reemplazan autenticación del cliente, identidad
 persistida del intento, validación de campos de negocio, replay ni transacción de estados.
-Por eso no se exponen aún los endpoints de inicio/webhook ni una acción `PAID`.
+El inicio posterior tiene una ruta protegida desactivada; el webhook y una transición
+`PAID` siguen sin implementarse. Los helpers solos no autorizan su activación.
 
 ## Reglas de estados y concurrencia a concretar
 

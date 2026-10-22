@@ -1,5 +1,13 @@
 # Respaldo y recuperación de PostgreSQL
 
+S3-02 añade un segundo contrato aislado: `node scripts/verify-cart-restore.mjs automatic`.
+Aplica 14 migraciones, genera una reserva automática y un intento INITIATING, restaura
+y verifica misma orden/referencia, stock descontado una vez y carrito posterior intacto.
+No concede una segunda llamada al proveedor ni contiene un token. El dump completo debe
+conservar `Order.paymentIntegration`, claves/huellas y `PaymentAttempt`; no limpiar esos
+registros al recuperar. Es prueba sintética de CI, no recuperación real de Render.
+[Contrato y límites](../integraciones/reserva-izipay.md) · [QA](../testing/s3-02-reserva.md).
+
 ## Objetivo
 
 El MVP de Vinos ROSH debe poder respaldar y restaurar la base de datos sin contratar un servicio adicional. Para desarrollo y autoalojamiento se usan las herramientas nativas de PostgreSQL que ya existen dentro del contenedor Docker.
