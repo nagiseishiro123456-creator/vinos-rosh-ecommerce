@@ -1,5 +1,12 @@
 # Changelog
 
+## Fase 2 — Sprint 3 / S3-02 (inicio de sandbox protegido, 2026-10-22)
+
+- Route Handler POST de inicio con opt-in separado/desactivado, sesión, origen, validación estricta, límites de body/tiempo/tráfico y respuestas privadas.
+- Coordinación intento → llamada fuera de BD → hash confirmado antes de entregar token. Replays y fallos no disparan otra solicitud; reserva/importe se revalidan bajo bloqueo al finalizar.
+- Pruebas de transporte simulado, concurrencia, timeout y cancelación/vencimiento durante llamada; smoke de la ruta desactivada en app compilada.
+- Guías, QA, ADR, backlog y avance actualizados. Sin nueva migración/dependencia, SDK/UI, confirmación de pago ni cambio en Render.
+
 ## Fase 2 — Sprint 3 / S3-02 (persistencia aislada, 2026-10-22)
 
 - Preparación de PaymentAttempt con referencia/importe de servidor y estados de inicio/token/incertidumbre; una identidad por orden y transiciones condicionadas.

@@ -1,5 +1,14 @@
 # Arquitectura — Vinos ROSH
 
+## Preparación en rama — S3-02
+
+El Sprint 3 prepara Mi Cuenta Web V4 con adaptador, intentos persistidos y
+[ruta protegida de inicio](integraciones/inicio-izipay.md). Está desactivada con opt-in
+separado; no se conecta al checkout existente. El intento se guarda antes de llamar
+fuera de BD; el token solo se entrega tras registrar su hash y revalidar la reserva.
+No confirma pagos ni cambia pedidos manuales. Producto/test keys, reserva automática,
+recuperación, SDK e IPN siguen pendientes. [QA](testing/s3-02-inicio.md).
+
 ## Estilo arquitectónico
 Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, autenticación, validaciones y acceso a datos viven en un mismo proyecto, separados por módulos de negocio.
 

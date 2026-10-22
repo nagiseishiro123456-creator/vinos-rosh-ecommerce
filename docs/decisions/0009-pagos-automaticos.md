@@ -15,6 +15,11 @@ en rama, con una migración aditiva. Unicidad por orden, valores de servidor y e
 INITIATING/TOKEN_READY/UNCERTAIN; todavía sin ruta, SDK, confirmación de pago o cambio
 de pedidos manuales. El ADR de integración comercial sigue propuesto.
 
+Preparación posterior: [ruta protegida y coordinación del token](../integraciones/inicio-izipay.md),
+con opt-in desactivado e independiente, guardas HTTP y revalidación de orden al finalizar.
+No conecta SDK/checkout, crea reservas automáticas ni confirma pagos. La elección
+comercial y los contratos de recuperación/IPN aún necesitan aceptación y prueba externa.
+
 ## Contexto y alternativas
 
 La base integrada calcula importes exactos y reserva stock una vez antes de presentar

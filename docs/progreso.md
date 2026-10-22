@@ -1,5 +1,31 @@
 # Punto de avance
 
+## Sprint 3 — Coordinación del token y ruta protegida (2026-10-22, America/Lima)
+
+- El propietario pide continuar mientras revisa en local. Se conserva su revisión
+  sobre la rama que descargue; no se modifica su equipo ni se publica en Render.
+- Base PR #18 `6d81d539c782a2d63cae64ae7312cff1b757f891`, verificada por
+  [CI 39800349578](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39800349578):
+  141 servidor/66 navegador, 13 migraciones, seis contratos SQL y restore aprobados.
+  El reintento final de PR #17 también aprobó 132/66 sobre la misma fuente original.
+- Se añade [POST protegido de inicio](integraciones/inicio-izipay.md), desactivado con
+  opt-in separado. Sesión, Origin, tipo/body acotado, cuenta actual, rate limit y no-store.
+  La orden se autoriza y el intento se persiste antes de salir a la red; solo el creador
+  solicita un token, sin retry. Solo se entrega tras confirmar su registro en BD.
+- Finalización refuerza reserva/importe bajo bloqueo de orden. Cancelar o vencer
+  durante la llamada impide entregar el token y conserva el stock liberado. No hay PAID.
+- Dieciséis casos deterministas nuevos aprobados localmente, ocho PostgreSQL y dos
+  ejecuciones smoke añadidas. [QA y límites](testing/s3-02-inicio.md); resultado y SHA
+  de la cabecera se registran en el PR. No hay migraciones/dependencias nuevas ni cambios de UI.
+- S3-02 sigue parcial: no se crea todavía una reserva automática, no se muestra SDK
+  en checkout ni se confirma una transacción por IPN. Los pedidos manuales se conservan.
+  Producto, test keys y evidencia externa de Izipay pendientes; ningún pago real o simulado
+  se presenta como un cobro aprobado. Todos los transportes de QA son en memoria.
+- No se consultó/modificó Render ni su BD en este incremento. Se conserva el preflight
+  anterior y la actualización sigue pendiente de respaldo/build por un canal compatible.
+- **Siguiente:** verificar esta cabecera y revisar el PR; concretar la reserva automática
+  y el contrato de recuperación/IPN, sujeto al producto/test package de Izipay para ROSH.
+
 ## Sprint 3 — Intentos persistidos y preflight Render (2026-10-22, America/Lima)
 
 - El propietario confirmó **My Workspace** y autorizó continuar. Se precisó que Next.js
