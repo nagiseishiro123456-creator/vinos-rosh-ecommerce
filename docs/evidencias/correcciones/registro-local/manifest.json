@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-22",
+  "timezone": "America/Lima",
+  "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+  "sourceTree": "2f05a589d0dd387325df58f293c5eb4342be5f88",
+  "ciRunId": 39864647078,
+  "ciRunUrl": "https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39864647078",
+  "browser": "Google Chrome 155.0.8059.39 (Playwright chrome channel)",
+  "serverTests": 194,
+  "browserTests": 76,
+  "files": [
+    {
+      "project": "small-mobile",
+      "path": "test-results/registration-limits-regist-1e654-t-does-not-consume-attempts-small-mobile/auth-01-reglas-contrasena.png",
+      "file": "auth-01-reglas-contrasena.png",
+      "bytes": 154326,
+      "width": 320,
+      "height": 1502,
+      "sha256": "2a8aa3b43d4e15242f77a7716529f527ce9bc684c38c02fefc5a705515bce015",
+      "blobSha": "f89b98151c032121b48d2679df755add0cee1927",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988464,
+      "storedFile": "small-mobile-auth-01-reglas-contrasena.png",
+      "viewport": {
+        "width": 320,
+        "height": 740
+      },
+      "fullPage": true
+    },
+    {
+      "project": "small-mobile",
+      "path": "test-results/registration-limits-regist-94c7b--does-not-create-an-account-small-mobile/auth-02-registro-espera.png",
+      "file": "auth-02-registro-espera.png",
+      "bytes": 161646,
+      "width": 320,
+      "height": 1622,
+      "sha256": "f93b26de6eab0a1ad93e72baf8fa44b4b65d8f309672b0aced348c158aaa1240",
+      "blobSha": "e9ed93cc01a7f144652352f66256493a52e768fc",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988464,
+      "storedFile": "small-mobile-auth-02-registro-espera.png",
+      "viewport": {
+        "width": 320,
+        "height": 740
+      },
+      "fullPage": true
+    },
+    {
+      "project": "tablet",
+      "path": "test-results/registration-limits-regist-1e654-t-does-not-consume-attempts-tablet/auth-01-reglas-contrasena.png",
+      "file": "auth-01-reglas-contrasena.png",
+      "bytes": 219663,
+      "width": 768,
+      "height": 1163,
+      "sha256": "0808519d3e6bbe1cca8cd06f17a29c004515457948d500a496d4e3ebcb79232d",
+      "blobSha": "7d80a012f2a15709e7a0ad289cff5858594078ef",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988500,
+      "storedFile": "tablet-auth-01-reglas-contrasena.png",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "fullPage": true
+    },
+    {
+      "project": "tablet",
+      "path": "test-results/registration-limits-regist-94c7b--does-not-create-an-account-tablet/auth-02-registro-espera.png",
+      "file": "auth-02-registro-espera.png",
+      "bytes": 225097,
+      "width": 768,
+      "height": 1243,
+      "sha256": "ef30e2ac0c54d5820f49b26d2bc8ec74f35f51cb462dfcc65d535047a907aaf0",
+      "blobSha": "7b0540f08d746484c52795af19cdd224fef8e930",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988500,
+      "storedFile": "tablet-auth-02-registro-espera.png",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "fullPage": true
+    },
+    {
+      "project": "desktop",
+      "path": "test-results/registration-limits-regist-1e654-t-does-not-consume-attempts-desktop/auth-01-reglas-contrasena.png",
+      "file": "auth-01-reglas-contrasena.png",
+      "bytes": 356607,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ba5d9abd90fae6df8be0d45002a0dd0c50f0e8137e938fc6934af5477351c472",
+      "blobSha": "541ebec4da8b1242f104e96d781ebd91cdb96434",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988552,
+      "storedFile": "desktop-auth-01-reglas-contrasena.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true
+    },
+    {
+      "project": "desktop",
+      "path": "test-results/registration-limits-regist-94c7b--does-not-create-an-account-desktop/auth-02-registro-espera.png",
+      "file": "auth-02-registro-espera.png",
+      "bytes": 364206,
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7a5488728843ba4a30fc67e3f1926dc19dd0fc2be4b629322fc717c6770bf309",
+      "blobSha": "a34ed34fa889ffd15d7aa0fa9ad35b9eb7d06601",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988552,
+      "storedFile": "desktop-auth-02-registro-espera.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true
+    },
+    {
+      "project": "mobile",
+      "path": "test-results/registration-limits-regist-1e654-t-does-not-consume-attempts-mobile/auth-01-reglas-contrasena.png",
+      "file": "auth-01-reglas-contrasena.png",
+      "bytes": 163694,
+      "width": 390,
+      "height": 1405,
+      "sha256": "5456b0a1f1f1cdac9ecc687b4906bdaacd6e2b4634d7827cd55e1b8dffb7063e",
+      "blobSha": "a68ef0c3d989b39014c5ce1ee2ac27676bbb43f6",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988576,
+      "storedFile": "mobile-auth-01-reglas-contrasena.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true
+    },
+    {
+      "project": "mobile",
+      "path": "test-results/registration-limits-regist-94c7b--does-not-create-an-account-mobile/auth-02-registro-espera.png",
+      "file": "auth-02-registro-espera.png",
+      "bytes": 171533,
+      "width": 390,
+      "height": 1484,
+      "sha256": "552071a1f5992c7ebaef2509b7d4c47afc594bbbe04e9731d2fb90ec63ee8eca",
+      "blobSha": "5e5401601868dda8960f0a8cb1de2a59e6da2ff4",
+      "sourceCommit": "715327c289853fb688c101e825f68f9ed57fe99b",
+      "ciSha": "49a52d1c4e873decb2f0add71910c6648626d4e1",
+      "runId": "39864647078",
+      "jobId": 120126988576,
+      "storedFile": "mobile-auth-02-registro-espera.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true
+    }
+  ]
+}
