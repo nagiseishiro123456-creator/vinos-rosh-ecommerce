@@ -1,5 +1,29 @@
 # Punto de avance
 
+## Sprint 3 — Refinamiento de pagos iniciado (2026-10-21, America/Lima)
+
+- El propietario pide comprobar cómo abrir el carrito y avanzar a pagos, investigando
+  «ezepay»/Yape antes de elegir. Base remota y local: `83c8e5774af42d8b7c90dfd3135385faf3c8d0d9`.
+- [Guía de carrito](guia-carrito.md): bolsa arriba a la derecha, acceso móvil, `/carrito`,
+  cuenta para checkout y diferencia entre código integrado y versión desplegada.
+  La observación de descubrimiento queda abierta para aceptación comercial.
+- [Investigación](investigacion/pagos-yape-izipay.md): estado financiero real, tres comercios
+  consultados, documentación oficial, alternativas y límites comerciales. Izipay es una
+  hipótesis sobre el nombre; se necesita confirmar marca/producto y disponibilidad.
+- [Plan Sprint 3](sprints/fase-2-sprint-03.md): seis historias, 26 SP preliminares,
+  dependencias, DoD y cuándo documentar. [ADR 0009 propuesto](decisions/0009-pagos-automaticos.md)
+  y [QA del refinamiento](testing/s3-01-refinamiento.md) preparados.
+- S3-01 tiene investigación preparada, no elección terminada. S3-02–S3-06 pendientes;
+  cobro automático, conciliación de proveedor, avisos de pago y emisión fiscal no se
+  presentan como implementados. No hay cambios de ejecución, esquema o dependencias.
+- Baseline: [CI final de main 39674983346](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39674983346)
+  aprobada sobre `83c8e57…`, 117 servidor/66 navegador; resultados heredados de Sprint 2,
+  no prueba de integración de pagos. La CI de la propuesta se registra en su PR.
+- Este trabajo no consulta ni modifica Render/BD remota, no contacta proveedores y no
+  ejecuta pagos. [Política de costos](cost-policy.md) vigente.
+- **Siguiente:** confirmar si es Izipay, producto/medios habilitados y condiciones;
+  cerrar la decisión S3-01 y concretar S3-02 con sandbox del producto disponible.
+
 ## Cierre técnico — Sprint 2 integrado (2026-10-21, America/Lima)
 
 - S2-01–S2-06 revisadas e integradas en main mediante **PR #9 → #14**, conservando historial.

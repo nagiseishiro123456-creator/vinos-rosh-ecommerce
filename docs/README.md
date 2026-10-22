@@ -32,6 +32,11 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 25. [Revisión e integración S2-06](testing/revision-integracion-sprint-02.md) · [Cierre técnico Sprint 2](sprints/cierre-sprint-02.md) · [Seis capturas nuevas](evidencias/sprint-02/integracion/README.md)
 
+26. [Cómo abrir el carrito y comprobar la versión](guia-carrito.md)
+27. [Sprint 3: propuesta, historias y documentación](sprints/fase-2-sprint-03.md)
+28. [Investigación: Yape, Izipay, sitios de referencia y costos](investigacion/pagos-yape-izipay.md)
+29. [ADR 0009 propuesto: pago automático](decisions/0009-pagos-automaticos.md) · [QA del refinamiento S3-01](testing/s3-01-refinamiento.md)
+
 ## Cuándo documentar
 
 | Momento | Registro |

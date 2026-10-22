@@ -42,6 +42,26 @@ Cuenta obligatoria antes del checkout; stock solo se reserva al confirmar, no al
 S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 [QA de S2-02](testing/s2-02-ux-movil.md), con CI oficial aprobada y cierre técnico documentado.
 
+## Sprint 3 — Pagos y comunicación (26 SP propuestos, sin compromiso de capacidad)
+
+[Plan, aceptación y secuencia documental](sprints/fase-2-sprint-03.md) ·
+[Investigación y alternativas](investigacion/pagos-yape-izipay.md) ·
+[Guía de acceso al carrito](guia-carrito.md).
+
+| ID | Historia | SP | Estado |
+| --- | --- | ---: | --- |
+| S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Investigación y guía preparadas; elección/aceptación pendientes. |
+| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Pendiente de elección y contrato. |
+| S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
+| S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Pendiente. |
+| S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Pendiente. |
+| S3-06 | Revisar, comprobar regresión, integrar y demostrar el incremento. | 2 | Pendiente. |
+
+«ezepay» se investiga como posible Izipay; no se da por elegido ni habilitado.
+Antes del adaptador: aceptar [ADR 0009](decisions/0009-pagos-automaticos.md) con el contrato
+del producto real. La observación del propietario sobre encontrar el carrito mantiene
+abierta la aceptación UX. No hay nueva implementación, activación ni despliegue en S3-01.
+
 ## Secuencia posterior, sujeta a refinamiento
 
 | Sprint | Objetivo | Documentación antes / durante / al cerrar |
