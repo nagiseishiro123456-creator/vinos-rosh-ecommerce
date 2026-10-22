@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import test, { after, type TestContext } from "node:test";
+import test, { after } from "node:test";
 
 import { prisma } from "../src/lib/prisma";
 import { checkoutFixture } from "./helpers/checkout";
+import { automaticCheckoutFixture as automaticFixture, automaticSandbox as sandbox } from "./helpers/automatic-checkout";
 import { reserveManualOrder } from "../src/modules/orders/manual-order-service";
 import { cancelUnpaidReservation } from "../src/modules/orders/reservation-service";
 import {
@@ -11,23 +12,8 @@ import {
   recordMicuentawebAttemptUncertain, recordMicuentawebTokenReady,
 } from "../src/modules/payments/izipay/attempt-service";
 
-// Synthetic credentials used only to pass a local guard; these tests never call Izipay.
-const sandbox = {
-  PAYMENTS_IZIPAY_ENABLED: "true", IZIPAY_INTEGRATION: "MICUENTAWEB_V4", IZIPAY_MODE: "TEST",
-  IZIPAY_MCW_MERCHANT_ID: "qa-merchant", IZIPAY_MCW_REST_TEST_PASSWORD: "qa-not-a-credential",
-  IZIPAY_MCW_PUBLIC_TEST_KEY: "qa-not-a-public-key",
-};
 process.env.NEXTAUTH_SECRET ||= "integration-only-signing-secret-at-least-32-chars";
 after(() => prisma.$disconnect());
-
-async function automaticFixture(t: TestContext) {
-  const f = await checkoutFixture(t);
-  const order = await reserveManualOrder(f.user.id, f.input);
-  // Isolated QA only: retain a real reservation while modelling a future automatic order.
-  // Production service explicitly rejects a manual payment; it never performs this deletion.
-  await prisma.payment.deleteMany({ where: { orderId: order.id } });
-  return { ...f, order };
-}
 
 const unavailable = (e: unknown) => e instanceof PaymentAttemptError && e.code === "ORDER_UNAVAILABLE";
 

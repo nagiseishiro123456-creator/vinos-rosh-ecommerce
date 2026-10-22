@@ -76,14 +76,16 @@ el stock liberado y la identidad del intento. La reserva puede vencer después d
 última comprobación o después de entregar el token: S3-03 aún debe resolver cualquier
 ingreso tardío sin reabrir órdenes ni volver a reservar. Esta ruta no confirma pagos.
 
-El flujo actual de pedidos manuales conserva su circuito. La ruta los rechaza mientras
-tengan un pago existente; no borra registros ni cambia de método. La creación de una
-reserva automática elegible sigue pendiente. Los tests modelan esa forma exclusivamente
-en una BD aislada; no existe un botón de tarjeta/Yape nuevo en el checkout actual.
+El flujo manual conserva su circuito. La elegibilidad exige ahora el marcador explícito
+MICUENTAWEB_V4 y ningún pago existente; no deduce el método de la ausencia de pagos.
+La [reserva automática interna](reserva-izipay.md) ya crea ese snapshot con el núcleo
+ACID compartido. Los tests usan ese servicio real en BD aislada; no eliminan pagos
+manuales. Todavía no hay punto HTTP de reserva automática ni botón de tarjeta/Yape.
 
-Pendientes antes de activar: producto/test package de ROSH, reserva automática, contrato
-de recuperación/consulta, SDK y medios habilitados, IPN persistida y verificada, pruebas
-externas de sandbox y aceptación. Se mantienen las 13 migraciones de la base, sin una nueva.
+Pendientes antes de activar: producto/test package de ROSH, llamador autenticado de la
+reserva, contrato de recuperación/consulta, SDK y medios habilitados, IPN persistida y
+verificada, pruebas externas y aceptación. Esta ruta se añadió sin migración; el
+incremento posterior de reserva añade la migración 14. [QA](../testing/s3-02-reserva.md).
 No se modificó ni desplegó Render en este incremento.
 
 ## Fuentes y evidencia

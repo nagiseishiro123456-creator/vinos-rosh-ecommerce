@@ -25,12 +25,15 @@ La tienda sigue siendo un entorno de validación; no hay lanzamiento comercial e
 Para usar la compra: [cómo abrir el carrito](docs/guia-carrito.md).
 Sprint 3 en refinamiento: [plan e historias](docs/sprints/fase-2-sprint-03.md) y
 [comparación Yape/Izipay](docs/investigacion/pagos-yape-izipay.md).
-La pasarela automática todavía no está implementada ni el proveedor elegido.
+La integración automática sigue parcial; Izipay es el proveedor solicitado para evaluar,
+con producto web y habilitación comercial pendientes.
 Izipay se evalúa para sandbox: [guía técnica y base aislada de pruebas](docs/integraciones/izipay-sandbox.md).
 Ese código preparatorio está desactivado y no se conecta todavía al checkout.
 [Intentos persistentes y límites](docs/integraciones/intentos-izipay.md) ·
 [Estado verificado y actualización pendiente de Render](docs/render-free-preview.md).
-[Inicio de pago protegido, aún desactivado](docs/integraciones/inicio-izipay.md).
+[Inicio de pago protegido, aún desactivado](docs/integraciones/inicio-izipay.md) ·
+[Reserva automática interna TEST](docs/integraciones/reserva-izipay.md) ·
+[QA de reserva y recuperación](docs/testing/s3-02-reserva.md).
 
 Ya existe:
 - estructura Next.js
@@ -91,7 +94,7 @@ npm run prisma:studio
 - Los pagos manuales y Culqi comparten una abstracción `Payment`.
 
 ## Modelo principal
-`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `CartImport`, `CartMutation`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `OrderEvent`, `PaymentReconciliation`, `Review`.
+`User`, `PasswordResetToken`, `Address`, `Category`, `Product`, `ProductImage`, `Cart`, `CartItem`, `CartImport`, `CartMutation`, `ShippingZone`, `Order`, `OrderItem`, `Payment`, `PaymentAttempt`, `OrderEvent`, `PaymentReconciliation`, `Review`.
 
 ## Preview gratuito en Render
 
@@ -120,8 +123,9 @@ estado compartido entre panel/página/contador y compra móvil accesible.
 186 anteriores. [Cierre técnico y continuidad](docs/sprints/cierre-sprint-02.md).
 
 El Sprint 3 tiene una propuesta documentada de pagos automáticos/notificaciones.
-El siguiente paso es confirmar proveedor, producto y disponibilidad para ROSH antes
-de implementar el adaptador. El entorno comercial y la aceptación funcional/UAT siguen pendientes.
+Ya prepara transporte, intentos, inicio protegido y reserva automática internos,
+sin conectar SDK ni confirmar pagos. Siguiente: confirmar producto/test package,
+recuperación y formulario oficial, y después IPN en S3-03. La aceptación comercial/UAT sigue pendiente.
 
 ## Verificación y evidencias
 
@@ -129,6 +133,7 @@ La instalación estándar usa `npm ci --include=dev` y el lockfile versionado.
 Para preparar otra plataforma y ejecutar pruebas, seguir [la guía reproducible](docs/desarrollo-reproducible.md).
 CI valida migraciones en PostgreSQL 16, pruebas existentes, tipos, lint y build.
 También comprueba `/api/health` y genera capturas desktop/móvil con Playwright en una BD aislada.
-CI también comprueba recuperación de identidades del carrito después de pg_dump/psql.
+CI también comprueba recuperación de identidades del carrito y de orden/intento
+automáticos después de pg_dump/psql, con datos sintéticos y sin red del proveedor.
 Resultados actuales y límites en [QA final del Sprint 2](docs/testing/revision-integracion-sprint-02.md);
 [QA histórico del Sprint 1](docs/testing/sprint-01.md) conservado.

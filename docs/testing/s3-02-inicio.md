@@ -1,5 +1,9 @@
 # S3-02 — QA de inicio protegido y coordinación del token
 
+Continuidad: el incremento de [reserva interna](s3-02-reserva.md) sustituye las fixtures
+manuales sin pago por reservas automáticas reales. El resto de esta ficha conserva
+el alcance y los resultados históricos del PR #19.
+
 Fecha: 2026-10-22 (America/Lima). Base: PR #18, `6d81d539c782a2d63cae64ae7312cff1b757f891`.
 No se usaron credenciales de Izipay ni se hicieron solicitudes a su sandbox.
 

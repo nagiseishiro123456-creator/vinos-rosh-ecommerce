@@ -17,10 +17,11 @@ servidor y el ID de orden. Bloquea la fila de esa orden con `FOR UPDATE`, compru
 propiedad y recupera primero el intento existente. La transacción no hace solicitudes
 externas. La restricción única por orden refuerza que solo haya un creador.
 
-Para un intento nuevo exige reserva vigente, stock sin liberar, estado pendiente y
-ningún pago existente. Los pedidos manuales y Culqi conservan su circuito: este
-servicio no los convierte ni elimina sus registros. La creación de una reserva
-automática elegible es trabajo pendiente antes de conectar esa ruta al checkout.
+Para un intento nuevo exige marcador MICUENTAWEB_V4, reserva vigente, stock sin liberar,
+estado pendiente y ningún pago existente. Los pedidos manuales/Culqi conservan su
+circuito; no se convierten ni se eliminan sus registros. La
+[reserva automática interna](reserva-izipay.md) ya crea la orden elegible; su llamador
+autenticado y conexión al checkout siguen pendientes. Los históricos NULL no se infieren.
 
 El total procede de `Order.total`, no del precio actual del catálogo ni del navegador.
 La referencia identifica el intento en el proveedor; no contiene datos personales.
@@ -61,8 +62,8 @@ Las funciones internas de finalización nunca deben exponerse con parámetros de
 
 1. Confirmar familia comercial, test keys y medios habilitados. El flag TEST no convierte
    una contraseña real en una credencial de prueba.
-2. Crear/reservar órdenes automáticas sin cambiar los pedidos manuales antes de conectar
-   el checkout. La coordinación protegida ya revalida antes/después de la llamada,
+2. Conectar el servicio interno de reserva automática mediante un llamador autenticado,
+   sin cambiar pedidos manuales. La coordinación revalida antes/después de la llamada,
    fuera de transacciones de red; aún requiere aceptación del contrato externo.
 3. Resolver recuperación de INITIATING/UNCERTAIN y pérdida de token: el hash no permite
    reabrir el formulario; no se hará otra solicitud sin contrato verificado.
