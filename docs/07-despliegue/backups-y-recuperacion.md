@@ -53,3 +53,37 @@ genera una unión/comando con los servicios reales, restaura y comprueba replay 
 conflicto de otra huella y una edición nueva. El SQL temporal no se publica como artefacto.
 Consultar [resultados y límites](../testing/revision-integracion-sprint-02.md).
 Este contrato no sustituye la restauración operativa del entorno real antes del lanzamiento.
+
+## Render PostgreSQL 16: exportación externa
+
+El plan Free no incluye PITR ni exportaciones administradas según la documentación
+oficial verificada el 2026-10-22. Se necesita un dump propio antes de migrar la preview.
+Este procedimiento está preparado, **no ejecutado** sobre la base remota.
+
+Con herramientas cliente PostgreSQL 16 y una conexión externa con TLS configurada
+privadamente en `ROSH_RENDER_DATABASE_URL`, elegir un destino seguro fuera de Git para
+`ROSH_RENDER_BACKUP_PATH`. No pegar la URL, contraseña ni contenido del dump en el chat.
+
+```bash
+pg_dump --dbname="$ROSH_RENDER_DATABASE_URL" \
+  --format=custom --no-owner --no-privileges \
+  --file="$ROSH_RENDER_BACKUP_PATH"
+pg_restore --list "$ROSH_RENDER_BACKUP_PATH"
+```
+
+`pg_restore --list` comprueba legibilidad del archivo, no demuestra que se pueda restaurar.
+Validar la recuperación en una base **vacía y aislada**, con su URL privada en otra
+variable `ROSH_RESTORE_DATABASE_URL`, y nunca contra el origen:
+
+```bash
+pg_restore --exit-on-error --no-owner --no-privileges \
+  --dbname="$ROSH_RESTORE_DATABASE_URL" "$ROSH_RENDER_BACKUP_PATH"
+```
+
+Comparar migraciones completas, pedidos/pagos/stock/carritos y restricciones entre
+origen y copia. Guardar fecha, SHA-256 y resultado sin datos sensibles en el registro
+de despliegue; conservar el archivo en almacenamiento privado persistente. No subirlo
+a GitHub ni a artefactos públicos de CI. No crear recursos de pago sin decisión explícita.
+
+Preflight y pasos de la actualización pendiente en [preview Render](../render-free-preview.md).
+Fuentes: [backups](https://render.com/docs/postgresql-backups) y [Free Postgres](https://render.com/docs/free#free-postgres).

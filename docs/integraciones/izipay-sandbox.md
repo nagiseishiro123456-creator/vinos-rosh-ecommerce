@@ -2,8 +2,9 @@
 
 Fecha: 2026-10-22 (America/Lima).
 Alcance de esta entrega: evaluación del requerimiento y primera base técnica aislada.
-No hay ruta de pagos activa, persistencia de intentos nueva, cambio de estado bancario
-ni checkout de proveedor incorporado. S3-01 y S3-02 continúan parcialmente pendientes.
+No hay ruta de pagos activa, cambio de estado bancario ni checkout de proveedor
+incorporado. Un incremento posterior añade [intentos persistentes aislados](intentos-izipay.md)
+en rama. S3-01 y S3-02 continúan parcialmente pendientes.
 
 ## Recomendación de arquitectura
 
@@ -97,6 +98,10 @@ const snapshot = {
 ```
 
 ### Ruta de inicio pendiente de S3-02
+
+Incremento posterior: [dominio persistente de intentos](intentos-izipay.md), con guardas,
+unicidad por orden y estados de preparación. Está aislado y no crea todavía una
+reserva automática ni implementa recuperación en el proveedor; ver sus límites antes de conectarlo.
 
 La futura `POST /api/payment/initiate` será un Route Handler Node.js. Recibirá una
 identidad de orden y la intención estable; exigirá sesión y comprobación de origen

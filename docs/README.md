@@ -39,6 +39,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 30. [Guía del desarrollador: Izipay sandbox y familias de API](integraciones/izipay-sandbox.md) · [QA de la base aislada S3-02](testing/s3-02-base-izipay.md)
 
+31. [Intentos persistentes de sandbox y límites](integraciones/intentos-izipay.md) · [QA PostgreSQL S3-02](testing/s3-02-intentos.md)
+
 ## Cuándo documentar
 
 | Momento | Registro |

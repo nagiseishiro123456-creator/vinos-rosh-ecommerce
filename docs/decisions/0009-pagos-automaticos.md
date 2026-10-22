@@ -10,6 +10,11 @@ Se conserva Next.js/Route Handlers como arquitectura de aplicación; Express que
 como posible adaptador independiente, sin añadir otro servidor al proyecto.
 Ver [contrato, código y límites](../integraciones/izipay-sandbox.md).
 
+Incremento posterior: [preparación persistente de intentos](../integraciones/intentos-izipay.md)
+en rama, con una migración aditiva. Unicidad por orden, valores de servidor y estados
+INITIATING/TOKEN_READY/UNCERTAIN; todavía sin ruta, SDK, confirmación de pago o cambio
+de pedidos manuales. El ADR de integración comercial sigue propuesto.
+
 ## Contexto y alternativas
 
 La base integrada calcula importes exactos y reserva stock una vez antes de presentar

@@ -33,7 +33,7 @@ async function main() {
   const context = JSON.parse(readFileSync(contextPath!, "utf8")) as Context;
   const { userId, productId, importId, operationId } = context;
   const migrations = await prisma.$queryRaw<{ count: bigint }[]>`SELECT count(*)::bigint AS count FROM "_prisma_migrations" WHERE finished_at IS NOT NULL`;
-  assert.equal(Number(migrations[0].count), 12);
+  assert.equal(Number(migrations[0].count), 13);
   assert.equal((await prisma.cartImport.findFirstOrThrow({ where: { userId } })).requestHash, context.importHash);
   assert.equal((await prisma.cartMutation.findFirstOrThrow({ where: { userId } })).requestHash, context.commandHash);
   const replayImport = await mergeGuestCart(userId, { expectedUserId: userId, importId, items: [{ productId, quantity: 2 }] });
@@ -53,7 +53,7 @@ async function main() {
   assert.equal(await prisma.cartMutation.count({ where: { userId } }), 2);
   assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: productId } })).stock, 10);
   assert.equal(await prisma.order.count({ where: { userId } }), 0);
-  console.log("S206_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations: 12, imports: 1, commands: 2,
+  console.log("S206_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations: 13, imports: 1, commands: 2,
     restoredQuantity: 4, restoredRevision: 2, finalQuantity: 3, finalRevision: 3, stock: 10, orders: 0 }));
 }
 main().finally(() => prisma.$disconnect()).catch((error) => { console.error(error); process.exitCode = 1; });

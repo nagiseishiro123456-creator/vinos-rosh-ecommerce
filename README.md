@@ -28,6 +28,8 @@ Sprint 3 en refinamiento: [plan e historias](docs/sprints/fase-2-sprint-03.md) y
 La pasarela automática todavía no está implementada ni el proveedor elegido.
 Izipay se evalúa para sandbox: [guía técnica y base aislada de pruebas](docs/integraciones/izipay-sandbox.md).
 Ese código preparatorio está desactivado y no se conecta todavía al checkout.
+[Intentos persistentes y límites](docs/integraciones/intentos-izipay.md) ·
+[Estado verificado y actualización pendiente de Render](docs/render-free-preview.md).
 
 Ya existe:
 - estructura Next.js

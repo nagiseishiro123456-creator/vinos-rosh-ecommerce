@@ -1,5 +1,32 @@
 # Punto de avance
 
+## Sprint 3 — Intentos persistidos y preflight Render (2026-10-22, America/Lima)
+
+- El propietario confirmó **My Workspace** y autorizó continuar. Se precisó que Next.js
+  solicita el formToken, mientras los datos sensibles del formulario oficial viajan
+  al proveedor; esto no elimina automáticamente las obligaciones de cumplimiento.
+- Render consultado con workspace explícito: preview y PostgreSQL activos. El último
+  deploy live sigue en `b4831ea…` (Fase 1), con 7 migraciones frente a 12 de main.
+  Hay 10 pedidos/10 pagos conservados. [Preflight y secuencia operativa](render-free-preview.md).
+  El build efectivo sigue usando npm install; no se alteró configuración ni BD remota.
+- Falta dump/restore completo y sincronizar build antes de actualizar preview. El conector
+  no permite exportar ni editar ese build; [procedimiento concreto](07-despliegue/backups-y-recuperacion.md#render-postgresql-16-exportación-externa).
+  No se repite la confirmación de workspace, que ya quedó resuelta.
+- Sobre PR #17 se añade una preparación aislada de `PaymentAttempt`: importe/referencia
+  de servidor, una identidad por orden, guardas de propietario/reserva y rechazo de
+  pedidos con pago manual. Inicios paralelos recuperan el mismo intento; token/resultado
+  incierto compiten por una transición. Sin PAID, otro descuento de stock ni solicitud externa.
+- [Contrato y límites de recuperación](integraciones/intentos-izipay.md), migración 13
+  aditiva y nueve casos PostgreSQL más un contrato SQL. [QA](testing/s3-02-intentos.md)
+  y resultado exacto de cabecera en el PR; S3-02 sigue parcial y la pasarela desactivada.
+- El primer CI de PR #17 aprobó 132 servidor y checks técnicos, pero agotó tiempo en
+  navegador después de una descarga Ubuntu de más de 16 minutos. Se pidió reintentar
+  los jobs cancelados; no se lo declara totalmente aprobado mientras falte ese resultado.
+- No cambió UI ni se inventan capturas de Izipay. Se conservan las 192 evidencias previas.
+- **Siguiente:** obtener resultado de CI de este incremento y revisar el PR; resolver
+  canal de backup/configuración para publicar main en preview. Identificar producto/test
+  package de Izipay antes de conectar reserva automática, endpoint/SDK e IPN.
+
 ## Sprint 3 — Primera preparación de Izipay (2026-10-22, America/Lima)
 
 - El propietario solicita avanzar por historias y evaluar un ejemplo Express con

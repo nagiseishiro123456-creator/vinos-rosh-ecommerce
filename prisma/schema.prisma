@@ -39,6 +39,13 @@ enum PaymentProvider {
   TRANSFER_MANUAL
 }
 
+// Preparation states, not evidence of an approved charge.
+enum PaymentAttemptState {
+  INITIATING
+  TOKEN_READY
+  UNCERTAIN
+}
+
 enum ReceiptType {
   BOLETA
   FACTURA
@@ -316,6 +323,7 @@ model Order {
   address            Address?            @relation(fields: [addressId], references: [id], onDelete: SetNull)
   items              OrderItem[]
   payments           Payment[]
+  paymentAttempt     PaymentAttempt?
   reviews            Review[]
   inventoryMovements InventoryMovement[]
   events             OrderEvent[]
@@ -377,6 +385,28 @@ model Payment {
   @@index([provider])
   @@index([provider, externalReference])
   @@index([reviewedById])
+}
+
+// One attempt per order until the provider's recovery/retry contract is verified.
+// Tokens, credentials and provider response bodies must never be stored here.
+model PaymentAttempt {
+  id                String              @id @default(cuid())
+  orderId           String              @unique
+  providerReference String              @unique @db.VarChar(64)
+  integration       String              @db.VarChar(32)
+  mode              String              @db.VarChar(4)
+  amountMinor       BigInt
+  currency          String              @db.Char(3)
+  state             PaymentAttemptState @default(INITIATING)
+  tokenHash         String?             @db.Char(64)
+  tokenReadyAt      DateTime?
+  uncertainAt       DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([state, createdAt])
 }
 
 model OrderEvent {
