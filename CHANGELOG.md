@@ -1,5 +1,11 @@
 # Changelog
 
+## Fase 2 — Sprint 3 / S3-02 (preparación aislada, 2026-10-22)
+
+- Guía del desarrollador para corregir familia/API, importes, formulario del proveedor e IPN.
+- Núcleo Mi Cuenta Web V4 desactivado: céntimos exactos, transporte Basic Auth/timeout/errores sanitizados y verificación HMAC en tiempo constante; entrada exclusiva de servidor.
+- Quince pruebas deterministas sin red real. Sin nuevas dependencias, migraciones, rutas públicas ni cambios de pagos/stock; integración externa y checkout pendientes.
+
 ## Fase 2 — Sprint 3 / S3-01 (refinamiento documental, 2026-10-21)
 
 - Guía de acceso al carrito y distinción entre integración en GitHub y despliegue.

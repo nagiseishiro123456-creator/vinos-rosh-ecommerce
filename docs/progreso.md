@@ -1,5 +1,28 @@
 # Punto de avance
 
+## Sprint 3 — Primera preparación de Izipay (2026-10-22, America/Lima)
+
+- El propietario solicita avanzar por historias y evaluar un ejemplo Express con
+  `formToken`, Yape y webhook. [Evaluación y guía técnica](integraciones/izipay-sandbox.md).
+- Se conserva Next.js/Route Handlers. Se distingue Mi Cuenta Web V4 de Punto Web SDK;
+  no se usan totales del navegador ni el dominio Micropayment como si fuera Izipay.
+- Base `beb8698f0f1c7d599ea840d5a7ead51b29e72b3b` / PR #16. Preparación Mi Cuenta Web:
+  céntimos exactos, configuración TEST desactivada, Basic Auth con destino fijo,
+  timeout/límite de respuesta, errores sanitizados y verificación HMAC de IPN.
+  Entrada `server-only`; no hay endpoint público ni conexión al checkout.
+- Quince pruebas aisladas aprobadas localmente con transportes inyectados sin red real;
+  Node 24.19.0/npm 11.9.0 locales, toolchain canónico de CI 22.23.3/11.9.0.
+  [QA, comprobaciones y límites](testing/s3-02-base-izipay.md); checks de cabecera en su PR.
+- S3-01 mantiene pendiente producto/condiciones y aceptación. S3-02 mantiene pendientes
+  intentos persistidos, rutas/UI y sandbox externo. S3-03 no cambia pedidos ni stock.
+  No hay nuevas dependencias/migraciones ni capturas de una pasarela inexistente.
+- Render: se consultó la selección y la lista de workspaces. El conector no conserva
+  selección y exige confirmar el espacio; devuelve `My Workspace`. No se seleccionó
+  automáticamente ni se accedió a servicios, BD, secretos o despliegues.
+- **Siguiente:** confirmar el workspace para actualizar la preview; identificar con
+  Izipay el producto/paquete de test disponible y completar el servicio de intentos
+  de S3-02 antes de activar la conexión del checkout. Política de costos vigente.
+
 ## Sprint 3 — Refinamiento de pagos iniciado (2026-10-21, America/Lima)
 
 - El propietario pide comprobar cómo abrir el carrito y avanzar a pagos, investigando
