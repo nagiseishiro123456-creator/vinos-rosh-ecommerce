@@ -71,4 +71,6 @@ auténtica, persistencia de eventos y carreras/pagos tardíos antes de activar c
 Yape dependerá de la familia y habilitación del comercio; no se simula un formulario propio.
 
 El [POST de inicio](inicio-izipay.md) mantiene ambos flags desactivados por defecto.
-Este incremento no cambia Motion/UI, dependencias ni Render. [QA y límites](../testing/s3-02-reserva.md).
+La CI detectó un aviso crítico en Next.js 16.3.8 antes de ejecutar pruebas. Se fija
+Next.js y eslint-config-next en 16.4.2 y se regenera el lockfile; la auditoría no se
+omite. No hay cambios de Motion/UI o Render. [QA y límites](../testing/s3-02-reserva.md).

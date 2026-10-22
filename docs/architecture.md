@@ -11,7 +11,9 @@ manual, con entrada estricta y marcador explícito en la migración 14 (NULL his
 Congela importes, reserva una vez y consume el snapshot del carrito; no crea Payment
 ni inicia red. No hay nueva ruta de reserva ni conexión UI. El intento exige el marcador.
 El plazo TEST de 15 minutos es política provisional local, no TTL del proveedor.
-No confirma pagos. Producto/test keys, punto de entrada autenticado, recuperación,
+La auditoría inicial requiere actualizar Next.js y eslint-config-next de 16.3.8 a
+16.4.2 con lockfile regenerado; no se omite el check. No confirma pagos.
+Producto/test keys, punto de entrada autenticado, recuperación,
 SDK e IPN siguen pendientes. [ADR](decisions/0010-reserva-automatica-sandbox.md) y
 [QA](testing/s3-02-reserva.md).
 

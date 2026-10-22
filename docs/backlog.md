@@ -70,6 +70,12 @@ Se añaden [inicio protegido](integraciones/inicio-izipay.md) y
 [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) y [QA](testing/s3-02-reserva.md).
 No se contabiliza como historia terminada ni como integración externa comprobada.
 
+Seguimiento técnico antes de producción: la actualización de Next.js/eslint-config-next
+16.4.2 elimina el hallazgo crítico de producción. Queda el aviso de braces 3.0.3 en
+la cadena de lint (cinco entradas high propagadas, sin parche publicado al verificar).
+Revisar release/alternativa compatible y repetir auditoría completa; no confundir con
+cinco fallos independientes del checkout. [Evidencia y límites](testing/s3-02-reserva.md).
+
 ## Secuencia posterior, sujeta a refinamiento
 
 | Sprint | Objetivo | Documentación antes / durante / al cerrar |

@@ -18,7 +18,12 @@
   Las 192 capturas históricas se conservan; no hay UI nueva que fotografiar.
 - S3-02 sigue parcial: servicio interno sin nueva ruta/acción de reserva ni SDK, con
   inicio desactivado. S3-03/IPN no se ha implementado. Producto/test keys, recuperación
-  y prueba externa pendientes. Sin cambios en dependencias, main o Render.
+  y prueba externa pendientes. Main y Render no cambian.
+- El primer CI de esta rama (39847337080) se detuvo en auditoría antes de migrar/probar:
+  Next.js 16.3.8 apareció afectado por avisos críticos recién incorporados al feed.
+  Se fijan Next.js/eslint-config-next 16.4.2 y lockfile actualizado; la nueva cabecera
+  debe repetir todos los checks. Auditoría local de producción 0 hallazgos; aviso
+  transitivo de braces en lint registrado en backlog. [Fuentes y alcance](testing/s3-02-reserva.md).
 - **Siguiente:** revisar este incremento; confirmar producto/paquete de pruebas y
   contrato de recuperación; conectar reserva autenticada y formulario oficial, y
   preparar la IPN transaccional con tratamiento de pagos tardíos. No activar cobros aún.
