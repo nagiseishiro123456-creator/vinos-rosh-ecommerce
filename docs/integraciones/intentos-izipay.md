@@ -3,6 +3,8 @@
 Fecha: 2026-10-22 (America/Lima). Incremento posterior a la preparación del PR #17.
 Alcance: dominio y persistencia aislados. No es un checkout de Izipay ni el cierre de S3-02.
 El producto comercial de ROSH y sus credenciales de pruebas siguen por confirmar.
+El incremento posterior añade [inicio protegido y coordinación del token](inicio-izipay.md),
+desactivado por defecto y todavía sin checkout/SDK.
 
 ## Contrato implementado
 
@@ -18,7 +20,7 @@ externas. La restricción única por orden refuerza que solo haya un creador.
 Para un intento nuevo exige reserva vigente, stock sin liberar, estado pendiente y
 ningún pago existente. Los pedidos manuales y Culqi conservan su circuito: este
 servicio no los convierte ni elimina sus registros. La creación de una reserva
-automática elegible es trabajo pendiente antes de conectar una ruta de inicio.
+automática elegible es trabajo pendiente antes de conectar esa ruta al checkout.
 
 El total procede de `Order.total`, no del precio actual del catálogo ni del navegador.
 La referencia identifica el intento en el proveedor; no contiene datos personales.
@@ -31,7 +33,7 @@ La proyección de metadatos convierte BigInt a string para poder serializarla.
 | TOKEN_READY | Se registró un token del adaptador; no acredita un cobro. | Recupera metadatos; no pide otro token. |
 | UNCERTAIN | Una solicitud o su resultado requiere recuperación. | Recupera identidad y bloquea reinicio automático. |
 
-Solo `created: true` otorga al futuro orquestador permiso para efectuar una solicitud.
+Solo `created: true` otorga al orquestador permiso para efectuar una solicitud.
 Un timeout, caída o respuesta perdida no caduca ese permiso para entregárselo a otro
 proceso. Si el proceso cae antes de enviar, el intento puede quedar bloqueado aun sin
 solicitud externa: es una limitación deliberada hasta verificar el contrato de consulta
@@ -50,17 +52,18 @@ carritos históricos. La relación con la orden usa el mismo patrón de borrado 
 cascada que los pagos existentes; la retención operativa debe concretarse antes de producción.
 No editar ni borrar intentos para desbloquear reintentos; primero conciliar con el proveedor.
 
-Esta rama no aplica la migración a Render ni configura credenciales. No añade rutas,
-formularios, SDK o llamadas de red. La entrada de servidor usa `server-only`; su futuro
-Route Handler debe comprobar sesión, Origin/CSRF según el mecanismo y límites de tráfico.
+Esta preparación de persistencia no aplica la migración a Render ni configura credenciales.
+El [incremento de inicio](inicio-izipay.md) añade una ruta desactivada con sesión, origen
+y límites de tráfico. No incorpora un formulario/SDK ni ejecuta llamadas reales en QA.
 Las funciones internas de finalización nunca deben exponerse con parámetros del navegador.
 
 ## Pendientes antes de activar
 
 1. Confirmar familia comercial, test keys y medios habilitados. El flag TEST no convierte
    una contraseña real en una credencial de prueba.
-2. Crear/reservar órdenes automáticas sin cambiar los pedidos manuales, autenticar el
-   endpoint y conectar adaptador fuera de la transacción. Revalidar la reserva antes de enviar.
+2. Crear/reservar órdenes automáticas sin cambiar los pedidos manuales antes de conectar
+   el checkout. La coordinación protegida ya revalida antes/después de la llamada,
+   fuera de transacciones de red; aún requiere aceptación del contrato externo.
 3. Resolver recuperación de INITIATING/UNCERTAIN y pérdida de token: el hash no permite
    reabrir el formulario; no se hará otra solicitud sin contrato verificado.
 4. Implementar IPN persistida, firma/campos/identidad y efectos atómicos, incluidos pago

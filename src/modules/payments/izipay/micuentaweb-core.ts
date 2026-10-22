@@ -57,7 +57,7 @@ const snapshotSchema = z.object({
 export type PersistedPaymentSnapshot = z.infer<typeof snapshotSchema>;
 
 /**
- * The future order service must load/authorize this snapshot and persist an attempt.
+ * The caller must load/authorize this snapshot and persist an attempt.
  * This function is a transport payload builder, not an HTTP request-body validator.
  */
 export function buildMicuentawebPayment(snapshot: unknown) {
@@ -108,7 +108,7 @@ const tokenResponseSchema = z.object({
 });
 
 /**
- * Disabled preparation adapter, not wired to a public route or the purchase flow.
+ * Adapter used by a separately gated sandbox-initiation route; no live checkout/SDK.
  * TEST is a local guard: Izipay's test credentials determine the upstream environment.
  * A timeout is an uncertain outcome. This function intentionally performs NO retries.
  */

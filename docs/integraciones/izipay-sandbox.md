@@ -2,8 +2,8 @@
 
 Fecha: 2026-10-22 (America/Lima).
 Alcance de esta entrega: evaluación del requerimiento y primera base técnica aislada.
-No hay ruta de pagos activa, cambio de estado bancario ni checkout de proveedor
-incorporado. Un incremento posterior añade [intentos persistentes aislados](intentos-izipay.md)
+La [ruta de inicio preparada](inicio-izipay.md) está desactivada; no hay cambio de
+estado bancario ni checkout/SDK incorporado. Hay [intentos persistentes](intentos-izipay.md)
 en rama. S3-01 y S3-02 continúan parcialmente pendientes.
 
 ## Recomendación de arquitectura
@@ -97,21 +97,22 @@ const snapshot = {
 // 98.20 se convierte a 9820; no se reciben PAN, CVV ni códigos Yape.
 ```
 
-### Ruta de inicio pendiente de S3-02
+### Ruta de inicio preparada, desactivada
 
 Incremento posterior: [dominio persistente de intentos](intentos-izipay.md), con guardas,
 unicidad por orden y estados de preparación. Está aislado y no crea todavía una
 reserva automática ni implementa recuperación en el proveedor; ver sus límites antes de conectarlo.
 
-La futura `POST /api/payment/initiate` será un Route Handler Node.js. Recibirá una
-identidad de orden y la intención estable; exigirá sesión y comprobación de origen
-para esa acción del cliente. El servicio comprobará propiedad, estado/reserva, importe,
-moneda e intentos previos. Persistirá la identidad antes de llamar al proveedor fuera
-de la transacción de BD. Recuperará un intento incierto antes de permitir otro cargo.
+`POST /api/payment/initiate` es un Route Handler Node.js con opt-in separado. Recibe
+identidad de orden y cuenta esperada, exige sesión/origen y comprueba propiedad,
+estado/reserva e intentos previos. Coordina persistencia y llamada fuera de BD;
+un intento incierto bloquea reinicio. La consulta/recuperación en Izipay sigue pendiente.
+Ver [contrato, respuestas y límites](inicio-izipay.md).
 
 El helper no comprueba acceso a BD ni implementa idempotencia distribuida por sí solo;
 el tipo `PersistedPaymentSnapshot` expresa una obligación del servicio que lo invoque.
-Por eso todavía no se conectó a una ruta pública ni a los pedidos manuales existentes.
+Por eso el acceso HTTP usa el servicio persistente y guardas adicionales. La ruta
+permanece desactivada; no se conecta a los pedidos manuales ni al checkout actual.
 
 ## 4. Formulario oficial y Yape
 

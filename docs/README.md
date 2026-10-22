@@ -41,6 +41,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 31. [Intentos persistentes de sandbox y límites](integraciones/intentos-izipay.md) · [QA PostgreSQL S3-02](testing/s3-02-intentos.md)
 
+32. [Inicio protegido y contrato HTTP de sandbox](integraciones/inicio-izipay.md) · [QA de coordinación y ruta S3-02](testing/s3-02-inicio.md)
+
 ## Cuándo documentar
 
 | Momento | Registro |

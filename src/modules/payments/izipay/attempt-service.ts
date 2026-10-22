@@ -4,6 +4,7 @@ import { PaymentAttemptState, Prisma, type PaymentAttempt } from "@prisma/client
 import { prisma } from "@/lib/prisma";
 import {
   buildMicuentawebPayment, readMicuentawebSandboxConfig, type SandboxEnvironment,
+  toMicuentawebMinorUnits,
 } from "@/modules/payments/izipay/micuentaweb-core";
 
 export class PaymentAttemptError extends Error {
@@ -20,6 +21,30 @@ function view(attempt: PaymentAttempt) {
     amountMinor: attempt.amountMinor.toString(), currency: attempt.currency,
     createdAt: attempt.createdAt, tokenReadyAt: attempt.tokenReadyAt, uncertainAt: attempt.uncertainAt,
   };
+}
+
+const eligibilitySelect = {
+  userId: true, status: true, total: true, stockReservedAt: true, reservationExpiresAt: true,
+  stockReleasedAt: true, reservationExpiredAt: true, paidAt: true,
+  payments: { select: { id: true } },
+} as const;
+type EligibleOrder = Prisma.OrderGetPayload<{ select: typeof eligibilitySelect }>;
+function eligible(order: EligibleOrder, now = new Date()) {
+  return order.status === "PENDING_PAYMENT" && !!order.stockReservedAt && order.stockReservedAt <= now
+    && !!order.reservationExpiresAt && order.reservationExpiresAt > now && !order.stockReleasedAt
+    && !order.reservationExpiredAt && !order.paidAt && order.payments.length === 0;
+}
+function current(attempt: PaymentAttempt & { order: EligibleOrder }) {
+  if (attempt.state !== PaymentAttemptState.INITIATING || attempt.integration !== "MICUENTAWEB_V4"
+    || attempt.mode !== "TEST" || attempt.currency !== "PEN" || !eligible(attempt.order)) return false;
+  return BigInt(toMicuentawebMinorUnits(attempt.order.total.toFixed(2))) === attempt.amountMinor;
+}
+
+/** Recheck immediately before network I/O; expiry during/after the call remains possible. */
+export async function canRequestMicuentawebToken(userId: string, attemptId: string) {
+  const attempt = await prisma.paymentAttempt.findUnique({ where: { id: attemptId },
+    include: { order: { select: eligibilitySelect } } });
+  return !!attempt && attempt.order.userId === userId && current(attempt);
 }
 
 /**
@@ -43,14 +68,9 @@ export async function beginMicuentawebSandboxAttempt(
       if (existing) return { created: false as const, attempt: view(existing) };
 
       const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, select: {
-        status: true, total: true, stockReservedAt: true, reservationExpiresAt: true,
-        stockReleasedAt: true, reservationExpiredAt: true, paidAt: true,
-        user: { select: { email: true } }, payments: { select: { id: true } },
+        ...eligibilitySelect, user: { select: { email: true } },
       } });
-      const now = new Date();
-      if (order.status !== "PENDING_PAYMENT" || !order.stockReservedAt || order.stockReservedAt > now
-        || !order.reservationExpiresAt || order.reservationExpiresAt <= now
-        || order.stockReleasedAt || order.reservationExpiredAt || order.paidAt || order.payments.length !== 0) {
+      if (!eligible(order)) {
         // Manual/Culqi orders retain their existing flow; no automatic method conversion.
         throw new PaymentAttemptError("ORDER_UNAVAILABLE");
       }
@@ -77,12 +97,21 @@ export async function recordMicuentawebTokenReady(attemptId: string, formToken: 
   if (typeof formToken !== "string" || !formToken.trim() || Buffer.byteLength(formToken, "utf8") > 65_536) {
     throw new PaymentAttemptError("INVALID_COMPLETION");
   }
-  const changed = await prisma.paymentAttempt.updateMany({
-    where: { id: attemptId, state: PaymentAttemptState.INITIATING },
-    data: { state: PaymentAttemptState.TOKEN_READY,
-      tokenHash: createHash("sha256").update(formToken, "utf8").digest("hex"), tokenReadyAt: new Date() },
+  return prisma.$transaction(async (tx) => {
+    const identity = await tx.paymentAttempt.findUnique({ where: { id: attemptId }, select: { orderId: true } });
+    if (!identity) return false;
+    // The order is locked first, matching cancellation/expiry's lock order.
+    await tx.$queryRaw`SELECT "id" FROM "Order" WHERE "id" = ${identity.orderId} FOR UPDATE`;
+    const attempt = await tx.paymentAttempt.findUnique({ where: { id: attemptId },
+      include: { order: { select: eligibilitySelect } } });
+    if (!attempt || !current(attempt)) return false;
+    const changed = await tx.paymentAttempt.updateMany({
+      where: { id: attemptId, state: PaymentAttemptState.INITIATING },
+      data: { state: PaymentAttemptState.TOKEN_READY,
+        tokenHash: createHash("sha256").update(formToken, "utf8").digest("hex"), tokenReadyAt: new Date() },
+    });
+    return changed.count === 1;
   });
-  return changed.count === 1;
 }
 
 /** Timeout/crash recovery blocks new requests; no automatic unlock, retry, refund or PAID effect. */

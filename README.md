@@ -30,6 +30,7 @@ Izipay se evalúa para sandbox: [guía técnica y base aislada de pruebas](docs/
 Ese código preparatorio está desactivado y no se conecta todavía al checkout.
 [Intentos persistentes y límites](docs/integraciones/intentos-izipay.md) ·
 [Estado verificado y actualización pendiente de Render](docs/render-free-preview.md).
+[Inicio de pago protegido, aún desactivado](docs/integraciones/inicio-izipay.md).
 
 Ya existe:
 - estructura Next.js
