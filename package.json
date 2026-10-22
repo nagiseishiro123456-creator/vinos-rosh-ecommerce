@@ -26,7 +26,8 @@
     "db:backup": "tsx scripts/backup-db.ts",
     "db:restore": "tsx scripts/restore-db.ts",
     "db:maintenance": "tsx scripts/maintenance.ts",
-    "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1"
+    "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1",
+    "auth:unlock-local": "node --env-file-if-exists=.env --import tsx scripts/unlock-local-registration.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",

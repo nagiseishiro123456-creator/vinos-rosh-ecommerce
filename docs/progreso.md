@@ -1,5 +1,22 @@
 # Punto de avance
 
+## Corrección — Registro bloqueado en local (2026-10-22, America/Lima)
+
+- El propietario reporta el límite mientras prueba en local. La regla normal cuenta
+  seis solicitudes por IP/hora antes de validar, persiste en BD y puede agrupar unknown.
+  No se ha inspeccionado ni modificado su PC/BD; se prepara una solución ejecutable allí.
+- Rama `fase-2/correccion-registro-local`, base PR #20 `f254a839b5e65b292d431a300d74db4b0243991f`.
+  CI base 39848363578: 182 servidor/68 navegador aprobados. No cambia main ni Render.
+- [Operación local](desarrollo-registro-local.md): `auth:unlock-local` elimina solo claves
+  de registro seleccionadas, con guardas de BD/URLs de loopback y rechazo en production.
+  Flag local opt-in para 60 solicitudes/10 minutos; publicado conserva seis/hora.
+- Mensaje con espera concreta y reglas de contraseña en cliente. [QA](testing/registro-local.md):
+  nueve casos de política, tres PostgreSQL y ocho de navegador previstos. Resultado y SHA
+  observados se guardan en la PR; capturas nuevas en artefacto CI, 192 anteriores intactas.
+- Sin migraciones, nuevas dependencias, cambio de contraseñas ni avance de cobros.
+  S3-02 sigue parcial. Siguiente: entregar el comando al propietario para su base local;
+  después retomar formulario sandbox/recuperación e IPN del Sprint 3.
+
 ## Sprint 3 — Reserva automática interna y recuperación (2026-10-22, America/Lima)
 
 - Se continúa mientras el propietario prueba en local. Rama `fase-2/sprint-03-reserva-automatica`,

@@ -225,3 +225,27 @@ jobs:
           path: evidence-source
       - name: Export original integration PNGs for visual review
         run: node scripts/qa-cart-evidence.mjs evidence-source ${{ matrix.project }}
+
+  registration-evidence:
+    name: Registration evidence (${{ matrix.project }})
+    needs: validate
+    if: ${{ always() && github.head_ref == 'fase-2/correccion-registro-local' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile, small-mobile, tablet]
+    env:
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      EVIDENCE_STORY: AUTH_LOCAL
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Download original QA evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: sprint-01-smoke-${{ github.run_id }}
+          path: evidence-source
+      - name: Export original registration PNGs for visual review
+        run: node scripts/qa-cart-evidence.mjs evidence-source ${{ matrix.project }}

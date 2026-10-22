@@ -47,6 +47,8 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 ## Cuándo documentar
 
+[Registro: desbloqueo y pruebas locales](desarrollo-registro-local.md) · [QA y capturas](testing/registro-local.md).
+
 | Momento | Registro |
 | --- | --- |
 | Inicio del sprint | Objetivo, historias y commit de partida. |

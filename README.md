@@ -86,6 +86,9 @@ Prisma Studio:
 npm run prisma:studio
 ```
 
+Si el registro se bloquea durante las pruebas locales: `npm run auth:unlock-local`.
+[Modo de pruebas, tiempo de espera y pasos completos](docs/desarrollo-registro-local.md).
+
 ## Seguridad
 - `.env` está ignorado por Git.
 - Nunca se versionan claves reales.
