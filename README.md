@@ -22,6 +22,11 @@ El trabajo se entrega por historias pequeñas: ver [avance actual](docs/progreso
 [backlog](docs/backlog.md) y [plan del Sprint 1](docs/sprints/fase-2-sprint-01.md).
 La tienda sigue siendo un entorno de validación; no hay lanzamiento comercial en este hito.
 
+Para usar la compra: [cómo abrir el carrito](docs/guia-carrito.md).
+Sprint 3 en refinamiento: [plan e historias](docs/sprints/fase-2-sprint-03.md) y
+[comparación Yape/Izipay](docs/investigacion/pagos-yape-izipay.md).
+La pasarela automática todavía no está implementada ni el proveedor elegido.
+
 Ya existe:
 - estructura Next.js
 - modelo Prisma de producción
@@ -109,8 +114,9 @@ estado compartido entre panel/página/contador y compra móvil accesible.
 [Seis capturas de cierre](docs/evidencias/sprint-02/integracion/README.md), conservando las
 186 anteriores. [Cierre técnico y continuidad](docs/sprints/cierre-sprint-02.md).
 
-El siguiente paso es presentar y refinar el Sprint 3 (pagos automáticos/notificaciones)
-antes de implementar. El entorno comercial y la aceptación funcional/UAT siguen pendientes.
+El Sprint 3 tiene una propuesta documentada de pagos automáticos/notificaciones.
+El siguiente paso es confirmar proveedor, producto y disponibilidad para ROSH antes
+de implementar el adaptador. El entorno comercial y la aceptación funcional/UAT siguen pendientes.
 
 ## Verificación y evidencias
 

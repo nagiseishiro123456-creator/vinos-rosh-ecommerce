@@ -1,5 +1,12 @@
 # Changelog
 
+## Fase 2 — Sprint 3 / S3-01 (refinamiento documental, 2026-10-21)
+
+- Guía de acceso al carrito y distinción entre integración en GitHub y despliegue.
+- Investigación de Yape/Izipay, tres comercios y alternativas, con fuentes y límites de vigencia.
+- Inventario de lo financiero existente y pendiente; plan preliminar de seis historias y ADR 0009 propuesto.
+- Proveedor/producto por elegir; sin integración automática, nuevas migraciones, dependencias o cambios de UI.
+
 ## Fase 2 — Sprint 2 (cierre técnico integrado, 2026-10-21)
 
 - Historias S2-01–S2-06 revisadas e integradas en main mediante PR #9–#14.
