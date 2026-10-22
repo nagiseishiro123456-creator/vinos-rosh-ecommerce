@@ -11,6 +11,7 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:3000",
     browserName: "chromium",
+    channel: process.env.PLAYWRIGHT_BROWSER_CHANNEL === "chrome" ? "chrome" : undefined,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH

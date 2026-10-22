@@ -162,8 +162,15 @@ jobs:
           npm run db:seed:smoke
           npm run prepare:standalone
 
-      - name: Install Chromium for visual evidence
-        run: npx playwright install --with-deps chromium
+      - name: Prepare browser for visual evidence
+        timeout-minutes: 3
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then
+            google-chrome --version
+            echo "PLAYWRIGHT_BROWSER_CHANNEL=chrome" >> "$GITHUB_ENV"
+          else
+            npx playwright install --with-deps chromium
+          fi
 
       - name: Smoke checks and desktop/mobile screenshots
         run: npm run test:smoke

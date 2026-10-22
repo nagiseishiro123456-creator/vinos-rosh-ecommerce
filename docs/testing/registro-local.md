@@ -50,3 +50,18 @@ Cuatro ejecuciones del caso 429 fallaron por un selector ambiguo: el role alert 
 con el mensaje del formulario y el anunciador de rutas de Next.js. Se acota a authCard,
 sin cambiar la respuesta del servidor. Los resultados finales de cabecera se registran
 en la PR después de repetir CI; esos cuatro fallos no se presentan como aprobados.
+
+## Preparación del navegador en CI
+
+El paso de instalación de Chromium de CI 39863451281 permaneció más de cinco minutos
+sin avanzar a las pruebas de navegador. El nuevo incremento prioriza Google Chrome
+preinstalado en el runner Ubuntu mediante el canal oficial `chrome` de Playwright,
+y registra su versión en logs. Si no existe, conserva la instalación de Chromium,
+con plazo de tres minutos para ese paso. La suite mantiene los mismos casos y asserts.
+Localmente el canal no cambia salvo que se seleccione explícitamente.
+
+Fuentes primarias consultadas el 2026-10-22:
+[canales de Playwright](https://playwright.dev/docs/browsers#google-chrome--microsoft-edge) y
+[software del runner Ubuntu](https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md).
+El navegador del runner puede variar con su imagen; la versión exacta ejecutada queda
+en el run. Esta evidencia no se etiqueta como ejecución del binario bundled anterior.
