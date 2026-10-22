@@ -55,3 +55,8 @@ estados concurrentes y evidencia externa. El checkout manual permanece como circ
 
 Render requiere confirmar el workspace antes de operar. Solo se consultó selección y
 lista; no se leyeron servicios/BD/secretos ni se reanudó/desplegó infraestructura.
+
+Registro de la entrega inicial. Después el propietario confirmó My Workspace y se
+realizó [preflight de solo lectura](../render-free-preview.md#preflight-comprobado-el-2026-10-22-americalima).
+El incremento siguiente añade [persistencia aislada](s3-02-intentos.md); no modifica
+retroactivamente las verificaciones ni el alcance de este primer núcleo.

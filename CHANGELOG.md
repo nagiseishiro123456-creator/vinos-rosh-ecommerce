@@ -1,5 +1,12 @@
 # Changelog
 
+## Fase 2 — Sprint 3 / S3-02 (persistencia aislada, 2026-10-22)
+
+- Preparación de PaymentAttempt con referencia/importe de servidor y estados de inicio/token/incertidumbre; una identidad por orden y transiciones condicionadas.
+- Guardas de propietario, reserva y modo TEST; los pedidos manuales conservan su circuito. Sin endpoint, SDK, petición externa ni aprobación de pago.
+- Migración 13 aditiva, nueve casos PostgreSQL y contrato SQL sobre datos históricos; regresión de restore conserva controles y reconoce la migración nueva.
+- Contrato, QA y avance documentados; preflight de Render confirmado con plan de respaldo/build/actualización, sin despliegue remoto todavía.
+
 ## Fase 2 — Sprint 3 / S3-02 (preparación aislada, 2026-10-22)
 
 - Guía del desarrollador para corregir familia/API, importes, formulario del proveedor e IPN.

@@ -121,6 +121,12 @@ jobs:
         run: |
           cat tests/sql/cart-commands-migration-before.sql prisma/migrations/20261020040500_cart_commands/migration.sql tests/sql/cart-commands-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
+      - name: Verify payment attempt migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/payment-attempt-migration-before.sql prisma/migrations/20261022150000_payment_attempt_preparation/migration.sql tests/sql/payment-attempt-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Tests
         run: npm test
 

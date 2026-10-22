@@ -51,7 +51,7 @@ S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 | ID | Historia | SP | Estado |
 | --- | --- | ---: | --- |
 | S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
-| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte/cripto aislados preparados; endpoint/intentos/UI y sandbox externo pendientes. |
+| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte/cripto e intentos aislados en rama; reserva automática, endpoint, recuperación, UI y sandbox externo pendientes. |
 | S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
 | S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Pendiente. |
 | S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Pendiente. |
@@ -62,8 +62,9 @@ y habilitación siguen pendientes. [Guía técnica](integraciones/izipay-sandbox
 [QA de la primera preparación](testing/s3-02-base-izipay.md).
 Antes de conectar el adaptador al checkout: concretar [ADR 0009](decisions/0009-pagos-automaticos.md) con el contrato
 del producto real. La observación del propietario sobre encontrar el carrito mantiene
-abierta la aceptación UX. S3-02 tiene una base aislada, desactivada y sin migraciones;
-no se contabiliza como historia terminada ni como integración externa comprobada.
+abierta la aceptación UX. S3-02 tiene una base aislada, desactivada y una migración
+aditiva de intentos propuesta en rama; [contrato y límites](integraciones/intentos-izipay.md).
+No se contabiliza como historia terminada ni como integración externa comprobada.
 
 ## Secuencia posterior, sujeta a refinamiento
 
