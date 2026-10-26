@@ -51,7 +51,7 @@ S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 | ID | Historia | SP | Estado |
 | --- | --- | ---: | --- |
 | S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
-| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte, intentos, inicio protegido y reserva automática interna en rama/desactivados; punto de reserva autenticado, recuperación, SDK y sandbox externo pendientes. |
+| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte, intentos, inicio y reserva protegidos/desactivados; consulta propia y UI de estado implementadas localmente. SDK, recuperación del proveedor y sandbox externo pendientes. |
 | S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
 | S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Pendiente. |
 | S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Pendiente. |
@@ -68,7 +68,15 @@ aditivas 13 (intentos) y 14 (marcador de reserva) propuestas en rama;
 Se añaden [inicio protegido](integraciones/inicio-izipay.md) y
 [reserva automática interna](integraciones/reserva-izipay.md) sin conectar el checkout existente.
 [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) y [QA](testing/s3-02-reserva.md).
+Se continúa el 2026-10-23 con [reserva HTTP autenticada](integraciones/reserva-izipay-http.md),
+opt-in independiente y apagado. [ADR 0011](decisions/0011-reserva-sandbox-autenticada.md),
+[QA local](testing/s3-02-reserva-http.md): 218/218 servidor en PostgreSQL aislado, sin cobros.
 No se contabiliza como historia terminada ni como integración externa comprobada.
+
+Incremento posterior: [consulta autenticada de estado y recorrido visual](integraciones/estado-izipay.md).
+Panel del pedido propio y demostración solo en desarrollo, sin cobros/correo reales.
+[QA](testing/s3-02-estado-ui.md): 238/238 servidor en PostgreSQL aislado; capturas locales
+de escenarios y responsive. No implementa IPN ni cierra S3-02/S3-06.
 
 Seguimiento técnico antes de producción: la actualización de Next.js/eslint-config-next
 16.4.2 elimina el hallazgo crítico de producción. Queda el aviso de braces 3.0.3 en

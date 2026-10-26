@@ -1,5 +1,62 @@
 # Punto de avance
 
+## Publicación del avance del Sprint 3 — 2026-10-25 (America/Lima)
+
+- El propietario autoriza commit/subida con `jose-israel`. Perfil y permiso `write`
+  comprobados en el repositorio original; publicación en `codex/sprint-03-reserva-estado`.
+- El alcance seleccionado contiene reserva HTTP, consulta/panel, demostración y QA.
+  Diseño, carrito y validación de registro posteriores a la base se conservan localmente.
+- Copia exacta del contenido seleccionado: **237/237 servidor**, tipos y lint aprobados.
+  La cifra histórica 238 incluye una prueba de registro que no forma parte de este commit.
+- [Validación y límites de la publicación](testing/s3-02-publicacion.md). La compilación
+  aislada no se declara aprobada: las dependencias locales difieren del lockfile y los
+  enlaces temporales entre discos impiden compilar. La generación Prisma en la instalación
+  limpia temporal no fue autorizada. CI de la nueva cabecera queda por comprobar.
+- S3-02 continúa parcial: siguiente paso funcional, formulario oficial con acceso TEST
+  verificado y contrato de recuperación; después IPN, conciliación y outbox/correo.
+  La subida conserva los flags de Izipay apagados y no activa un despliegue de Render.
+
+## Sprint 3 — Consulta de estado y recorrido visual (2026-10-23, America/Lima)
+
+- Nueva instrucción del propietario: continuar funcionalidades y mostrar las pantallas
+  del sprint. Se añade consulta autenticada del pedido automático y demostración local.
+- `GET /api/payment/status` verifica dueño/cuenta/origen, DTO y presupuesto persistente;
+  devuelve un estado mínimo private/no-store sin proveedor, tokens o cambios de pedido/stock.
+  Sigue disponible con inicio apagado. TOKEN_READY no implica pago; confirmado exige estado
+  pagado y paidAt persistido. [Contrato](integraciones/estado-izipay.md).
+- Panel en el detalle propio, actualización manual con timeout/cancelación y manejo de
+  sesión/red; los automáticos no se envían a instrucciones de pago manual.
+- `/desarrollo/sprint-3`: seis escenarios ilustrativos, consulta de prueba y próximos
+  desarrollos. Solo development, noindex; no crea pedidos ni cobra/envía correos.
+  [Capturas reales](evidencias/sprint-03/s3-02-estado-ui/README.md).
+- **238/238 servidor** aprobadas en PostgreSQL QA aislado (20 nuevas). Tipos/lint/diff
+  aprobados; revisión local móvil 320/390 y escritorio. [QA y límites](testing/s3-02-estado-ui.md).
+- **Siguiente:** formulario oficial con acceso TEST verificado; IPN auténtica/idempotente,
+  recuperación/conciliación y correo/outbox. S3-02 sigue parcial; S3-03–05 pendientes.
+  Sin claves habilitadas, integración externa aceptada, commit/PR o despliegue.
+
+## Sprint 3 — Reserva HTTP autenticada (2026-10-23, America/Lima)
+
+- Por solicitud del propietario se deja pendiente el diseño y se retoman funcionalidades.
+  El siguiente pendiente implementado es el punto de entrada de reserva de S3-02.
+- `POST /api/orders/reserve`: sesión/origen, identidad esperada, DTO estricto, lectura
+  JSON acotada, presupuesto persistente y errores de negocio específicos. Opt-in propio
+  `IZIPAY_MCW_RESERVE_ENABLED`, apagado por defecto en ejemplo y CI; `.env` no modificado.
+- Reutiliza la reserva ACID. 201 al crear; 200 al recuperar, sin prometer que un pedido
+  cancelado siga activo. Reintento tras respuesta perdida conserva orden, plazo y stock.
+  No obtiene token, no llama a Izipay ni confirma pagos.
+- [Contrato](integraciones/reserva-izipay-http.md), [ADR 0011](decisions/0011-reserva-sandbox-autenticada.md)
+  y [QA](testing/s3-02-reserva-http.md). **218/218 servidor** aprobadas sobre PostgreSQL
+  local aislado `vinos_rosh_test`, incluidas 15 unitarias y 8 de integración nuevas.
+  Tipos/lint/diff aprobados; HTTP local GET 405 y POST apagado 404/private-no-store.
+- Runner reproducible `scripts/test-local-postgres.mjs`: crea/migra solo la base de QA;
+  no migra, resetea ni carga datos en desarrollo. No hay migración nueva ni dependencia.
+- **Siguiente:** confirmar producto/paquete TEST de ROSH y contrato de consulta/recuperación;
+  conectar el formulario oficial y preparar IPN auténtica y pagos tardíos. S3-02 continúa
+  parcial. Sin activación comercial, UI automática, nuevo commit/PR o despliegue.
+
+Las entradas siguientes son registros históricos de sus incrementos.
+
 ## Corrección — Registro bloqueado en local (2026-10-22, America/Lima)
 
 - El propietario reporta el límite mientras prueba en local. La regla normal cuenta

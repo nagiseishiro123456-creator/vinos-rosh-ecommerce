@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-23T23:09:25.080Z",
+  "url": "http://localhost:3000/api/orders/reserve",
+  "getStatus": 405,
+  "postStatus": 404,
+  "postCacheControl": "private, no-store",
+  "postBody": {
+    "message": "Recurso no disponible."
+  },
+  "credentialsUsed": false
+}

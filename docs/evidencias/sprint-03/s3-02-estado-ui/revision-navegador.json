@@ -1,0 +1,17 @@
+{
+  "source": "localhost:3000/desarrollo/sprint-3, Next development",
+  "baseHead": "715327c289853fb688c101e825f68f9ed57fe99b",
+  "workingTree": "uncommitted",
+  "date": "2026-10-23, America/Lima",
+  "method": "Manual control through the integrated browser; real screenshots",
+  "providerContacted": false,
+  "chargesOrEmailsCreated": false,
+  "scenariosReviewed": ["reserved", "prepared", "initiating", "uncertain", "confirmed (simulated)", "expired", "query without valid session"],
+  "querySessionFailureClearsPanel": true,
+  "cardInputsFound": 0,
+  "horizontalOverflow": { "320": false, "390": false, "1102": false, "1440": false },
+  "nextControlActivatedWithEnter": true,
+  "nextControlRetainsKeyboardFocus": true,
+  "consoleErrorsObserved": [],
+  "limits": ["No external payment sandbox", "No complete browser regression suite", "No actual IPN or email delivery", "No complete accessibility certification"]
+}

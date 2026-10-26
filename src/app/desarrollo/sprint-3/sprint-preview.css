@@ -1,0 +1,56 @@
+.sprintPreview { background: #f5f6f7; min-height: 100vh; color: #27313c; font-family: Arial, Helvetica, sans-serif; }
+.sprintDemoBanner { background: #20272d; color: #dce3e7; padding: 11px 24px; text-align: center; font-size: 11px; letter-spacing: .05em; }
+.sprintDemoBanner span { font-weight: 800; color: #c9e9dc; margin-right: 18px; }
+.sprintPreviewHeader { padding: 25px max(24px, calc((100vw - 1200px) / 2)); display: flex; align-items: center; justify-content: space-between; background: white; border-bottom: 1px solid #e5e8eb; gap: 20px; }
+.sprintPreviewHeader > a { font-family: Georgia, serif; font-size: 33px; letter-spacing: .1em; text-decoration: none; color: #20272d; }
+.sprintPreviewHeader > a > span { display: block; font-family: Arial, sans-serif; font-size: 7px; letter-spacing: .13em; margin-top: 5px; }
+.sprintPreviewHeader > p { display: flex; align-items: center; gap: 9px; font-size: 12px; color: #687381; margin: 0; }
+.sprintPreviewWrap { max-width: 1200px; margin: auto; padding: 48px 0 0; }
+.sprintKicker { font-size: 10px; font-weight: 800; letter-spacing: .14em; color: #627685; margin: 0 0 13px; }
+.sprintPreviewIntro h1 { color: #25303b; font-family: Georgia, serif; font-size: clamp(2.4rem, 4.5vw, 3.5rem); line-height: 1.08; margin: 0 0 17px; letter-spacing: -.035em; }
+.sprintPreviewIntro > p:last-child { font-size: 13px; color: #67727c; line-height: 1.8; max-width: 580px; margin: 0; }
+.sprintSceneNav { display: flex; flex-wrap: wrap; gap: 7px; margin: 30px 0 26px; }
+.sprintSceneNav button { border: 1px solid #d7dce1; border-radius: 7px; background: white; padding: 11px 13px; color: #5b6874; font-size: 11px; cursor: pointer; }
+.sprintSceneNav button[aria-pressed="true"] { background: #283b46; border-color: #283b46; color: white; }
+.sprintPreview button:focus-visible, .sprintPreview a:focus-visible { outline: 3px solid #328567; outline-offset: 4px; }
+.sprintPreviewGrid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 28px; align-items: start; }
+.sprintSceneLabel { font-size: 9px; color: #627383; font-weight: 800; letter-spacing: .11em; margin: 0 0 11px; }
+.sprintFlow .automaticPaymentCard { margin: 0; }
+.sprintFlow .automaticPaymentPanel { min-height: 275px; }
+.sprintNextAction { margin-top: 19px; }
+.sprintNextAction > p, .sprintQueryNotice { font-size: 12px; line-height: 1.8; color: #65717c; margin: 0 0 15px; }
+.sprintNextAction .button { min-height: 43px; display: inline-flex; gap: 12px; background: #253540; border-color: #253540; font-size: 12px; }
+.sprintProviderSlot { display: grid; place-items: center; text-align: center; margin: 18px 0 0; border: 1px dashed #bdcbd3; border-radius: 12px; padding: 27px 28px; background: #eef2f4; color: #456173; }
+.sprintProviderSlot h3, .sprintMailPreview h3 { font-size: 16px; color: #263d49; margin: 12px 0 9px; }
+.sprintProviderSlot p { font-size: 12px; line-height: 1.8; max-width: 440px; color: #627583; margin: 0 0 17px; }
+.sprintProviderSlot > span, .sprintMailPreview span { font-size: 9px; font-weight: 800; letter-spacing: .06em; }
+.sprintMailPreview { display: flex; align-items: start; gap: 17px; background: #eaf2ee; padding: 23px; border-radius: 12px; margin-top: 18px; color: #367056; }
+.sprintMailPreview > svg { flex-shrink: 0; }
+.sprintMailPreview h3 { margin-top: 0; color: #315c48; }
+.sprintMailPreview p { font-size: 12px; line-height: 1.8; color: #567365; margin: 0 0 13px; }
+.sprintSceneControls { display: flex; justify-content: space-between; align-items: center; padding: 23px 0; color: #75828d; font-size: 11px; }
+.sprintSceneControls button { display: flex; align-items: center; gap: 7px; border: 0; padding: 8px 0; color: #405869; background: none; cursor: pointer; font-size: 11px; }
+.sprintSceneControls button:disabled { color: #aab2b9; cursor: default; }
+.sprintOrderSummary { border: 1px solid #dfe4e8; border-radius: 14px; padding: 25px; background: white; margin-top: 21px; }
+.sprintProduct { display: flex; gap: 14px; align-items: center; border-bottom: 1px solid #e8ecef; padding: 8px 0 22px; }
+.sprintProduct img { width: 76px; height: 95px; object-fit: cover; border-radius: 7px; }
+.sprintProduct h3 { font-size: 13px; margin: 0 0 10px; line-height: 1.5; color: #35424b; }
+.sprintProduct p { font-size: 11px; margin: 0 0 7px; color: #5e6b77; }
+.sprintProduct span { font-size: 9px; color: #83909b; }
+.sprintOrderSummary dl { padding: 5px 0 0; margin: 0; }
+.sprintOrderSummary dl > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: #6a7682; margin-top: 19px; }
+.sprintOrderSummary dd { margin: 0; color: #3b4853; font-variant-numeric: tabular-nums; }
+.sprintOrderSummary dl .sprintTotal { border-top: 1px solid #e8ecef; padding-top: 20px; font-size: 17px; font-weight: 800; color: #293b46; }
+.sprintOrderSafety { display: flex; align-items: start; gap: 10px; border-top: 1px solid #e8ecef; padding-top: 20px; margin: 23px 0 0; font-size: 10px; line-height: 1.8; color: #73808b; }
+.sprintOrderSafety svg { flex-shrink: 0; color: #577a6b; }
+.sprintRoadmap { border-top: 1px solid #dfe5e9; padding: 33px 0; margin-top: 18px; }
+.sprintRoadmap h2 { font-family: Georgia, serif; font-size: 27px; color: #2c3c46; margin: 0 0 22px; line-height: 1.25; }
+.sprintRoadmapGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; }
+.sprintRoadmapGrid article { background: white; border: 1px solid #e2e7eb; border-radius: 10px; padding: 18px; }
+.sprintRoadmapGrid article > span { display: flex; align-items: center; gap: 5px; font-size: 9px; letter-spacing: .03em; color: #697d8c; font-weight: 800; }
+.sprintRoadmapGrid h3 { font-size: 14px; color: #334c5b; margin: 13px 0 9px; }
+.sprintRoadmapGrid article p { font-size: 11px; color: #74808a; line-height: 1.8; margin: 0; }
+.sprintPreviewFooter { text-align: center; color: #89939b; font-size: 10px; border-top: 1px solid #e1e6e9; padding: 23px 0; line-height: 1.8; }
+@media (max-width: 1280px) { .sprintPreviewWrap { padding: 35px 24px 0; } }
+@media (max-width: 800px) { .sprintPreviewGrid { grid-template-columns: minmax(0, 1fr); gap: 0; } .sprintOrderSummary { margin-top: 0; } .sprintRoadmapGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .sprintPreviewHeader { padding: 19px; align-items: start; } .sprintPreviewHeader > p { max-width: 135px; font-size: 10px; line-height: 1.6; } .sprintPreviewWrap { padding-inline: 18px; } .sprintDemoBanner { line-height: 1.7; padding: 8px 14px; } .sprintDemoBanner span { display: block; margin: 0; } .sprintRoadmapGrid { grid-template-columns: 1fr; } .sprintSceneNav { gap: 6px; } .sprintSceneNav button { font-size: 10px; padding: 10px; } .sprintProviderSlot { padding: 23px 17px; } }

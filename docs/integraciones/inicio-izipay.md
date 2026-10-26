@@ -1,5 +1,10 @@
 # S3-02 — Inicio protegido de Mi Cuenta Web sandbox
 
+Actualización 2026-10-23: ya existe una [entrada de reserva autenticada](reserva-izipay-http.md)
+con opt-in independiente/desactivado. La descripción siguiente conserva el alcance de la
+entrega original; el llamador HTTP está cubierto por el nuevo contrato y su QA. Sin SDK
+ni activación de cobros.
+
 Fecha: 2026-10-22 (America/Lima). Base: PR #18, `6d81d539c782a2d63cae64ae7312cff1b757f891`.
 Incremento de backend condicionado; no es cierre del checkout ni habilitación comercial.
 

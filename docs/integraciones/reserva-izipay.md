@@ -1,5 +1,10 @@
 # S3-02 — Reserva automática interna de Mi Cuenta Web TEST
 
+Actualización 2026-10-23: ya existe una [entrada de reserva autenticada](reserva-izipay-http.md)
+con opt-in independiente/desactivado. La descripción siguiente conserva el alcance de la
+entrega original; el llamador HTTP está cubierto por el nuevo contrato y su QA. Sin SDK
+ni activación de cobros.
+
 Fecha: 2026-10-22 (America/Lima). Base: PR #19,
 `8424493ebdf099b029c9d066ab50869125ccdaf6`, CI 39808132000 aprobada (165 servidor/68 navegador).
 Incremento parcial: preparación del dominio; no es checkout ni aceptación externa de Izipay.

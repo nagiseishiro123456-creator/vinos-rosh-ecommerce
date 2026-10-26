@@ -1,0 +1,414 @@
+QA database: vinos_rosh_test (local). Applying committed migrations; no reset or seed.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "vinos_rosh_test", schema "public" at "localhost:5432"
+
+14 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+✔ account SSR and anonymous stores do not request private data (1.0794ms)
+✔ lost response retries the same identity after refreshing current server state (19.6278ms)
+✔ old read and old SSR cannot overwrite a confirmed mutation (0.6646ms)
+✔ out of order reads and another user payload never replace the account cart (0.9569ms)
+✔ 401 removes private data and disposed or old server replies cannot restore it (1.3145ms)
+✔ rapid duplicate intents and transient errors retain one pending operation (0.7466ms)
+✔ definite refusal can be verified; invalid success remains uncertain (0.9141ms)
+✔ invalidation re-reads; subscriptions release browser resources (5.2318ms)
+✔ account change clears private data while retaining the original command owner (0.3622ms)
+prisma:error
+Invalid `prisma.cartItem.upsert()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ two concurrent account additions preserve both increments without reserving stock (206.644ms)
+prisma:error
+Invalid `prisma.cartItem.upsert()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ S2-06: guest merge and account add serialize together and replay without another increment (97.1447ms)
+prisma:error
+Invalid `prisma.cartItem.upsert()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ concurrent copies and lost-response replay use one receipt with current cart state (86.3664ms)
+✔ same operation identity with another command conflicts without changing quantities (73.4929ms)
+✔ commands enforce stock/99, preserve other lines and remove unavailable products (198.2663ms)
+✔ new distinct lines respect 50-product cap; existing lines remain editable (89.6776ms)
+prisma:error
+Invalid `prisma.cartMutation.create()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "23514", message: "new row for relation \"CartMutation\" violates check constraint \"qa_cart_receipt_fail\"", severity: "ERROR", detail: Some("Failing row contains (cmvlkwcpx007gurzgh5kuvq7c, cmvlkwcoz0072urzgtsrk3eb6, 463131a5-70be-4367-92c9-9587c0647d2f, 9c182b5d6bb6c0385c714d03ef8f3008fc4921cf0978251f2ed49d93faffafcd, {\"adjusted\": false, \"quantity\": 4, \"productId\": \"cmvlkwcp70076ur..., 2026-10-23 23:05:54.021)."), column: None, hint: None }), transient: false })
+✔ receipt write failure rolls quantity and revision back together (62.8107ms)
+✔ account snapshots and operation namespaces are isolated by session user (103.6237ms)
+✔ account API validates public origin, strict bounded UTF-8 JSON, owner and rate limit (193.253ms)
+✔ merge and order reservation advance the shared cart revision atomically (123.8072ms)
+✔ RI-02: business export preserves reconciled money, refund reference and order audit without password hashes (240.6283ms)
+✔ approve versus reject claims one order and records exactly one administrative decision (128.4478ms)
+✔ duplicate approval is one event and never reserves twice, even past the original deadline (93.3253ms)
+✔ duplicate rejection versus cancel/expiry releases stock once and retains the reason (122.0411ms)
+✔ approval versus customer cancellation/expiry preserves the communicated payment (125.6773ms)
+✔ amount, currency, released or missing reservation and extra payment block approval atomically (139.4732ms)
+✔ current DB role prevents administrative writes after permission revocation (83.3891ms)
+✔ duplicate full refunds restore stock and create an event once (108.8543ms)
+✔ replayed fulfillment forms cannot skip preparation and refund/shipping races stay coherent (117.5946ms)
+✔ refund blocks money mismatch and dispatched orders without partial mutation (109.0151ms)
+✔ late income reconciliation and duplicate closure never resurrect an order or touch stock (135.928ms)
+✔ rejected discrepant payment can be reconciled, but its code and received amount cannot be rewritten (123.631ms)
+prisma:error
+Invalid `tx.payment.update()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\payments\reconciliation-service.ts:32:24
+
+  29 const locked = await tx.payment.findUniqueOrThrow({ where: { id: paymentId }, include: { reconciliation: true } });
+  30 if (locked.reconciliation) return { changed: false };
+  31 if (locked.operationCode && locked.operationCode !== data.operationCode) throw new AdminOperationError("INCONSISTENT");
+→ 32 await tx.payment.update(
+Unique constraint failed on the fields: (`provider`,`operationCode`)
+✔ bank reference used in another order rolls reconciliation back without creating an event (169.1906ms)
+✔ invalid reconciliation amounts and unclosed orders cannot record received money (75.8622ms)
+✔ authentication preserves normalized internal destinations and rejects origin/encoding escapes (0.9631ms)
+✔ guest authentication keeps the purchase destination for review after merging (0.2003ms)
+✔ registerSchema accepts a valid Peruvian customer (3.1566ms)
+✔ registerSchema rejects weak passwords (0.3471ms)
+✔ passwordSchema enforces length, uppercase, lowercase and number (0.2166ms)
+✔ registerSchema rejects invalid Peruvian mobile numbers (0.3078ms)
+✔ loginSchema normalizes email and requires a password (0.448ms)
+✔ registration explains phone length, format and prefix and accepts a correction (0.9608ms)
+prisma:error
+Invalid `prisma.rateLimitBucket.create()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ reservation API commits one order across concurrent HTTP confirmations with no payment or token (224.1597ms)
+✔ reservation API recovers after a response is lost following commit and preserves later cart edits (101.5925ms)
+✔ reservation API recovers a cancelled order without re-reserving or extending its deadline (109.4768ms)
+✔ reservation API rejects changed prices and insufficient stock without consuming the cart (79.6377ms)
+✔ reservation API does not expose or reserve another account's address or confirmation (97.432ms)
+✔ reservation API cannot convert a manual order by reusing its checkout key (90.5041ms)
+✔ reservation API enforces TEST configuration with rollback before any inventory effect (55.0702ms)
+✔ reservation API throttles the eleventh request with one persistent reservation (146.9208ms)
+✔ reservation endpoint is off by default and needs its own opt-in, before authentication (14.5172ms)
+✔ reservation requires the configured HTTP(S) origin and refuses cross-site requests (5.361ms)
+✔ reservation requires JSON, a session and persistent per-user traffic budget (1.4398ms)
+✔ reservation binds the rendered account to the session and rejects browser money or payment data (9.0928ms)
+✔ reservation passes the authenticated identity and normalized fiscal input to the ACID service (0.9909ms)
+✔ reservation replay recovers identity without claiming a closed reservation is active (0.4308ms)
+✔ reservation rejects oversized bytes with missing or misleading Content-Length, not just string length (0.9338ms)
+✔ reservation rejects malformed bodies, invalid UTF-8 and invalid Content-Length without echoing input (0.8178ms)
+✔ reservation cancels a stalled request body within its deadline, without reserving (7.2011ms)
+✔ reservation aborts an in-flight body read and cancels its stream without reserving (5.578ms)
+✔ reservation rejects an already aborted client before changing stock (2.4402ms)
+✔ reservation bounds the sum of streamed chunks even when the declared length lies (0.5874ms)
+✔ reservation maps business failures and never exposes arbitrary private error details (5.0085ms)
+✔ reservation conflict returns only the authenticated account's existing order reference (0.4428ms)
+✔ reservation validates the configured request deadline (0.4151ms)
+✔ automatic reservation freezes authoritative prices, marks its integration and reserves without inventing a payment (203.0176ms)
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ six automatic confirmations commit one order, one reservation and one audit event (146.6259ms)
+✔ automatic replay preserves later cart edits and original deadline despite changed catalogue and disabled configuration (124.3661ms)
+✔ automatic and manual method changes conflict on the same checkout identity without converting orders (153.9386ms)
+✔ automatic reservations reject foreign accounts, foreign confirmations and forged identities before stock changes (78.8374ms)
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ automatic and manual buyers competing for the final bottle cannot oversell (138.6999ms)
+✔ automatic stale quotes reject changed delivery pricing without consuming stock or identity (45.5103ms)
+✔ automatic and manual reservations share the pending-order limit (118.389ms)
+prisma:error
+Invalid `prisma.order.create()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "P0001", message: "QA_AUTOMATIC_RESERVATION_FAULT", severity: "ERROR", detail: None, column: None, hint: None }), transient: false })
+✔ automatic failure after stock decrement rolls back order, event, cart revision and identity (88.4295ms)
+✔ automatic expiry uses the persisted deadline and maintenance releases exactly once without reopening replay (123.0944ms)
+✔ an unlabelled legacy order is not inferred to be eligible for Izipay (68.3106ms)
+✔ automatic creation requires test configuration and leaves the same identity reusable after a rejected creation (68.9699ms)
+✔ automatic reservation input normalizes optional fields and preserves a stable fingerprint (3.567ms)
+✔ automatic reservation input rejects browser totals, method switches and unexpected data (6.6153ms)
+✔ automatic reservation requires the same invoice fields as manual checkout (1.2708ms)
+✔ automatic reservation fingerprint binds account, quote, address and fiscal fields and has a separate method domain (0.5936ms)
+✔ automatic reservation refuses a mismatched current account before database access (0.5087ms)
+✔ checkout identity is stable across views and bound to user, quote and signing domain (1.3039ms)
+✔ malformed identities and missing signing secrets fail closed (3.1334ms)
+✔ request fingerprint normalizes optional whitespace and ignores client amounts and unknown fields (0.6939ms)
+✔ fingerprint binds the full accepted request including every invoice field (0.7411ms)
+✔ a quote is canonical across item order and decimal presentation (13.3185ms)
+✔ price changes cannot hide behind an identical aggregate total (0.3339ms)
+✔ quotes bind user, cart, quantity, shipping and delivery address (0.5945ms)
+✔ tampered tokens, wrong keys and missing signing keys fail closed (0.5633ms)
+✔ anonymous preview uses current exact prices and stock without commercial mutations (164.4304ms)
+✔ unavailable and hidden products are removed without exposing private product metadata (48.2446ms)
+✔ public preview rejects forged money, duplicate/invalid lines and bounded-stream violations (110.4444ms)
+✔ preview rate limit returns Retry-After without touching the commercial cart (52.3137ms)
+✔ large preview arithmetic stays exact and marks the order ceiling without making a reservation (45.7199ms)
+✔ legacy selection contains only IDs/quantities and normalizes duplicate lines within 99 (1.6951ms)
+✔ corrupt, future, oversized or invalid selections recover explicitly (1.0299ms)
+✔ SSR snapshot reads before migrating storage and strips non-selection metadata (7.6399ms)
+✔ legacy migration is canonical across two independently recovered tabs (0.8204ms)
+✔ rapid queued additions, edits and removals preserve limits and the last action (3.7205ms)
+✔ blocked storage remains editable in memory with a truthful warning (0.3274ms)
+✔ unavailable locks recover readable data in memory without unsafe writes (1.0324ms)
+✔ quota failure keeps new memory data and ignores stale disk events (0.5337ms)
+✔ corrupt storage repairs and cross-tab replacement/clearing are reflected (0.5894ms)
+✔ resubscription reloads edits made while no consumer was mounted (0.5708ms)
+✔ two tabs claim the same immutable import and acknowledgements preserve later additions (1.0018ms)
+✔ lost response retains identity on reload and refuses reassignment to another account (1.3099ms)
+✔ failed local acknowledgement reloads the same pending identity, never a new import (0.6046ms)
+✔ a later identical selection has a fresh identity; a stale preview cannot erase a queued edit (0.799ms)
+✔ an old preview cannot clamp a new selection even if IDs and quantities happen to match again (0.9732ms)
+✔ merge sums once, retains other account lines and never reserves stock or creates commerce records (170.9111ms)
+✔ same identity replays even after prices, availability and the private cart change; altered content conflicts (96.0606ms)
+prisma:error
+Invalid `prisma.cartItem.upsert()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `prisma.cartItem.upsert()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ concurrent retries share one receipt, while distinct imports serialize their sums (137.1475ms)
+prisma:error
+Invalid `prisma.cartItem.upsert()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ concurrent same key with different contents commits one complete request and rejects the other (47.2818ms)
+✔ current stock and 99-unit ceiling adjust quantities, hidden/missing/zero-price products disappear (120.4324ms)
+prisma:error
+Invalid `prisma.cartImport.create()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "23514", message: "new row for relation \"CartImport\" violates check constraint \"qa_import_rollback\"", severity: "ERROR", detail: Some("Failing row contains (cmvlkwjke003uurdgofnido7o, cmvlkwjjc003gurdg53evqvle, g2_e52ab90eb2bc4b6ebaf9af09dd99e50e, 056bbe6db6bd4605078a4090978737c15458c10b3729b126186d145fa50193f8, {\"lines\": [{\"quantity\": 5, \"productId\": \"cmvlkwjjk003kurdgzalklj..., 2026-10-23 23:06:02.894)."), column: None, hint: None }), transient: false })
+✔ receipt failure rolls back all cart changes, leaving stock and order state intact (60.6565ms)
+✔ identity namespace belongs to the current user and cannot expose another user's result (98.8883ms)
+✔ merge endpoint enforces session, origin, strict bounded JSON and retry-safe responses (157.0767ms)
+✔ configured public origin remains valid when Next or the reverse proxy changes the internal URL (52.5115ms)
+✔ sequential retries return the same order even after cart, catalogue, address, provider and signing key change (188.3247ms)
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ six concurrent identical confirmations commit one order, one payment and one reservation (153.0764ms)
+✔ same key with changed provider, receipt, fiscal fields, notes or quote conflicts without overwriting the order (121.3596ms)
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ concurrent conflicting requests select a single winner and report the existing order to its owner (74.1306ms)
+✔ another user, missing key and forged key cannot recover or create an order (120.4252ms)
+prisma:error
+Invalid `prisma.order.create()` invocation:
+
+
+Error occurred during query execution:
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: "P0001", message: "QA_CHECKOUT_FAULT", severity: "ERROR", detail: None, column: None, hint: None }), transient: false })
+✔ failed transaction after decrement rolls stock and identity back; same key succeeds after fault is removed (101.6886ms)
+✔ cancelled and expired results are recovered without renewing them; a new cart generates a new operation (125.8862ms)
+✔ a completed paid order is recovered without another payment or stock movement (85.3592ms)
+✔ new reservations still enforce provider readiness and do not consume an identity on failure (59.4254ms)
+✔ Izipay preparation persists server totals and a unique reference without changing commerce or calling a provider (184.894ms)
+✔ Izipay preparation refuses disabled/configuration mismatches, foreign owners and missing orders before persistence (94.2337ms)
+✔ Izipay preparation leaves existing manual orders in their current payment flow (80.2481ms)
+✔ Izipay preparation rejects expired, released, unreserved, paid and review orders without creating an attempt (161.7803ms)
+✔ Izipay concurrent starts have one creator and replay the same persisted identity (100.825ms)
+✔ Izipay an uncompleted attempt survives lost responses and later order cancellation without granting another request (106.3908ms)
+✔ Izipay token completion stores only a hash once and never confirms a payment (123.7198ms)
+✔ Izipay uncertainty blocks reinitiation and late token completion; invalid tokens preserve the initial state (94.7049ms)
+✔ Izipay competing completion and uncertainty use one atomic transition (85.3859ms)
+✔ Izipay API persists before transport and returns only a confirmed token without commerce effects (207.4914ms)
+✔ Izipay simultaneous requests and a lost success response never issue a second provider request (143.2924ms)
+✔ Izipay transport timeout is persisted as uncertain and retries cannot send another request (113.4709ms)
+✔ Izipay cancellation during network I/O does not hold a DB lock or expose a token afterwards (120.7296ms)
+✔ Izipay reservation expiry during token issuance preserves released stock and withholds the token (110.0361ms)
+✔ Izipay mismatch between persisted order and attempt prevents token handoff (95.2455ms)
+✔ Izipay API ownership and manual-payment guards preserve existing records without transport (100.5459ms)
+✔ Izipay invalidation between attempt commit and preflight never sends network traffic (102.9639ms)
+✔ Izipay initiation persists before request and confirms storage before returning a token (8.3564ms)
+✔ Izipay initiation replays have no token and never request or store another one (0.2969ms)
+✔ Izipay an invalidated reservation prevents outbound request and preserves the attempt for recovery (0.4854ms)
+✔ Izipay network errors produce one uncertain outcome without exposing the underlying exception (2.2299ms)
+✔ Izipay missing or failed token persistence never returns the provider token (0.3386ms)
+✔ Izipay failure to record uncertainty does not retry network or leak the database error (0.2521ms)
+✔ Izipay endpoint defaults off and requires a separate route opt-in before authentication (4.4805ms)
+✔ Izipay endpoint rejects absent/foreign Origin and cross-site requests (2.0732ms)
+✔ Izipay endpoint requires JSON, authenticated session and traffic budget (1.5076ms)
+✔ Izipay endpoint refuses client amounts, sensitive fields and a different current account (8.7794ms)
+✔ Izipay endpoint bounds streamed bodies and handles malformed JSON and UTF-8 (1.1038ms)
+✔ Izipay endpoint cancels a slow body without starting payment (6.8602ms)
+✔ Izipay successful response is private/no-store and only exposes token, public key and attempt identity (0.7384ms)
+✔ Izipay pending/recovery responses never expose a token or offer a new attempt (0.6067ms)
+✔ Izipay endpoint sanitizes provider, order and database errors (1.7271ms)
+✔ Izipay endpoint does not start a request whose client already disconnected (2.7122ms)
+✔ Izipay converts persisted amounts to exact integer cents (0.965ms)
+✔ Izipay rejects rounded, zero, floating-point and out-of-range inputs (0.4594ms)
+✔ Izipay payload uses the order snapshot and excludes card data (2.686ms)
+✔ Izipay rejects unsupported currency and invalid order references (0.3471ms)
+✔ Izipay is disabled by default without an outbound request (0.4632ms)
+✔ Izipay requires the explicit product and TEST mode before accepting credentials (0.885ms)
+✔ Izipay formToken request pins HTTPS destination and sends server Basic Auth (23.9535ms)
+✔ Izipay provider HTTP errors do not leak response bodies or retry (0.3977ms)
+✔ Izipay provider failure and missing token are never treated as success (1.0487ms)
+✔ Izipay rejects HTML, malformed JSON and oversized response bodies (1.2289ms)
+✔ Izipay network failures are sanitized and are not automatically retried (0.2809ms)
+✔ Izipay timeout aborts the attempt without a second outbound request (21.0125ms)
+✔ Izipay invalid timeout is rejected before a request (0.4798ms)
+✔ Izipay IPN verifies the original UTF-8 answer and REST password (0.5764ms)
+✔ Izipay IPN rejects another key, invalid digest formats and invalid inputs (0.3286ms)
+✔ maintenance cancels expired manual-payment orders and restores stock (172.1954ms)
+✔ maintenance keeps old reported payments under review and their reserved stock (144.7122ms)
+✔ order, item and payment snapshots store exact amounts and ignore browser totals (184.783ms)
+✔ a changed price creates no order or stock movement until a refreshed quote is submitted (117.2301ms)
+✔ changed shipping and a tampered quote leave the cart and inventory intact (62.5574ms)
+✔ an amount exceeding Decimal(10,2) is rejected before reserving stock (77.8837ms)
+✔ 3 bottles at 29.90 plus 8.50 shipping are exactly 98.20 (1.3425ms)
+✔ mixed cents and repeated addition have no floating point drift (0.3921ms)
+✔ administrative amounts reject extra precision rather than silently rounding (3.3513ms)
+✔ invalid precision, quantities and database overflow are rejected (0.6458ms)
+✔ client-side formatting and preview sum remain exact for large amounts (18.6572ms)
+✔ manual payment hold defaults to 120 minutes (0.7068ms)
+✔ reservation deadline adds the hold once at creation (0.844ms)
+✔ manual payment hold is clamped to a safe range (0.1189ms)
+✔ manual payment cutoff subtracts the configured hold (0.1562ms)
+✔ getClientIp uses the first forwarded address (15.9076ms)
+✔ consumeRateLimit blocks requests after the configured limit (57.8331ms)
+✔ manual refund restores stock and records audit data (150.5585ms)
+✔ registration defaults preserve six attempts per hour (1.2807ms)
+✔ registration local opt-in has its own bounded ten-minute bucket (0.2467ms)
+✔ registration production cannot enable the local policy even with loopback configuration (0.2257ms)
+✔ registration refuses relaxation for remote, malformed, renamed or overridden databases (0.3715ms)
+✔ registration requires both application URLs to be loopback (0.3239ms)
+✔ registration accepts IPv4 and IPv6 loopback for named local QA databases (0.7666ms)
+✔ registration never enables local relaxation in test or unspecified runtime (0.128ms)
+✔ registration feedback gives a positive Retry-After and rounds minutes upward (0.246ms)
+✔ local unlock configuration may omit NODE_ENV but still rejects production (0.164ms)
+✔ local registration unlock removes only selected registration keys and preserves accounts and other protections (81.6869ms)
+✔ a full legacy registration bucket does not block opt-in local development and remains recoverable (32.8565ms)
+✔ local registration unlock rejects production, remote settings and invalid IPs without clearing a bucket (11.032ms)
+✔ reserving persists a deadline and pending payment before instructions; reporting preserves later cart edits and frozen prices (193.4368ms)
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ two full checkouts competing for the final bottle create only one reserved order (198.4603ms)
+✔ missing availability in a multi-product checkout leaves every line, payment and stock unchanged (83.8719ms)
+✔ persisted expiry survives configuration changes; exact deadline rejects reporting and releases once (117.0758ms)
+✔ concurrent cancel and expiry return the reservation only once (88.1443ms)
+✔ reporting races with expiry: either review keeps the stock or expiry releases it (80.6069ms)
+✔ other customers cannot report or cancel; review cannot expire or be customer-cancelled; approval never reserves twice (115.5595ms)
+prisma:error
+Invalid `tx.payment.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\orders\reservation-service.ts:80:40
+
+  77   stockReservedAt: { not: null }, reservationExpiresAt: { gt: now },
+  78 }, data: { status: OrderStatus.PAYMENT_REVIEW } });
+  79 if (claimed.count !== 1) return "unavailable" as const;
+→ 80 const updated = await tx.payment.updateMany(
+Unique constraint failed on the fields: (`provider`,`operationCode`)
+✔ a duplicate operation rolls back the review transition without losing either reservation (127.2818ms)
+✔ legacy pending without reservation markers is neither payable nor automatically released (83.5922ms)
+✔ three reservations or reviews block a fourth before touching stock (126.7611ms)
+✔ only one concurrent reservation can take the final unit (68.7693ms)
+✔ releaseStock restores a previously reserved quantity (22.9424ms)
+✔ a failed multi-product reservation rolls back earlier stock changes (32.5214ms)
+ℹ tests 218
+ℹ suites 0
+ℹ pass 218
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19776.6838
