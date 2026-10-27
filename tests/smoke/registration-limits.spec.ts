@@ -24,8 +24,29 @@ test("registration explains password rules and invalid browser input does not co
   await page.getByRole("button", { name: "Crear cuenta", exact: true }).click();
   expect(await page.getByLabel("Contraseña", { exact: true }).evaluate((el) => (el as HTMLInputElement).validity.patternMismatch)).toBe(true);
   expect(requests).toBe(0);
+  await expect(page.locator("#registration-password-error")).toContainText("Incluye al menos una mayúscula");
+  await expect(page.locator("#registration-password-error")).toContainText("Incluye al menos un número");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await capture(page, info, "auth-01-reglas-contrasena");
+});
+
+test("registration identifies an eight-digit phone and removes the error after correction", async ({ page }) => {
+  let requests = 0;
+  page.on("request", (request) => { if (request.url().endsWith("/api/auth/register")) requests++; });
+  await page.goto("/registrarse");
+  const phone = page.getByLabel("Celular (opcional)", { exact: true });
+  await phone.fill("98765432");
+  await page.getByLabel("Correo electrónico").focus();
+  await expect(page.locator("#registration-phone-error")).toContainText("9 dígitos; ingresaste 8");
+  await expect(phone).toHaveAttribute("aria-invalid", "true");
+  await phone.fill("987654321");
+  await expect(page.locator("#registration-phone-error")).toHaveCount(0);
+  await expect(phone).toHaveAttribute("aria-invalid", "false");
+  await phone.fill("");
+  await page.getByRole("button", { name: "Crear cuenta", exact: true }).click();
+  await expect(page.getByLabel("Nombres", { exact: true })).toBeFocused();
+  await expect(page.locator("#registration-firstName-error")).toBeVisible();
+  expect(requests).toBe(0);
 });
 
 test("registration 429 shows a real waiting time and does not create an account", async ({ page }, info) => {

@@ -1,5 +1,22 @@
 # Punto de avance
 
+## Sprint 3 — Confirmaciones recuperables (2026-10-27, America/Lima)
+
+- El propietario confirma ausencia de acceso del comercio a Izipay. Se avanza en correo
+  independiente del proveedor, sin habilitar cobros automáticos.
+- S3-05: aviso persistente junto con aprobación manual, snapshot exacto, unicidad por
+  pedido, lease, mismo cuerpo/clave y límites de reintento. [Contrato](integraciones/confirmaciones-correo.md).
+- Panel `/admin/notificaciones`, vistas previas y envío operativo explícito apagado por
+  defecto. Demo `/desarrollo/correos`. [Guía para probar y explicar al cliente](guia-prueba-sprint-03.md).
+- Migración aditiva 15; preparador local aplicó solo las pendientes 13–15, sin reset/seed.
+  Regresión 255/255 servidor en QA; contrato SQL aislado, tipos/lint y pruebas de navegador
+  añadidas. [QA](testing/s3-05-confirmaciones.md).
+- Se incluyen correcciones funcionales de carrito/registro que seguían locales. Home
+  visual pendiente. Entrega de correo externa y pago automático/IPN por verificar.
+- Base previa 5af345a: [CI 40265331014](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/40265331014)
+  aprobó tests, build, migraciones/restore, tipos/lint, auditoría y navegador. El CI nuevo
+  se registra en la PR al publicar con jose-israel.
+
 ## Publicación del avance del Sprint 3 — 2026-10-25 (America/Lima)
 
 - El propietario autoriza commit/subida con `jose-israel`. Perfil y permiso `write`

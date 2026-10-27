@@ -23,3 +23,14 @@
 .authSubmitLink {
   text-decoration: none;
 }
+
+.registrationFieldError {
+  margin: 0;
+  padding-left: 18px;
+  color: #84212b;
+  font-size: .82rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.authCard input[aria-invalid="true"] { border-color: var(--danger); }
+.authCard .formField small { color: var(--muted); line-height: 1.5; }

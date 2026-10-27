@@ -3,6 +3,7 @@
 import { ArrowLeft, ArrowRight, Check, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import type { Route } from "next";
 import { useState } from "react";
 
 import { PaymentProgressPanel } from "@/components/payment-progress-panel";
@@ -48,7 +49,7 @@ export function SprintPaymentPreview() {
             {scene === "prepared" ? <div className="sprintProviderSlot"><LockKeyhole size={24} aria-hidden="true" /><h3>Aquí irá el formulario oficial</h3><p>Integración pendiente con el producto habilitado por Izipay. Esta vista no solicita datos de tarjetas ni inicia un pago.</p><span>PENDIENTE · SANDBOX DEL PROVEEDOR</span></div> : null}
             {scene === "initiating" ? <div className="sprintNextAction"><p>La siguiente pantalla se habilitará al verificar el resultado. Un tiempo de espera no debe provocar otro cobro.</p><button type="button" className="button buttonDark" onClick={() => setScene("uncertain")}>Ver caso de recuperación <ArrowRight size={16} aria-hidden="true" /></button></div> : null}
             {scene === "uncertain" || scene === "expired" ? <div className="sprintNextAction"><p>Se conservará la referencia del pedido para revisar la operación con la tienda. No se propondrá pagar de nuevo mientras el resultado sea incierto.</p><button type="button" className="button buttonDark" onClick={() => setScene("confirmed")}>Ver confirmación simulada <ArrowRight size={16} aria-hidden="true" /></button></div> : null}
-            {scene === "confirmed" ? <div className="sprintMailPreview"><Mail size={23} aria-hidden="true" /><div><h3>La confirmación también llegará por correo</h3><p>Próximo desarrollo: envío recuperable con el resumen del pedido. Si el correo falla, el pedido conservará su confirmación.</p><span>VISTA PREVISTA · ENVÍO AÚN PENDIENTE</span></div></div> : null}
+            {scene === "confirmed" ? <div className="sprintMailPreview"><Mail size={23} aria-hidden="true" /><div><h3>La confirmación tiene su propio aviso</h3><p>La cola y la vista previa ya están disponibles para pagos manuales aprobados. Un fallo de correo conserva el pago. La conexión al pago automático y el envío externo siguen pendientes.</p><Link href={"/desarrollo/correos" as Route}>Probar la demostración del correo →</Link></div></div> : null}
             <div className="sprintSceneControls"><button type="button" disabled={index === 0} onClick={() => setScene(scenes[index - 1].id)}><ArrowLeft size={16} aria-hidden="true" /> Anterior</button><span>{index + 1} / {scenes.length}</span><button type="button" disabled={index === scenes.length - 1} onClick={() => setScene(scenes[index + 1].id)}>Siguiente <ArrowRight size={16} aria-hidden="true" /></button></div>
           </section>
           <aside className="sprintOrderSummary" aria-label="Resumen de ejemplo"><p className="sprintKicker">TU PEDIDO DE EJEMPLO</p><div className="sprintProduct"><Image src="/media/rosh/home/botella-uvas.webp" width={100} height={120} alt="Botella ROSH entre uvas, fotografía del cliente" /><div><h3>ROSH · Bebida de uva</h3><p>3 botellas · S/ 29.90 c/u</p><span>Producto y precio ilustrativos</span></div></div><dl><div><dt>Productos</dt><dd>S/ 89.70</dd></div><div><dt>Envío de ejemplo</dt><dd>S/ 8.50</dd></div><div className="sprintTotal"><dt>Total</dt><dd>S/ 98.20</dd></div></dl><p className="sprintOrderSafety"><ShieldCheck size={20} aria-hidden="true" /><span>La confirmación real dependerá de la verificación del servidor y del proveedor.</span></p></aside>
@@ -57,7 +58,7 @@ export function SprintPaymentPreview() {
           {[{ code: "S3-02", title: "Reserva y consulta", text: "Implementadas con sesión y pedido propios. Falta conectar el formulario oficial.", ready: true },
             { code: "S3-03", title: "Confirmación auténtica", text: "Verificar notificaciones y aplicar el resultado una sola vez, incluso si se repite.", ready: false },
             { code: "S3-04", title: "Revisión de operaciones", text: "Comparar el pago, las comisiones y el abono para detectar diferencias.", ready: false },
-            { code: "S3-05", title: "Correo recuperable", text: "Guardar la notificación y reintentar su envío sin duplicar el pedido.", ready: false }].map((item) => <article key={item.code}><span>{item.ready ? <Check size={15} aria-hidden="true" /> : null}{item.code} · {item.ready ? "AVANCE PARCIAL" : "PENDIENTE"}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+            { code: "S3-05", title: "Correo recuperable", text: "Cola persistente, vista previa y reintentos para pagos manuales aprobados. Envío externo apagado.", ready: true }].map((item) => <article key={item.code}><span>{item.ready ? <Check size={15} aria-hidden="true" /> : null}{item.code} · {item.ready ? "AVANCE PARCIAL" : "PENDIENTE"}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
         </div></section>
         <footer className="sprintPreviewFooter">Solo desarrollo local · Sin claves, datos de tarjetas ni cobros reales · Diseño de la tienda pendiente de revisión</footer>
       </div>

@@ -26,6 +26,7 @@
     "db:backup": "tsx scripts/backup-db.ts",
     "db:restore": "tsx scripts/restore-db.ts",
     "db:maintenance": "tsx scripts/maintenance.ts",
+    "db:prepare:email": "node --env-file-if-exists=.env scripts/prepare-payment-email-local.mjs",
     "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1",
     "auth:unlock-local": "node --env-file-if-exists=.env --import tsx scripts/unlock-local-registration.ts"
   },

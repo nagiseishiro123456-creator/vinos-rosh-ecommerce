@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -13,7 +13,8 @@ const database = "vinos_rosh_test";
 const qa = new URL(source);
 qa.pathname = "/" + database;
 const env = { ...process.env, DATABASE_URL: qa.toString(), NODE_ENV: "test", SMOKE_TEST_DATA: "true",
-  PAYMENTS_IZIPAY_ENABLED: "false", IZIPAY_MCW_INITIATE_ENABLED: "false", IZIPAY_MCW_RESERVE_ENABLED: "false" };
+  PAYMENTS_IZIPAY_ENABLED: "false", IZIPAY_MCW_INITIATE_ENABLED: "false", IZIPAY_MCW_RESERVE_ENABLED: "false",
+  PAYMENT_CONFIRMATION_EMAIL_ENABLED: "false" };
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, { cwd: root, env, stdio: "inherit", ...options });
   if (result.error || result.status !== 0) throw new Error("Local QA command failed; development database was not targeted.");
@@ -28,3 +29,6 @@ console.log("QA database: vinos_rosh_test (local). Applying committed migrations
 run(process.execPath, ["node_modules/prisma/build/index.js", "migrate", "deploy"]);
 const files = readdirSync(new URL("../tests/", import.meta.url)).filter((name) => name.endsWith(".test.ts")).sort();
 run(process.execPath, ["--import", "tsx", "--test", "--test-concurrency=1", ...files.map((name) => "tests/" + name)]);
+const sql = ["tests/sql/confirmation-outbox-migration-before.sql", "prisma/migrations/20261027090000_payment_confirmation_outbox/migration.sql", "tests/sql/confirmation-outbox-migration-after.sql"]
+  .map((name) => readFileSync(new URL("../" + name, import.meta.url), "utf8")).join("\n");
+run("docker", ["exec", "-i", container, "psql", "-U", username, "-d", database, "-v", "ON_ERROR_STOP=1"], { input: sql, stdio: ["pipe", "inherit", "inherit"] });

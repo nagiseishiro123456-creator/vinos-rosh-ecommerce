@@ -1,0 +1,29 @@
+{
+  "source": "localhost:3000/desarrollo/correos",
+  "date": "2026-10-27, America/Lima",
+  "base": "5af345acfe3fc10dd1906fe141d466ac707cb449",
+  "mode": "development, synthetic examples",
+  "providerRequestsMade": 0,
+  "scenarios": [
+    "QUEUED",
+    "RETRY",
+    "SENT (simulated)"
+  ],
+  "anonymousAdminAccess": "redirects to login",
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 720,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    }
+  ],
+  "limits": [
+    "Not evidence of actual provider delivery",
+    "Private operational flow covered by the new CI browser scenario"
+  ]
+}

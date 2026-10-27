@@ -328,6 +328,7 @@ model Order {
   reviews            Review[]
   inventoryMovements InventoryMovement[]
   events             OrderEvent[]
+  paymentConfirmation PaymentConfirmationOutbox?
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -436,6 +437,31 @@ model PaymentReconciliation {
   payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 
   @@index([refundedAt, openedAt])
+}
+
+// One recoverable confirmation per paid order. Provider acceptance is not inbox delivery.
+model PaymentConfirmationOutbox {
+  id                String    @id @db.Uuid
+  orderId           String    @unique
+  status            String    @default("QUEUED") @db.VarChar(16)
+  recipient         String    @db.VarChar(254)
+  payload           Json      @db.JsonB
+  envelope          Json?     @db.JsonB
+  senderConfigHash  String?   @db.Char(64)
+  attempts          Int       @default(0)
+  firstAttemptAt    DateTime?
+  nextAttemptAt     DateTime  @default(now())
+  leaseToken        String?   @db.Uuid
+  lockedUntil       DateTime?
+  providerMessageId String?   @db.Uuid
+  acceptedAt        DateTime?
+  lastErrorCode     String?   @db.VarChar(64)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextAttemptAt])
 }
 
 model Review {

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { AdminOperationError, assertTransactionAdmin } from "@/modules/admin/transaction-auth";
 import { releaseStock } from "@/modules/inventory/stock-service";
+import { enqueuePaymentConfirmation } from "@/modules/notifications/outbox-service";
 
 async function review(adminId: string, paymentId: string, decision: "approve" | "reject", reason: string) {
   if (reason.trim().length < 4 || reason.length > 500) throw new AdminOperationError("INVALID_INPUT");
@@ -30,6 +31,7 @@ async function review(adminId: string, paymentId: string, decision: "approve" | 
       ...(decision === "approve" ? { paidAt: now } : {}),
     } });
     if (updated.count !== 1) throw new AdminOperationError("STATE_CHANGED");
+    if (decision === "approve") await enqueuePaymentConfirmation(tx, order.id);
     if (decision === "reject") {
       const stockAfter = await releaseStock(tx, order.items);
       await tx.inventoryMovement.createMany({ data: order.items.map((item) => ({

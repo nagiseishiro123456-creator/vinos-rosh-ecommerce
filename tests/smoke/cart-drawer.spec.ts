@@ -53,6 +53,25 @@ async function quantity(cartId: string, productId: string) {
   return (await prisma.cartItem.findUniqueOrThrow({ where: { cartId_productId: { cartId, productId } } })).quantity;
 }
 
+test("closing the cart releases the native modal and background navigation with and without motion", async ({ page }) => {
+  await page.goto("/");
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    await page.emulateMedia({ reducedMotion });
+    for (const method of ["button", "escape", "continue"] as const) {
+      const overflow = await page.evaluate(() => document.body.style.overflow);
+      await open(page);
+      if (method === "escape") await page.keyboard.press("Escape");
+      else await panel(page).getByRole("button", { name: method === "button" ? "Cerrar carrito" : "Continuar comprando", exact: true }).click();
+      await expect(page.locator("#cart-drawer")).not.toHaveAttribute("open", "");
+      await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe(overflow);
+      await expect(page.locator(".cartButton")).toBeFocused();
+    }
+    await page.getByRole("link", { name: "Explorar catálogo", exact: true }).click();
+    await expect(page).toHaveURL((url) => url.pathname === "/productos");
+    await page.goto("/");
+  }
+});
+
 test("S2-05: guest panel contains keyboard focus, restores scroll and shares selection with the page", async ({ page }, info) => {
   test.setTimeout(120_000); await resetCheckoutFixture();
   const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message));

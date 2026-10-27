@@ -54,7 +54,7 @@ S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 | S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte, intentos, inicio y reserva protegidos/desactivados; consulta propia y UI de estado implementadas localmente. SDK, recuperación del proveedor y sandbox externo pendientes. |
 | S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
 | S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Pendiente. |
-| S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Pendiente. |
+| S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Cola, panel, plantilla y recuperación implementados en aprobación manual; entrega externa y conexión a IPN pendientes. |
 | S3-06 | Revisar, comprobar regresión, integrar y demostrar el incremento. | 2 | Pendiente. |
 
 Izipay se solicita expresamente para evaluar sandbox (2026-10-22); su producto web

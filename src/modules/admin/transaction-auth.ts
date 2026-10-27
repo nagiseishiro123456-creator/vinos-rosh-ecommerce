@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 
 export class AdminOperationError extends Error {
-  constructor(public code: "FORBIDDEN" | "STATE_CHANGED" | "INCONSISTENT" | "INVALID_INPUT" | "DUPLICATE_OPERATION") {
+  constructor(public code: "FORBIDDEN" | "STATE_CHANGED" | "INCONSISTENT" | "INVALID_INPUT" | "DUPLICATE_OPERATION" | "NOTIFICATION_UNAVAILABLE") {
     super(code);
     this.name = "AdminOperationError";
   }

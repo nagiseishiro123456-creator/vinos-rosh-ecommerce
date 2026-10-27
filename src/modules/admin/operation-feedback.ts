@@ -14,6 +14,7 @@ export const operationMessages: Record<string, string> = {
   INCONSISTENT: "No se puede ejecutar la operación: revisa el estado, importe, moneda y reserva. No se modificó el stock.",
   INVALID_INPUT: "Los datos no son válidos. Revisa los campos solicitados.",
   DUPLICATE_OPERATION: "Esta operación bancaria ya está registrada. Verifica su pedido antes de continuar.",
+  NOTIFICATION_UNAVAILABLE: "No pudimos guardar la confirmación y su aviso. Reintenta la revisión; no necesitas repetir la operación bancaria.",
 };
 
 export async function adminOperation(orderId: string | undefined, destination: string, operation: () => Promise<{ changed: boolean }>) {

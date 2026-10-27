@@ -50,6 +50,7 @@ jobs:
       PAYMENTS_IZIPAY_ENABLED: "false"
       IZIPAY_MCW_INITIATE_ENABLED: "false"
       IZIPAY_MCW_RESERVE_ENABLED: "false"
+      PAYMENT_CONFIRMATION_EMAIL_ENABLED: "false"
       PAYMENTS_YAPE_MANUAL_ENABLED: "false"
       PAYMENTS_TRANSFER_MANUAL_ENABLED: "false"
       SMOKE_TEST_DATA: "true"
@@ -138,6 +139,12 @@ jobs:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: |
           cat tests/sql/automatic-reservation-migration-before.sql prisma/migrations/20261022170000_automatic_order_reservation/migration.sql tests/sql/automatic-reservation-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
+      - name: Verify confirmation outbox migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/confirmation-outbox-migration-before.sql prisma/migrations/20261027090000_payment_confirmation_outbox/migration.sql tests/sql/confirmation-outbox-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
       - name: Verify cart idempotency after PostgreSQL dump and restore
         env:
