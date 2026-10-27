@@ -19,6 +19,14 @@ TypeScript/ESLint locales aprobados. Se añade Playwright de aprobación, cola/c
 acceso por rol y envíos desactivados. Build/suite completa de la cabecera nueva se comprueban
 en CI; los checks de la base anterior no se atribuyen a este código.
 
+La primera ejecución de CI detectó que dos contratos de restauración aún exigían 14
+migraciones. Ahora comparan los nombres de todas las migraciones comprometidas con el
+historial restaurado, en lugar de mantener un contador fijo. Ambos contratos se repitieron
+localmente con dump/restore nativos: carrito conservó cantidades/revisión y deduplicación;
+reserva conservó un pedido, un intento, stock 7 y carrito posterior intacto, con 15
+migraciones y cero solicitudes externas. El runner usa el usuario configurado en la URL
+y mantiene sus guardas de CI, localhost y bases temporales. CI completa pendiente de repetición.
+
 Navegador integrado: demo Pendiente → Reintento → Aceptado, móvil 390 sin desborde y cola
 anónima redirigida a login. [Evidencias](../evidencias/sprint-03/s3-05-confirmaciones/README.md).
 Se incluyen correcciones funcionales previas de carrito/registro y sus regresiones.

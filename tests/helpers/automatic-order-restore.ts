@@ -8,6 +8,7 @@ import { loadCheckoutSnapshot } from "../../src/modules/checkout/snapshot";
 import type { AutomaticOrderInput } from "../../src/modules/orders/automatic-order-input";
 import { reserveMicuentawebSandboxOrder } from "../../src/modules/orders/automatic-order-service";
 import { beginMicuentawebSandboxAttempt } from "../../src/modules/payments/izipay/attempt-service";
+import { assertRestoredMigrations } from "./migration-history";
 
 type Context = { userId: string; productId: string; cartId: string; input: AutomaticOrderInput;
   orderId: string; number: string; expiresAt: string; attemptId: string; providerReference: string };
@@ -52,8 +53,7 @@ async function main() {
   assert.equal(process.argv[2], "verify");
   const context = JSON.parse(readFileSync(contextPath!, "utf8")) as Context;
   const { userId, productId, cartId, orderId } = context;
-  const migrations = await prisma.$queryRaw<{ count: bigint }[]>`SELECT count(*)::bigint AS count FROM "_prisma_migrations" WHERE finished_at IS NOT NULL`;
-  assert.equal(Number(migrations[0].count), 14);
+  const migrations = await assertRestoredMigrations();
   const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });
   assert.equal(order.paymentIntegration, "MICUENTAWEB_V4");
   assert.equal(order.status, "PENDING_PAYMENT");
@@ -77,7 +77,7 @@ async function main() {
   assert.equal(await prisma.paymentAttempt.count({ where: { orderId } }), 1);
   assert.equal(await prisma.inventoryMovement.count({ where: { orderId, type: "ORDER_RESERVATION" } }), 1);
   assert.equal(await prisma.orderEvent.count({ where: { orderId, kind: "AUTOMATIC_SANDBOX_RESERVED" } }), 1);
-  console.log("S302_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations: 14, orders: 1, payments: 0,
+  console.log("S302_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations, orders: 1, payments: 0,
     attempts: 1, attemptState: "INITIATING", stock: 7, cartQuantity: 2, cartRevision: 1, outboundRequests: 0 }));
 }
 main().finally(() => prisma.$disconnect()).catch((error) => { console.error(error); process.exitCode = 1; });

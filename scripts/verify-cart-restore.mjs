@@ -11,6 +11,8 @@ assert.equal(process.env.CI, "true", "Recovery contract runs only in isolated CI
 assert.ok(container && /^[a-zA-Z0-9_.-]+$/.test(container));
 assert.ok(["localhost", "127.0.0.1"].includes(database.hostname));
 assert.equal(database.pathname, "/vinos_rosh_ci");
+const username = decodeURIComponent(database.username);
+assert.match(username, /^[a-zA-Z0-9_]+$/);
 
 const scenario = process.argv[2] ?? "cart";
 assert.ok(["cart", "automatic"].includes(scenario), "Unknown recovery contract");
@@ -37,20 +39,20 @@ function environment(name) {
 }
 try {
   for (const name of [source, target]) {
-    docker("createdb", "-U", "postgres", name);
+    docker("createdb", "-U", username, name);
     created.push(name);
   }
   run(process.execPath, ["node_modules/prisma/build/index.js", "migrate", "deploy"], { env: environment(source) });
   run(process.execPath, ["--import", "tsx", helper, "seed"], { env: environment(source) });
 
   // Same native dump/restore flags as scripts/backup-db.ts and restore-db.ts.
-  const dump = docker("pg_dump", "-U", "postgres", "-d", source, "--clean", "--if-exists", "--no-owner", "--no-privileges");
+  const dump = docker("pg_dump", "-U", username, "-d", source, "--clean", "--if-exists", "--no-owner", "--no-privileges");
   assert.ok(dump.length > 0);
-  run("docker", ["exec", "-i", container, "psql", "-U", "postgres", "-d", target, "-v", "ON_ERROR_STOP=1"], { input: dump });
+  run("docker", ["exec", "-i", container, "psql", "-U", username, "-d", target, "-v", "ON_ERROR_STOP=1"], { input: dump });
   const verification = run(process.execPath, ["--import", "tsx", helper, "verify"], { env: environment(target) });
   process.stdout.write(verification);
   console.log(prefix.toUpperCase() + "_RESTORE_DUMP " + JSON.stringify({ bytes: dump.length, sha256: createHash("sha256").update(dump).digest("hex") }));
 } finally {
-  for (const name of created.reverse()) docker("dropdb", "-U", "postgres", "--force", name);
+  for (const name of created.reverse()) docker("dropdb", "-U", username, "--force", name);
   rmSync(scratch, { recursive: true, force: true });
 }
