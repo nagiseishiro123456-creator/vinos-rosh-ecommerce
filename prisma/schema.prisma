@@ -380,6 +380,7 @@ model Payment {
   order      Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   reviewedBy User? @relation("PaymentReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
   reconciliation PaymentReconciliation?
+  settlement PaymentSettlement?
 
   @@unique([provider, operationCode])
   @@index([orderId])
@@ -387,6 +388,23 @@ model Payment {
   @@index([provider])
   @@index([provider, externalReference])
   @@index([reviewedById])
+}
+
+// Operator-entered statement evidence; never evidence of an automatic bank transfer.
+model PaymentSettlement {
+  id               String   @id @db.Uuid
+  paymentId        String   @unique
+  grossAmount      Decimal  @db.Decimal(10, 2)
+  commissionAmount Decimal? @db.Decimal(10, 2)
+  depositedAmount  Decimal? @db.Decimal(10, 2)
+  depositReference String?  @db.VarChar(120)
+  depositDate      DateTime? @db.Date
+  sourceReference  String   @db.VarChar(120)
+  revision         Int      @default(1)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 }
 
 // One attempt per order until the provider's recovery/retry contract is verified.

@@ -53,9 +53,15 @@ S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 | S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
 | S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte, intentos, inicio y reserva protegidos/desactivados; consulta propia y UI de estado implementadas localmente. SDK, recuperación del proveedor y sandbox externo pendientes. |
 | S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
-| S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Pendiente. |
+| S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Conciliación manual con comisiones, neto, abono e historial implementada; reporte/consulta Izipay y aceptación externa pendientes. |
 | S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Cola, panel, plantilla y recuperación implementados en aprobación manual; entrega externa y conexión a IPN pendientes. |
 | S3-06 | Revisar, comprobar regresión, integrar y demostrar el incremento. | 2 | Pendiente. |
+
+Actualización 2026-10-29: [conciliación manual](integraciones/conciliacion-manual.md),
+migración 16, panel privado y demo con datos ficticios. No cambia pagos/stock ni ejecuta
+operaciones bancarias. El propietario confirma Resend sin configurar; se incorpora
+diagnóstico local sin secretos, sin peticiones externas ni activar el envío.
+[Guía de prueba](guia-prueba-sprint-03.md) · [QA](testing/s3-04-conciliacion.md).
 
 Izipay se solicita expresamente para evaluar sandbox (2026-10-22); su producto web
 y habilitación siguen pendientes. [Guía técnica](integraciones/izipay-sandbox.md) y

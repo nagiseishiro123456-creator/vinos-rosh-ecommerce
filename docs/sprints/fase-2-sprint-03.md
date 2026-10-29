@@ -37,6 +37,12 @@ revisión local responsive y capturas reales de la demostración. SDK/IPN/correo
 
 ## Sprint Goal
 
+Actualización 2026-10-29: por instrucción del propietario se implementa la parte manual
+de S3-04: [registro de comisión, abono y diferencias](../integraciones/conciliacion-manual.md)
+con historial y recuperación de respaldo. S3-04 continúa parcial para el proveedor.
+ROSH confirma Resend todavía sin configurar; se añade diagnóstico y guía sin activar
+envíos. La verificación externa de correo e Izipay permanece pendiente.
+
 Un comprador puede pagar una reserva con un proveedor habilitado para ROSH y consultar
 un estado confirmado por servidor. Los reintentos no duplican cobros/efectos de negocio
 y una confirmación de pedido puede recuperarse aunque falle el envío del correo.
@@ -69,7 +75,7 @@ integración externa aceptada. No cambiar a otro proveedor sin dejar registrada 
 | S3-01 | Como propietario, quiero entender el carrito y comparar proveedor/producto/costos para elegir sin rehacer el checkout. | 3 | Accesos y versión explicados; estado financiero real inventariado; fuentes y alternativas verificadas; elección y condiciones registradas. | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
 | S3-02 | Como comprador, quiero iniciar un pago de mi reserva en el checkout del proveedor elegido. | 5 | Intento persistido ligado a orden/importe/moneda; token en backend; modo prueba; SDK solo bajo demanda; timeout recuperable sin generar cobro nuevo a ciegas; manuales operativos. | Transporte, intentos, inicio y reserva autenticados preparados/desactivados; consulta propia y panel local implementados. Recuperación del proveedor, SDK y sandbox externo pendientes. |
 | S3-03 | Como tienda, quiero confirmar resultados auténticos una sola vez incluso con eventos repetidos o tardíos. | 8 | Firma y campos verificados; IPN persistida/idempotente; transacción de estados y stock; carreras pago/vencimiento; discrepancia o ingreso tardío queda conciliable sin vender stock liberado. | Pendiente. |
-| S3-04 | Como operador, quiero comparar pagos confirmados, costos y abonos para detectar diferencias. | 3 | Consulta segura/reconciliación según API disponible o reporte verificado; bruto/comisión/neto/abono separados; datos desconocidos explícitos; pendientes y discrepancias trazables. | Pendiente. |
+| S3-04 | Como operador, quiero comparar pagos confirmados, costos y abonos para detectar diferencias. | 3 | Consulta segura/reconciliación según API disponible o reporte verificado; bruto/comisión/neto/abono separados; datos desconocidos explícitos; pendientes y discrepancias trazables. | Registro manual con evidencia, revisiones e historial implementado; reporte/consulta del proveedor y aceptación externa pendientes. |
 | S3-05 | Como comprador, quiero confirmación de pago y pedido recuperable por correo. | 5 | Evento/outbox persistido en misma transacción; envío después del commit; reintentos registrados; caída del correo no revierte ni duplica pago; constancia sin simular emisión fiscal. | Cola transaccional, panel, plantilla y recuperación implementados en aprobación manual; entrega externa y conexión a IPN pendientes. |
 | S3-06 | Como propietario, quiero revisar el recorrido y evidencias antes de integrar y aceptar el incremento. | 2 | Regresión previa conservada, nuevos casos de pasarela y errores, capturas de prueba, documentación de operación y revisión del PR; aceptación comercial registrada aparte. | Pendiente. |
 

@@ -48,13 +48,29 @@ estáticos. Los fallos de BD no imprimen payloads/valores. Un correo no emite co
 
 ## Configuración
 
+Actualización 2026-10-29: el propietario confirma Resend sin configurar. Se añade
+`/admin/notificaciones/configuracion` (ADMIN) y `npm run email:check`, diagnóstico local
+sin HTTP/BD, claves, direcciones ni valores privados en su resultado. Formato completo
+no significa dominio verificado, autenticación aceptada ni entrega. Se rechazan saltos
+de línea/espacios internos en la credencial y remitentes mal formados.
+
+Preparación con el negocio: verificar su dominio en Resend, crear credencial de envío
+restringida al dominio, configurar RESEND_API_KEY/EMAIL_FROM en el entorno privado y
+NEXT_PUBLIC_APP_URL. Conservar el flag apagado durante preparación; revisar límites
+gratuitos antes de activar. La prueba externa requiere un destinatario autorizado y
+comprobar proveedor y recepción, diferenciando aceptación de entrega.
+[Dominios](https://resend.com/docs/dashboard/domains/introduction) y
+[credenciales](https://resend.com/docs/dashboard/api-keys/introduction), documentación
+oficial consultada el 2026-10-29. No se creó cuenta, cambió DNS o envió un correo.
+
 PAYMENT_CONFIRMATION_EMAIL_ENABLED=false por defecto, también en CI. Sin flag, clave
 y remitente válidos no se reclama/envía el aviso. RESEND_API_KEY/EMAIL_FROM son opcionales;
 antes de activar externamente se verifica remitente/dominio y límites gratuitos.
 No se activó ni envió correo externo: las pruebas utilizan transportes sintéticos.
 
 `npm run db:prepare:email` admite solo vinos_rosh/vinos_rosh_test locales, fuera de production,
-y las migraciones aditivas conocidas 13–15. Rechaza otros destinos/pendientes; no resetea ni
+y las migraciones aditivas conocidas 13–16. `npm run db:prepare:sprint3` es un alias para
+preparar ambos módulos. Rechaza otros destinos/pendientes; no resetea ni
 carga datos comerciales. El repositorio SQL tipado mantiene explícitos los locks y leases;
 el modelo Prisma refleja la tabla. [QA](../testing/s3-05-confirmaciones.md).
 

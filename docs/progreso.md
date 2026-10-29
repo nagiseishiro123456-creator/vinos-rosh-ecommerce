@@ -1,5 +1,23 @@
 # Punto de avance
 
+## Sprint 3 — Conciliación manual y preparación de correo (2026-10-29, America/Lima)
+
+- El propietario autoriza continuar y confirma que Resend todavía no está configurado.
+  Se conserva el envío desactivado; la entrega externa y el acceso del comercio Izipay siguen pendientes.
+- S3-04 parcial: pagos manuales confirmados, comisión explícita o desconocida, neto exacto,
+  abono/fecha/referencia verificados y diferencias visibles. Correcciones con revisión
+  optimista, rol ADMIN vigente y auditoría atómica. Reembolsos o cambios de pago requieren revisión.
+  [Contrato](integraciones/conciliacion-manual.md).
+- Panel `/admin/conciliacion` y demo `/desarrollo/conciliacion`; el diagnóstico privado del
+  correo está en `/admin/notificaciones/configuracion`, también `npm run email:check`.
+  No expone claves ni presenta formato válido como autenticación o entrega comprobadas.
+- Migración aditiva 16 comprobada en QA y aplicada en desarrollo sin reset/seed.
+  **270/270 servidor** locales y contratos SQL aprobados; dump/restore conserva dos
+  versiones y auditoría, sin envíos externos. Tipos y lint aprobados. Nueva navegación
+  de conciliación se verifica en CI al publicar. [QA](testing/s3-04-conciliacion.md).
+- [Guía de prueba](guia-prueba-sprint-03.md). Diseño de Home permanece pendiente.
+  No se cierra el Sprint 3 ni se activa un despliegue.
+
 ## Sprint 3 — Confirmaciones recuperables (2026-10-27, America/Lima)
 
 - El propietario confirma ausencia de acceso del comercio a Izipay. Se avanza en correo

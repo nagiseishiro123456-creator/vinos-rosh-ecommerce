@@ -15,10 +15,13 @@ const username = decodeURIComponent(database.username);
 assert.match(username, /^[a-zA-Z0-9_]+$/);
 
 const scenario = process.argv[2] ?? "cart";
-assert.ok(["cart", "automatic"].includes(scenario), "Unknown recovery contract");
-const automatic = scenario === "automatic";
-const prefix = automatic ? "s302" : "s206";
-const helper = automatic ? "tests/helpers/automatic-order-restore.ts" : "tests/helpers/cart-restore.ts";
+const contracts = {
+  cart: { prefix: "s206", helper: "tests/helpers/cart-restore.ts", context: "S206_CONTEXT_PATH" },
+  automatic: { prefix: "s302", helper: "tests/helpers/automatic-order-restore.ts", context: "S302_CONTEXT_PATH" },
+  settlement: { prefix: "s304", helper: "tests/helpers/settlement-restore.ts", context: "S304_CONTEXT_PATH" },
+};
+assert.ok(Object.hasOwn(contracts, scenario), "Unknown recovery contract");
+const { prefix, helper, context } = contracts[scenario];
 const scratch = mkdtempSync(join(tmpdir(), "rosh-" + scenario + "-restore-"));
 const contextPath = join(scratch, "context.json");
 const source = "rosh_" + prefix + "_source_" + process.pid;
@@ -35,7 +38,7 @@ function docker(...args) { return run("docker", ["exec", container, ...args]); }
 function environment(name) {
   const url = new URL(database);
   url.pathname = "/" + name;
-  return { ...process.env, DATABASE_URL: url.href, [automatic ? "S302_CONTEXT_PATH" : "S206_CONTEXT_PATH"]: contextPath };
+  return { ...process.env, DATABASE_URL: url.href, [context]: contextPath };
 }
 try {
   for (const name of [source, target]) {

@@ -146,6 +146,12 @@ jobs:
         run: |
           cat tests/sql/confirmation-outbox-migration-before.sql prisma/migrations/20261027090000_payment_confirmation_outbox/migration.sql tests/sql/confirmation-outbox-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
+      - name: Verify manual settlement migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/settlement-migration-before.sql prisma/migrations/20261029100000_manual_payment_settlement/migration.sql tests/sql/settlement-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Verify cart idempotency after PostgreSQL dump and restore
         env:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
@@ -155,6 +161,11 @@ jobs:
         env:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: node scripts/verify-cart-restore.mjs automatic
+
+      - name: Verify settlement evidence after PostgreSQL dump and restore
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: node scripts/verify-cart-restore.mjs settlement
 
       - name: Typecheck
         run: npm run typecheck

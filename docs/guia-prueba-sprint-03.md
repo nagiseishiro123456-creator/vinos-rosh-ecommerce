@@ -1,6 +1,33 @@
 # Probar el avance y explicarlo al cliente
 
-2026-10-27. Entorno local; Izipay aún no está habilitado para ROSH.
+Actualizado 2026-10-29. Entorno local; Izipay y Resend aún no están habilitados para ROSH.
+
+## Nuevo: conciliación y preparación del correo
+
+Abre `http://localhost:3000/desarrollo/conciliacion`. Pulsa **Ver diferencia**: un pago de
+98.20 menos comisión 2.50 deja neto 95.70; un abono de 94.70 muestra que falta 1.00.
+Pulsa **Ver conciliado**, **Comisión desconocida** y **Sin comisión** para comparar.
+Datos ficticios, sin guardar registros ni consultar cuentas bancarias.
+
+En la función real, después de aprobar un pago manual de prueba:
+
+1. Entra como administrador a `http://localhost:3000/admin/conciliacion`.
+2. Abre el pedido y registra la comisión (vacío si se desconoce), abono, fecha y referencia.
+3. Identifica el extracto y explica el registro. Guarda con la confirmación solicitada.
+4. Si aparece diferencia, corrige el dato después de revisar la fuente; indica el motivo.
+5. Comprueba el historial: conserva valores anteriores y nuevos. Recargar no añade registros.
+
+Prueba con comisión 99.00 frente a bruto 98.20: el formulario indica el campo y conserva
+los valores para corregir. Una fecha futura o abono sin fecha/referencia también se rechaza.
+El panel requiere ADMIN; un pago reembolsado conserva evidencia y queda para revisión.
+
+Correo: `http://localhost:3000/admin/notificaciones/configuracion` muestra lo pendiente
+sin exponer claves ni enviar mensajes. `npm run email:check` ofrece el mismo diagnóstico.
+ROSH todavía debe preparar Resend y verificar su dominio; [pasos de configuración](integraciones/confirmaciones-correo.md).
+
+Para explicarlo al cliente: «Un pago confirmado y el abono recibido se revisan por separado.
+Registramos la comisión real y el extracto; si hay diferencia, queda visible. Las correcciones
+conservan historial. La preparación del correo no envía mensajes hasta configurar el proveedor».
 
 ## Recorrido inmediato
 
@@ -24,12 +51,12 @@ Instalación nueva con PostgreSQL local iniciado, antes de arrancar Next:
 ```powershell
 npm ci
 npm run prisma:generate
-npm run db:prepare:email
+npm run db:prepare:sprint3
 npm run dev
 ```
 
 Si ya están servidor/base preparados, abre las páginas. Durante la implementación se
-aplicaron las aditivas pendientes 13–15 en la base local, sin reset ni seed.
+aplicaron las aditivas pendientes 13–15 y después la 16 en la base local, sin reset ni seed.
 
 Para comprobar la función real usa datos de prueba en desarrollo:
 

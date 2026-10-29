@@ -26,6 +26,7 @@ export default async function AdminPage() {
     { title: "Clientes", description: "Cuentas registradas, pedidos, direcciones y reseñas.", href: "/admin/clientes" },
     { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi opcional.", href: "/admin/pagos" },
     { title: "Confirmaciones", description: "Cola de correos de pagos aprobados, vistas previas y recuperación de envíos.", href: "/admin/notificaciones" },
+    { title: "Conciliación", description: "Comisiones, neto esperado, abonos verificados y diferencias de pagos manuales.", href: "/admin/conciliacion" },
     { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
     { title: "Reseñas", description: "Moderación de opiniones de compras entregadas y verificadas.", href: "/admin/resenas" },
     { title: "Contactos", description: "Consultas recibidas desde el formulario público sin servicios externos.", href: "/admin/contactos" },

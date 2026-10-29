@@ -1,23 +1,12 @@
 import { z } from "zod";
+export { readPaymentEmailConfig } from "./email-config";
+export type { EmailEnvironment } from "./email-config";
 
 export const mailEnvelopeSchema = z.object({ from: z.string().min(3).max(300).regex(/^[^\r\n]+$/), to: z.array(z.string().email().max(254)).length(1),
   subject: z.string().min(1).max(200).regex(/^[^\r\n]+$/), text: z.string().max(100_000), html: z.string().max(100_000) }).strict();
 export type MailEnvelope = z.infer<typeof mailEnvelopeSchema>;
-export type EmailEnvironment = Readonly<Record<string, string | undefined>>;
 export class MailDeliveryError extends Error {
   constructor(public code: "RETRYABLE" | "PROVIDER_REJECTED") { super(code); }
-}
-export function readPaymentEmailConfig(environment: EmailEnvironment) {
-  if (environment.PAYMENT_CONFIRMATION_EMAIL_ENABLED !== "true") return null;
-  const apiKey = environment.RESEND_API_KEY?.trim();
-  const from = environment.EMAIL_FROM?.trim();
-  const appUrl = environment.NEXT_PUBLIC_APP_URL ?? environment.NEXTAUTH_URL;
-  if (!apiKey || !from || !appUrl || /[\r\n]/.test(from)) return null;
-  const address = from.match(/<([^<>]+)>$/)?.[1] ?? from;
-  if (!z.string().email().safeParse(address).success || from.length > 300) return null;
-  try { const url = new URL(appUrl); if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) return null; }
-  catch { return null; }
-  return { apiKey, from, appUrl };
 }
 
 /** Optional provider adapter. Never called while the feature/configuration is disabled. */

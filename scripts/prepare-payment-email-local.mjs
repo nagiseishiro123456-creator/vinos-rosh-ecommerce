@@ -8,7 +8,7 @@ const url = new URL(process.env.DATABASE_URL ?? "");
 if (process.env.NODE_ENV === "production" || !["postgres:", "postgresql:"].includes(url.protocol)
   || !["localhost", "127.0.0.1"].includes(url.hostname) || (url.port && url.port !== "5432")
   || !["/vinos_rosh", "/vinos_rosh_test"].includes(url.pathname)) throw new Error("Only the named local development/QA databases are allowed.");
-const allowed = new Set(["20261022150000_payment_attempt_preparation", "20261022170000_automatic_order_reservation", "20261027090000_payment_confirmation_outbox"]);
+const allowed = new Set(["20261022150000_payment_attempt_preparation", "20261022170000_automatic_order_reservation", "20261027090000_payment_confirmation_outbox", "20261029100000_manual_payment_settlement"]);
 const client = new PrismaClient({ log: [] });
 try {
   const applied = await client.$queryRaw`SELECT migration_name FROM _prisma_migrations WHERE finished_at IS NOT NULL AND rolled_back_at IS NULL`;
@@ -25,4 +25,4 @@ const result = spawnSync(process.execPath, ["node_modules/prisma/build/index.js"
   cwd: root, env: { ...process.env, PAYMENT_CONFIRMATION_EMAIL_ENABLED: "false" }, stdio: "inherit",
 });
 if (result.error || result.status !== 0) throw new Error("Local email migration did not finish successfully.");
-console.log("Local confirmation queue ready. No email was sent and no payment was made.");
+console.log("Local Sprint 3 tables ready. No email was sent and no payment was made.");
