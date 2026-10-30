@@ -43,7 +43,7 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
       {conflicts.size ? <p className="checkoutError" role="alert">Hay tarifas activas duplicadas para una misma ubicación. Revisa sus importes y pausa las sobrantes; esa cobertura queda en revisión mientras haya más de una tarifa activa.</p> : null}
 
       <section className="adminSplit">
-        <ShippingZoneForm key={editing?.id ?? "new"} initial={editing ? { id: editing.id, expectedUpdatedAt: editing.updatedAt.toISOString(), department: editing.department, province: editing.province, district: editing.district, price: editing.price.toFixed(2), active: editing.active } : undefined} />
+        <ShippingZoneForm key={editing ? `${editing.id}-${editing.updatedAt.toISOString()}` : "new"} initial={editing ? { id: editing.id, expectedUpdatedAt: editing.updatedAt.toISOString(), department: editing.department, province: editing.province, district: editing.district, price: editing.price.toFixed(2), active: editing.active } : undefined} />
 
         <section className="adminCard adminWideCard">
           <p className="eyebrow wine">COBERTURA</p>
