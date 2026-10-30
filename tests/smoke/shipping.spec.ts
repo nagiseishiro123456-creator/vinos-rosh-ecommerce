@@ -29,7 +29,7 @@ test("S4: paused tariffs remain paused when edited and checkout agrees with publ
     await row.getByRole("link", { name: "Editar tarifa", exact: true }).click();
     await admin.getByLabel("Tarifa de envío (S/)", { exact: true }).fill("8,50");
     await admin.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
-    await expect(admin.getByRole("alert")).toContainText("Corrige los campos");
+    await expect(admin.locator(".deliveryAddressForm").getByRole("alert")).toContainText("Corrige los campos");
     await expect(admin.getByLabel("Tarifa de envío (S/)", { exact: true })).toHaveValue("8,50");
     await admin.getByLabel("Tarifa de envío (S/)", { exact: true }).fill("9.50");
     await admin.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
