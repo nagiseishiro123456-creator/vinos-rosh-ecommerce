@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { formatPrice } from "@/lib/money";
+import { DeliveryAddressForm } from "@/components/delivery-address-form";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -9,7 +9,6 @@ import { CartMergeBoundary } from "@/components/cart-merge-boundary";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { authOptions } from "@/lib/auth";
-import { createAddress } from "@/modules/addresses/actions";
 import { getCheckoutData } from "@/modules/checkout/queries";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +28,6 @@ export default async function CheckoutPage({ searchParams }: Props) {
 
   const params = await searchParams;
   const data = await getCheckoutData(session.user.id);
-  const createCheckoutAddress = createAddress.bind(null, "checkout");
 
   if (data.items.length === 0) {
     redirect("/carrito");
@@ -100,54 +98,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
               </div>
             </div>
 
-            <form className="checkoutForm" action={createCheckoutAddress}>
-              <div className="formField">
-                <label htmlFor="label">Nombre de la dirección</label>
-                <input id="label" name="label" placeholder="Casa, oficina..." maxLength={40} />
-              </div>
-
-              <div className="checkoutFormGrid">
-                <div className="formField">
-                  <label htmlFor="recipient">Persona que recibe</label>
-                  <input id="recipient" name="recipient" required maxLength={120} defaultValue={`${session.user.name ?? ""}`} />
-                </div>
-                <div className="formField">
-                  <label htmlFor="phone">Celular</label>
-                  <input id="phone" name="phone" required inputMode="tel" autoComplete="tel" placeholder="987654321" />
-                </div>
-              </div>
-
-              <div className="formField">
-                <label htmlFor="shippingZoneId">Distrito / zona de entrega</label>
-                <select id="shippingZoneId" name="shippingZoneId" required disabled={data.shippingZones.length === 0} defaultValue="">
-                  <option value="" disabled>Selecciona una zona</option>
-                  {data.shippingZones.map((zone) => (
-                    <option key={zone.id} value={zone.id}>
-                      {zone.district} · {zone.province} · {formatPrice(zone.price)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="formField">
-                <label htmlFor="addressLine1">Dirección exacta</label>
-                <input id="addressLine1" name="addressLine1" required maxLength={200} autoComplete="street-address" placeholder="Av., calle, número, urbanización" />
-              </div>
-
-              <div className="formField">
-                <label htmlFor="reference">Referencia</label>
-                <textarea id="reference" name="reference" maxLength={250} rows={3} placeholder="Frente a..., puerta de color..., etc." />
-              </div>
-
-              <label className="checkboxField">
-                <input type="checkbox" name="isDefault" />
-                <span>Usar como dirección predeterminada</span>
-              </label>
-
-              <button className="button buttonDark" type="submit" disabled={data.shippingZones.length === 0}>
-                Guardar dirección
-              </button>
-            </form>
+            <DeliveryAddressForm destination="checkout" zones={data.shippingZones} initial={{ recipient: session.user.name ?? "" }} />
           </section>
         </div>
       </section>

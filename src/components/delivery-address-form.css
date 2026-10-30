@@ -1,0 +1,5 @@
+.deliveryAddressForm { min-width: 0; }
+.deliveryAddressForm .deliveryFieldError { color: #a32a3b; font-weight: 600; line-height: 1.6; }
+.deliveryAddressForm .deliveryFieldError:empty { display: none; }
+.deliveryAddressForm [aria-invalid=true] { border-color: #a32a3b; }
+.deliveryAddressForm small { line-height: 1.7; }

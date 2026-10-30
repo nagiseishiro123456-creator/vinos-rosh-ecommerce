@@ -1,221 +1,55 @@
 "use server";
-
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
-
+import type { Route } from "next";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { consumeRateLimit } from "@/lib/rate-limit";
+import { deliveryAddressSchema } from "./contract";
+import { archiveDeliveryAddress, DeliveryAddressError, makeDeliveryAddressPrimary, saveDeliveryAddress } from "./service";
 
-const addressIdSchema = z.string().cuid();
-
-const addressSchema = z.object({
-  label: z.string().trim().max(40).optional(),
-  recipient: z.string().trim().min(2).max(120),
-  phone: z.string().trim().regex(/^\+?[0-9 ]{7,16}$/),
-  shippingZoneId: z.string().cuid(),
-  addressLine1: z.string().trim().min(5).max(200),
-  reference: z.string().trim().max(250).optional(),
-  isDefault: z.boolean().default(false),
-});
-
-type AddressDestination = "checkout" | "account";
-
+export type AddressFormState = { message?: string; errors?: Record<string, string> };
+export type AddressDestination = "checkout" | "account";
 async function requireCustomer() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect("/iniciar-sesion");
-  }
+  if (!session?.user?.id) redirect("/iniciar-sesion?callbackUrl=/mi-cuenta/direcciones");
   return session.user.id;
 }
-
-function parseAddress(formData: FormData) {
-  return addressSchema.safeParse({
-    label: formData.get("label") || undefined,
-    recipient: formData.get("recipient"),
-    phone: formData.get("phone"),
-    shippingZoneId: formData.get("shippingZoneId"),
-    addressLine1: formData.get("addressLine1"),
-    reference: formData.get("reference") || undefined,
-    isDefault: formData.get("isDefault") === "on",
-  });
-}
-
-async function getActiveZone(shippingZoneId: string) {
-  return prisma.shippingZone.findFirst({
-    where: { id: shippingZoneId, active: true },
-    select: {
-      department: true,
-      province: true,
-      district: true,
-    },
-  });
-}
-
 function refreshAddressViews() {
-  revalidatePath("/checkout");
-  revalidatePath("/mi-cuenta");
-  revalidatePath("/mi-cuenta/direcciones");
+  for (const path of ["/checkout", "/mi-cuenta", "/mi-cuenta/direcciones"]) revalidatePath(path);
 }
-
-export async function createAddress(destination: AddressDestination, formData: FormData) {
+const messages = {
+  INVALID: "Revisa los datos indicados.", NOT_FOUND: "La dirección ya no está disponible en tu cuenta. Recarga la página.",
+  UNSUPPORTED_ZONE: "La zona cambió o necesita revisión. Selecciona una tarifa activa y vuelve a guardar.",
+  LIMIT: "Puedes guardar hasta 10 direcciones activas. Quita una que ya no uses para agregar otra.", SESSION: "Tu sesión ya no está disponible. Ingresa nuevamente.",
+};
+export async function submitDeliveryAddress(destination: AddressDestination, addressId: string | null, _previous: AddressFormState, form: FormData): Promise<AddressFormState> {
   const userId = await requireCustomer();
-  const parsed = parseAddress(formData);
-
-  if (!parsed.success) {
-    redirect(destination === "checkout" ? "/checkout?error=invalid-address" : "/mi-cuenta/direcciones?error=invalid-address");
+  const text = (name: string) => typeof form.get(name) === "string" ? String(form.get(name)) : "";
+  const input = { label: text("label"), recipient: text("recipient"), phone: text("phone"), shippingZoneId: text("shippingZoneId"), addressLine1: text("addressLine1"), reference: text("reference"), isDefault: form.get("isDefault") === "on" };
+  const parsed = deliveryAddressSchema.safeParse(input);
+  if (!parsed.success) return { message: "Corrige los campos indicados. Tu dirección todavía no se guardó.", errors: Object.fromEntries(parsed.error.issues.map((issue) => [String(issue.path[0]), issue.message])) };
+  let saved: { id: string };
+  try {
+    const rate = await consumeRateLimit({ scope: "delivery-address-write", identifier: userId, limit: 20, windowMs: 60_000 });
+    if (!rate.allowed) return { message: "Espera un minuto antes de guardar más cambios." };
+    saved = await saveDeliveryAddress(userId, input, addressId ?? undefined);
+  } catch (error) {
+    return { message: error instanceof DeliveryAddressError ? messages[error.code] : "No pudimos guardar la dirección. Conservamos lo escrito para que puedas reintentar." };
   }
-
-  const zone = await getActiveZone(parsed.data.shippingZoneId);
-  if (!zone) {
-    redirect(destination === "checkout" ? "/checkout?error=unsupported-zone" : "/mi-cuenta/direcciones?error=unsupported-zone");
-  }
-
-  const currentAddressCount = await prisma.address.count({
-    where: { userId, active: true },
-  });
-
-  const shouldBeDefault = parsed.data.isDefault || currentAddressCount === 0;
-
-  const created = await prisma.$transaction(async (tx) => {
-    if (shouldBeDefault) {
-      await tx.address.updateMany({
-        where: { userId },
-        data: { isDefault: false },
-      });
-    }
-
-    return tx.address.create({
-      data: {
-        userId,
-        label: parsed.data.label,
-        recipient: parsed.data.recipient,
-        phone: parsed.data.phone.replace(/\s+/g, ""),
-        department: zone.department,
-        province: zone.province,
-        district: zone.district,
-        addressLine1: parsed.data.addressLine1,
-        reference: parsed.data.reference,
-        isDefault: shouldBeDefault,
-      },
-      select: { id: true },
-    });
-  });
-
   refreshAddressViews();
-
-  if (destination === "checkout") {
-    redirect(`/checkout?addressId=${created.id}`);
-  }
-
-  redirect("/mi-cuenta/direcciones?status=created");
+  if (destination === "checkout") redirect(("/checkout?addressId=" + saved.id) as Route);
+  redirect(("/mi-cuenta/direcciones?status=" + (addressId ? "updated" : "created")) as Route);
 }
-
-export async function updateAddress(addressId: string, formData: FormData) {
+export async function setDefaultAddress(id: string) {
   const userId = await requireCustomer();
-  const parsedId = addressIdSchema.safeParse(addressId);
-  const parsed = parseAddress(formData);
-
-  if (!parsedId.success || !parsed.success) {
-    redirect("/mi-cuenta/direcciones?error=invalid-address");
-  }
-
-  const [zone, existing] = await Promise.all([
-    getActiveZone(parsed.data.shippingZoneId),
-    prisma.address.findFirst({
-      where: { id: parsedId.data, userId, active: true },
-      select: { id: true, isDefault: true },
-    }),
-  ]);
-
-  if (!zone || !existing) {
-    redirect("/mi-cuenta/direcciones?error=not-found");
-  }
-
-  const shouldBeDefault = parsed.data.isDefault || existing.isDefault;
-
-  await prisma.$transaction(async (tx) => {
-    if (shouldBeDefault) {
-      await tx.address.updateMany({
-        where: { userId, id: { not: existing.id } },
-        data: { isDefault: false },
-      });
-    }
-
-    await tx.address.update({
-      where: { id: existing.id },
-      data: {
-        label: parsed.data.label,
-        recipient: parsed.data.recipient,
-        phone: parsed.data.phone.replace(/\s+/g, ""),
-        department: zone.department,
-        province: zone.province,
-        district: zone.district,
-        addressLine1: parsed.data.addressLine1,
-        reference: parsed.data.reference,
-        isDefault: shouldBeDefault,
-      },
-    });
-  });
-
-  refreshAddressViews();
-  redirect("/mi-cuenta/direcciones?status=updated");
-}
-
-export async function setDefaultAddress(addressId: string) {
-  const userId = await requireCustomer();
-  const parsedId = addressIdSchema.safeParse(addressId);
-  if (!parsedId.success) return;
-
-  const address = await prisma.address.findFirst({
-    where: { id: parsedId.data, userId, active: true },
-    select: { id: true },
-  });
-
-  if (!address) return;
-
-  await prisma.$transaction([
-    prisma.address.updateMany({ where: { userId }, data: { isDefault: false } }),
-    prisma.address.update({ where: { id: address.id }, data: { isDefault: true } }),
-  ]);
-
+  try { await makeDeliveryAddressPrimary(userId, id); }
+  catch { redirect("/mi-cuenta/direcciones?error=not-found"); }
   refreshAddressViews();
 }
-
-export async function archiveAddress(addressId: string) {
+export async function archiveAddress(id: string) {
   const userId = await requireCustomer();
-  const parsedId = addressIdSchema.safeParse(addressId);
-  if (!parsedId.success) return;
-
-  await prisma.$transaction(async (tx) => {
-    const address = await tx.address.findFirst({
-      where: { id: parsedId.data, userId, active: true },
-      select: { id: true, isDefault: true },
-    });
-
-    if (!address) return;
-
-    await tx.address.update({
-      where: { id: address.id },
-      data: { active: false, isDefault: false },
-    });
-
-    if (address.isDefault) {
-      const replacement = await tx.address.findFirst({
-        where: { userId, active: true, id: { not: address.id } },
-        orderBy: { createdAt: "desc" },
-        select: { id: true },
-      });
-
-      if (replacement) {
-        await tx.address.update({
-          where: { id: replacement.id },
-          data: { isDefault: true },
-        });
-      }
-    }
-  });
-
+  try { await archiveDeliveryAddress(userId, id); }
+  catch { redirect("/mi-cuenta/direcciones?error=not-found"); }
   refreshAddressViews();
 }

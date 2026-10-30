@@ -1,78 +1,38 @@
 "use server";
-
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
-
+import type { Route } from "next";
 import { requireAdmin } from "@/modules/admin/auth";
-import { moneyInputSchema } from "@/modules/checkout/pricing";
-import { prisma } from "@/lib/prisma";
-
-const shippingZoneSchema = z.object({
-  department: z.string().trim().min(2).max(80).default("Lima"),
-  province: z.string().trim().min(2).max(80).default("Lima"),
-  district: z.string().trim().min(2).max(100),
-  price: moneyInputSchema({ max: "10000.00" }),
-});
-
-const zoneIdSchema = z.string().cuid();
-
-export async function saveShippingZone(formData: FormData) {
-  await requireAdmin("/admin/envios");
-
-  const parsed = shippingZoneSchema.safeParse({
-    department: formData.get("department") || "Lima",
-    province: formData.get("province") || "Lima",
-    district: formData.get("district"),
-    price: formData.get("price"),
-  });
-
-  if (!parsed.success) {
-    redirect("/admin/envios?error=invalid");
+import { AdminOperationError } from "@/modules/admin/transaction-auth";
+import { consumeRateLimit } from "@/lib/rate-limit";
+import { shippingZoneInputSchema } from "./contract";
+import { saveShippingZoneRecord, setShippingZoneActive, ShippingZoneError } from "./service";
+export type ShippingFormState = { message?: string; errors?: Record<string, string> };
+const feedback: Record<string, string> = {
+  DUPLICATE: "La zona ya existe, incluso si está pausada. Usa Editar tarifa en su fila.",
+  CONFLICT: "Otra persona cambió la zona. Recarga para revisar su estado actual.",
+  IDENTITY_CHANGED: "Para otra ubicación crea una zona nueva. Esta edición conserva las direcciones existentes.",
+  NOT_FOUND: "La zona ya no está disponible.", INVALID: "Revisa los datos de la tarifa.",
+};
+function refresh() { for (const path of ["/admin/envios", "/envios", "/checkout", "/mi-cuenta/direcciones"]) revalidatePath(path); }
+export async function saveShippingZone(_previous: ShippingFormState, form: FormData): Promise<ShippingFormState> {
+  const session = await requireAdmin("/admin/envios");
+  const text = (name: string) => typeof form.get(name) === "string" ? String(form.get(name)) : "";
+  const input = { id: text("id") || undefined, expectedUpdatedAt: text("expectedUpdatedAt") || undefined, department: text("department"), province: text("province"), district: text("district"), price: text("price") };
+  const parsed = shippingZoneInputSchema.safeParse(input);
+  if (!parsed.success) return { message: "Corrige los campos indicados. La tarifa todavía no cambió.", errors: Object.fromEntries(parsed.error.issues.map((issue) => [String(issue.path[0]), issue.message])) };
+  try {
+    const budget = await consumeRateLimit({ scope: "shipping-admin-write", identifier: session.user.id, limit: 20, windowMs: 60_000 });
+    if (!budget.allowed) return { message: "Espera un minuto antes de guardar más tarifas." };
+    await saveShippingZoneRecord(session.user.id, input);
+  } catch (error) {
+    return { message: error instanceof ShippingZoneError ? feedback[error.code] : error instanceof AdminOperationError ? "Tu cuenta ya no tiene permisos de administración." : "No pudimos guardar la tarifa. Conservamos los datos para que puedas revisarlos." };
   }
-
-  const { department, province, district, price } = parsed.data;
-
-  await prisma.shippingZone.upsert({
-    where: {
-      department_province_district: { department, province, district },
-    },
-    create: {
-      department,
-      province,
-      district,
-      price,
-      active: true,
-    },
-    update: {
-      price,
-      active: true,
-    },
-  });
-
-  revalidatePath("/admin/envios");
-  revalidatePath("/checkout");
-  redirect("/admin/envios?saved=1");
+  refresh(); redirect("/admin/envios?saved=1");
 }
-
-export async function toggleShippingZone(zoneId: string) {
-  await requireAdmin("/admin/envios");
-
-  const parsedId = zoneIdSchema.safeParse(zoneId);
-  if (!parsedId.success) return;
-
-  const zone = await prisma.shippingZone.findUnique({
-    where: { id: parsedId.data },
-    select: { id: true, active: true },
-  });
-
-  if (!zone) return;
-
-  await prisma.shippingZone.update({
-    where: { id: zone.id },
-    data: { active: !zone.active },
-  });
-
-  revalidatePath("/admin/envios");
-  revalidatePath("/checkout");
+export async function toggleShippingZone(id: string, expectedActive: boolean, expectedUpdatedAt: string) {
+  const session = await requireAdmin("/admin/envios");
+  try { await setShippingZoneActive(session.user.id, id, expectedActive, expectedUpdatedAt); }
+  catch (error) { redirect(("/admin/envios?error=" + (error instanceof ShippingZoneError ? error.code : "unavailable")) as Route); }
+  refresh();
 }

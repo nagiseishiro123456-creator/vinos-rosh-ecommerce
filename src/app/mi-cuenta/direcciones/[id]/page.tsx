@@ -1,4 +1,4 @@
-import { formatPrice } from "@/lib/money";
+import { DeliveryAddressForm } from "@/components/delivery-address-form";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -6,7 +6,7 @@ import { notFound, redirect } from "next/navigation";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { updateAddress } from "@/modules/addresses/actions";
+import { resolveShippingCoverage } from "@/modules/shipping/coverage";
 
 export const dynamic = "force-dynamic";
 
@@ -47,10 +47,8 @@ export default async function EditAddressPage({ params }: Props) {
 
   if (!address) notFound();
 
-  const selectedZone = shippingZones.find(
-    (zone) => zone.department === address.department && zone.province === address.province && zone.district === address.district,
-  );
-  const updateAction = updateAddress.bind(null, address.id);
+  const coverage = resolveShippingCoverage(address, shippingZones);
+  const selectedZone = coverage.kind === "available" ? coverage.zone : null;
 
   return (
     <main className="orderPage">
@@ -67,57 +65,7 @@ export default async function EditAddressPage({ params }: Props) {
         </div>
 
         <section className="accountToolCard">
-          <form className="accountToolForm" action={updateAction}>
-            <label className="accountToolField">
-              <span>Nombre de la dirección</span>
-              <input name="label" maxLength={40} defaultValue={address.label ?? ""} placeholder="Casa, oficina..." />
-            </label>
-
-            <div className="accountToolFormGrid">
-              <label className="accountToolField">
-                <span>Persona que recibe</span>
-                <input name="recipient" required maxLength={120} defaultValue={address.recipient} />
-              </label>
-
-              <label className="accountToolField">
-                <span>Celular</span>
-                <input name="phone" required inputMode="tel" maxLength={16} defaultValue={address.phone} />
-              </label>
-            </div>
-
-            <label className="accountToolField">
-              <span>Distrito / zona</span>
-              <select name="shippingZoneId" required defaultValue={selectedZone?.id ?? ""}>
-                {!selectedZone ? <option value="" disabled>Selecciona una zona activa</option> : null}
-                {shippingZones.map((zone) => (
-                  <option key={zone.id} value={zone.id}>
-                    {zone.district} · {zone.province} · {formatPrice(zone.price.toFixed(2))}
-                  </option>
-                ))}
-              </select>
-              {!selectedZone ? <small>La zona anterior ya no está activa; debes elegir una nueva.</small> : null}
-            </label>
-
-            <label className="accountToolField">
-              <span>Dirección exacta</span>
-              <input name="addressLine1" required maxLength={200} defaultValue={address.addressLine1} />
-            </label>
-
-            <label className="accountToolField">
-              <span>Referencia</span>
-              <textarea name="reference" maxLength={250} rows={3} defaultValue={address.reference ?? ""} />
-            </label>
-
-            <label className="accountCheckbox">
-              <input type="checkbox" name="isDefault" defaultChecked={address.isDefault} />
-              <span>Usar como dirección principal</span>
-            </label>
-
-            <div className="accountToolActions split">
-              <Link className="button buttonGhostLight" href="/mi-cuenta/direcciones">Cancelar</Link>
-              <button className="button buttonDark" type="submit">Guardar cambios</button>
-            </div>
-          </form>
+          <DeliveryAddressForm destination="account" addressId={address.id} zones={shippingZones.map((zone) => ({ ...zone, price: zone.price.toFixed(2) }))} initial={{ label: address.label ?? "", recipient: address.recipient, phone: address.phone, shippingZoneId: selectedZone?.id ?? "", addressLine1: address.addressLine1, reference: address.reference ?? "", isDefault: address.isDefault }} />
         </section>
       </section>
     </main>

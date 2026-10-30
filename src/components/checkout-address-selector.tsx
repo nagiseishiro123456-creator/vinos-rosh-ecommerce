@@ -6,10 +6,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import type { CheckoutAddress, CheckoutShippingZone } from "@/modules/checkout/queries";
-
-function normalize(value: string) {
-  return value.trim().toLocaleLowerCase("es-PE");
-}
+import { resolveShippingCoverage } from "@/modules/shipping/coverage";
 
 
 type Props = {
@@ -39,12 +36,8 @@ export function CheckoutAddressSelector({
   const selectedZone = useMemo(() => {
     if (!selectedAddress) return undefined;
 
-    return shippingZones.find(
-      (zone) =>
-        normalize(zone.department) === normalize(selectedAddress.department) &&
-        normalize(zone.province) === normalize(selectedAddress.province) &&
-        normalize(zone.district) === normalize(selectedAddress.district),
-    );
+    const coverage = resolveShippingCoverage(selectedAddress, shippingZones);
+    return coverage.kind === "available" ? coverage.zone : undefined;
   }, [selectedAddress, shippingZones]);
 
   const shipping = selectedZone?.price ?? "0.00";
@@ -95,11 +88,12 @@ export function CheckoutAddressSelector({
           <span>Envío</span>
           <strong>{selectedZone ? formatPrice(shipping) : "Sin cobertura"}</strong>
         </div>
-        <div className="summaryTotal"><span>Total</span><strong>{formatPrice(total)}</strong></div>
+        <div className="summaryTotal"><span>Total</span><strong>{selectedZone ? formatPrice(total) : "Por calcular"}</strong></div>
 
         {selectedAddress && !selectedZone ? (
           <p className="checkoutAlert">
             Esta dirección no tiene una tarifa activa. El administrador debe habilitar la zona antes de continuar.
+            {" "}<Link href="/envios">Consultar cobertura de entrega</Link>
           </p>
         ) : null}
 

@@ -1,4 +1,6 @@
+import { DeliveryAddressForm } from "@/components/delivery-address-form";
 import { formatPrice } from "@/lib/money";
+import { resolveShippingCoverage } from "@/modules/shipping/coverage";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -6,7 +8,7 @@ import { redirect } from "next/navigation";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { archiveAddress, createAddress, setDefaultAddress } from "@/modules/addresses/actions";
+import { archiveAddress, setDefaultAddress } from "@/modules/addresses/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +58,6 @@ export default async function AddressesPage({ searchParams }: Props) {
 
   if (!user) redirect("/iniciar-sesion");
 
-  const createAccountAddress = createAddress.bind(null, "account");
 
   return (
     <main className="orderPage">
@@ -104,6 +105,7 @@ export default async function AddressesPage({ searchParams }: Props) {
                 {user.addresses.map((address) => {
                   const defaultAction = setDefaultAddress.bind(null, address.id);
                   const archiveAction = archiveAddress.bind(null, address.id);
+                  const coverage = resolveShippingCoverage(address, shippingZones);
 
                   return (
                     <article className="accountAddressManagerCard" key={address.id}>
@@ -119,6 +121,7 @@ export default async function AddressesPage({ searchParams }: Props) {
                       <p>{address.addressLine1}</p>
                       <p>{address.district}, {address.province}, {address.department}</p>
                       <p>{address.phone}</p>
+                      <p>{coverage.kind === "available" ? `Tarifa actual: ${formatPrice(coverage.zone.price.toFixed(2))}` : coverage.kind === "ambiguous" ? "Cobertura en revisión" : "Sin cobertura activa"}</p>
                       {address.reference ? <small>Referencia: {address.reference}</small> : null}
 
                       <div className="accountAddressManagerActions">
@@ -149,53 +152,7 @@ export default async function AddressesPage({ searchParams }: Props) {
             {shippingZones.length === 0 ? (
               <div className="accountNotice warning">El administrador aún no configuró zonas de envío activas.</div>
             ) : (
-              <form className="accountToolForm" action={createAccountAddress}>
-                <label className="accountToolField">
-                  <span>Nombre de la dirección</span>
-                  <input name="label" maxLength={40} placeholder="Casa, oficina..." />
-                </label>
-
-                <div className="accountToolFormGrid">
-                  <label className="accountToolField">
-                    <span>Persona que recibe</span>
-                    <input name="recipient" required maxLength={120} defaultValue={`${user.firstName} ${user.lastName}`} />
-                  </label>
-
-                  <label className="accountToolField">
-                    <span>Celular</span>
-                    <input name="phone" required inputMode="tel" maxLength={16} defaultValue={user.phone ?? ""} placeholder="987654321" />
-                  </label>
-                </div>
-
-                <label className="accountToolField">
-                  <span>Distrito / zona</span>
-                  <select name="shippingZoneId" required defaultValue="">
-                    <option value="" disabled>Selecciona una zona</option>
-                    {shippingZones.map((zone) => (
-                      <option key={zone.id} value={zone.id}>
-                        {zone.district} · {zone.province} · {formatPrice(zone.price.toFixed(2))}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="accountToolField">
-                  <span>Dirección exacta</span>
-                  <input name="addressLine1" required maxLength={200} placeholder="Av., calle, número, urbanización" />
-                </label>
-
-                <label className="accountToolField">
-                  <span>Referencia</span>
-                  <textarea name="reference" maxLength={250} rows={3} placeholder="Frente a..., puerta de color..., etc." />
-                </label>
-
-                <label className="accountCheckbox">
-                  <input type="checkbox" name="isDefault" />
-                  <span>Usar como dirección principal</span>
-                </label>
-
-                <button className="button buttonDark" type="submit">Guardar dirección</button>
-              </form>
+              <DeliveryAddressForm destination="account" zones={shippingZones.map((zone) => ({ ...zone, price: zone.price.toFixed(2) }))} initial={{ recipient: `${user.firstName} ${user.lastName}`, phone: user.phone ?? "" }} />
             )}
           </section>
         </div>
