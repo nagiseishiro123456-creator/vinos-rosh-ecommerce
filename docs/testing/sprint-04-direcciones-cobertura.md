@@ -23,3 +23,8 @@ la CI de la base a este nuevo incremento.
 Revisión manual integrada: demo y página real; búsqueda ignorando mayúsculas, resultado
 sin cobertura y móvil 390. [Capturas y límites](../evidencias/sprint-04/cobertura-direcciones/README.md).
 La demo no confirma tarifas comerciales, mapas ni cobertura oficial. UAT pendiente.
+
+La revisión de capturas de navegador detectó el reset nativo de zona/casilla después
+de devolver un error de formulario. Se evita ese reset y la alta correcta remonta un
+formulario nuevo. La regresión comprueba expresamente selección, casilla, texto conservado
+y formulario limpio tras guardar. Los campos quedan alineados al inicio al mostrar errores.

@@ -68,10 +68,13 @@ test("S4: delivery errors preserve input and the saved address has one primary",
     await page.getByRole("button", { name: "Guardar dirección", exact: true }).click();
     await expect(page.getByText("Escribe un celular peruano de 9 dígitos que empiece con 9. Puedes incluir +51.", { exact: true })).toBeVisible();
     await expect(page.getByLabel("Celular", { exact: true })).toHaveValue("98765432");
+    await expect(page.getByLabel("Distrito / zona", { exact: true })).toHaveValue(zone.id);
+    await expect(page.getByRole("checkbox", { name: "Usar como dirección principal" })).toBeChecked();
     await page.screenshot({ path: info.outputPath("s4-direccion-error.png"), fullPage: true });
     await page.getByLabel("Celular", { exact: true }).fill("+51 987654321");
     await page.getByRole("button", { name: "Guardar dirección", exact: true }).click();
     await expect(page.getByText("Dirección guardada correctamente.", { exact: true })).toBeVisible();
+    await expect(page.getByLabel("Nombre de la dirección", { exact: true })).toHaveValue("");
     const card = page.locator(".accountAddressManagerCard").filter({ hasText: label });
     await expect(card).toContainText("987654321"); await expect(card).toContainText("Principal");
     expect(await prisma.address.count({ where: { userId: user.id, active: true, isDefault: true } })).toBe(1);

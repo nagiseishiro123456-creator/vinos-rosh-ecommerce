@@ -152,7 +152,7 @@ export default async function AddressesPage({ searchParams }: Props) {
             {shippingZones.length === 0 ? (
               <div className="accountNotice warning">El administrador aún no configuró zonas de envío activas.</div>
             ) : (
-              <DeliveryAddressForm destination="account" zones={shippingZones.map((zone) => ({ ...zone, price: zone.price.toFixed(2) }))} initial={{ recipient: `${user.firstName} ${user.lastName}`, phone: user.phone ?? "" }} />
+              <DeliveryAddressForm key={user.addresses.length} destination="account" zones={shippingZones.map((zone) => ({ ...zone, price: zone.price.toFixed(2) }))} initial={{ recipient: `${user.firstName} ${user.lastName}`, phone: user.phone ?? "" }} />
             )}
           </section>
         </div>

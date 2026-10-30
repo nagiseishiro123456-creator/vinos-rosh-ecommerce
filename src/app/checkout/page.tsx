@@ -98,7 +98,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
               </div>
             </div>
 
-            <DeliveryAddressForm destination="checkout" zones={data.shippingZones} initial={{ recipient: session.user.name ?? "" }} />
+            <DeliveryAddressForm key={data.addresses.length} destination="checkout" zones={data.shippingZones} initial={{ recipient: session.user.name ?? "" }} />
           </section>
         </div>
       </section>

@@ -14,7 +14,9 @@ export function DeliveryAddressForm({ destination, addressId = null, zones, init
   const selectedZone = available.find((zone) => zone.id === values.shippingZoneId);
   const field = (name: Exclude<keyof Values, "isDefault">) => ({ name, id: `delivery-${name}`, value: values[name], onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setValues({ ...values, [name]: event.target.value }), "aria-invalid": !!state.errors?.[name], "aria-describedby": `delivery-${name}-error` });
   const error = (name: string) => <small className="deliveryFieldError" id={`delivery-${name}-error`}>{state.errors?.[name]}</small>;
-  return <form action={action} className="checkoutForm deliveryAddressForm">
+  // A returned validation error still triggers React's native reset; keep the select and checkbox too.
+  // Successful creation remounts the form in its parent, while editing redirects to the list.
+  return <form action={action} onReset={(event) => event.preventDefault()} className="checkoutForm deliveryAddressForm">
     {state.message ? <p className="checkoutError" role="alert">{state.message}</p> : null}
     <div className="formField"><label htmlFor="delivery-label">Nombre de la dirección</label><input {...field("label")} maxLength={40} placeholder="Casa, oficina..." />{error("label")}</div>
     <div className="checkoutFormGrid"><div className="formField"><label htmlFor="delivery-recipient">Persona que recibe</label><input {...field("recipient")} required maxLength={120} autoComplete="name" />{error("recipient")}</div>
