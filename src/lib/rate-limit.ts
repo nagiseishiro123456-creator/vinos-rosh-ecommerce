@@ -39,7 +39,7 @@ export function getClientIp(headersLike?: HeadersLike) {
   return candidate || "unknown";
 }
 
-function bucketKey(scope: string, identifier: string) {
+export function rateLimitKey(scope: string, identifier: string) {
   return createHash("sha256")
     .update(`${scope}:${identifier.trim().toLowerCase()}`)
     .digest("hex");
@@ -65,7 +65,7 @@ export async function consumeRateLimit({
     throw new Error("RATE_LIMIT_INVALID_WINDOW");
   }
 
-  const key = bucketKey(scope, identifier || "unknown");
+  const key = rateLimitKey(scope, identifier || "unknown");
 
   for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
@@ -139,7 +139,7 @@ export async function consumeRateLimit({
 }
 
 export async function clearRateLimit(scope: string, identifier: string) {
-  const key = bucketKey(scope, identifier || "unknown");
+  const key = rateLimitKey(scope, identifier || "unknown");
   await prisma.rateLimitBucket.deleteMany({ where: { key } });
 }
 

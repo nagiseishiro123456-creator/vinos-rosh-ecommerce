@@ -1,5 +1,22 @@
 # Arquitectura — Vinos ROSH
 
+## Preparación en rama — S3-02
+
+El Sprint 3 prepara Mi Cuenta Web V4 con adaptador, intentos persistidos y
+[ruta protegida de inicio](integraciones/inicio-izipay.md). Está desactivada con opt-in
+separado; no se conecta al checkout existente. El intento se guarda antes de llamar
+fuera de BD; el token solo se entrega tras registrar su hash y revalidar la reserva.
+La [reserva automática interna](integraciones/reserva-izipay.md) comparte el núcleo ACID
+manual, con entrada estricta y marcador explícito en la migración 14 (NULL histórico).
+Congela importes, reserva una vez y consume el snapshot del carrito; no crea Payment
+ni inicia red. No hay nueva ruta de reserva ni conexión UI. El intento exige el marcador.
+El plazo TEST de 15 minutos es política provisional local, no TTL del proveedor.
+La auditoría inicial requiere actualizar Next.js y eslint-config-next de 16.3.8 a
+16.4.2 con lockfile regenerado; no se omite el check. No confirma pagos.
+Producto/test keys, punto de entrada autenticado, recuperación,
+SDK e IPN siguen pendientes. [ADR](decisions/0010-reserva-automatica-sandbox.md) y
+[QA](testing/s3-02-reserva.md).
+
 ## Estilo arquitectónico
 Monolito modular sobre Next.js App Router. La interfaz, las rutas servidor, autenticación, validaciones y acceso a datos viven en un mismo proyecto, separados por módulos de negocio.
 

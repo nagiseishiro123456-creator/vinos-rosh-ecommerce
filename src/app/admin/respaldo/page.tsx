@@ -53,6 +53,7 @@ export default async function BackupPage() {
           <p>
             El archivo incluye catálogo, imágenes referenciadas, zonas, pedidos, pagos,
             reseñas, movimientos de inventario, historial de pedidos, conciliaciones,
+            comisiones y abonos registrados,
             configuración pública y mensajes de contacto.
           </p>
           <p>

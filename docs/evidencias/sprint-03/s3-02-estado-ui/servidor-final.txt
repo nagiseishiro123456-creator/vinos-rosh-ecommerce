@@ -1,0 +1,96 @@
+Tramo final de la regresión local. La salida anterior se conserva en la conversación.
+Comando: node --env-file=.env scripts/test-local-postgres.mjs
+BD: vinos_rosh_test, local aislada. Node 24.22.1.
+
+Warning: truncated output (original token count: 7381)
+Total output lines: 409
+
+✔ RI-02: business export preserves reconciled money, refund reference and order audit without password hashes (230.1508ms)
+✔ approve versus reject claims one order and records exactly one administrative decision (136.9406ms)
+✔ duplicate approval is one event and never reserves twice, even past the original deadline (97.3687ms)
+✔ duplicate rejection versus cancel/expiry releases stock once and retains the reason (132.1591ms)
+✔ approval versus customer cancellation/expiry preserves the communicated payment (147.0407ms)
+✔ amount, currency, released or missing reservation and extra payment block approval atomically (160.1722ms)
+✔ current DB role prevents administrative writes after permission revocation (97.2898ms)
+✔ duplicate full refunds restore stock and create an event once (108.4ms)
+✔ replayed fulfillment forms cannot skip preparation and refund/shipping races stay coherent (117.0918ms)
+✔ refund blocks money mismatch and dispatched orders without partial mutation (116.1251ms)
+✔ late income reconciliation and duplicate closure never resurrect an order or touch stock (127.6026ms)
+✔ rejected discrepant payment can be reconciled, but its code and received amount cannot be rewritten (108.0769ms)
+prisma:error
+Invalid `tx.payment.update()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\payments\reconciliation-service.ts:32:24
+
+  29 const locked = await tx.payment.findUniqueOrThrow({ where: { id: paymentId }, include: { reconciliation: true } });
+  30 if (locked.reconciliation) return { changed: false };
+  31 if (locked.operationCode && locked.operationCode !== data.operationCode) throw new AdminOperationError("INCONSISTENT");
+→ 32 await tx.payment.update(
+Unique constraint failed on the fields: (`provider`,`operationCode`)
+✔ bank reference used in another order rolls reconciliation back without creating an event (167.4471ms)
+✔ invalid reconciliation amounts and unclosed orders cannot record received money (73.184ms)
+✔ authentication preserves normalized internal destinations and rejects origin/encoding escapes (1.4953ms)
+✔ guest authentication keeps the purchase destination for review after merging (0.1913ms)
+✔ registerSchema accepts a valid Peruvian customer (2.843ms)
+✔ registerSchema rejects weak passwords (0.3389ms)
+✔ passwordSchema enforces length, uppercase, lowercase and number (0.2125ms)
+✔ registerSchema rejects invalid Peruvian mobile numbers (0.3873ms)
+✔ loginSchema normalizes email and requires a password (0.4668ms)
+✔ registration explains phone length, format and prefix and accepts a correction (2.5827ms)
+prisma:error
+Invalid `prisma.rateLimitBucket.create()` invocation:
+
+
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedIte…5881 tokens truncated…to be loopback (0.3163ms)
+✔ registration accepts IPv4 and IPv6 loopback for named local QA databases (0.8592ms)
+✔ registration never enables local relaxation in test or unspecified runtime (0.1288ms)
+✔ registration feedback gives a positive Retry-After and rounds minutes upward (0.2751ms)
+✔ local unlock configuration may omit NODE_ENV but still rejects production (0.1839ms)
+✔ local registration unlock removes only selected registration keys and preserves accounts and other protections (165.543ms)
+✔ a full legacy registration bucket does not block opt-in local development and remains recoverable (35.3379ms)
+✔ local registration unlock rejects production, remote settings and invalid IPs without clearing a bucket (12.1426ms)
+✔ reserving persists a deadline and pending payment before instructions; reporting preserves later cart edits and frozen prices (312.4145ms)
+prisma:error
+Invalid `tx.product.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\inventory\stock-service.ts:53:39
+
+  50 const stockAfter = new Map<string, number>();
+  51
+  52 for (const item of normalizedItems) {
+→ 53   const reserved = await tx.product.updateMany(
+Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+✔ two full checkouts competing for the final bottle create only one reserved order (243.0747ms)
+✔ missing availability in a multi-product checkout leaves every line, payment and stock unchanged (116.5511ms)
+✔ persisted expiry survives configuration changes; exact deadline rejects reporting and releases once (151.6788ms)
+✔ concurrent cancel and expiry return the reservation only once (121.1618ms)
+✔ reporting races with expiry: either review keeps the stock or expiry releases it (107.3653ms)
+✔ other customers cannot report or cancel; review cannot expire or be customer-cancelled; approval never reserves twice (150.433ms)
+prisma:error
+Invalid `tx.payment.updateMany()` invocation in
+E:\nagi\vinos-rosh-ecommerce\src\modules\orders\reservation-service.ts:80:40
+
+  77   stockReservedAt: { not: null }, reservationExpiresAt: { gt: now },
+  78 }, data: { status: OrderStatus.PAYMENT_REVIEW } });
+  79 if (claimed.count !== 1) return "unavailable" as const;
+→ 80 const updated = await tx.payment.updateMany(
+Unique constraint failed on the fields: (`provider`,`operationCode`)
+✔ a duplicate operation rolls back the review transition without losing either reservation (158.5501ms)
+✔ legacy pending without reservation markers is neither payable nor automatically released (99.0904ms)
+✔ three reservations or reviews block a fourth before touching stock (353.4103ms)
+✔ only one concurrent reservation can take the final unit (98.7131ms)
+✔ releaseStock restores a previously reserved quantity (42.4643ms)
+✔ a failed multi-product reservation rolls back earlier stock changes (43.9199ms)
+ℹ tests 238
+ℹ suites 0
+ℹ pass 238
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25039.2206

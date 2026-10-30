@@ -1,0 +1,30 @@
+[
+  {
+    "file": "01-reserva-y-plan.jpg",
+    "sha256": "288863f265f233827bcca05ee8b7238a09329ce54145494fe648b52dd93805b7"
+  },
+  {
+    "file": "02-formulario-previsto.jpg",
+    "sha256": "e95da51f0d5b34c848f522190bd2f25956a03fc2a6bfe6dfc713ed3e8522fceb"
+  },
+  {
+    "file": "03-recuperacion.jpg",
+    "sha256": "b303d8df6462f16e0057a71f4fdc71da7babeb70d58efa464e74fe87a7ddd857"
+  },
+  {
+    "file": "04-confirmacion-y-correo-previstos.jpg",
+    "sha256": "7cad5ff4e7cb1376e862388d8364e16b5e2a307b5bf7aade3b85a0ce9ed2aa47"
+  },
+  {
+    "file": "05-consulta-sesion-requerida.jpg",
+    "sha256": "f6eb9d718f26a4415bc06c7ed79794f1c0d49f2eb70b6a8392b7eba8fb0f50cf"
+  },
+  {
+    "file": "06-recuperacion-movil.jpg",
+    "sha256": "521802239c18dc6830758e952b2895095a3036a7dcf9c337a9093e0951503e64"
+  },
+  {
+    "file": "07-vencimiento-movil-320.jpg",
+    "sha256": "f85ddac1dbdef2d2a9addf7f60ea512952bee3c034edae247d847812f252c9d6"
+  }
+]

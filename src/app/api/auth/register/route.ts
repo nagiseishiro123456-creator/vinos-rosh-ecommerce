@@ -4,27 +4,27 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
 import { registerSchema } from "@/modules/auth/schemas";
+import { registrationRateLimit, registrationWait } from "@/modules/auth/registration-policy";
 
 export async function POST(request: Request) {
   try {
     const ip = getClientIp(request.headers);
     const rateLimit = await consumeRateLimit({
-      scope: "auth-register",
+      ...registrationRateLimit(process.env),
       identifier: ip,
-      limit: 6,
-      windowMs: 60 * 60 * 1000,
     });
 
     if (!rateLimit.allowed) {
+      const feedback = registrationWait(rateLimit.retryAfterMs);
       return NextResponse.json(
         {
           ok: false,
-          message: "Se realizaron demasiados intentos. Intenta nuevamente más tarde.",
+          ...feedback,
         },
         {
           status: 429,
           headers: {
-            "Retry-After": String(Math.ceil(rateLimit.retryAfterMs / 1000)),
+            "Retry-After": String(feedback.retryAfterSeconds),
           },
         },
       );

@@ -11,6 +11,7 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:3000",
     browserName: "chromium",
+    channel: process.env.PLAYWRIGHT_BROWSER_CHANNEL === "chrome" ? "chrome" : undefined,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
@@ -20,8 +21,8 @@ export default defineConfig({
   projects: [
     { name: "desktop", use: { viewport: { width: 1440, height: 1000 } } },
     { name: "mobile", use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },
-    { name: "small-mobile", testMatch: ["**/ux-mobile.spec.ts", "**/guest-cart.spec.ts", "**/cart-merge.spec.ts", "**/cart-drawer.spec.ts"], use: { viewport: { width: 320, height: 740 }, isMobile: true, hasTouch: true } },
-    { name: "tablet", testMatch: ["**/ux-mobile.spec.ts", "**/guest-cart.spec.ts", "**/cart-merge.spec.ts", "**/cart-drawer.spec.ts"], use: { viewport: { width: 768, height: 1024 }, hasTouch: true } },
+    { name: "small-mobile", testMatch: ["**/ux-mobile.spec.ts", "**/guest-cart.spec.ts", "**/cart-merge.spec.ts", "**/cart-drawer.spec.ts", "**/registration-limits.spec.ts"], use: { viewport: { width: 320, height: 740 }, isMobile: true, hasTouch: true } },
+    { name: "tablet", testMatch: ["**/ux-mobile.spec.ts", "**/guest-cart.spec.ts", "**/cart-merge.spec.ts", "**/cart-drawer.spec.ts", "**/registration-limits.spec.ts"], use: { viewport: { width: 768, height: 1024 }, hasTouch: true } },
   ],
   webServer: {
     command: "node .next/standalone/server.js",

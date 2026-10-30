@@ -41,7 +41,7 @@ test("RI-02: business export preserves reconciled money, refund reference and or
   });
   await refundPaymentReconciliation(f.user.id, f.payment.id, "QA-BACKUP-REF");
   const backup = await buildBusinessBackup();
-  assert.equal(backup.meta.version, 2);
+  assert.equal(backup.meta.version, 3);
   assert.ok(backup.users.every((u) => !("passwordHash" in u)));
   assert.equal(backup.orders.find((o) => o.id === f.order.id)?.status, "CANCELLED");
   const received = backup.paymentReconciliations.find((r) => r.paymentId === f.payment.id);

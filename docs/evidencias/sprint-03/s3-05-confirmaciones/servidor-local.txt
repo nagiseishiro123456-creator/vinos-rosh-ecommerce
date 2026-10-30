@@ -1,0 +1,322 @@
+QA database: vinos_rosh_test (local). Applying committed migrations; no reset or seed.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "vinos_rosh_test", schema "public" at "localhost:5432"
+
+15 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+✔ account SSR and anonymous stores do not request private data (1.1851ms)
+✔ lost response retries the same identity after refreshing current server state (22.0354ms)
+✔ old read and old SSR cannot overwrite a confirmed mutation (1.7065ms)
+✔ out of order reads and another user payload never replace the account cart (0.7531ms)
+✔ 401 removes private data and disposed or old server replies cannot restore it (0.8188ms)
+✔ rapid duplicate intents and transient errors retain one pending operation (0.8456ms)
+✔ definite refusal can be verified; invalid success remains uncertain (0.7729ms)
+✔ invalidation re-reads; subscriptions release browser resources (6.5525ms)
+✔ account change clears private data while retaining the original command owner (0.5223ms)
+DATABASE_OPERATION_FAILED
+✔ two concurrent account additions preserve both increments without reserving stock (219.4611ms)
+DATABASE_OPERATION_FAILED
+✔ S2-06: guest merge and account add serialize together and replay without another increment (96.9876ms)
+DATABASE_OPERATION_FAILED
+✔ concurrent copies and lost-response replay use one receipt with current cart state (97.8162ms)
+✔ same operation identity with another command conflicts without changing quantities (64.2347ms)
+✔ commands enforce stock/99, preserve other lines and remove unavailable products (232.5104ms)
+✔ new distinct lines respect 50-product cap; existing lines remain editable (88.5324ms)
+DATABASE_OPERATION_FAILED
+✔ receipt write failure rolls quantity and revision back together (66.8095ms)
+✔ account snapshots and operation namespaces are isolated by session user (120.7357ms)
+✔ account API validates public origin, strict bounded UTF-8 JSON, owner and rate limit (178.9814ms)
+✔ merge and order reservation advance the shared cart revision atomically (126.9515ms)
+✔ RI-02: business export preserves reconciled money, refund reference and order audit without password hashes (289.8439ms)
+✔ approve versus reject claims one order and records exactly one administrative decision (142.5666ms)
+✔ duplicate approval is one event and never reserves twice, even past the original deadline (157.7797ms)
+✔ duplicate rejection versus cancel/expiry releases stock once and retains the reason (161.7286ms)
+✔ approval versus customer cancellation/expiry preserves the communicated payment (173.5848ms)
+✔ amount, currency, released or missing reservation and extra payment block approval atomically (153.4071ms)
+✔ current DB role prevents administrative writes after permission revocation (122.3423ms)
+✔ duplicate full refunds restore stock and create an event once (138.633ms)
+✔ replayed fulfillment forms cannot skip preparation and refund/shipping races stay coherent (126.0699ms)
+✔ refund blocks money mismatch and dispatched orders without partial mutation (144.1412ms)
+✔ late income reconciliation and duplicate closure never resurrect an order or touch stock (119.132ms)
+✔ rejected discrepant payment can be reconciled, but its code and received amount cannot be rewritten (113.1999ms)
+DATABASE_OPERATION_FAILED
+✔ bank reference used in another order rolls reconciliation back without creating an event (151.0201ms)
+✔ invalid reconciliation amounts and unclosed orders cannot record received money (69.9182ms)
+✔ authentication preserves normalized internal destinations and rejects origin/encoding escapes (1.0214ms)
+✔ guest authentication keeps the purchase destination for review after merging (0.2165ms)
+✔ registerSchema accepts a valid Peruvian customer (2.9504ms)
+✔ registerSchema rejects weak passwords (0.923ms)
+✔ passwordSchema enforces length, uppercase, lowercase and number (0.3648ms)
+✔ registerSchema rejects invalid Peruvian mobile numbers (0.4093ms)
+✔ loginSchema normalizes email and requires a password (1.0308ms)
+✔ registration explains phone length, format and prefix and accepts a correction (1.3671ms)
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+✔ reservation API commits one order across concurrent HTTP confirmations with no payment or token (237.0845ms)
+✔ reservation API recovers after a response is lost following commit and preserves later cart edits (110.6498ms)
+✔ reservation API recovers a cancelled order without re-reserving or extending its deadline (111.5965ms)
+✔ reservation API rejects changed prices and insufficient stock without consuming the cart (68.4314ms)
+✔ reservation API does not expose or reserve another account's address or confirmation (88.78ms)
+✔ reservation API cannot convert a manual order by reusing its checkout key (79.8092ms)
+✔ reservation API enforces TEST configuration with rollback before any inventory effect (51.1452ms)
+✔ reservation API throttles the eleventh request with one persistent reservation (150.3923ms)
+✔ reservation endpoint is off by default and needs its own opt-in, before authentication (13.2157ms)
+✔ reservation requires the configured HTTP(S) origin and refuses cross-site requests (5.0958ms)
+✔ reservation requires JSON, a session and persistent per-user traffic budget (1.406ms)
+✔ reservation binds the rendered account to the session and rejects browser money or payment data (9.0603ms)
+✔ reservation passes the authenticated identity and normalized fiscal input to the ACID service (0.9873ms)
+✔ reservation replay recovers identity without claiming a closed reservation is active (0.4237ms)
+✔ reservation rejects oversized bytes with missing or misleading Content-Length, not just string length (0.9307ms)
+✔ reservation rejects malformed bodies, invalid UTF-8 and invalid Content-Length without echoing input (0.8328ms)
+✔ reservation cancels a stalled request body within its deadline, without reserving (5.4892ms)
+✔ reservation aborts an in-flight body read and cancels its stream without reserving (14.6068ms)
+✔ reservation rejects an already aborted client before changing stock (2.0096ms)
+✔ reservation bounds the sum of streamed chunks even when the declared length lies (0.4182ms)
+✔ reservation maps business failures and never exposes arbitrary private error details (3.8367ms)
+✔ reservation conflict returns only the authenticated account's existing order reference (0.3814ms)
+✔ reservation validates the configured request deadline (0.385ms)
+✔ automatic reservation freezes authoritative prices, marks its integration and reserves without inventing a payment (204.7846ms)
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+✔ six automatic confirmations commit one order, one reservation and one audit event (155.5113ms)
+✔ automatic replay preserves later cart edits and original deadline despite changed catalogue and disabled configuration (114.7261ms)
+✔ automatic and manual method changes conflict on the same checkout identity without converting orders (127.828ms)
+✔ automatic reservations reject foreign accounts, foreign confirmations and forged identities before stock changes (64.769ms)
+DATABASE_OPERATION_FAILED
+✔ automatic and manual buyers competing for the final bottle cannot oversell (120.8842ms)
+✔ automatic stale quotes reject changed delivery pricing without consuming stock or identity (66.5072ms)
+✔ automatic and manual reservations share the pending-order limit (132.8347ms)
+DATABASE_OPERATION_FAILED
+✔ automatic failure after stock decrement rolls back order, event, cart revision and identity (89.9874ms)
+✔ automatic expiry uses the persisted deadline and maintenance releases exactly once without reopening replay (128.7512ms)
+✔ an unlabelled legacy order is not inferred to be eligible for Izipay (62.0258ms)
+✔ automatic creation requires test configuration and leaves the same identity reusable after a rejected creation (70.9911ms)
+✔ automatic reservation input normalizes optional fields and preserves a stable fingerprint (3.8773ms)
+✔ automatic reservation input rejects browser totals, method switches and unexpected data (7.7569ms)
+✔ automatic reservation requires the same invoice fields as manual checkout (1.4247ms)
+✔ automatic reservation fingerprint binds account, quote, address and fiscal fields and has a separate method domain (0.7309ms)
+✔ automatic reservation refuses a mismatched current account before database access (0.7062ms)
+✔ checkout identity is stable across views and bound to user, quote and signing domain (1.4697ms)
+✔ malformed identities and missing signing secrets fail closed (3.7364ms)
+✔ request fingerprint normalizes optional whitespace and ignores client amounts and unknown fields (0.8081ms)
+✔ fingerprint binds the full accepted request including every invoice field (0.8065ms)
+✔ a quote is canonical across item order and decimal presentation (13.0279ms)
+✔ price changes cannot hide behind an identical aggregate total (0.5081ms)
+✔ quotes bind user, cart, quantity, shipping and delivery address (1.2745ms)
+✔ tampered tokens, wrong keys and missing signing keys fail closed (0.89ms)
+✔ anonymous preview uses current exact prices and stock without commercial mutations (191.6512ms)
+✔ unavailable and hidden products are removed without exposing private product metadata (60.0201ms)
+✔ public preview rejects forged money, duplicate/invalid lines and bounded-stream violations (146.8092ms)
+✔ preview rate limit returns Retry-After without touching the commercial cart (78.0177ms)
+✔ large preview arithmetic stays exact and marks the order ceiling without making a reservation (71.8376ms)
+✔ legacy selection contains only IDs/quantities and normalizes duplicate lines within 99 (2.2647ms)
+✔ corrupt, future, oversized or invalid selections recover explicitly (1.1717ms)
+✔ SSR snapshot reads before migrating storage and strips non-selection metadata (7.6536ms)
+✔ legacy migration is canonical across two independently recovered tabs (1.219ms)
+✔ rapid queued additions, edits and removals preserve limits and the last action (4.579ms)
+✔ blocked storage remains editable in memory with a truthful warning (0.4213ms)
+✔ unavailable locks recover readable data in memory without unsafe writes (1.4339ms)
+✔ quota failure keeps new memory data and ignores stale disk events (0.9002ms)
+✔ corrupt storage repairs and cross-tab replacement/clearing are reflected (0.8376ms)
+✔ resubscription reloads edits made while no consumer was mounted (0.9501ms)
+✔ two tabs claim the same immutable import and acknowledgements preserve later additions (1.321ms)
+✔ lost response retains identity on reload and refuses reassignment to another account (1.0673ms)
+✔ failed local acknowledgement reloads the same pending identity, never a new import (0.5769ms)
+✔ a later identical selection has a fresh identity; a stale preview cannot erase a queued edit (0.8263ms)
+✔ an old preview cannot clamp a new selection even if IDs and quantities happen to match again (0.5304ms)
+✔ merge sums once, retains other account lines and never reserves stock or creates commerce records (204.0688ms)
+✔ same identity replays even after prices, availability and the private cart change; altered content conflicts (92.5548ms)
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+✔ concurrent retries share one receipt, while distinct imports serialize their sums (120.8584ms)
+DATABASE_OPERATION_FAILED
+✔ concurrent same key with different contents commits one complete request and rejects the other (48.0753ms)
+✔ current stock and 99-unit ceiling adjust quantities, hidden/missing/zero-price products disappear (123.9082ms)
+DATABASE_OPERATION_FAILED
+✔ receipt failure rolls back all cart changes, leaving stock and order state intact (63.9787ms)
+✔ identity namespace belongs to the current user and cannot expose another user's result (107.9631ms)
+✔ merge endpoint enforces session, origin, strict bounded JSON and retry-safe responses (158.1334ms)
+✔ configured public origin remains valid when Next or the reverse proxy changes the internal URL (51.0343ms)
+✔ sequential retries return the same order even after cart, catalogue, address, provider and signing key change (201.572ms)
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+DATABASE_OPERATION_FAILED
+✔ six concurrent identical confirmations commit one order, one payment and one reservation (159.3499ms)
+✔ same key with changed provider, receipt, fiscal fields, notes or quote conflicts without overwriting the order (127.6554ms)
+DATABASE_OPERATION_FAILED
+✔ concurrent conflicting requests select a single winner and report the existing order to its owner (78.8669ms)
+✔ another user, missing key and forged key cannot recover or create an order (94.5393ms)
+DATABASE_OPERATION_FAILED
+✔ failed transaction after decrement rolls stock and identity back; same key succeeds after fault is removed (91.0247ms)
+✔ cancelled and expired results are recovered without renewing them; a new cart generates a new operation (148.6545ms)
+✔ a completed paid order is recovered without another payment or stock movement (107.2055ms)
+✔ new reservations still enforce provider readiness and do not consume an identity on failure (82.0467ms)
+✔ Izipay preparation persists server totals and a unique reference without changing commerce or calling a provider (215.7423ms)
+✔ Izipay preparation refuses disabled/configuration mismatches, foreign owners and missing orders before persistence (127.0267ms)
+✔ Izipay preparation leaves existing manual orders in their current payment flow (119.477ms)
+✔ Izipay preparation rejects expired, released, unreserved, paid and review orders without creating an attempt (199.0752ms)
+✔ Izipay concurrent starts have one creator and replay the same persisted identity (109.0969ms)
+✔ Izipay an uncompleted attempt survives lost responses and later order cancellation without granting another request (105.9444ms)
+✔ Izipay token completion stores only a hash once and never confirms a payment (113.8541ms)
+✔ Izipay uncertainty blocks reinitiation and late token completion; invalid tokens preserve the initial state (92.9794ms)
+✔ Izipay competing completion and uncertainty use one atomic transition (84.1854ms)
+✔ Izipay API persists before transport and returns only a confirmed token without commerce effects (268.6186ms)
+✔ Izipay simultaneous requests and a lost success response never issue a second provider request (170.8179ms)
+✔ Izipay transport timeout is persisted as uncertain and retries cannot send another request (145.4675ms)
+✔ Izipay cancellation during network I/O does not hold a DB lock or expose a token afterwards (151.6434ms)
+✔ Izipay reservation expiry during token issuance preserves released stock and withholds the token (153.8081ms)
+✔ Izipay mismatch between persisted order and attempt prevents token handoff (112.976ms)
+✔ Izipay API ownership and manual-payment guards preserve existing records without transport (125.6983ms)
+✔ Izipay invalidation between attempt commit and preflight never sends network traffic (101.5538ms)
+✔ Izipay initiation persists before request and confirms storage before returning a token (8.7948ms)
+✔ Izipay initiation replays have no token and never request or store another one (0.3063ms)
+✔ Izipay an invalidated reservation prevents outbound request and preserves the attempt for recovery (0.5043ms)
+✔ Izipay network errors produce one uncertain outcome without exposing the underlying exception (2.324ms)
+✔ Izipay missing or failed token persistence never returns the provider token (0.8503ms)
+✔ Izipay failure to record uncertainty does not retry network or leak the database error (0.3857ms)
+✔ Izipay endpoint defaults off and requires a separate route opt-in before authentication (8.6728ms)
+✔ Izipay endpoint rejects absent/foreign Origin and cross-site requests (2.2572ms)
+✔ Izipay endpoint requires JSON, authenticated session and traffic budget (1.0991ms)
+✔ Izipay endpoint refuses client amounts, sensitive fields and a different current account (4.8288ms)
+✔ Izipay endpoint bounds streamed bodies and handles malformed JSON and UTF-8 (1.1238ms)
+✔ Izipay endpoint cancels a slow body without starting payment (5.8976ms)
+✔ Izipay successful response is private/no-store and only exposes token, public key and attempt identity (0.724ms)
+✔ Izipay pending/recovery responses never expose a token or offer a new attempt (0.6052ms)
+✔ Izipay endpoint sanitizes provider, order and database errors (2.0444ms)
+✔ Izipay endpoint does not start a request whose client already disconnected (3.6849ms)
+✔ Izipay converts persisted amounts to exact integer cents (1.0054ms)
+✔ Izipay rejects rounded, zero, floating-point and out-of-range inputs (0.4682ms)
+✔ Izipay payload uses the order snapshot and excludes card data (2.6199ms)
+✔ Izipay rejects unsupported currency and invalid order references (0.2948ms)
+✔ Izipay is disabled by default without an outbound request (0.3714ms)
+✔ Izipay requires the explicit product and TEST mode before accepting credentials (0.7482ms)
+✔ Izipay formToken request pins HTTPS destination and sends server Basic Auth (25.1999ms)
+✔ Izipay provider HTTP errors do not leak response bodies or retry (0.5963ms)
+✔ Izipay provider failure and missing token are never treated as success (1.2148ms)
+✔ Izipay rejects HTML, malformed JSON and oversized response bodies (1.329ms)
+✔ Izipay network failures are sanitized and are not automatically retried (0.3104ms)
+✔ Izipay timeout aborts the attempt without a second outbound request (26.8369ms)
+✔ Izipay invalid timeout is rejected before a request (0.6202ms)
+✔ Izipay IPN verifies the original UTF-8 answer and REST password (0.7998ms)
+✔ Izipay IPN rejects another key, invalid digest formats and invalid inputs (0.4254ms)
+✔ maintenance cancels expired manual-payment orders and restores stock (211.9704ms)
+✔ maintenance keeps old reported payments under review and their reserved stock (219.4434ms)
+✔ order, item and payment snapshots store exact amounts and ignore browser totals (233.7497ms)
+✔ a changed price creates no order or stock movement until a refreshed quote is submitted (142.3004ms)
+✔ changed shipping and a tampered quote leave the cart and inventory intact (104.3136ms)
+✔ an amount exceeding Decimal(10,2) is rejected before reserving stock (116.2193ms)
+✔ 3 bottles at 29.90 plus 8.50 shipping are exactly 98.20 (1.3649ms)
+✔ mixed cents and repeated addition have no floating point drift (0.4806ms)
+✔ administrative amounts reject extra precision rather than silently rounding (3.6523ms)
+✔ invalid precision, quantities and database overflow are rejected (0.6812ms)
+✔ client-side formatting and preview sum remain exact for large amounts (18.1957ms)
+✔ manual payment hold defaults to 120 minutes (0.6932ms)
+✔ reservation deadline adds the hold once at creation (0.9831ms)
+✔ manual payment hold is clamped to a safe range (0.1191ms)
+✔ manual payment cutoff subtracts the configured hold (0.6815ms)
+✔ approval and duplicate concurrent approval persist exactly one confirmation in the same commit (304.9567ms)
+DATABASE_OPERATION_FAILED
+✔ outbox insertion failure rolls back payment, order and audit together (573.7934ms)
+✔ disabled sending leaves the queue untouched and performs no provider request (185.9842ms)
+✔ one active lease blocks concurrent requests and accepted messages cannot be sent again (146.8146ms)
+✔ retry preserves the frozen envelope/key and payment; it respects its schedule (267.7605ms)
+✔ uncertain operations stop before provider idempotency expiry and after sender configuration changes (299.7975ms)
+✔ the fifth failed attempt requires review and cannot trigger a sixth send (158.5353ms)
+DATABASE_OPERATION_FAILED
+✔ provider acceptance followed by DB failure is recovered with the same idempotency key (127.9015ms)
+✔ revoked administrators cannot list, preview or dispatch another confirmation (101.5666ms)
+✔ refunded orders stop their queued notice; changed recipients require review (240.902ms)
+✔ confirmation template preserves exact totals and neutral fiscal language (1.0317ms)
+✔ confirmation escapes customer/product HTML and constrains links (0.4003ms)
+✔ snapshot rejects inconsistent or malformed amounts without throwing outside validation (0.7552ms)
+✔ email configuration is opt-in and rejects incomplete or unsafe sender/origin (0.5064ms)
+✔ transport uses the official endpoint and stable key without following redirects (23.2485ms)
+✔ transient failures are retryable; provider refusals require review and never leak bodies (1.6582ms)
+✔ network, malformed success and oversized success remain uncertain retryable outcomes (1.1416ms)
+✔ owned status follows the persisted attempt without changing payment or stock (217.178ms)
+✔ uncertain status and exact expiry are read-only, without releasing stock or creating new attempts (120.3312ms)
+✔ foreign, absent and manual orders are unavailable through the same ownership query (111.3803ms)
+✔ persisted confirmation and subsequent cancellation use the server record (82.0773ms)
+✔ HTTP read works with disabled payment flags and enforces its persistent budget across handlers (325.5797ms)
+✔ status distinguishes reservation and all attempt states without claiming approval (8.3704ms)
+✔ status requires both a persisted paid state and paidAt for confirmation (8.4249ms)
+✔ closed orders stay closed regardless of attempt or prior approval (0.3153ms)
+✔ deadline is expired at the exact boundary and takes precedence over an uncertain attempt (0.2492ms)
+✔ missing or inconsistent reservation information is sent for review (0.2844ms)
+✔ attempt amount, product, mode and currency mismatches cannot look ready (0.3074ms)
+✔ manual orders are unavailable and the response contains only public progress fields (1.2964ms)
+✔ the client contract rejects token-only approval, unknown fields and malformed totals (0.4939ms)
+✔ status stays readable with initiation disabled and cannot be cached (6.0729ms)
+✔ unauthenticated or switched accounts cannot read an order (1.3119ms)
+✔ foreign origin and cross-site requests are rejected before authentication (1.0123ms)
+✔ strict query rejects duplicates, extra keys, missing fields and invalid identifiers (1.5189ms)
+✔ status has its own per-user persistent budget and retry guidance (0.3618ms)
+✔ unknown and foreign orders share one unavailable response (0.4962ms)
+✔ configuration and internal failures are sanitized and never cached (0.9105ms)
+✔ getClientIp uses the first forwarded address (22.7039ms)
+✔ consumeRateLimit blocks requests after the configured limit (54.5947ms)
+✔ manual refund restores stock and records audit data (147.0605ms)
+✔ registration defaults preserve six attempts per hour (1.6056ms)
+✔ registration local opt-in has its own bounded ten-minute bucket (0.295ms)
+✔ registration production cannot enable the local policy even with loopback configuration (0.165ms)
+✔ registration refuses relaxation for remote, malformed, renamed or overridden databases (0.2729ms)
+✔ registration requires both application URLs to be loopback (0.9274ms)
+✔ registration accepts IPv4 and IPv6 loopback for named local QA databases (0.2486ms)
+✔ registration never enables local relaxation in test or unspecified runtime (0.1224ms)
+✔ registration feedback gives a positive Retry-After and rounds minutes upward (0.2456ms)
+✔ local unlock configuration may omit NODE_ENV but still rejects production (0.1717ms)
+✔ local registration unlock removes only selected registration keys and preserves accounts and other protections (77.3782ms)
+✔ a full legacy registration bucket does not block opt-in local development and remains recoverable (32.5163ms)
+✔ local registration unlock rejects production, remote settings and invalid IPs without clearing a bucket (14.0502ms)
+✔ reserving persists a deadline and pending payment before instructions; reporting preserves later cart edits and frozen prices (214.876ms)
+DATABASE_OPERATION_FAILED
+✔ two full checkouts competing for the final bottle create only one reserved order (190.828ms)
+✔ missing availability in a multi-product checkout leaves every line, payment and stock unchanged (98.6835ms)
+✔ persisted expiry survives configuration changes; exact deadline rejects reporting and releases once (107.5444ms)
+✔ concurrent cancel and expiry return the reservation only once (114.8708ms)
+✔ reporting races with expiry: either review keeps the stock or expiry releases it (80.6061ms)
+✔ other customers cannot report or cancel; review cannot expire or be customer-cancelled; approval never reserves twice (109.1918ms)
+DATABASE_OPERATION_FAILED
+✔ a duplicate operation rolls back the review transition without losing either reservation (99.6551ms)
+✔ legacy pending without reservation markers is neither payable nor automatically released (75.1965ms)
+✔ three reservations or reviews block a fourth before touching stock (121.6067ms)
+✔ only one concurrent reservation can take the final unit (66.6728ms)
+✔ releaseStock restores a previously reserved quantity (26.0497ms)
+✔ a failed multi-product reservation rolls back earlier stock changes (29.1352ms)
+ℹ tests 255
+ℹ suites 0
+ℹ pass 255
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26120.805
+CREATE SCHEMA
+SET
+CREATE TABLE
+CREATE TABLE
+INSERT 0 1
+INSERT 0 1
+BEGIN
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+COMMIT
+DO
+RESET
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table rosh_confirmation_outbox_qa."Order"
+drop cascades to table rosh_confirmation_outbox_qa."Product"
+drop cascades to table rosh_confirmation_outbox_qa."PaymentConfirmationOutbox"
+DROP SCHEMA

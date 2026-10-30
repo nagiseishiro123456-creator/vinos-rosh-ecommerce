@@ -1,0 +1,31 @@
+.notificationsPage { max-width: 1200px; }
+.notificationNotice { background: #eef3f7; color: #304d62; border: 1px solid #ccdae4; border-radius: 10px; padding: 16px; line-height: 1.7; }
+.notificationList { display: grid; gap: 16px; margin: 25px 0; }
+.notificationList article > div { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.notificationList h2 { margin: 0; }
+.notificationState { display: inline-block; padding: 7px 12px; border-radius: 6px; background: #edf1f4; color: #395166; font-size: .8rem; font-weight: 700; }
+.notificationState-sent { background: #e8f4ec; color: #286346; }
+.notificationState-retry,.notificationState-review { background: #fcf0d7; color: #75541b; }
+.notificationDetailGrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 26px; align-items: start; margin-block: 28px; }
+.notificationFacts { display: grid; gap: 18px; margin-block: 25px; }
+.notificationFacts dt { font-size: .8rem; color: #657583; }
+.notificationFacts dd { margin: 7px 0 0; font-size: .9rem; overflow-wrap: anywhere; }
+.notificationDispatch { display: grid; gap: 18px; margin-block: 22px; }
+.notificationDispatch label { display: flex; align-items: start; gap: 10px; line-height: 1.7; font-size: .85rem; }
+.notificationDispatch input { flex: 0 0 auto; margin-top: 6px; }
+.notificationDemoControls { display: flex; gap: 12px; flex-wrap: wrap; margin-block: 22px; }
+.notificationDemoControls button { font-size: .8rem; }
+.confirmationEmailPreview { background: white; border: 1px solid #dbe1e6; color: #2c3945; border-radius: 14px; padding: 30px; font-family: Arial, Helvetica, sans-serif; }
+.confirmationEmailPreview h2 { font-family: Georgia, serif; letter-spacing: .12em; font-size: 2rem; color: #27313c; }
+.confirmationEmailPreview h3 { color: #30495b; font-size: 1.4rem; }
+.confirmationEmailPreview p { line-height: 1.8; font-size: .87rem; }
+.confirmationEmailPreview .confirmationEmailCaption { font-size: .65rem; color: #687988; letter-spacing: .04em; }
+.confirmationEmailItems { max-width: 100%; overflow-x: auto; }
+.confirmationEmailPreview table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.confirmationEmailPreview th,.confirmationEmailPreview td { text-align: left; border-bottom: 1px solid #e7ecef; padding: 14px 8px 14px 0; overflow-wrap: anywhere; }
+.confirmationEmailPreview th:last-child,.confirmationEmailPreview td:last-child { text-align: right; min-width: 75px; }
+.confirmationEmailPreview dl { margin: 25px 0; display: grid; gap: 13px; }
+.confirmationEmailPreview dl > div { display: flex; justify-content: space-between; gap: 15px; font-size: .85rem; }
+.confirmationEmailPreview dd { margin: 0; }
+.confirmationEmailPreview dl > div:last-child { font-weight: 700; font-size: 1.2rem; padding-top: 15px; border-top: 1px solid #e7ecef; }
+@media (max-width: 800px) { .notificationDetailGrid { grid-template-columns: 1fr; } .confirmationEmailPreview { padding: 22px 17px; } }

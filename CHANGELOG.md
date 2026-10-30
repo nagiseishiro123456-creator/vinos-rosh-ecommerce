@@ -1,5 +1,47 @@
 # Changelog
 
+## Corrección de registro durante desarrollo local (2026-10-22)
+
+- Desbloqueo CLI selectivo con guardas de BD/app locales; sin cambiar cuentas ni contraseñas.
+- Opt-in local de 60 solicitudes/10 minutos, solo en development; producción conserva seis/hora.
+- Respuesta 429 con tiempo restante y reglas de contraseña visibles/validadas en el navegador.
+- QA de política, almacenamiento y registro en cuatro tamaños, con capturas. Sin migraciones ni dependencias nuevas.
+
+## Fase 2 — Sprint 3 / S3-02 (reserva automática interna, 2026-10-22)
+
+- Núcleo ACID compartido con reserva manual, entrada automática estricta, total/envío de servidor, stock condicional e idempotencia por cuenta/clave.
+- Migración 14 aditiva con marcador explícito y NULL histórico; no se crean pagos ni se convierten órdenes manuales. Plazo TEST provisional local de 15 minutos.
+- Cinco casos deterministas, doce PostgreSQL, séptimo contrato SQL y dump/restore de orden/intento. Las fixtures de inicio usan reservas automáticas reales.
+- ADR, contrato, QA, backlog y avance en el mismo PR. Sin nueva UI, SDK, webhook, cobro ni cambio en Render.
+- La auditoría inicial bloqueó Next.js 16.3.8 por avisos críticos: Next.js y su configuración ESLint se fijan en 16.4.2 y se regenera el lockfile, manteniendo el control CI.
+
+## Fase 2 — Sprint 3 / S3-02 (inicio de sandbox protegido, 2026-10-22)
+
+- Route Handler POST de inicio con opt-in separado/desactivado, sesión, origen, validación estricta, límites de body/tiempo/tráfico y respuestas privadas.
+- Coordinación intento → llamada fuera de BD → hash confirmado antes de entregar token. Replays y fallos no disparan otra solicitud; reserva/importe se revalidan bajo bloqueo al finalizar.
+- Pruebas de transporte simulado, concurrencia, timeout y cancelación/vencimiento durante llamada; smoke de la ruta desactivada en app compilada.
+- Guías, QA, ADR, backlog y avance actualizados. Sin nueva migración/dependencia, SDK/UI, confirmación de pago ni cambio en Render.
+
+## Fase 2 — Sprint 3 / S3-02 (persistencia aislada, 2026-10-22)
+
+- Preparación de PaymentAttempt con referencia/importe de servidor y estados de inicio/token/incertidumbre; una identidad por orden y transiciones condicionadas.
+- Guardas de propietario, reserva y modo TEST; los pedidos manuales conservan su circuito. Sin endpoint, SDK, petición externa ni aprobación de pago.
+- Migración 13 aditiva, nueve casos PostgreSQL y contrato SQL sobre datos históricos; regresión de restore conserva controles y reconoce la migración nueva.
+- Contrato, QA y avance documentados; preflight de Render confirmado con plan de respaldo/build/actualización, sin despliegue remoto todavía.
+
+## Fase 2 — Sprint 3 / S3-02 (preparación aislada, 2026-10-22)
+
+- Guía del desarrollador para corregir familia/API, importes, formulario del proveedor e IPN.
+- Núcleo Mi Cuenta Web V4 desactivado: céntimos exactos, transporte Basic Auth/timeout/errores sanitizados y verificación HMAC en tiempo constante; entrada exclusiva de servidor.
+- Quince pruebas deterministas sin red real. Sin nuevas dependencias, migraciones, rutas públicas ni cambios de pagos/stock; integración externa y checkout pendientes.
+
+## Fase 2 — Sprint 3 / S3-01 (refinamiento documental, 2026-10-21)
+
+- Guía de acceso al carrito y distinción entre integración en GitHub y despliegue.
+- Investigación de Yape/Izipay, tres comercios y alternativas, con fuentes y límites de vigencia.
+- Inventario de lo financiero existente y pendiente; plan preliminar de seis historias y ADR 0009 propuesto.
+- Proveedor/producto por elegir; sin integración automática, nuevas migraciones, dependencias o cambios de UI.
+
 ## Fase 2 — Sprint 2 (cierre técnico integrado, 2026-10-21)
 
 - Historias S2-01–S2-06 revisadas e integradas en main mediante PR #9–#14.

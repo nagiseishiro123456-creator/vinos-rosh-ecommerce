@@ -1,5 +1,242 @@
 # Punto de avance
 
+## Sprint 3 — Conciliación manual y preparación de correo (2026-10-29, America/Lima)
+
+- El propietario autoriza continuar y confirma que Resend todavía no está configurado.
+  Se conserva el envío desactivado; la entrega externa y el acceso del comercio Izipay siguen pendientes.
+- S3-04 parcial: pagos manuales confirmados, comisión explícita o desconocida, neto exacto,
+  abono/fecha/referencia verificados y diferencias visibles. Correcciones con revisión
+  optimista, rol ADMIN vigente y auditoría atómica. Reembolsos o cambios de pago requieren revisión.
+  [Contrato](integraciones/conciliacion-manual.md).
+- Panel `/admin/conciliacion` y demo `/desarrollo/conciliacion`; el diagnóstico privado del
+  correo está en `/admin/notificaciones/configuracion`, también `npm run email:check`.
+  No expone claves ni presenta formato válido como autenticación o entrega comprobadas.
+- Migración aditiva 16 comprobada en QA y aplicada en desarrollo sin reset/seed.
+  **270/270 servidor** locales y contratos SQL aprobados; dump/restore conserva dos
+  versiones y auditoría, sin envíos externos. Tipos y lint aprobados. Nueva navegación
+  de conciliación se verifica en CI al publicar. [QA](testing/s3-04-conciliacion.md).
+- [Guía de prueba](guia-prueba-sprint-03.md). Diseño de Home permanece pendiente.
+  No se cierra el Sprint 3 ni se activa un despliegue.
+
+## Sprint 3 — Confirmaciones recuperables (2026-10-27, America/Lima)
+
+- El propietario confirma ausencia de acceso del comercio a Izipay. Se avanza en correo
+  independiente del proveedor, sin habilitar cobros automáticos.
+- S3-05: aviso persistente junto con aprobación manual, snapshot exacto, unicidad por
+  pedido, lease, mismo cuerpo/clave y límites de reintento. [Contrato](integraciones/confirmaciones-correo.md).
+- Panel `/admin/notificaciones`, vistas previas y envío operativo explícito apagado por
+  defecto. Demo `/desarrollo/correos`. [Guía para probar y explicar al cliente](guia-prueba-sprint-03.md).
+- Migración aditiva 15; preparador local aplicó solo las pendientes 13–15, sin reset/seed.
+  Regresión 255/255 servidor en QA; contrato SQL aislado, tipos/lint y pruebas de navegador
+  añadidas. [QA](testing/s3-05-confirmaciones.md).
+- Se incluyen correcciones funcionales de carrito/registro que seguían locales. Home
+  visual pendiente. Entrega de correo externa y pago automático/IPN por verificar.
+- Base previa 5af345a: [CI 40265331014](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/40265331014)
+  aprobó tests, build, migraciones/restore, tipos/lint, auditoría y navegador. El CI nuevo
+  se registra en la PR al publicar con jose-israel.
+
+## Publicación del avance del Sprint 3 — 2026-10-25 (America/Lima)
+
+- El propietario autoriza commit/subida con `jose-israel`. Perfil y permiso `write`
+  comprobados en el repositorio original; publicación en `codex/sprint-03-reserva-estado`.
+- El alcance seleccionado contiene reserva HTTP, consulta/panel, demostración y QA.
+  Diseño, carrito y validación de registro posteriores a la base se conservan localmente.
+- Copia exacta del contenido seleccionado: **237/237 servidor**, tipos y lint aprobados.
+  La cifra histórica 238 incluye una prueba de registro que no forma parte de este commit.
+- [Validación y límites de la publicación](testing/s3-02-publicacion.md). La compilación
+  aislada no se declara aprobada: las dependencias locales difieren del lockfile y los
+  enlaces temporales entre discos impiden compilar. La generación Prisma en la instalación
+  limpia temporal no fue autorizada. CI de la nueva cabecera queda por comprobar.
+- S3-02 continúa parcial: siguiente paso funcional, formulario oficial con acceso TEST
+  verificado y contrato de recuperación; después IPN, conciliación y outbox/correo.
+  La subida conserva los flags de Izipay apagados y no activa un despliegue de Render.
+
+## Sprint 3 — Consulta de estado y recorrido visual (2026-10-23, America/Lima)
+
+- Nueva instrucción del propietario: continuar funcionalidades y mostrar las pantallas
+  del sprint. Se añade consulta autenticada del pedido automático y demostración local.
+- `GET /api/payment/status` verifica dueño/cuenta/origen, DTO y presupuesto persistente;
+  devuelve un estado mínimo private/no-store sin proveedor, tokens o cambios de pedido/stock.
+  Sigue disponible con inicio apagado. TOKEN_READY no implica pago; confirmado exige estado
+  pagado y paidAt persistido. [Contrato](integraciones/estado-izipay.md).
+- Panel en el detalle propio, actualización manual con timeout/cancelación y manejo de
+  sesión/red; los automáticos no se envían a instrucciones de pago manual.
+- `/desarrollo/sprint-3`: seis escenarios ilustrativos, consulta de prueba y próximos
+  desarrollos. Solo development, noindex; no crea pedidos ni cobra/envía correos.
+  [Capturas reales](evidencias/sprint-03/s3-02-estado-ui/README.md).
+- **238/238 servidor** aprobadas en PostgreSQL QA aislado (20 nuevas). Tipos/lint/diff
+  aprobados; revisión local móvil 320/390 y escritorio. [QA y límites](testing/s3-02-estado-ui.md).
+- **Siguiente:** formulario oficial con acceso TEST verificado; IPN auténtica/idempotente,
+  recuperación/conciliación y correo/outbox. S3-02 sigue parcial; S3-03–05 pendientes.
+  Sin claves habilitadas, integración externa aceptada, commit/PR o despliegue.
+
+## Sprint 3 — Reserva HTTP autenticada (2026-10-23, America/Lima)
+
+- Por solicitud del propietario se deja pendiente el diseño y se retoman funcionalidades.
+  El siguiente pendiente implementado es el punto de entrada de reserva de S3-02.
+- `POST /api/orders/reserve`: sesión/origen, identidad esperada, DTO estricto, lectura
+  JSON acotada, presupuesto persistente y errores de negocio específicos. Opt-in propio
+  `IZIPAY_MCW_RESERVE_ENABLED`, apagado por defecto en ejemplo y CI; `.env` no modificado.
+- Reutiliza la reserva ACID. 201 al crear; 200 al recuperar, sin prometer que un pedido
+  cancelado siga activo. Reintento tras respuesta perdida conserva orden, plazo y stock.
+  No obtiene token, no llama a Izipay ni confirma pagos.
+- [Contrato](integraciones/reserva-izipay-http.md), [ADR 0011](decisions/0011-reserva-sandbox-autenticada.md)
+  y [QA](testing/s3-02-reserva-http.md). **218/218 servidor** aprobadas sobre PostgreSQL
+  local aislado `vinos_rosh_test`, incluidas 15 unitarias y 8 de integración nuevas.
+  Tipos/lint/diff aprobados; HTTP local GET 405 y POST apagado 404/private-no-store.
+- Runner reproducible `scripts/test-local-postgres.mjs`: crea/migra solo la base de QA;
+  no migra, resetea ni carga datos en desarrollo. No hay migración nueva ni dependencia.
+- **Siguiente:** confirmar producto/paquete TEST de ROSH y contrato de consulta/recuperación;
+  conectar el formulario oficial y preparar IPN auténtica y pagos tardíos. S3-02 continúa
+  parcial. Sin activación comercial, UI automática, nuevo commit/PR o despliegue.
+
+Las entradas siguientes son registros históricos de sus incrementos.
+
+## Corrección — Registro bloqueado en local (2026-10-22, America/Lima)
+
+- El propietario reporta el límite mientras prueba en local. La regla normal cuenta
+  seis solicitudes por IP/hora antes de validar, persiste en BD y puede agrupar unknown.
+  No se ha inspeccionado ni modificado su PC/BD; se prepara una solución ejecutable allí.
+- Rama `fase-2/correccion-registro-local`, base PR #20 `f254a839b5e65b292d431a300d74db4b0243991f`.
+  CI base 39848363578: 182 servidor/68 navegador aprobados. No cambia main ni Render.
+- [Operación local](desarrollo-registro-local.md): `auth:unlock-local` elimina solo claves
+  de registro seleccionadas, con guardas de BD/URLs de loopback y rechazo en production.
+  Flag local opt-in para 60 solicitudes/10 minutos; publicado conserva seis/hora.
+- Mensaje con espera concreta y reglas de contraseña en cliente. [QA](testing/registro-local.md):
+  nueve casos de política, tres PostgreSQL y ocho de navegador previstos. Resultado y SHA
+  observados se guardan en la PR; capturas nuevas en artefacto CI, 192 anteriores intactas.
+- Sin migraciones, nuevas dependencias, cambio de contraseñas ni avance de cobros.
+  S3-02 sigue parcial. Siguiente: entregar el comando al propietario para su base local;
+  después retomar formulario sandbox/recuperación e IPN del Sprint 3.
+
+## Sprint 3 — Reserva automática interna y recuperación (2026-10-22, America/Lima)
+
+- Se continúa mientras el propietario prueba en local. Rama `fase-2/sprint-03-reserva-automatica`,
+  sobre PR #19 `8424493ebdf099b029c9d066ab50869125ccdaf6`.
+  [CI base 39808132000](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39808132000):
+  **165/165 servidor y 68/68 navegador**, 13 migraciones/seis contratos SQL y restore aprobados.
+- [Reserva automática interna](integraciones/reserva-izipay.md) comparte el núcleo ACID manual.
+  Importe/envío/stock del servidor, misma clave recupera, cambio de método conflictivo,
+  cuenta esperada y datos fiscales validados. No inicia red ni crea un pago aprobado.
+- Migración 14: marcador MICUENTAWEB_V4 explícito, NULL en históricos. El inicio exige
+  ese marcador; las fixtures positivas ya no borran pagos manuales. Plazo local provisional
+  TEST de 15 minutos, no TTL garantizado por Izipay; replay no extiende la fecha.
+- [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) y [QA](testing/s3-02-reserva.md):
+  cinco casos deterministas, doce PostgreSQL, contrato SQL de históricos y segundo
+  dump/restore (orden/intento). Resultados de cabecera y SHA se registran en el PR.
+  Las 192 capturas históricas se conservan; no hay UI nueva que fotografiar.
+- S3-02 sigue parcial: servicio interno sin nueva ruta/acción de reserva ni SDK, con
+  inicio desactivado. S3-03/IPN no se ha implementado. Producto/test keys, recuperación
+  y prueba externa pendientes. Main y Render no cambian.
+- El primer CI de esta rama (39847337080) se detuvo en auditoría antes de migrar/probar:
+  Next.js 16.3.8 apareció afectado por avisos críticos recién incorporados al feed.
+  Se fijan Next.js/eslint-config-next 16.4.2 y lockfile actualizado; la nueva cabecera
+  debe repetir todos los checks. Auditoría local de producción 0 hallazgos; aviso
+  transitivo de braces en lint registrado en backlog. [Fuentes y alcance](testing/s3-02-reserva.md).
+- **Siguiente:** revisar este incremento; confirmar producto/paquete de pruebas y
+  contrato de recuperación; conectar reserva autenticada y formulario oficial, y
+  preparar la IPN transaccional con tratamiento de pagos tardíos. No activar cobros aún.
+
+## Sprint 3 — Coordinación del token y ruta protegida (2026-10-22, America/Lima)
+
+- El propietario pide continuar mientras revisa en local. Se conserva su revisión
+  sobre la rama que descargue; no se modifica su equipo ni se publica en Render.
+- Base PR #18 `6d81d539c782a2d63cae64ae7312cff1b757f891`, verificada por
+  [CI 39800349578](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39800349578):
+  141 servidor/66 navegador, 13 migraciones, seis contratos SQL y restore aprobados.
+  El reintento final de PR #17 también aprobó 132/66 sobre la misma fuente original.
+- Se añade [POST protegido de inicio](integraciones/inicio-izipay.md), desactivado con
+  opt-in separado. Sesión, Origin, tipo/body acotado, cuenta actual, rate limit y no-store.
+  La orden se autoriza y el intento se persiste antes de salir a la red; solo el creador
+  solicita un token, sin retry. Solo se entrega tras confirmar su registro en BD.
+- Finalización refuerza reserva/importe bajo bloqueo de orden. Cancelar o vencer
+  durante la llamada impide entregar el token y conserva el stock liberado. No hay PAID.
+- Dieciséis casos deterministas nuevos aprobados localmente, ocho PostgreSQL y dos
+  ejecuciones smoke añadidas. [QA y límites](testing/s3-02-inicio.md); resultado y SHA
+  de la cabecera se registran en el PR. No hay migraciones/dependencias nuevas ni cambios de UI.
+- S3-02 sigue parcial: no se crea todavía una reserva automática, no se muestra SDK
+  en checkout ni se confirma una transacción por IPN. Los pedidos manuales se conservan.
+  Producto, test keys y evidencia externa de Izipay pendientes; ningún pago real o simulado
+  se presenta como un cobro aprobado. Todos los transportes de QA son en memoria.
+- No se consultó/modificó Render ni su BD en este incremento. Se conserva el preflight
+  anterior y la actualización sigue pendiente de respaldo/build por un canal compatible.
+- **Siguiente:** verificar esta cabecera y revisar el PR; concretar la reserva automática
+  y el contrato de recuperación/IPN, sujeto al producto/test package de Izipay para ROSH.
+
+## Sprint 3 — Intentos persistidos y preflight Render (2026-10-22, America/Lima)
+
+- El propietario confirmó **My Workspace** y autorizó continuar. Se precisó que Next.js
+  solicita el formToken, mientras los datos sensibles del formulario oficial viajan
+  al proveedor; esto no elimina automáticamente las obligaciones de cumplimiento.
+- Render consultado con workspace explícito: preview y PostgreSQL activos. El último
+  deploy live sigue en `b4831ea…` (Fase 1), con 7 migraciones frente a 12 de main.
+  Hay 10 pedidos/10 pagos conservados. [Preflight y secuencia operativa](render-free-preview.md).
+  El build efectivo sigue usando npm install; no se alteró configuración ni BD remota.
+- Falta dump/restore completo y sincronizar build antes de actualizar preview. El conector
+  no permite exportar ni editar ese build; [procedimiento concreto](07-despliegue/backups-y-recuperacion.md#render-postgresql-16-exportación-externa).
+  No se repite la confirmación de workspace, que ya quedó resuelta.
+- Sobre PR #17 se añade una preparación aislada de `PaymentAttempt`: importe/referencia
+  de servidor, una identidad por orden, guardas de propietario/reserva y rechazo de
+  pedidos con pago manual. Inicios paralelos recuperan el mismo intento; token/resultado
+  incierto compiten por una transición. Sin PAID, otro descuento de stock ni solicitud externa.
+- [Contrato y límites de recuperación](integraciones/intentos-izipay.md), migración 13
+  aditiva y nueve casos PostgreSQL más un contrato SQL. [QA](testing/s3-02-intentos.md)
+  y resultado exacto de cabecera en el PR; S3-02 sigue parcial y la pasarela desactivada.
+- El primer CI de PR #17 aprobó 132 servidor y checks técnicos, pero agotó tiempo en
+  navegador después de una descarga Ubuntu de más de 16 minutos. Se pidió reintentar
+  los jobs cancelados; no se lo declara totalmente aprobado mientras falte ese resultado.
+- No cambió UI ni se inventan capturas de Izipay. Se conservan las 192 evidencias previas.
+- **Siguiente:** obtener resultado de CI de este incremento y revisar el PR; resolver
+  canal de backup/configuración para publicar main en preview. Identificar producto/test
+  package de Izipay antes de conectar reserva automática, endpoint/SDK e IPN.
+
+## Sprint 3 — Primera preparación de Izipay (2026-10-22, America/Lima)
+
+- El propietario solicita avanzar por historias y evaluar un ejemplo Express con
+  `formToken`, Yape y webhook. [Evaluación y guía técnica](integraciones/izipay-sandbox.md).
+- Se conserva Next.js/Route Handlers. Se distingue Mi Cuenta Web V4 de Punto Web SDK;
+  no se usan totales del navegador ni el dominio Micropayment como si fuera Izipay.
+- Base `beb8698f0f1c7d599ea840d5a7ead51b29e72b3b` / PR #16. Preparación Mi Cuenta Web:
+  céntimos exactos, configuración TEST desactivada, Basic Auth con destino fijo,
+  timeout/límite de respuesta, errores sanitizados y verificación HMAC de IPN.
+  Entrada `server-only`; no hay endpoint público ni conexión al checkout.
+- Quince pruebas aisladas aprobadas localmente con transportes inyectados sin red real;
+  Node 24.19.0/npm 11.9.0 locales, toolchain canónico de CI 22.23.3/11.9.0.
+  [QA, comprobaciones y límites](testing/s3-02-base-izipay.md); checks de cabecera en su PR.
+- S3-01 mantiene pendiente producto/condiciones y aceptación. S3-02 mantiene pendientes
+  intentos persistidos, rutas/UI y sandbox externo. S3-03 no cambia pedidos ni stock.
+  No hay nuevas dependencias/migraciones ni capturas de una pasarela inexistente.
+- Render: se consultó la selección y la lista de workspaces. El conector no conserva
+  selección y exige confirmar el espacio; devuelve `My Workspace`. No se seleccionó
+  automáticamente ni se accedió a servicios, BD, secretos o despliegues.
+- **Siguiente:** confirmar el workspace para actualizar la preview; identificar con
+  Izipay el producto/paquete de test disponible y completar el servicio de intentos
+  de S3-02 antes de activar la conexión del checkout. Política de costos vigente.
+
+## Sprint 3 — Refinamiento de pagos iniciado (2026-10-21, America/Lima)
+
+- El propietario pide comprobar cómo abrir el carrito y avanzar a pagos, investigando
+  «ezepay»/Yape antes de elegir. Base remota y local: `83c8e5774af42d8b7c90dfd3135385faf3c8d0d9`.
+- [Guía de carrito](guia-carrito.md): bolsa arriba a la derecha, acceso móvil, `/carrito`,
+  cuenta para checkout y diferencia entre código integrado y versión desplegada.
+  La observación de descubrimiento queda abierta para aceptación comercial.
+- [Investigación](investigacion/pagos-yape-izipay.md): estado financiero real, tres comercios
+  consultados, documentación oficial, alternativas y límites comerciales. Izipay es una
+  hipótesis sobre el nombre; se necesita confirmar marca/producto y disponibilidad.
+- [Plan Sprint 3](sprints/fase-2-sprint-03.md): seis historias, 26 SP preliminares,
+  dependencias, DoD y cuándo documentar. [ADR 0009 propuesto](decisions/0009-pagos-automaticos.md)
+  y [QA del refinamiento](testing/s3-01-refinamiento.md) preparados.
+- S3-01 tiene investigación preparada, no elección terminada. S3-02–S3-06 pendientes;
+  cobro automático, conciliación de proveedor, avisos de pago y emisión fiscal no se
+  presentan como implementados. No hay cambios de ejecución, esquema o dependencias.
+- Baseline: [CI final de main 39674983346](https://github.com/nagiseishiro123456-creator/vinos-rosh-ecommerce/actions/runs/39674983346)
+  aprobada sobre `83c8e57…`, 117 servidor/66 navegador; resultados heredados de Sprint 2,
+  no prueba de integración de pagos. La CI de la propuesta se registra en su PR.
+- Este trabajo no consulta ni modifica Render/BD remota, no contacta proveedores y no
+  ejecuta pagos. [Política de costos](cost-policy.md) vigente.
+- **Siguiente:** confirmar si es Izipay, producto/medios habilitados y condiciones;
+  cerrar la decisión S3-01 y concretar S3-02 con sandbox del producto disponible.
+
 ## Cierre técnico — Sprint 2 integrado (2026-10-21, America/Lima)
 
 - S2-01–S2-06 revisadas e integradas en main mediante **PR #9 → #14**, conservando historial.

@@ -42,6 +42,54 @@ Cuenta obligatoria antes del checkout; stock solo se reserva al confirmar, no al
 S2-02 agrega comparación visual y pruebas de foco/layout a cuatro tamaños. Ver
 [QA de S2-02](testing/s2-02-ux-movil.md), con CI oficial aprobada y cierre técnico documentado.
 
+## Sprint 3 — Pagos y comunicación (26 SP propuestos, sin compromiso de capacidad)
+
+[Plan, aceptación y secuencia documental](sprints/fase-2-sprint-03.md) ·
+[Investigación y alternativas](investigacion/pagos-yape-izipay.md) ·
+[Guía de acceso al carrito](guia-carrito.md).
+
+| ID | Historia | SP | Estado |
+| --- | --- | ---: | --- |
+| S3-01 | Comprender acceso/versión y elegir proveedor/producto con condiciones verificadas. | 3 | Izipay solicitado para evaluar; producto/condiciones y aceptación pendientes. |
+| S3-02 | Iniciar pago de la reserva con intento persistido y checkout de sandbox. | 5 | Transporte, intentos, inicio y reserva protegidos/desactivados; consulta propia y UI de estado implementadas localmente. SDK, recuperación del proveedor y sandbox externo pendientes. |
+| S3-03 | Verificar IPN y aplicar resultado una vez, incluyendo concurrencia y pagos tardíos. | 8 | Pendiente. |
+| S3-04 | Conciliar pago, costos y abono con referencias verificadas. | 3 | Conciliación manual con comisiones, neto, abono e historial implementada; reporte/consulta Izipay y aceptación externa pendientes. |
+| S3-05 | Confirmar pedido por correo con outbox y recuperación de fallos. | 5 | Cola, panel, plantilla y recuperación implementados en aprobación manual; entrega externa y conexión a IPN pendientes. |
+| S3-06 | Revisar, comprobar regresión, integrar y demostrar el incremento. | 2 | Pendiente. |
+
+Actualización 2026-10-29: [conciliación manual](integraciones/conciliacion-manual.md),
+migración 16, panel privado y demo con datos ficticios. No cambia pagos/stock ni ejecuta
+operaciones bancarias. El propietario confirma Resend sin configurar; se incorpora
+diagnóstico local sin secretos, sin peticiones externas ni activar el envío.
+[Guía de prueba](guia-prueba-sprint-03.md) · [QA](testing/s3-04-conciliacion.md).
+
+Izipay se solicita expresamente para evaluar sandbox (2026-10-22); su producto web
+y habilitación siguen pendientes. [Guía técnica](integraciones/izipay-sandbox.md) y
+[QA de la primera preparación](testing/s3-02-base-izipay.md).
+Antes de conectar el adaptador al checkout: concretar [ADR 0009](decisions/0009-pagos-automaticos.md) con el contrato
+del producto real. La observación del propietario sobre encontrar el carrito mantiene
+abierta la aceptación UX. S3-02 tiene una base aislada y desactivada, con las migraciones
+aditivas 13 (intentos) y 14 (marcador de reserva) propuestas en rama;
+[contrato y límites](integraciones/intentos-izipay.md).
+Se añaden [inicio protegido](integraciones/inicio-izipay.md) y
+[reserva automática interna](integraciones/reserva-izipay.md) sin conectar el checkout existente.
+[ADR 0010](decisions/0010-reserva-automatica-sandbox.md) y [QA](testing/s3-02-reserva.md).
+Se continúa el 2026-10-23 con [reserva HTTP autenticada](integraciones/reserva-izipay-http.md),
+opt-in independiente y apagado. [ADR 0011](decisions/0011-reserva-sandbox-autenticada.md),
+[QA local](testing/s3-02-reserva-http.md): 218/218 servidor en PostgreSQL aislado, sin cobros.
+No se contabiliza como historia terminada ni como integración externa comprobada.
+
+Incremento posterior: [consulta autenticada de estado y recorrido visual](integraciones/estado-izipay.md).
+Panel del pedido propio y demostración solo en desarrollo, sin cobros/correo reales.
+[QA](testing/s3-02-estado-ui.md): 238/238 servidor en PostgreSQL aislado; capturas locales
+de escenarios y responsive. No implementa IPN ni cierra S3-02/S3-06.
+
+Seguimiento técnico antes de producción: la actualización de Next.js/eslint-config-next
+16.4.2 elimina el hallazgo crítico de producción. Queda el aviso de braces 3.0.3 en
+la cadena de lint (cinco entradas high propagadas, sin parche publicado al verificar).
+Revisar release/alternativa compatible y repetir auditoría completa; no confundir con
+cinco fallos independientes del checkout. [Evidencia y límites](testing/s3-02-reserva.md).
+
 ## Secuencia posterior, sujeta a refinamiento
 
 | Sprint | Objetivo | Documentación antes / durante / al cerrar |

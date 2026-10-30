@@ -66,3 +66,20 @@ test("loginSchema normalizes email and requires a password", () => {
   }
   assert.equal(invalid.success, false);
 });
+
+test("registration explains phone length, format and prefix and accepts a correction", () => {
+  const input = { firstName: "Cliente", lastName: "Prueba", email: "qa@example.test", password: "Segura123" };
+  for (const [phone, expected] of [
+    ["98765432", /9 dígitos; ingresaste 8/],
+    ["9876543210", /9 dígitos; ingresaste 10/],
+    ["887654321", /empezar con 9/],
+    ["+51987654321", /sin espacios ni código de país/],
+  ] as const) {
+    const result = registerSchema.safeParse({ ...input, phone });
+    assert.equal(result.success, false);
+    if (!result.success) assert.match(result.error.flatten().fieldErrors.phone!.join(" "), expected);
+  }
+  for (const phone of ["987654321", "", "   ", undefined]) {
+    assert.equal(registerSchema.safeParse({ ...input, phone }).success, true);
+  }
+});

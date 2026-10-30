@@ -26,7 +26,11 @@
     "db:backup": "tsx scripts/backup-db.ts",
     "db:restore": "tsx scripts/restore-db.ts",
     "db:maintenance": "tsx scripts/maintenance.ts",
-    "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1"
+    "db:prepare:email": "node --env-file-if-exists=.env scripts/prepare-payment-email-local.mjs",
+    "email:check": "node --env-file-if-exists=.env --import tsx scripts/check-payment-email.ts",
+    "db:prepare:sprint3": "node --env-file-if-exists=.env scripts/prepare-payment-email-local.mjs",
+    "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1",
+    "auth:unlock-local": "node --env-file-if-exists=.env --import tsx scripts/unlock-local-registration.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
@@ -34,7 +38,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
     "motion": "14.4.0",
-    "next": "16.3.8",
+    "next": "16.4.2",
     "next-auth": "^4.24.15",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -49,7 +53,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "eslint": "^9.31.0",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "16.4.2",
     "postcss": "^8.5.23",
     "prisma": "6.19.3",
     "tailwindcss": "^4.1.0",

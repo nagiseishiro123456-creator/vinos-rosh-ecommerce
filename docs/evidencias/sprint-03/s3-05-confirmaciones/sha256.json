@@ -1,0 +1,18 @@
+[
+  {
+    "file": "01-aviso-pendiente.jpg",
+    "sha256": "c7b829ce7582f90ca78f2678f5dd2cdd2b32f1e5dab01b58abb7820d1d006a85"
+  },
+  {
+    "file": "02-fallo-recuperable.jpg",
+    "sha256": "4f66b7bc695a7f8f02013048107b0f7463d153878c2b78f941275ccad8453c87"
+  },
+  {
+    "file": "03-recuperacion-prevista.jpg",
+    "sha256": "e26a991bf929894caee9e533af09c493612b2ec8f8937da63cb148eed59da7d2"
+  },
+  {
+    "file": "04-correo-movil.jpg",
+    "sha256": "e4eafa0e845ea82efeeb28fde814dc62fc1eb8063ea9f817d075ecd5e227aa38"
+  }
+]

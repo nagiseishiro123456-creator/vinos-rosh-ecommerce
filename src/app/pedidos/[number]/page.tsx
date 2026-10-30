@@ -4,6 +4,8 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { PaymentStatusCard } from "@/components/payment-status-card";
+import { projectMicuentawebPaymentStatus } from "@/modules/payments/izipay/status-service";
 import { StoreHeader } from "@/components/store-header";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -53,6 +55,10 @@ export default async function OrderPage({ params, searchParams }: Props) {
       ...(admin ? {} : { userId: session.user.id }),
     },
     select: {
+      id: true,
+      paymentIntegration: true,
+      paidAt: true,
+      paymentAttempt: { select: { state: true, integration: true, mode: true, amountMinor: true, currency: true } },
       number: true,
       userId: true,
       status: true,
@@ -104,11 +110,13 @@ export default async function OrderPage({ params, searchParams }: Props) {
 
   if (!order) notFound();
 
+  const automaticStatus = order.userId === session.user.id && order.paymentIntegration === "MICUENTAWEB_V4"
+    ? projectMicuentawebPaymentStatus(order) : null;
   const payment = order.payments[0];
   const canCustomerCancel =
     order.userId === session.user.id && order.status === "PENDING_PAYMENT" &&
     Boolean(order.stockReservedAt && !order.stockReleasedAt);
-  const canContinuePayment = order.userId === session.user.id && order.status === "PENDING_PAYMENT";
+  const canContinuePayment = order.userId === session.user.id && order.status === "PENDING_PAYMENT" && order.paymentIntegration !== "MICUENTAWEB_V4";
 
   return (
     <main className="orderPage purchaseFlow">
@@ -182,6 +190,8 @@ export default async function OrderPage({ params, searchParams }: Props) {
           </div>
           <span className={`orderStatusPill status-${order.status.toLowerCase()}`}>{statusLabel(order.status)}</span>
         </div>
+
+        {automaticStatus ? <PaymentStatusCard key={`${session.user.id}:${order.id}`} initialStatus={automaticStatus} expectedUserId={session.user.id} /> : null}
 
         <div className="orderStatusGrid">
           <section className="adminCard">

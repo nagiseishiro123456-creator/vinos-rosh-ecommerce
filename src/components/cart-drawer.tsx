@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, type RefObject } from "react";
@@ -13,7 +13,6 @@ import { useGuestCartQuote } from "./guest-cart-quote-provider";
 
 export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose: () => void; trigger: RefObject<HTMLElement | null> }) {
   const dialog = useRef<HTMLDialogElement>(null); const title = useRef<HTMLHeadingElement>(null);
-  const restore = useRef<(() => void) | null>(null);
   const account = useAccountCart(); const { userId } = useCartPanel(); const guest = useGuestCart(); const quote = useGuestCartQuote();
   const initialReduced = useReducedMotion();
   const [reduced, setReduced] = useState(() => initialReduced ?? window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -26,10 +25,6 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
   const [desktop, setDesktop] = useState(() => window.matchMedia("(min-width: 768px)").matches);
   useEffect(() => { const media = window.matchMedia("(min-width: 768px)"); const change = () => setDesktop(media.matches);
     media.addEventListener("change", change); return () => media.removeEventListener("change", change); }, []);
-  function finishClose() {
-    if (!restore.current) return;
-    dialog.current?.close(); const cleanup = restore.current; restore.current = null; cleanup();
-  }
   useEffect(() => {
     if (!open || !dialog.current || dialog.current.open) return;
     const element = dialog.current;
@@ -52,7 +47,9 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
       }
     };
     document.addEventListener("keydown", containFocus, true);
-    restore.current = () => {
+    // Closing/unmounting must release the native modal even if an animation is interrupted.
+    const cleanup = () => {
+      element.close();
       document.removeEventListener("keydown", containFocus, true);
       document.body.style.overflow = overflow; document.body.style.paddingRight = padding;
       if (window.location.pathname !== path) return;
@@ -60,8 +57,8 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
       target?.focus({ preventScroll: true }); window.scrollTo({ top: y, left: x, behavior: "instant" });
     };
     element.showModal(); title.current?.focus({ preventScroll: true });
+    return cleanup;
   }, [open, trigger]);
-  useEffect(() => () => { restore.current?.(); restore.current = null; }, []);
   const mergePending = Boolean(userId && (!guest.ready || guest.items.length || guest.pending));
   const subtotal = userId ? account.status === "idle" ? account.data?.subtotal : undefined
     : guest.ready && !guest.items.length ? "0.00" : quote.quote?.subtotal;
@@ -75,11 +72,10 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
       else if (event.target instanceof Element && event.target.closest("a") && event.button === 0
         && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) onClose();
     }}>
-    <AnimatePresence onExitComplete={finishClose}>
       {open ? <motion.section key="cart-panel" className="cartDrawerPanel flex h-full w-full max-w-[30rem] flex-col bg-[var(--paper)] text-[var(--ink)] shadow-2xl"
         data-reduced-motion={reduced ? "true" : "false"}
         initial={{ opacity: reduced ? 1 : .9, x: !reduced && desktop ? 20 : 0 }} animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: reduced ? 1 : .9, x: !reduced && desktop ? 20 : 0 }} transition={{ duration: reduced ? 0 : .16, ease: "easeOut" }}>
+        transition={{ duration: reduced ? 0 : .16, ease: "easeOut" }}>
         <header className="cartDrawerHeader"><div><p className="eyebrow wine">ROSH · TU COMPRA</p><h2 ref={title} id="cart-drawer-title" tabIndex={-1}>Tu carrito</h2></div>
           <button className="drawerClose" type="button" aria-label="Cerrar carrito" onClick={onClose}><X size={22} aria-hidden="true" /></button></header>
         <div className="cartDrawerBody min-h-0 flex-1 overflow-y-auto overscroll-contain">
@@ -97,6 +93,5 @@ export function CartDrawer({ open, onClose, trigger }: { open: boolean; onClose:
             <button type="button" className="textLink" onClick={onClose}>Continuar comprando</button></div>
         </footer>
       </motion.section> : null}
-    </AnimatePresence>
   </dialog>;
 }

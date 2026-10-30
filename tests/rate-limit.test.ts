@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { prisma } from "../src/lib/prisma";
-import { consumeRateLimit, getClientIp } from "../src/lib/rate-limit";
+import { consumeRateLimit, getClientIp, rateLimitKey } from "../src/lib/rate-limit";
 
 test("getClientIp uses the first forwarded address", () => {
   const headers = new Headers({
@@ -42,6 +42,6 @@ test("consumeRateLimit blocks requests after the configured limit", async () => 
   assert.ok(third.retryAfterMs > 0);
 
   await prisma.rateLimitBucket.deleteMany({
-    where: { key: { not: "" }, resetAt: { gt: new Date(0) } },
+      where: { key: rateLimitKey("test", identifier) },
   });
 });

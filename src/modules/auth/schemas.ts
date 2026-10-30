@@ -9,13 +9,21 @@ export const passwordSchema = z
   .regex(/\d/, "Incluye al menos un número");
 
 export const registerSchema = z.object({
-  firstName: z.string().trim().min(2, "Ingresa tus nombres").max(80),
-  lastName: z.string().trim().min(2, "Ingresa tus apellidos").max(80),
-  email: z.string().trim().toLowerCase().email("Correo electrónico inválido"),
+  firstName: z.string().trim().min(2, "Ingresa tus nombres con al menos 2 caracteres.").max(80, "Usa como máximo 80 caracteres para tus nombres."),
+  lastName: z.string().trim().min(2, "Ingresa tus apellidos con al menos 2 caracteres.").max(80, "Usa como máximo 80 caracteres para tus apellidos."),
+  email: z.string().trim().toLowerCase().email("Ingresa un correo válido, por ejemplo nombre@dominio.com."),
   phone: z
     .string()
     .trim()
-    .regex(/^9\d{8}$/, "Ingresa un celular peruano válido de 9 dígitos")
+    .superRefine((value, ctx) => {
+      if (!value) return;
+      const message = !/^\d+$/.test(value)
+        ? "Usa solo números, sin espacios ni código de país. Ejemplo: 987654321."
+        : value.length !== 9
+          ? `El celular debe tener 9 dígitos; ingresaste ${value.length}. Ejemplo: 987654321.`
+          : !value.startsWith("9") ? "El celular peruano debe empezar con 9. Ejemplo: 987654321." : null;
+      if (message) ctx.addIssue({ code: "custom", message });
+    })
     .optional()
     .or(z.literal("")),
   password: passwordSchema,

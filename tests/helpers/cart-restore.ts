@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { prisma } from "../../src/lib/prisma";
 import { CartCommandError, executeCartCommand, readAccountCart } from "../../src/modules/cart/account-service";
 import { mergeGuestCart } from "../../src/modules/cart/guest-merge-service";
+import { assertRestoredMigrations } from "./migration-history";
 
 type Context = { userId: string; productId: string; importId: string; operationId: string; importHash: string; commandHash: string };
 const contextPath = process.env.S206_CONTEXT_PATH;
@@ -32,8 +33,7 @@ async function main() {
   assert.equal(process.argv[2], "verify");
   const context = JSON.parse(readFileSync(contextPath!, "utf8")) as Context;
   const { userId, productId, importId, operationId } = context;
-  const migrations = await prisma.$queryRaw<{ count: bigint }[]>`SELECT count(*)::bigint AS count FROM "_prisma_migrations" WHERE finished_at IS NOT NULL`;
-  assert.equal(Number(migrations[0].count), 12);
+  const migrations = await assertRestoredMigrations();
   assert.equal((await prisma.cartImport.findFirstOrThrow({ where: { userId } })).requestHash, context.importHash);
   assert.equal((await prisma.cartMutation.findFirstOrThrow({ where: { userId } })).requestHash, context.commandHash);
   const replayImport = await mergeGuestCart(userId, { expectedUserId: userId, importId, items: [{ productId, quantity: 2 }] });
@@ -53,7 +53,7 @@ async function main() {
   assert.equal(await prisma.cartMutation.count({ where: { userId } }), 2);
   assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: productId } })).stock, 10);
   assert.equal(await prisma.order.count({ where: { userId } }), 0);
-  console.log("S206_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations: 12, imports: 1, commands: 2,
+  console.log("S206_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations, imports: 1, commands: 2,
     restoredQuantity: 4, restoredRevision: 2, finalQuantity: 3, finalRevision: 3, stock: 10, orders: 0 }));
 }
 main().finally(() => prisma.$disconnect()).catch((error) => { console.error(error); process.exitCode = 1; });

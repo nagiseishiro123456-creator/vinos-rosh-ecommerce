@@ -27,7 +27,7 @@ export default async function ReservedPaymentPage({ params, searchParams }: {
     await expireUnpaidReservation(order.id);
     order = await prisma.order.findFirstOrThrow({ where: { id: order.id, userId: session.user.id }, include: { items: true, payments: true } });
   }
-  if (order.status !== "PENDING_PAYMENT") redirect(`/pedidos/${order.number}`);
+  if (order.status !== "PENDING_PAYMENT" || order.paymentIntegration === "MICUENTAWEB_V4") redirect(`/pedidos/${order.number}`);
   const payment = order.payments[0];
   const hasReservation = Boolean(order.stockReservedAt && !order.stockReleasedAt && order.reservationExpiresAt);
   const isManual = payment?.provider === "YAPE_MANUAL" || payment?.provider === "TRANSFER_MANUAL";

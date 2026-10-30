@@ -29,6 +29,7 @@ import "./admin-backup.css";
 import "./purchase-flow.css";
 import "./guest-cart.css";
 import "./cart-drawer.css";
+import "./automatic-payment.css";
 
 const previewMode = process.env.PREVIEW_MODE === "true";
 

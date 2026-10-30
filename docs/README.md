@@ -32,6 +32,21 @@ La documentación cambia en el mismo PR que el comportamiento. El historial de G
 
 25. [Revisión e integración S2-06](testing/revision-integracion-sprint-02.md) · [Cierre técnico Sprint 2](sprints/cierre-sprint-02.md) · [Seis capturas nuevas](evidencias/sprint-02/integracion/README.md)
 
+26. [Cómo abrir el carrito y comprobar la versión](guia-carrito.md)
+27. [Sprint 3: propuesta, historias y documentación](sprints/fase-2-sprint-03.md)
+28. [Investigación: Yape, Izipay, sitios de referencia y costos](investigacion/pagos-yape-izipay.md)
+29. [ADR 0009 propuesto: pago automático](decisions/0009-pagos-automaticos.md) · [QA del refinamiento S3-01](testing/s3-01-refinamiento.md)
+
+30. [Guía del desarrollador: Izipay sandbox y familias de API](integraciones/izipay-sandbox.md) · [QA de la base aislada S3-02](testing/s3-02-base-izipay.md)
+
+31. [Intentos persistentes de sandbox y límites](integraciones/intentos-izipay.md) · [QA PostgreSQL S3-02](testing/s3-02-intentos.md)
+
+32. [Inicio protegido y contrato HTTP de sandbox](integraciones/inicio-izipay.md) · [QA de coordinación y ruta S3-02](testing/s3-02-inicio.md)
+
+33. [Reserva automática interna TEST](integraciones/reserva-izipay.md) · [ADR 0010](decisions/0010-reserva-automatica-sandbox.md) · [QA y recuperación S3-02](testing/s3-02-reserva.md)
+
+34. [Registro: desbloqueo y pruebas locales](desarrollo-registro-local.md) · [QA y capturas](testing/registro-local.md).
+
 ## Cuándo documentar
 
 | Momento | Registro |

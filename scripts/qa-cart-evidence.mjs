@@ -3,8 +3,9 @@ import { join, relative, basename } from "node:path";
 import { createHash } from "node:crypto";
 const root = process.argv[2], project = process.argv[3];
 const integration = process.env.EVIDENCE_STORY === "S206";
-const tag = integration ? "S206" : "S205";
-const spec = integration ? "sprint-02-integration-" : "cart-drawer-";
+const registration = process.env.EVIDENCE_STORY === "AUTH_LOCAL";
+const tag = registration ? "AUTH_LOCAL" : integration ? "S206" : "S205";
+const spec = registration ? "registration-limits-" : integration ? "sprint-02-integration-" : "cart-drawer-";
 if (!root || !["desktop", "mobile", "small-mobile", "tablet"].includes(project)) throw new Error("Expected artifact directory and project");
 function walk(directory) { return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? walk(join(directory, entry.name)) : [join(directory, entry.name)]); }
 let count = 0;
@@ -15,7 +16,7 @@ for (const file of walk(root).sort()) {
   const found = ["small-mobile", "desktop", "mobile", "tablet"].find((name) => directory.endsWith("-" + name));
   if (found !== project) continue;
   if (basename(file) === "drawer-chunks.json") { console.log(tag + "_METRIC " + readFileSync(file, "utf8")); continue; }
-  const accepted = integration ? /^6[6-8]-.*\.png$/ : /^(5[2-9]|6[0-5])-.*\.png$/;
+  const accepted = registration ? /^auth-0[12]-.*\.png$/ : integration ? /^6[6-8]-.*\.png$/ : /^(5[2-9]|6[0-5])-.*\.png$/;
   if (!accepted.test(basename(file)) && basename(file) !== "test-failed-1.png") continue;
   const bytes = readFileSync(file);
   const meta = { project, path, file: basename(file), bytes: bytes.length, width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20),
