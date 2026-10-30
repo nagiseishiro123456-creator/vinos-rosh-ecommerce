@@ -1,0 +1,17 @@
+.shippingCoveragePage { padding-block: 45px 80px; max-width: 1150px; }
+.shippingCoveragePage > h1 { font-size: clamp(2rem, 5vw, 3.7rem); line-height: 1.1; margin-block: 12px 22px; }
+.shippingCoveragePage > p { max-width: 760px; line-height: 1.8; }
+.shippingExplorer { margin-block: 30px; }
+.shippingSearch { display: grid; gap: 12px; max-width: 720px; }
+.shippingSearch label { font-weight: 650; }
+.shippingSearch input { padding: 15px; width: 100%; min-width: 0; border: 1px solid #bfc8d1; border-radius: 8px; background: white; color: #20384c; font: inherit; box-sizing: border-box; }
+.shippingCoverageGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-block: 25px; }
+.shippingCoverageGrid article { background: white; color: #263b4b; border: 1px solid #dbe1e6; border-radius: 12px; padding: 22px; display: grid; gap: 10px; overflow-wrap: anywhere; }
+.shippingCoverageGrid h2 { font-size: 1.35rem; margin: 0 0 8px; }
+.shippingCoverageGrid p { font-size: .9rem; margin: 0; line-height: 1.6; }
+.shippingCoverageGrid strong { font-size: 1.2rem; }
+.shippingCoverageGrid small { color: #586b79; }
+.shippingCoverageNotice,.shippingEmpty { background: #eef3f7; border: 1px solid #cfdae4; color: #304e62; padding: 18px; border-radius: 9px; line-height: 1.8; margin-block: 25px; }
+.shippingEmpty h2 { font-size: 1.3rem; }
+@media (max-width: 800px) { .shippingCoverageGrid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 500px) { .shippingCoverageGrid { grid-template-columns: 1fr; } }

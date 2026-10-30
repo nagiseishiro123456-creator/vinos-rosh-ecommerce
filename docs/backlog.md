@@ -90,6 +90,22 @@ la cadena de lint (cinco entradas high propagadas, sin parche publicado al verif
 Revisar release/alternativa compatible y repetir auditoría completa; no confundir con
 cinco fallos independientes del checkout. [Evidencia y límites](testing/s3-02-reserva.md).
 
+## Sprint 4 — Direcciones, cobertura y tarifas
+
+Inicio 2026-10-30 desde main 70f6dbc, por instrucción del propietario. Sprint 3 conserva
+sus dependencias externas; no se presenta como cerrado por integrar #22.
+[Plan y límites](sprints/fase-2-sprint-04.md).
+
+| ID | Historia | Estado |
+| --- | --- | --- |
+| S4-01 | Revisar coherencia de direcciones y tarifas en el recorrido de compra. | Fallo de comparación reproducido en la base; identidad compartida implementada. |
+| S4-02 | Consultar cobertura y administrar tarifas sin reactivar zonas por accidente. | Consulta pública, edición/pausa explícitas, errores por campo y control de versión implementados. |
+| S4-03 | Guardar direcciones claras y conservar una única principal por cuenta. | Formulario compartido y servicio transaccional con propiedad, validación y concurrencia implementados. |
+| S4-04 | Refinar precisión geográfica y reglas reales de entrega con el negocio. | Pendiente: aceptación de cobertura, horarios/excepciones y necesidad de mapas. |
+| S4-05 | Validar, integrar y demostrar el incremento. | Regresión local aprobada; CI y aceptación operativa por registrar al publicar. |
+
+[Guía para probar](guia-prueba-sprint-04.md) · [QA](testing/sprint-04-direcciones-cobertura.md).
+
 ## Secuencia posterior, sujeta a refinamiento
 
 | Sprint | Objetivo | Documentación antes / durante / al cerrar |

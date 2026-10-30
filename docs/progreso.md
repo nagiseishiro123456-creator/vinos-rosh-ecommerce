@@ -1,5 +1,25 @@
 # Punto de avance
 
+## Sprint 4 — Direcciones y cobertura (2026-10-30, America/Lima)
+
+- El propietario pide continuar tras integrar #22 en main (70f6dbc); Izipay y Resend
+  siguen pendientes de sus accesos. Se inicia el [plan del Sprint 4](sprints/fase-2-sprint-04.md).
+- Se confirma en una copia del código base que un distrito equivalente por mayúsculas
+  se mostraba disponible en el navegador y era rechazado por el servidor. Nueva identidad
+  compartida por departamento/provincia/distrito, sin elegir entre tarifas ambiguas.
+- `/envios` consulta tarifas reales sin sesión, con búsqueda y estado sin cobertura.
+  La demo `/desarrollo/envios` usa ejemplos ficticios solo en desarrollo.
+- Tarifas: edición explícita, pausa conservada al cambiar precio, versión optimista,
+  rol administrativo vigente y bloqueo de duplicados normalizados. Direcciones: mensajes
+  por campo, celular peruano, propiedad verificada y mutaciones serializadas por cuenta
+  para conservar una sola principal. [Contrato](integraciones/direcciones-cobertura.md).
+- **286/286 servidor** locales, tipos/lint aprobados, 16 migraciones existentes sin nuevas
+  alteraciones. Reproducción anterior y regresión aisladas de los datos comerciales.
+  [QA](testing/sprint-04-direcciones-cobertura.md) y [guía de prueba](guia-prueba-sprint-04.md).
+- Navegador local: búsqueda, sin cobertura y pantallas móviles; la nueva regresión
+  administrativa/checkout se comprueba en CI antes de integrar. No se cierra todo el
+  Sprint 4 ni se activan mapas, pagos, correo o un despliegue remoto.
+
 ## Sprint 3 — Conciliación manual y preparación de correo (2026-10-29, America/Lima)
 
 - El propietario autoriza continuar y confirma que Resend todavía no está configurado.

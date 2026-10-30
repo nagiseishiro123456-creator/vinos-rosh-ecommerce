@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 
 import { calculateAmounts } from "@/modules/checkout/pricing";
+import { resolveShippingCoverage } from "@/modules/shipping/coverage";
 
 export class CheckoutUnavailableError extends Error {
   constructor(public code: "EMPTY_CART" | "ADDRESS_NOT_FOUND" | "UNSUPPORTED_ZONE" | "STOCK_CHANGED") {
@@ -32,10 +33,9 @@ export async function loadCheckoutSnapshot(
   ]);
   if (!address) throw new CheckoutUnavailableError("ADDRESS_NOT_FOUND");
   if (!cart?.items.length) throw new CheckoutUnavailableError("EMPTY_CART");
-  const shippingZone = await db.shippingZone.findFirst({
-    where: { active: true, department: address.department, province: address.province, district: address.district },
-  });
-  if (!shippingZone) throw new CheckoutUnavailableError("UNSUPPORTED_ZONE");
+  const coverage = resolveShippingCoverage(address, await db.shippingZone.findMany({ where: { active: true } }));
+  if (coverage.kind !== "available") throw new CheckoutUnavailableError("UNSUPPORTED_ZONE");
+  const shippingZone = coverage.zone;
   if (cart.items.some((item) => !item.product.active || !Number.isSafeInteger(item.quantity) || item.quantity < 1 || item.quantity > 99 || item.quantity > item.product.stock)) {
     throw new CheckoutUnavailableError("STOCK_CHANGED");
   }

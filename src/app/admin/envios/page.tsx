@@ -3,12 +3,15 @@ import Link from "next/link";
 
 import { requireAdmin } from "@/modules/admin/auth";
 import { prisma } from "@/lib/prisma";
-import { saveShippingZone, toggleShippingZone } from "@/modules/shipping/actions";
+import { toggleShippingZone } from "@/modules/shipping/actions";
+import { ShippingZoneForm } from "./shipping-zone-form";
+import { resolveShippingCoverage } from "@/modules/shipping/coverage";
+import "@/components/delivery-address-form.css";
 
 export const dynamic = "force-dynamic";
 
 type Props = {
-  searchParams: Promise<{ saved?: string; error?: string }>;
+  searchParams: Promise<{ saved?: string; error?: string; edit?: string }>;
 };
 
 
@@ -19,6 +22,9 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
   const zones = await prisma.shippingZone.findMany({
     orderBy: [{ active: "desc" }, { department: "asc" }, { province: "asc" }, { district: "asc" }],
   });
+  const editing = params.edit ? zones.find((zone) => zone.id === params.edit) : undefined;
+  const conflicts = new Set(zones.filter((zone) => zone.active && resolveShippingCoverage(zone, zones).kind === "ambiguous").map((zone) => zone.id));
+  const feedback: Record<string, string> = { CONFLICT: "La zona cambió desde que abriste la página. Revisa su estado actual.", DUPLICATE: "Ya hay otra tarifa activa para esa ubicación. Revisa las zonas duplicadas antes de activarla.", NOT_FOUND: "La zona ya no está disponible.", INVALID: "Los datos de la zona no son válidos." };
 
   return (
     <main className="adminPage shell">
@@ -31,37 +37,13 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
         <Link className="textLink" href="/admin">← Panel principal</Link>
       </div>
 
-      {params.saved ? <div className="adminSuccess">Zona guardada correctamente.</div> : null}
-      {params.error ? <div className="checkoutError">Revisa el distrito y la tarifa ingresada.</div> : null}
+      {params.saved ? <div className="adminSuccess" role="status">Zona guardada correctamente.</div> : null}
+      {params.error ? <div className="checkoutError" role="alert">{Object.hasOwn(feedback, params.error) ? feedback[params.error] : "No pudimos modificar la zona. Revisa su estado y vuelve a intentarlo."}</div> : null}
+      <p><Link className="textLink" href="/envios">Ver cobertura pública y tarifas →</Link></p>
+      {conflicts.size ? <p className="checkoutError" role="alert">Hay tarifas activas duplicadas para una misma ubicación. Revisa sus importes y pausa las sobrantes; esa cobertura queda en revisión mientras haya más de una tarifa activa.</p> : null}
 
       <section className="adminSplit">
-        <form className="adminCard checkoutForm" action={saveShippingZone}>
-          <p className="eyebrow wine">NUEVA / ACTUALIZAR</p>
-          <h2>Configurar zona</h2>
-
-          <div className="checkoutFormGrid">
-            <div className="formField">
-              <label htmlFor="department">Departamento</label>
-              <input id="department" name="department" defaultValue="Lima" required />
-            </div>
-            <div className="formField">
-              <label htmlFor="province">Provincia</label>
-              <input id="province" name="province" defaultValue="Lima" required />
-            </div>
-          </div>
-
-          <div className="formField">
-            <label htmlFor="district">Distrito</label>
-            <input id="district" name="district" placeholder="Ej. Miraflores" required />
-          </div>
-
-          <div className="formField">
-            <label htmlFor="price">Tarifa de envío (S/)</label>
-            <input id="price" name="price" type="number" min="0" max="10000" step="0.01" placeholder="12.00" required />
-          </div>
-
-          <button className="button buttonDark" type="submit">Guardar tarifa</button>
-        </form>
+        <ShippingZoneForm key={editing ? `${editing.id}-${editing.updatedAt.toISOString()}` : "new"} initial={editing ? { id: editing.id, expectedUpdatedAt: editing.updatedAt.toISOString(), department: editing.department, province: editing.province, district: editing.district, price: editing.price.toFixed(2), active: editing.active } : undefined} />
 
         <section className="adminCard adminWideCard">
           <p className="eyebrow wine">COBERTURA</p>
@@ -85,13 +67,14 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
                 </thead>
                 <tbody>
                   {zones.map((zone) => {
-                    const toggleAction = toggleShippingZone.bind(null, zone.id);
+                    const toggleAction = toggleShippingZone.bind(null, zone.id, zone.active, zone.updatedAt.toISOString());
                     return (
                       <tr key={zone.id}>
-                        <td><strong>{zone.district}</strong><small>{zone.province}, {zone.department}</small></td>
+                        <td><strong>{zone.district}</strong><small>{zone.province}, {zone.department}</small>{conflicts.has(zone.id) ? <small>Cobertura en revisión</small> : null}</td>
                         <td>{formatPrice(zone.price.toFixed(2))}</td>
                         <td><span className={`statusPill ${zone.active ? "active" : "inactive"}`}>{zone.active ? "Activo" : "Pausado"}</span></td>
                         <td>
+                          <Link className="textLink" href={`/admin/envios?edit=${zone.id}`}>Editar tarifa</Link>
                           <form action={toggleAction}>
                             <button className="adminTextButton" type="submit">{zone.active ? "Pausar" : "Activar"}</button>
                           </form>
