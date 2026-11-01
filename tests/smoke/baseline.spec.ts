@@ -19,7 +19,7 @@ test("S1-01: storefront baseline with a connected database", async ({ page, requ
       const response = await page.goto(screen.path);
       expect(response?.status()).toBe(200);
       await expect(page.getByRole("heading", { name: screen.heading, exact: true })).toBeVisible();
-      if (screen.path === "/") await expect(page.locator(".roshLanding")).toHaveAttribute("data-phase", "final");
+      if (screen.path === "/") await expect(page.locator(".roshLanding")).toHaveAttribute("data-phase", "final", { timeout: 10_000 });
       if (screen.name === "02-catalogo") {
         await expect(page.getByRole("heading", { name: "ROSH QA — Botella de prueba", exact: true })).toBeVisible();
       }

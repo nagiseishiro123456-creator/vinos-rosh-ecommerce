@@ -65,7 +65,7 @@ export function RoshLanding({ userId, isAuthenticated, isAdmin, phone, media }: 
         <Link className="landingIcon landingDesktopIcon" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}><UserRound size={22} strokeWidth={1.8} aria-hidden="true" /></Link>
         <Link className="cartButton landingIcon landingCart" href="/carrito" aria-label={`Carrito de compras: ${count} unidades`} aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart}>
           <ShoppingCart size={22} strokeWidth={1.8} aria-hidden="true" />
-          {count > 0 ? <span className="landingCartBadge" key={count} aria-hidden="true">{count > 9 ? "9+" : count}</span> : null}
+          {count > 0 ? <span className="cartCount landingCartBadge" key={count} aria-hidden="true">{count > 9 ? "9+" : count}</span> : null}
         </Link>
         <span className="landingSeparator landingLoginSeparator" aria-hidden="true" />
         <Link className="landingLogin" href={loginHref} aria-label={loginLabel}><LogIn size={22} strokeWidth={1.8} aria-hidden="true" /><span>{loginLabel}</span></Link>
