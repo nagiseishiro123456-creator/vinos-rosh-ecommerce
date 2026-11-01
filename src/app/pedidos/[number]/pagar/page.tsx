@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import { DeliveryInstructions } from "@/components/delivery-instructions";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -79,6 +80,7 @@ export default async function ReservedPaymentPage({ params, searchParams }: {
       <aside className="orderReviewCard">
         <p className="eyebrow wine">TU PEDIDO RESERVADO</p>
         <div className="orderReviewAddress"><strong>{order.shippingRecipient}</strong><span>{order.shippingAddress}</span><span>{order.shippingDistrict}, {order.shippingProvince}</span></div>
+        <DeliveryInstructions text={order.shippingDeliveryInstructions} />
         <div className="orderReviewItems">{order.items.map((item) => <div key={item.id}><span>{item.quantity} × {item.productName}</span><strong>{formatPrice(item.subtotal.toFixed(2))}</strong></div>)}</div>
         <div className="summaryRow"><span>Subtotal</span><strong>{formatPrice(order.subtotal.toFixed(2))}</strong></div>
         <div className="summaryRow"><span>Envío</span><strong>{formatPrice(order.shippingAmount.toFixed(2))}</strong></div>

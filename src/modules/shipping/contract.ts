@@ -1,9 +1,15 @@
 import { z } from "zod";
+export const MAX_DELIVERY_INSTRUCTIONS = 600;
+export const deliveryInstructionsSchema = z.string()
+  .transform((value) => value.replace(/\r\n?/g, "\n").trim())
+  .pipe(z.string().max(MAX_DELIVERY_INSTRUCTIONS, "Usa como máximo 600 caracteres.")
+    .refine((value) => !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value), "Elimina los caracteres de control del texto."));
 const place = (max: number) => z.string().trim().min(2, "Escribe al menos 2 caracteres.").max(max, `Usa como máximo ${max} caracteres.`).transform((value) => value.replace(/\s+/g, " "));
 export const shippingZoneInputSchema = z.object({
   id: z.string().cuid().optional(),
   expectedUpdatedAt: z.string().datetime().optional(),
   department: place(80), province: place(80), district: place(100),
+  deliveryInstructions: deliveryInstructionsSchema.optional(),
   price: z.string().trim().regex(/^(0|[1-9]\d{0,4})(\.\d{1,2})?$/, "Usa un importe con hasta dos decimales, por ejemplo 8.50.")
     .refine((value) => {
       if (!/^(0|[1-9]\d{0,4})(\.\d{1,2})?$/.test(value)) return false;

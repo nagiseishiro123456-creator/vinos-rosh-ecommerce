@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { toggleShippingZone } from "@/modules/shipping/actions";
 import { ShippingZoneForm } from "./shipping-zone-form";
 import { resolveShippingCoverage } from "@/modules/shipping/coverage";
+import { DeliveryInstructions } from "@/components/delivery-instructions";
 import "@/components/delivery-address-form.css";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +44,7 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
       {conflicts.size ? <p className="checkoutError" role="alert">Hay tarifas activas duplicadas para una misma ubicación. Revisa sus importes y pausa las sobrantes; esa cobertura queda en revisión mientras haya más de una tarifa activa.</p> : null}
 
       <section className="adminSplit">
-        <ShippingZoneForm key={editing ? `${editing.id}-${editing.updatedAt.toISOString()}` : "new"} initial={editing ? { id: editing.id, expectedUpdatedAt: editing.updatedAt.toISOString(), department: editing.department, province: editing.province, district: editing.district, price: editing.price.toFixed(2), active: editing.active } : undefined} />
+        <ShippingZoneForm key={editing ? `${editing.id}-${editing.updatedAt.toISOString()}` : `new-${zones.length}`} initial={editing ? { id: editing.id, expectedUpdatedAt: editing.updatedAt.toISOString(), department: editing.department, province: editing.province, district: editing.district, price: editing.price.toFixed(2), active: editing.active, deliveryInstructions: editing.deliveryInstructions } : undefined} />
 
         <section className="adminCard adminWideCard">
           <p className="eyebrow wine">COBERTURA</p>
@@ -70,7 +71,7 @@ export default async function ShippingAdminPage({ searchParams }: Props) {
                     const toggleAction = toggleShippingZone.bind(null, zone.id, zone.active, zone.updatedAt.toISOString());
                     return (
                       <tr key={zone.id}>
-                        <td><strong>{zone.district}</strong><small>{zone.province}, {zone.department}</small>{conflicts.has(zone.id) ? <small>Cobertura en revisión</small> : null}</td>
+                        <td><strong>{zone.district}</strong><small>{zone.province}, {zone.department}</small>{conflicts.has(zone.id) ? <small>Cobertura en revisión</small> : null}<DeliveryInstructions text={zone.deliveryInstructions} /></td>
                         <td>{formatPrice(zone.price.toFixed(2))}</td>
                         <td><span className={`statusPill ${zone.active ? "active" : "inactive"}`}>{zone.active ? "Activo" : "Pausado"}</span></td>
                         <td>

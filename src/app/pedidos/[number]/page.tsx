@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/money";
+import { DeliveryInstructions } from "@/components/delivery-instructions";
 import { isCurrentAdmin } from "@/modules/admin/auth";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -78,6 +79,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
       shippingProvince: true,
       shippingAddress: true,
       shippingReference: true,
+      shippingDeliveryInstructions: true,
       items: {
         select: {
           id: true,
@@ -225,6 +227,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <p>{order.shippingDistrict}, {order.shippingProvince}</p>
             <p>{order.shippingPhone}</p>
             {order.shippingReference ? <p>Referencia: {order.shippingReference}</p> : null}
+            <DeliveryInstructions text={order.shippingDeliveryInstructions} />
           </section>
 
           <section className="adminCard">

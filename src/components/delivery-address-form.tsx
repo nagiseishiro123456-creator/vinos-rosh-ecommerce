@@ -5,6 +5,7 @@ import { formatPrice } from "@/lib/money";
 import { submitDeliveryAddress, type AddressDestination, type AddressFormState } from "@/modules/addresses/actions";
 import { unambiguousShippingZones } from "@/modules/shipping/coverage";
 import type { CheckoutShippingZone } from "@/modules/checkout/queries";
+import { DeliveryInstructions } from "./delivery-instructions";
 import "./delivery-address-form.css";
 type Values = { label: string; recipient: string; phone: string; shippingZoneId: string; addressLine1: string; reference: string; isDefault: boolean };
 export function DeliveryAddressForm({ destination, addressId = null, zones, initial = {} }: { destination: AddressDestination; addressId?: string | null; zones: CheckoutShippingZone[]; initial?: Partial<Values> }) {
@@ -24,7 +25,8 @@ export function DeliveryAddressForm({ destination, addressId = null, zones, init
     <div className="formField"><label htmlFor="delivery-shippingZoneId">{destination === "checkout" ? "Distrito / zona de entrega" : "Distrito / zona"}</label>
       <select {...field("shippingZoneId")} required disabled={!available.length}><option value="" disabled>Selecciona una zona activa</option>{available.map((zone) => <option value={zone.id} key={zone.id}>{zone.district} · {zone.province}, {zone.department} · {formatPrice(zone.price)}</option>)}</select>
       {error("shippingZoneId")}{selectedZone ? <small role="status">Envío configurado: {formatPrice(selectedZone.price)}. Se validará nuevamente al confirmar el pedido.</small> : <small>Consulta las zonas habilitadas antes de guardar. <Link href="/envios">Ver cobertura y tarifas</Link></small>}
-      {!available.length ? <p className="checkoutAlert">No hay una tarifa disponible para seleccionar por ahora.</p> : null}</div>
+      {!available.length ? <p className="checkoutAlert">No hay una tarifa disponible para seleccionar por ahora.</p> : null}
+      <DeliveryInstructions text={selectedZone?.deliveryInstructions} /></div>
     <div className="formField"><label htmlFor="delivery-addressLine1">Dirección exacta</label><input {...field("addressLine1")} required maxLength={200} autoComplete="street-address" placeholder="Av., calle, número, urbanización" />{error("addressLine1")}</div>
     <div className="formField"><label htmlFor="delivery-reference">Referencia</label><textarea {...field("reference")} maxLength={250} rows={3} placeholder="Frente a..., puerta de color..." />{error("reference")}</div>
     <label className="checkboxField"><input type="checkbox" name="isDefault" checked={values.isDefault} onChange={(event) => setValues({ ...values, isDefault: event.target.checked })} /><span>Usar como dirección principal</span></label>

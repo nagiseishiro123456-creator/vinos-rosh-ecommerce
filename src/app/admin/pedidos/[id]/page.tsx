@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/money";
+import { DeliveryInstructions } from "@/components/delivery-instructions";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -61,6 +62,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
       shippingDistrict: true,
       shippingAddress: true,
       shippingReference: true,
+      shippingDeliveryInstructions: true,
       createdAt: true,
       paidAt: true,
       shippedAt: true,
@@ -162,6 +164,7 @@ export default async function AdminOrderDetailPage({ params, searchParams }: Adm
             <span>{order.shippingAddress}</span>
             {order.shippingReference ? <span>Ref.: {order.shippingReference}</span> : null}
             <span>{order.shippingDistrict}, {order.shippingProvince}, {order.shippingDepartment}</span>
+            <DeliveryInstructions text={order.shippingDeliveryInstructions} />
           </div>
         </article>
 

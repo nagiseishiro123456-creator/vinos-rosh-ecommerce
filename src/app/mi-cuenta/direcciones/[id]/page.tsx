@@ -41,7 +41,7 @@ export default async function EditAddressPage({ params }: Props) {
     prisma.shippingZone.findMany({
       where: { active: true },
       orderBy: [{ department: "asc" }, { province: "asc" }, { district: "asc" }],
-      select: { id: true, department: true, province: true, district: true, price: true },
+      select: { id: true, department: true, province: true, district: true, price: true, deliveryInstructions: true },
     }),
   ]);
 

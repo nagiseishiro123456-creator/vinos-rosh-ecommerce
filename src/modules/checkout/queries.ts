@@ -20,6 +20,7 @@ export type CheckoutShippingZone = {
   province: string;
   district: string;
   price: string;
+  deliveryInstructions?: string | null;
 };
 
 export type CheckoutCartItem = {
@@ -84,6 +85,7 @@ export async function getCheckoutData(userId: string) {
         province: true,
         district: true,
         price: true,
+        deliveryInstructions: true,
       },
     }),
   ]);

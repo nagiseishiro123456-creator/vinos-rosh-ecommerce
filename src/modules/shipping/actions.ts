@@ -18,7 +18,9 @@ function refresh() { for (const path of ["/admin/envios", "/envios", "/checkout"
 export async function saveShippingZone(_previous: ShippingFormState, form: FormData): Promise<ShippingFormState> {
   const session = await requireAdmin("/admin/envios");
   const text = (name: string) => typeof form.get(name) === "string" ? String(form.get(name)) : "";
-  const input = { id: text("id") || undefined, expectedUpdatedAt: text("expectedUpdatedAt") || undefined, department: text("department"), province: text("province"), district: text("district"), price: text("price") };
+  const input = { id: text("id") || undefined, expectedUpdatedAt: text("expectedUpdatedAt") || undefined, department: text("department"), province: text("province"), district: text("district"), price: text("price"),
+    ...(form.has("deliveryInstructions") ? { deliveryInstructions: text("deliveryInstructions") } : {}),
+  };
   const parsed = shippingZoneInputSchema.safeParse(input);
   if (!parsed.success) return { message: "Corrige los campos indicados. La tarifa todavía no cambió.", errors: Object.fromEntries(parsed.error.issues.map((issue) => [String(issue.path[0]), issue.message])) };
   try {

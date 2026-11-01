@@ -1,5 +1,22 @@
 # Punto de avance
 
+## Sprint 4 — Indicaciones editables de entrega (2026-10-31, America/Lima)
+
+- Base main 78f4c5b: PR #23 integrado con jose-israel; CI #366 aprobada con
+  286/286 servidor y 92/92 navegador. La documentación anterior conserva su estado de entrega.
+- El propietario confirma que las condiciones comerciales todavía no están acordadas
+  y pide dejarlas editables para ROSH. Cada zona admite texto público opcional de hasta
+  600 caracteres desde `/admin/envios`; no se precargan condiciones ni fechas.
+- Se muestra en cobertura, selección de dirección, resumen y pedido. La información
+  revisada queda firmada y congelada al reservar; cambiarla exige revisar nuevamente,
+  sin modificar pedidos anteriores. Edición conserva pausa y control de versión.
+- Migración aditiva 17 en QA y desarrollo, sin reset/seed ni cambios de tarifas.
+  294/294 servidor y SQL heredado aprobados; tipos/lint locales aprobados. Nueva prueba
+  de navegador y restauración ampliada pendientes de CI del incremento al publicar.
+- [Guía para ROSH](guia-envios-cliente.md) · [Contrato](integraciones/indicaciones-entrega.md)
+  · [QA](testing/sprint-04-condiciones-entrega.md). UAT y reglas comerciales siguen
+  pendientes de ROSH. No activa calendarios, mapas, pagos, correo ni despliegue.
+
 ## Sprint 4 — Direcciones y cobertura (2026-10-30, America/Lima)
 
 - El propietario pide continuar tras integrar #22 en main (70f6dbc); Izipay y Resend

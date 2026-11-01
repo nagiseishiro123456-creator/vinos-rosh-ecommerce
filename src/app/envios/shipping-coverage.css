@@ -6,7 +6,7 @@
 .shippingSearch label { font-weight: 650; }
 .shippingSearch input { padding: 15px; width: 100%; min-width: 0; border: 1px solid #bfc8d1; border-radius: 8px; background: white; color: #20384c; font: inherit; box-sizing: border-box; }
 .shippingCoverageGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-block: 25px; }
-.shippingCoverageGrid article { background: white; color: #263b4b; border: 1px solid #dbe1e6; border-radius: 12px; padding: 22px; display: grid; gap: 10px; overflow-wrap: anywhere; }
+.shippingCoverageGrid article { background: white; color: #263b4b; border: 1px solid #dbe1e6; border-radius: 12px; padding: 22px; display: grid; align-content: start; gap: 10px; overflow-wrap: anywhere; }
 .shippingCoverageGrid h2 { font-size: 1.35rem; margin: 0 0 8px; }
 .shippingCoverageGrid p { font-size: .9rem; margin: 0; line-height: 1.6; }
 .shippingCoverageGrid strong { font-size: 1.2rem; }

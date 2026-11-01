@@ -101,10 +101,13 @@ sus dependencias externas; no se presenta como cerrado por integrar #22.
 | S4-01 | Revisar coherencia de direcciones y tarifas en el recorrido de compra. | Fallo de comparación reproducido en la base; identidad compartida implementada. |
 | S4-02 | Consultar cobertura y administrar tarifas sin reactivar zonas por accidente. | Consulta pública, edición/pausa explícitas, errores por campo y control de versión implementados. |
 | S4-03 | Guardar direcciones claras y conservar una única principal por cuenta. | Formulario compartido y servicio transaccional con propiedad, validación y concurrencia implementados. |
-| S4-04 | Refinar precisión geográfica y reglas reales de entrega con el negocio. | Pendiente: aceptación de cobertura, horarios/excepciones y necesidad de mapas. |
-| S4-05 | Validar, integrar y demostrar el incremento. | Regresión local aprobada; CI y aceptación operativa por registrar al publicar. |
+| S4-04 | Refinar precisión geográfica y reglas reales de entrega con el negocio. | Indicaciones públicas editables por zona y conservadas en pedidos; ROSH debe definir y cargar horarios/plazos. Calendario automático, mapas y aceptación comercial pendientes. |
+| S4-05 | Validar, integrar y demostrar el incremento. | Base integrada en #23 (286 servidor / 92 navegador). Incremento editable: 294 servidor locales; CI y UAT por registrar. |
 
 [Guía para probar](guia-prueba-sprint-04.md) · [QA](testing/sprint-04-direcciones-cobertura.md).
+
+2026-10-31: el propietario confirma condiciones aún no acordadas y solicita que ROSH
+las edite. [Guía del operador](guia-envios-cliente.md) · [Alcance y QA](testing/sprint-04-condiciones-entrega.md).
 
 ## Secuencia posterior, sujeta a refinamiento
 

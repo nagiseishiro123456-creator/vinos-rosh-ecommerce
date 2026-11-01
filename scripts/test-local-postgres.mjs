@@ -35,3 +35,6 @@ run("docker", ["exec", "-i", container, "psql", "-U", username, "-d", database, 
 const settlementSql = ["tests/sql/settlement-migration-before.sql", "prisma/migrations/20261029100000_manual_payment_settlement/migration.sql", "tests/sql/settlement-migration-after.sql"]
   .map((name) => readFileSync(new URL("../" + name, import.meta.url), "utf8")).join("\n");
 run("docker", ["exec", "-i", container, "psql", "-U", username, "-d", database, "-v", "ON_ERROR_STOP=1"], { input: settlementSql, stdio: ["pipe", "inherit", "inherit"] });
+const shippingSql = ["tests/sql/shipping-instructions-migration-before.sql", "prisma/migrations/20261031100000_shipping_delivery_instructions/migration.sql", "tests/sql/shipping-instructions-migration-after.sql"]
+  .map((name) => readFileSync(new URL("../" + name, import.meta.url), "utf8")).join("\n");
+run("docker", ["exec", "-i", container, "psql", "-U", username, "-d", database, "-v", "ON_ERROR_STOP=1"], { input: shippingSql, stdio: ["pipe", "inherit", "inherit"] });
