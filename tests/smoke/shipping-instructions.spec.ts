@@ -20,11 +20,13 @@ test("S4: editable delivery information is reviewed again and stays frozen in th
     async function editInformation(text: string) {
       await admin.goto("/admin/envios");
       await row.getByRole("link", { name: "Editar tarifa", exact: true }).click();
+      await expect(admin.getByRole("link", { name: "Cancelar edición", exact: true })).toBeVisible();
       await admin.getByLabel("Indicaciones de entrega (opcional)", { exact: true }).fill(text);
       await admin.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
       await expect(admin.getByRole("status")).toHaveText("Zona guardada correctamente.");
     }
     await row.getByRole("link", { name: "Editar tarifa", exact: true }).click();
+    await expect(admin.getByRole("link", { name: "Cancelar edición", exact: true })).toBeVisible();
     await admin.getByLabel("Indicaciones de entrega (opcional)", { exact: true }).fill(first);
     await admin.getByLabel("Tarifa de envío (S/)", { exact: true }).fill("8,50");
     await admin.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
@@ -33,6 +35,7 @@ test("S4: editable delivery information is reviewed again and stays frozen in th
     await admin.getByLabel("Tarifa de envío (S/)", { exact: true }).fill("8.50");
     await admin.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
     await expect(admin.getByRole("status")).toHaveText("Zona guardada correctamente.");
+    await expect(admin.getByLabel("Indicaciones de entrega (opcional)", { exact: true })).toHaveValue("");
     await page.goto("/envios");
     await page.getByLabel("Busca tu distrito, provincia o departamento").fill(zone.district);
     await expect(page.locator(".deliveryInstructionsText")).toHaveText(first);

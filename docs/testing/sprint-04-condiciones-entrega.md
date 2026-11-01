@@ -24,3 +24,9 @@ La demo /desarrollo/envios y sus capturas están rotuladas como ficticias. No ca
 condiciones en la base. La pantalla real se comprobó con su configuración existente.
 La aceptación de ROSH y la carga de sus horarios/plazos quedan pendientes. No se acredita
 un calendario automático, entrega comercial, prueba externa de pagos o correo.
+
+La CI inicial #368 confirmó el reset nativo del textarea al devolver un error de precio:
+el texto se perdía. Se impide ese reset y el formulario nuevo se remonta tras un alta.
+Los recorridos esperan el enlace de cancelar edición antes de rellenar, evitando escribir
+en el formulario de alta durante la navegación. Se comprueba texto conservado ante error
+y campo limpio después de guardar. La CI final se registra en el PR de entrega.

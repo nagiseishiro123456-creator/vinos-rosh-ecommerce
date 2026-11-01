@@ -27,6 +27,7 @@ test("S4: paused tariffs remain paused when edited and checkout agrees with publ
     await expect(page.locator(".summaryTotal strong")).toHaveText("Por calcular");
     await expect(page.getByRole("button", { name: "Revisar pedido", exact: true })).toBeDisabled();
     await row.getByRole("link", { name: "Editar tarifa", exact: true }).click();
+    await expect(admin.getByRole("link", { name: "Cancelar edición", exact: true })).toBeVisible();
     await admin.getByLabel("Tarifa de envío (S/)", { exact: true }).fill("8,50");
     await admin.getByRole("button", { name: "Guardar tarifa", exact: true }).click();
     await expect(admin.locator(".deliveryAddressForm").getByRole("alert")).toContainText("Corrige los campos");

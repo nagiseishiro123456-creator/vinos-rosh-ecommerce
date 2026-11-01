@@ -7,7 +7,8 @@ export type ShippingFormInitial = { id: string; expectedUpdatedAt: string; depar
 export function ShippingZoneForm({ initial }: { initial?: ShippingFormInitial }) {
   const [values, setValues] = useState({ department: initial?.department ?? "Lima", province: initial?.province ?? "Lima", district: initial?.district ?? "", price: initial?.price ?? "", deliveryInstructions: initial?.deliveryInstructions ?? "" });
   const [state, action, pending] = useActionState(saveShippingZone, {} as ShippingFormState);
-  return <form className="adminCard checkoutForm deliveryAddressForm" action={action}><p className="eyebrow wine">{initial ? "EDITAR TARIFA" : "NUEVA ZONA"}</p><h2>Configurar zona</h2>
+  // A validation response must retain the textarea along with the other controlled fields.
+  return <form className="adminCard checkoutForm deliveryAddressForm" action={action} onReset={(event) => event.preventDefault()}><p className="eyebrow wine">{initial ? "EDITAR TARIFA" : "NUEVA ZONA"}</p><h2>Configurar zona</h2>
     {state.message ? <p className="checkoutError" role="alert">{state.message}</p> : null}
     {initial ? <><input type="hidden" name="id" value={initial.id} /><input type="hidden" name="expectedUpdatedAt" value={initial.expectedUpdatedAt} /><p>La ubicación se conserva para mantener las direcciones guardadas. Editar la tarifa mantiene la zona {initial.active ? "activa" : "pausada"}.</p></> : null}
     {(["department", "province", "district", "price"] as const).map((name) => <div className="formField" key={name}><label htmlFor={`zone-${name}`}>{({ department: "Departamento", province: "Provincia", district: "Distrito", price: "Tarifa de envío (S/)" })[name]}</label>
