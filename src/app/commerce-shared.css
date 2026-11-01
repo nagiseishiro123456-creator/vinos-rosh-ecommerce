@@ -1,0 +1,104 @@
+/* Shared account, review and catalog controls; retain their original cascade before account overrides. */
+.adminTopbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.buttonGhostLight {
+  color: var(--wine-dark);
+  border-color: var(--line);
+  background: white;
+}
+
+.adminEmptyState,
+.adminPanel {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 14px 42px rgba(68, 34, 27, .06);
+}
+
+.adminEmptyState {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.adminEmptyState p {
+  max-width: 680px;
+  margin: 0 0 8px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.adminAlert {
+  margin-bottom: 20px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  line-height: 1.5;
+}
+
+.adminAlert.success {
+  color: #17633a;
+  border: 1px solid #bee8cb;
+  background: #edf9f1;
+}
+
+.adminAlert.error {
+  color: #84212b;
+  border: 1px solid #efc6cb;
+  background: #fff0f1;
+}
+
+.adminField {
+  display: grid;
+  gap: 7px;
+}
+
+.adminField > span {
+  font-size: .84rem;
+  font-weight: 800;
+}
+
+.adminField input,
+.adminField textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  background: #fffdfb;
+  outline: none;
+}
+
+.adminField input {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.adminField textarea {
+  resize: vertical;
+  padding: 12px 13px;
+  line-height: 1.55;
+}
+
+.adminField input:focus,
+.adminField textarea:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+}
+
+.adminField small {
+  color: var(--muted);
+  font-size: .74rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+
+  .adminTopbarActions,
+  .adminTopbarActions .button {
+    width: 100%;
+  }
+}

@@ -1,5 +1,6 @@
 import { Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
+import { publicPageMetadata } from "@/lib/seo";
 
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
@@ -7,10 +8,11 @@ import { getWhatsAppUrl } from "@/lib/site";
 import { submitContactMessage } from "@/modules/contact/actions";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPageMetadata({
+  path: "/contacto",
   title: "Contacto",
   description: "Contacta a Vinos ROSH para consultas sobre productos, pedidos y cobertura.",
-};
+});
 
 type Props = {
   searchParams: Promise<{ sent?: string; error?: string }>;

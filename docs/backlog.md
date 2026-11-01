@@ -109,6 +109,22 @@ sus dependencias externas; no se presenta como cerrado por integrar #22.
 2026-10-31: el propietario confirma condiciones aún no acordadas y solicita que ROSH
 las edite. [Guía del operador](guia-envios-cliente.md) · [Alcance y QA](testing/sprint-04-condiciones-entrega.md).
 
+## Sprint 5 — Rendimiento y SEO técnico
+
+Inicio 2026-10-31, base 6bf021d (#24 integrado). El propietario autoriza continuar y
+publicar con jose-israel en main. Se mantiene la pausa del rediseño visual.
+
+| ID | Historia | Estado |
+| --- | --- | --- |
+| S5-01 | Medir recursos públicos con una base reproducible. | Comparación CI entre base/head productivos y fixture común implementada. Resultado al publicar. |
+| S5-02 | Reducir CSS no utilizado y corregir tamaños de imagen. | Imports por área, reglas compartidas preservadas y tamaños 620/850 px implementados. |
+| S5-03 | Reutilizar producto por petición sin stock obsoleto. | React cache para metadata/contenido; regresión de cambios entre visitas. |
+| S5-04 | Canonical, compartir productos, robots y sitemap. | Implementados con política de preview/producción y rutas privadas noindex. |
+| S5-05 | Comparar, integrar y presentar el incremento. | 302 servidor locales; CI y pruebas de navegador por registrar. Medición real, Motion y aceptación pendientes. |
+
+[Plan y límites](sprints/fase-2-sprint-05.md) · [Guía](guia-prueba-sprint-05.md)
+· [QA](testing/sprint-05-rendimiento-seo.md).
+
 ## Secuencia posterior, sujeta a refinamiento
 
 | Sprint | Objetivo | Documentación antes / durante / al cerrar |
