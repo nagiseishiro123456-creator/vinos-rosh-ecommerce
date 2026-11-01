@@ -141,7 +141,12 @@ try {
     const old = before[index], current = after[index];
     assert.equal(current.containsAdminOnlyStyles, false, current.path);
     if (old.containsAdminOnlyStyles) assert.ok(current.cssDecoded < old.cssDecoded, `Remove unused CSS on ${current.path}: ${old.cssDecoded} -> ${current.cssDecoded}`);
-    else assert.ok(current.cssDecoded <= old.cssDecoded + 1024, `Review CSS growth on ${current.path}: ${old.cssDecoded} -> ${current.cssDecoded}`);
+    else {
+      // S5 original landing: bounded, route-specific design budget. Other routes keep
+      // the existing growth guard; this does not authorize admin CSS in public pages.
+      const limit = current.path === "/" ? Math.max(92_000, old.cssDecoded + 1024) : old.cssDecoded + 1024;
+      assert.ok(current.cssDecoded <= limit, `Review CSS growth on ${current.path}: ${old.cssDecoded} -> ${current.cssDecoded}, limit ${limit}`);
+    }
   }
   report.passed = true;
   writeFileSync("performance-report/public-assets.json", JSON.stringify(report, null, 2) + "\n");

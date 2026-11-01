@@ -66,8 +66,10 @@ test("closing the cart releases the native modal and background navigation with 
       await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe(overflow);
       await expect(page.locator(".cartButton")).toBeFocused();
     }
-    await page.getByRole("link", { name: "Explorar catálogo", exact: true }).click();
-    await expect(page).toHaveURL((url) => url.pathname === "/productos");
+    const menu = page.getByRole("button", { name: "Abrir menú", exact: true });
+    if (await menu.isVisible()) await menu.click();
+    await page.getByRole("link", { name: "Nuestra historia", exact: true }).click();
+    await expect(page).toHaveURL((url) => url.pathname === "/nuestra-historia");
     await page.goto("/");
   }
 });

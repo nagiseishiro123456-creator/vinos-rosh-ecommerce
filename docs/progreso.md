@@ -1,5 +1,20 @@
 # Punto de avance
 
+## Sprint 5 — Mejoras de la landing original (2026-11-01, America/Lima)
+
+- Base main 12d4f4e: #26 integrado con jose-israel, 311 servidor y 102 navegador.
+- El propietario retoma el diseño de Inicio y sustituye el material anterior por
+  rosh-handoff original.zip y Vinos Rosh — Prototipos  orginal.pdf. Alcance: solo `/`.
+- Un único producto y una sola botella de presentación, sin enlace, precios ni stock;
+  no se alteran los registros de ejemplo del catálogo.
+- Logo único animado, Lora local, fondo casi blanco, racimo enmascarado con video,
+  hoja/tallo lilas y halo. Header enlaza los módulos ya existentes.
+- Ocho tableros revisados; capturas locales en los cuatro tamaños sin overflow.
+  Tipos locales aprobados; pruebas y comparación productiva final en el PR.
+- [Referencia y decisiones](diseno/landing-original/README.md) · [Guía](guia-landing-rosh.md)
+  · [QA](testing/s5-06-landing-original.md). Sprint 6 e integraciones externas conservan
+  sus pendientes. Este cambio no añade administración de medios, pagos o despliegue.
+
 ## Sprint 6 — Preparación de lanzamiento (2026-11-01, America/Lima)
 
 - Base main f5ecac6: PR #25 integrado con jose-israel. CI #373 aprobada, 302 servidor
