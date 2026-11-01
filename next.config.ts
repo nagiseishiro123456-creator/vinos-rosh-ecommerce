@@ -48,6 +48,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   output: "standalone",
+  // Keep route-only design styles out of unrelated public pages.
+  experimental: { cssChunking: { type: "graph", requestCost: 0 } },
   async headers() {
     return [
       {
