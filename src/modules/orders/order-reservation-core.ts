@@ -78,6 +78,7 @@ export async function reserveOrder(userId: string, input: ReservationInput, envi
             shippingDepartment: address.department, shippingProvince: address.province,
             shippingDistrict: address.district, shippingAddress: address.addressLine1,
             shippingReference: address.reference, customerNotes: input.customerNotes,
+            shippingDeliveryInstructions: snapshot.shippingZone.deliveryInstructions,
             items: {
               create: cart.items.map((item, index) => ({
                 productId: item.product.id, productName: item.product.name, productSku: item.product.sku,

@@ -152,6 +152,12 @@ jobs:
         run: |
           cat tests/sql/settlement-migration-before.sql prisma/migrations/20261029100000_manual_payment_settlement/migration.sql tests/sql/settlement-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
 
+      - name: Verify shipping information migration on legacy fixtures
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          cat tests/sql/shipping-instructions-migration-before.sql prisma/migrations/20261031100000_shipping_delivery_instructions/migration.sql tests/sql/shipping-instructions-migration-after.sql | docker exec -i "$POSTGRES_CONTAINER" psql -U postgres -d vinos_rosh_ci -v ON_ERROR_STOP=1
+
       - name: Verify cart idempotency after PostgreSQL dump and restore
         env:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}

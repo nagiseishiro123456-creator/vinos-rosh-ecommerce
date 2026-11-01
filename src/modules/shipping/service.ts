@@ -19,14 +19,18 @@ export async function saveShippingZoneRecord(adminId: string, input: ShippingZon
     const matching = zones.filter((zone) => shippingLocationKey(zone) === shippingLocationKey(data));
     if (!data.id) {
       if (matching.length) throw new ShippingZoneError("DUPLICATE");
-      return tx.shippingZone.create({ data: { department: data.department, province: data.province, district: data.district, price: data.price, active: true } });
+      return tx.shippingZone.create({ data: { department: data.department, province: data.province, district: data.district, price: data.price, deliveryInstructions: data.deliveryInstructions || null, active: true } });
     }
     const existing = zones.find((zone) => zone.id === data.id);
     if (!existing) throw new ShippingZoneError("NOT_FOUND");
     if (existing.updatedAt.toISOString() !== data.expectedUpdatedAt) throw new ShippingZoneError("CONFLICT");
     if (shippingLocationKey(existing) !== shippingLocationKey(data)) throw new ShippingZoneError("IDENTITY_CHANGED");
     // Keep the original spelling and activation state; saved addresses retain their identity.
-    return tx.shippingZone.update({ where: { id: existing.id }, data: { price: data.price, updatedAt: new Date(Math.max(Date.now(), existing.updatedAt.getTime() + 1)) } });
+    return tx.shippingZone.update({ where: { id: existing.id }, data: {
+      price: data.price,
+      ...(data.deliveryInstructions !== undefined ? { deliveryInstructions: data.deliveryInstructions || null } : {}),
+      updatedAt: new Date(Math.max(Date.now(), existing.updatedAt.getTime() + 1)),
+    } });
   });
 }
 export async function setShippingZoneActive(adminId: string, id: string, expectedActive: boolean, expectedUpdatedAt: string) {

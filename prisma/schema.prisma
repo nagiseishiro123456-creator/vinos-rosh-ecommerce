@@ -269,6 +269,7 @@ model ShippingZone {
   province   String   @default("Lima")
   district   String
   price      Decimal  @db.Decimal(10, 2)
+  deliveryInstructions String? @db.VarChar(600)
   active     Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -301,6 +302,7 @@ model Order {
   shippingDistrict   String
   shippingAddress    String
   shippingReference  String?
+  shippingDeliveryInstructions String? @db.VarChar(600)
 
   customerNotes String?
 

@@ -29,6 +29,7 @@
     "db:prepare:email": "node --env-file-if-exists=.env scripts/prepare-payment-email-local.mjs",
     "email:check": "node --env-file-if-exists=.env --import tsx scripts/check-payment-email.ts",
     "db:prepare:sprint3": "node --env-file-if-exists=.env scripts/prepare-payment-email-local.mjs",
+    "db:prepare:shipping": "node --env-file-if-exists=.env scripts/prepare-shipping-local.mjs",
     "setup:dev": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-dev.ps1",
     "auth:unlock-local": "node --env-file-if-exists=.env --import tsx scripts/unlock-local-registration.ts"
   },

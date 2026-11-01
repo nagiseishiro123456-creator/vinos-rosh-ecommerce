@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import type { CheckoutAddress, CheckoutShippingZone } from "@/modules/checkout/queries";
 import { resolveShippingCoverage } from "@/modules/shipping/coverage";
+import { DeliveryInstructions } from "./delivery-instructions";
 
 
 type Props = {
@@ -89,6 +90,7 @@ export function CheckoutAddressSelector({
           <strong>{selectedZone ? formatPrice(shipping) : "Sin cobertura"}</strong>
         </div>
         <div className="summaryTotal"><span>Total</span><strong>{selectedZone ? formatPrice(total) : "Por calcular"}</strong></div>
+        <DeliveryInstructions text={selectedZone?.deliveryInstructions} />
 
         {selectedAddress && !selectedZone ? (
           <p className="checkoutAlert">

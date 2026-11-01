@@ -2,6 +2,9 @@
 
 2026-10-30. Funciones locales sin mapas ni servicios de pago.
 
+Actualización 2026-10-31: [ROSH puede editar las indicaciones de entrega](guia-envios-cliente.md)
+por zona. No se asignaron condiciones comerciales por defecto.
+
 ## Recorrido rápido
 
 1. Abre http://localhost:3000/envios o Envíos en el menú. Muestra únicamente las tarifas

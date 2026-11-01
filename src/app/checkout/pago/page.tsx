@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { DeliveryInstructions } from "@/components/delivery-instructions";
 import { formatPrice } from "@/lib/money";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -123,6 +124,7 @@ export default async function PaymentPage({ searchParams }: Props) {
           <div className="summaryRow"><span>Subtotal</span><strong>{formatPrice(subtotal)}</strong></div>
           <div className="summaryRow"><span>Envío a {shippingZone.district}</span><strong>{formatPrice(shippingAmount)}</strong></div>
           <div className="summaryTotal"><span>Total</span><strong>{formatPrice(total)}</strong></div>
+          <DeliveryInstructions text={shippingZone.deliveryInstructions} />
         </aside>
 
         <div className="paymentMain">

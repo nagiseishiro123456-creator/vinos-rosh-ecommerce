@@ -17,18 +17,21 @@ assert.match(new URL(process.env.DATABASE_URL ?? "").pathname, /^\/rosh_s304_(so
 process.env.PAYMENTS_TRANSFER_MANUAL_ENABLED = "true";
 process.env.BANK_ACCOUNT_NUMBER = "QA-NO-TRANSFERIR";
 const evidence = { expectedRevision: 0, commissionAmount: "2.50", depositedAmount: "94.70", depositReference: "QA-RESTORE-ABONO", depositDate: "2026-01-01", sourceReference: "QA-RESTORE-EXTRACTO", reason: "Verificación sintética del respaldo" };
-type Context = { userId: string; orderId: string; paymentId: string; productId: string; recordId: string };
+type Context = { userId: string; orderId: string; paymentId: string; productId: string; recordId: string; zoneId: string };
+const originalShippingInfo = "Información sintética QA conservada con el pedido";
+const newerShippingInfo = "Información QA posterior para pedidos nuevos";
 async function main() {
   if (process.argv[2] === "seed") {
     const stamp = randomUUID();
     const user = await prisma.user.create({ data: { email: `settle-restore-${stamp}@example.test`, passwordHash: "synthetic-recovery-fixture-only", firstName: "QA", lastName: "Recovery", role: "ADMIN", cart: { create: {} } }, include: { cart: true } });
-    await prisma.shippingZone.create({ data: { department: "QA", province: "QA", district: stamp, price: "8.50" } });
+    const zone = await prisma.shippingZone.create({ data: { department: "QA", province: "QA", district: stamp, price: "8.50", deliveryInstructions: originalShippingInfo } });
     const address = await prisma.address.create({ data: { userId: user.id, recipient: "QA", phone: "000000000", department: "QA", province: "QA", district: stamp, addressLine1: "Dirección sintética" } });
     const product = await prisma.product.create({ data: { name: "QA settlement recovery", slug: `settle-restore-${stamp}`, description: "Synthetic recovery contract", price: "29.90", stock: 10 } });
     await prisma.cartItem.create({ data: { cartId: user.cart!.id, productId: product.id, quantity: 3 } });
     const snapshot = await loadCheckoutSnapshot(prisma, user.id, address.id);
     const checkoutQuote = createCheckoutQuote({ ...snapshot, userId: user.id });
     const order = await reserveManualOrder(user.id, { addressId: address.id, provider: "TRANSFER_MANUAL", receiptType: "BOLETA", checkoutQuote, checkoutKey: createCheckoutKey(user.id, checkoutQuote) });
+    await prisma.shippingZone.update({ where: { id: zone.id }, data: { deliveryInstructions: newerShippingInfo } });
     await reportManualPayment(user.id, order.number, `QA-RESTORE-${stamp}`);
     const payment = await prisma.payment.findFirstOrThrow({ where: { orderId: order.id } });
     await approveManualPaymentRecord(user.id, payment.id);
@@ -36,7 +39,7 @@ async function main() {
     await savePaymentSettlement(user.id, payment.id, { ...evidence, expectedRevision: 1, depositedAmount: "95.70", reason: "Corrección sintética respaldada" });
     const saved = await readPaymentSettlement(user.id, payment.id);
     assert.ok(saved?.recordId);
-    writeFileSync(contextPath!, JSON.stringify({ userId: user.id, orderId: order.id, paymentId: payment.id, productId: product.id, recordId: saved.recordId } satisfies Context));
+    writeFileSync(contextPath!, JSON.stringify({ userId: user.id, orderId: order.id, paymentId: payment.id, productId: product.id, recordId: saved.recordId, zoneId: zone.id } satisfies Context));
     return;
   }
   assert.equal(process.argv[2], "verify");
@@ -51,8 +54,10 @@ async function main() {
   assert.equal((await readPaymentSettlement(context.userId, context.paymentId))?.history.length, 2);
   assert.equal((await prisma.product.findUniqueOrThrow({ where: { id: context.productId } })).stock, 7);
   assert.equal((await prisma.order.findUniqueOrThrow({ where: { id: context.orderId } })).status, "PAID");
+  assert.equal((await prisma.order.findUniqueOrThrow({ where: { id: context.orderId } })).shippingDeliveryInstructions, originalShippingInfo);
+  assert.equal((await prisma.shippingZone.findUniqueOrThrow({ where: { id: context.zoneId } })).deliveryInstructions, newerShippingInfo);
   const outbox = await prisma.$queryRaw<Array<{ status: string; attempts: number }>>`SELECT "status", "attempts" FROM "PaymentConfirmationOutbox" WHERE "orderId"=${context.orderId}`;
   assert.deepEqual(outbox, [{ status: "QUEUED", attempts: 0 }]);
-  console.log("S304_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations, revisions: 2, history: 2, state: "MATCHED", stock: 7, outboxAttempts: 0, outboundRequests: 0 }));
+  console.log("S304_RESTORE_CONTRACT " + JSON.stringify({ passed: true, migrations, revisions: 2, history: 2, state: "MATCHED", stock: 7, outboxAttempts: 0, outboundRequests: 0, shippingSnapshotPreserved: true }));
 }
 main().finally(() => prisma.$disconnect()).catch(() => { console.error("SETTLEMENT_RECOVERY_CONTRACT_FAILED"); process.exitCode = 1; });

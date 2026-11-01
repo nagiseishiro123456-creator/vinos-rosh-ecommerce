@@ -13,7 +13,7 @@ type QuoteInput = {
     id: string;
     items: { id: string; quantity: number; product: { id: string; name: string; sku: string | null; price: MoneyInput } }[];
   };
-  shippingZone: { id: string; price: MoneyInput };
+  shippingZone: { id: string; price: MoneyInput; deliveryInstructions?: string | null };
 };
 
 export function createCheckoutQuote(input: QuoteInput, secret?: string): string {
@@ -22,7 +22,9 @@ export function createCheckoutQuote(input: QuoteInput, secret?: string): string 
     version: 1, currency: "PEN", userId, cartId: cart.id,
     delivery: [address.id, address.recipient, address.phone, address.department, address.province,
       address.district, address.addressLine1, address.reference],
-    shipping: [shippingZone.id, money(shippingZone.price).toFixed(2)],
+    // Keep old signatures unchanged when there is no information to show.
+    shipping: [shippingZone.id, money(shippingZone.price).toFixed(2),
+      ...(shippingZone.deliveryInstructions ? [shippingZone.deliveryInstructions] : [])],
     items: [...cart.items].sort((a, b) => a.id.localeCompare(b.id)).map((item) => [
       item.id, item.product.id, item.product.name, item.product.sku,
       item.quantity, money(item.product.price).toFixed(2),

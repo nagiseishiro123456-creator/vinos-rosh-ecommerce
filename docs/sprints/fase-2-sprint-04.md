@@ -24,6 +24,13 @@ serializadas por cuenta. S4-04: refinamiento con el negocio de cobertura, horari
 excepciones y eventual geolocalización. S4-05: regresión, integración y demostración.
 Este incremento implementa S4-01–03; la aceptación operativa permanece pendiente.
 
+Actualización 2026-10-31: base integrada mediante #23, main 78f4c5b, CI #366 con
+286 servidor y 92 navegador aprobados. El propietario confirma condiciones comerciales
+aún sin acordar y pide dejarlas editables para ROSH. S4-04 incorpora información pública
+opcional por zona, revisada en checkout y conservada en cada reserva; no configura
+automáticamente calendarios ni reglas de elegibilidad. Ver [contrato](../integraciones/indicaciones-entrega.md)
+y [guía del operador](../guia-envios-cliente.md). Aceptación comercial pendiente.
+
 ## Criterios
 
 - Departamento/provincia/distrito se comparan con la misma regla de mayúsculas, tildes
