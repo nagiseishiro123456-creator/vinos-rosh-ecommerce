@@ -40,9 +40,11 @@ La comparación de recursos admite un techo de Home de 92 000 bytes CSS por el d
 solicitado; las otras rutas conservan el presupuesto anterior. No se presenta como
 mejora de Core Web Vitals ni como aceptación comercial de ROSH.
 
-El primer build de CI mostró que la agrupación automática añadía 1 418 bytes CSS a
-rutas ajenas a Home, por encima del margen existente de 1 024. Se configura la estrategia
-documentada `cssChunking: { type: "graph", requestCost: 0 }` para separar estilos por
-ruta; se conserva el control anterior, en lugar de ampliar el presupuesto de esas páginas.
+El primer build de CI mostró 1 418 bytes CSS adicionales en rutas ajenas a Home,
+por encima del margen existente de 1 024. Tailwind detectaba candidatos también en
+la documentación técnica del handoff. Se limita su origen a `src` mediante
+`@import "tailwindcss" source("../")`, sin cambiar reglas visuales compartidas ni
+ampliar el presupuesto de las otras páginas. Referencia:
+[detección de fuentes de Tailwind](https://tailwindcss.com/docs/detecting-classes-in-source-files#setting-your-base-path).
 La captura baseline espera hasta diez segundos para respetar la entrada de 6,8 segundos.
 El badge de la portada conserva `cartCount`, utilizado por la integración existente.
