@@ -1,5 +1,41 @@
 # Punto de avance
 
+## Sprint 5 — Rendimiento y SEO técnico (2026-10-31, America/Lima)
+
+- Base main 6bf021d: #24 integrado con jose-israel, CI #369 aprobada (294 servidor,
+  94 navegador y restauración con indicaciones históricas). ROSH administra su información
+  comercial; aceptación y accesos externos de sprints anteriores siguen pendientes.
+- El propietario autoriza avanzar y hacer commits también en main. Se conserva el
+  diseño local pendiente y se inicia el [Sprint 5](sprints/fase-2-sprint-05.md).
+- CSS administrativo pasa a su área; reglas compartidas se conservan en la cascada original.
+  Imágenes con tamaños acordes a la cuadrícula y producto reutilizado por petición entre
+  metadata/contenido, sin almacenar stock entre visitas.
+- Canonical, producto compartido, filtros noindex, privacidad de rutas y política única
+  para robots/sitemap, con /envios incluido. No se activa indexación de un despliegue real.
+- 302/302 servidor locales, SQL previo, tipos y lint aprobados. Navegador y comparación
+  de builds productivos por registrar en la CI del PR del incremento.
+- [Guía de prueba](guia-prueba-sprint-05.md) · [Contrato](integraciones/rendimiento-seo.md)
+  · [QA y límites](testing/sprint-05-rendimiento-seo.md). No son Core Web Vitals de usuarios
+  reales ni cierre completo de Sprint 5 o aceptación comercial.
+
+## Sprint 5 — Rendimiento y SEO técnico (2026-10-31, America/Lima)
+
+- Base main 6bf021d: #24 integrado con jose-israel, CI #369 aprobada (294 servidor,
+  94 navegador y restauración con indicaciones históricas). ROSH administra su información
+  comercial; aceptación y accesos externos de sprints anteriores siguen pendientes.
+- El propietario autoriza avanzar y hacer commits también en main. Se conserva el
+  diseño local pendiente y se inicia el [Sprint 5](sprints/fase-2-sprint-05.md).
+- CSS administrativo pasa a su área; reglas compartidas se conservan en la cascada original.
+  Imágenes con tamaños acordes a la cuadrícula y producto reutilizado por petición entre
+  metadata/contenido, sin almacenar stock entre visitas.
+- Canonical, producto compartido, filtros noindex, privacidad de rutas y política única
+  para robots/sitemap, con /envios incluido. No se activa indexación de un despliegue real.
+- 302/302 servidor locales, SQL previo, tipos y lint aprobados. Navegador y comparación
+  de builds productivos por registrar en la CI del PR del incremento.
+- [Guía de prueba](guia-prueba-sprint-05.md) · [Contrato](integraciones/rendimiento-seo.md)
+  · [QA y límites](testing/sprint-05-rendimiento-seo.md). No son Core Web Vitals de usuarios
+  reales ni cierre completo de Sprint 5 o aceptación comercial.
+
 ## Sprint 4 — Indicaciones editables de entrega (2026-10-31, America/Lima)
 
 - Base main 78f4c5b: PR #23 integrado con jose-israel; CI #366 aprobada con

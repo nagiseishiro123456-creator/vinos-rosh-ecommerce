@@ -1,0 +1,105 @@
+name: Public assets
+
+on:
+  pull_request:
+
+concurrency:
+  group: rosh-public-assets-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: vinos_rosh_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d vinos_rosh_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vinos_rosh_ci?schema=public
+      NEXTAUTH_URL: http://127.0.0.1:3102
+      NEXTAUTH_SECRET: ci-only-public-assets-secret-at-least-32-characters
+      NEXT_PUBLIC_APP_URL: https://rosh.example.test
+      PREVIEW_MODE: "false"
+      SHOW_DEMO_CATALOG: "false"
+      SMOKE_TEST_DATA: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+      PAYMENTS_CULQI_ENABLED: "false"
+      PAYMENTS_IZIPAY_ENABLED: "false"
+      IZIPAY_MCW_INITIATE_ENABLED: "false"
+      IZIPAY_MCW_RESERVE_ENABLED: "false"
+      PAYMENT_CONFIRMATION_EMAIL_ENABLED: "false"
+      PAYMENTS_YAPE_MANUAL_ENABLED: "false"
+      PAYMENTS_TRANSFER_MANUAL_ENABLED: "false"
+      AUDIT_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      AUDIT_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Checkout baseline
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: baseline
+          persist-credentials: false
+      - name: Checkout candidate
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: candidate
+          persist-credentials: false
+      - name: Setup pinned Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: candidate/.nvmrc
+          cache: npm
+          cache-dependency-path: |
+            baseline/package-lock.json
+            candidate/package-lock.json
+      - name: Use pinned npm
+        run: npm install --global npm@11.9.0
+      - name: Install baseline dependencies
+        working-directory: baseline
+        run: npm ci --include=dev
+      - name: Install candidate dependencies
+        working-directory: candidate
+        run: npm ci --include=dev
+      - name: Prepare one isolated fixture for both builds
+        working-directory: candidate
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+          npm run db:seed:smoke
+      - name: Build baseline with production toolchain
+        working-directory: baseline
+        run: |
+          npx prisma generate
+          npm run build
+          npm run prepare:standalone
+      - name: Build candidate with production toolchain
+        working-directory: candidate
+        run: |
+          npm run build
+          npm run prepare:standalone
+      - name: Compare initial public assets and verify production SEO
+        working-directory: candidate
+        run: node scripts/audit-public-assets.mjs ../baseline .
+      - name: Upload exact baseline and candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-assets-${{ github.run_id }}
+          path: candidate/performance-report/
+          if-no-files-found: ignore
+          retention-days: 14

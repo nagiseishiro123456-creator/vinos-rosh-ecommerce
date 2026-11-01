@@ -7,16 +7,12 @@ import { readAccountCart } from "@/modules/cart/account-service";
 import type { AccountCartSnapshot } from "@/modules/cart/account-contract";
 
 import { AnalyticsConsent } from "@/components/analytics-consent";
+import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, readSeoConfig, publicPageMetadata } from "@/lib/seo";
 import { GuestCartProvider } from "@/components/guest-cart-provider";
 
 import "./globals.css";
 import "./checkout.css";
-import "./admin-products.css";
-import "./admin-customers.css";
-import "./admin-dashboard.css";
-import "./admin-categories.css";
-import "./admin-settings.css";
-import "./admin-launch.css";
+import "./commerce-shared.css";
 import "./account-reviews.css";
 import "./account-catalog-tools.css";
 import "./auth-security.css";
@@ -25,36 +21,22 @@ import "./analytics-consent.css";
 import "./mobile-performance.css";
 import "./contact.css";
 import "./history-faq.css";
-import "./admin-backup.css";
 import "./purchase-flow.css";
 import "./guest-cart.css";
 import "./cart-drawer.css";
 import "./automatic-payment.css";
 
-const previewMode = process.env.PREVIEW_MODE === "true";
+const seo = readSeoConfig();
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(seo.origin ?? "http://localhost:3000"),
   title: {
-    default: "Vinos ROSH | Bebidas de uva sin alcohol",
+    default: DEFAULT_SITE_TITLE,
     template: "%s | Vinos ROSH",
   },
-  description:
-    "Bebidas de uva sin alcohol de producción propia. Conoce la historia, productos y experiencia ROSH.",
+  description: DEFAULT_SITE_DESCRIPTION,
   applicationName: "Vinos ROSH",
-  robots: {
-    index: !previewMode,
-    follow: !previewMode,
-    noarchive: previewMode,
-    nosnippet: previewMode,
-  },
-  openGraph: {
-    type: "website",
-    locale: "es_PE",
-    siteName: "Vinos ROSH",
-    title: "Vinos ROSH | De nuestro viñedo a tu mesa",
-    description: "Bebidas de uva sin alcohol de producción propia.",
-  },
+  robots: publicPageMetadata({ path: "/", title: DEFAULT_SITE_TITLE, description: DEFAULT_SITE_DESCRIPTION, absoluteTitle: true }, seo).robots,
 };
 
 export const viewport: Viewport = {

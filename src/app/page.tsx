@@ -1,3 +1,4 @@
+import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, publicPageMetadata } from "@/lib/seo";
 import { BadgeCheck, Grape, HeartHandshake, Leaf, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +13,7 @@ import { getFeaturedVerifiedReviews } from "@/modules/reviews/queries";
 import { getCommerceSettings } from "@/modules/settings/queries";
 
 export const dynamic = "force-dynamic";
+export const metadata = publicPageMetadata({ path: "/", title: DEFAULT_SITE_TITLE, description: DEFAULT_SITE_DESCRIPTION, absoluteTitle: true });
 
 export default async function HomePage() {
   const [products, commerce, verifiedReviews] = await Promise.all([

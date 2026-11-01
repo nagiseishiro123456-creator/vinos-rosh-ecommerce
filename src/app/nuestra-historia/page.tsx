@@ -2,16 +2,18 @@ import { BookOpen, Grape, Heart, Leaf, Sprout, UsersRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { publicPageMetadata } from "@/lib/seo";
 
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { siteConfig } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPageMetadata({
+  path: "/nuestra-historia",
   title: "Nuestra historia",
   description:
     "El legado de Víctor Rosh: del colportaje y los caminos rurales al cultivo familiar de la uva.",
-};
+});
 
 export default function HistoryPage() {
   return (

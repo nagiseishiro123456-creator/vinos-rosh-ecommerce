@@ -1,14 +1,16 @@
 import { ChevronRight, CircleHelp } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { publicPageMetadata } from "@/lib/seo";
 
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPageMetadata({
+  path: "/preguntas-frecuentes",
   title: "Preguntas frecuentes",
   description: "Respuestas sobre compras, pagos, envíos, pedidos y reseñas en Vinos ROSH.",
-};
+});
 
 const faqs = [
   {

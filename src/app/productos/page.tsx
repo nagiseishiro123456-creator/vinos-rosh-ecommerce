@@ -5,11 +5,13 @@ import { ProductCard } from "@/components/product-card";
 import { StoreHeader } from "@/components/store-header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { getPublicCategories, getPublicProducts, type CatalogFilters } from "@/modules/products/queries";
+import { publicPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Productos",
-  description: "Catálogo de bebidas de uva sin alcohol de Vinos ROSH.",
-};
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  return publicPageMetadata({ path: "/productos", title: "Productos", description: "Catálogo de bebidas de uva sin alcohol de Vinos ROSH.",
+    filtered: Boolean(params.q?.trim() || params.categoria?.trim() || params.stock === "1" || (params.orden && params.orden !== "featured")) });
+}
 
 export const dynamic = "force-dynamic";
 

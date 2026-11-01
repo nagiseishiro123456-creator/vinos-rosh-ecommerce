@@ -18,7 +18,7 @@ export function ProductCard({ product }: { product: PublicProductCard }) {
           src={product.imageUrl ?? FALLBACK_IMAGE}
           alt={product.name}
           fill
-          sizes="(max-width: 700px) 92vw, (max-width: 1100px) 45vw, 360px"
+          sizes="(max-width: 619px) 92vw, (max-width: 849px) 46vw, (max-width: 1244px) 31vw, 380px"
         />
         {product.stock <= 0 ? <span className="stockBadge">Agotado</span> : null}
       </Link>

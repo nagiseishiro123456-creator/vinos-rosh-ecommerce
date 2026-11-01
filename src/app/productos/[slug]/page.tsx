@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto";
+import { cache } from "react";
+import { publicPageMetadata, privatePageMetadata } from "@/lib/seo";
 import { AccountAddToCart } from "@/components/account-add-to-cart";
 import { formatPrice } from "@/lib/money";
 import { BadgeCheck, Star } from "lucide-react";
@@ -20,6 +22,9 @@ type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// Request-scoped: share the DB read with metadata without caching stock across requests.
+const getProduct = cache(getProductBySlug);
+
 
 function formatReviewDate(value: Date) {
   return new Intl.DateTimeFormat("es-PE", {
@@ -31,21 +36,24 @@ function formatReviewDate(value: Date) {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const product = await getProduct(slug);
 
-  if (!product) return { title: "Producto no encontrado" };
+  if (!product) return privatePageMetadata("Producto no encontrado");
 
-  return {
+  return publicPageMetadata({
+    path: `/productos/${encodeURIComponent(product.slug)}`,
     title: product.name,
     description: product.shortDescription ?? product.description.slice(0, 150),
-  };
+    image: product.images[0]?.url ?? "/brand/logo-rosh.webp",
+    imageAlt: product.images[0]?.alt ?? product.name,
+  });
 }
 
 export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const [product, session] = await Promise.all([getProductBySlug(slug), getServerSession(authOptions)]);
+  const [product, session] = await Promise.all([getProduct(slug), getServerSession(authOptions)]);
   if (!product) notFound();
 
   const imageUrl =
@@ -66,7 +74,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               alt={product.images[0]?.alt ?? product.name}
               fill
               priority
-              sizes="(max-width: 850px) 92vw, 50vw"
+              sizes="(max-width: 849px) 92vw, (max-width: 1244px) 48vw, 590px"
             />
           </div>
         </div>
