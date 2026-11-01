@@ -26,7 +26,7 @@ test("S6: launch checks refresh saved checkout settings, preserve data and guide
     await expect(payment.locator(".launchStatus")).toHaveText("Pendiente");
     await expect(payment.getByRole("link", { name: /Revisar medios manuales/ })).toHaveAttribute("href", "/admin/configuracion");
     await page.getByRole("link", { name: /Abrir recorrido de prueba/ }).click();
-    await expect(page.getByRole("heading", { name: "Compra de prueba con el cliente", exact: true })).toBeInViewport();
+    await expect(page.getByRole("heading", { name: "Compra de prueba con el cliente", level: 2, exact: true })).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await capture(page, info, "s6-preparacion-lanzamiento", { fullPage: true });
     expect((await prisma.product.findUniqueOrThrow({ where: { id: product.id } })).stock).toBe(10);

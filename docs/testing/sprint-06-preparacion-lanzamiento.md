@@ -21,3 +21,9 @@ El PR conserva los resultados del SHA final comprobado; esta previsión no acred
 No se prueba una entrega real de correo, cobro ni publicación. Las pruebas de restauración
 ya existentes usan PostgreSQL aislado; no acreditan un plan de copias del hosting definitivo.
 La aceptación de ROSH no está registrada ni se considera completada por este incremento.
+
+La primera CI aprobó servidor, contratos SQL, restauración, tipos, lint y compilación;
+100/102 navegador. Dos ejecuciones detectaron un selector ambiguo: tarjeta h3 y sección
+h2 comparten el título del recorrido. La comprobación ahora apunta al h2 de la guía,
+conservando el enlace, la posición esperada y el contenido del producto. Resultado final
+en la CI del candidato corregido.
