@@ -24,3 +24,8 @@ registra en el PR para no citar la CI de un commit anterior como prueba del nuev
 Revisar también capturas de cuenta/administración existentes por la extracción de reglas
 compartidas. El código preserva su orden previo a overrides de cuenta. No se acredita
 aceptación visual, lanzamiento indexable, ranking de búsqueda ni Core Web Vitals reales.
+
+La auditoría inicial normaliza ahora las URLs al comparar la raíz: Next serializa su
+canonical sin barra final, equivalente al origen con /. La medición responsive de la
+tarjeta usa un contexto frío independiente del hero para no heredar su imagen de caché.
+No se cambió el contenido ni el destino de canonical para satisfacer la comprobación.

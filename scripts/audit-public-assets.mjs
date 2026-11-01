@@ -90,7 +90,8 @@ async function measure(server) {
 async function verifyProductionSeo(server) {
   for (const path of ["/", "/productos", productPath, "/envios", "/contacto", "/nuestra-historia", "/preguntas-frecuentes"]) {
     const response = await get(server.origin, path); assert.equal(response.status, 200, path);
-    assert.equal(canonical(response.text), new URL(path, expectedOrigin).href, "Canonical " + path);
+    const declared = canonical(response.text); assert.ok(declared, "Missing canonical " + path);
+    assert.equal(new URL(declared).href, new URL(path, expectedOrigin).href, "Canonical " + path);
     assert.ok(!meta(response.text, "robots")?.includes("noindex"), "Public production " + path);
   }
   const product = (await get(server.origin, productPath + "?utm_source=qa")).text;
