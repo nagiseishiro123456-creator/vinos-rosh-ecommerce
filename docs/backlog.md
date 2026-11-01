@@ -125,6 +125,18 @@ publicar con jose-israel en main. Se mantiene la pausa del rediseño visual.
 [Plan y límites](sprints/fase-2-sprint-05.md) · [Guía](guia-prueba-sprint-05.md)
 · [QA](testing/sprint-05-rendimiento-seo.md).
 
+### S5-06 — Mejoras de la landing con material original
+
+2026-11-01, después de #26. El propietario retoma únicamente Inicio con los originales
+definitivos: logo único animado, botella transparente, racimo/video, Lora y tonos lila.
+La empresa vende un producto: se elimina de Home la selección múltiple. La botella
+queda sin enlace por indicación expresa; los registros locales de ejemplo no se modifican.
+No se amplía el alcance a carrito, acceso, historia, admin o pagos.
+
+[Referencia](diseno/landing-original/README.md) · [Guía](guia-landing-rosh.md)
+· [QA](testing/s5-06-landing-original.md). Implementación y regresión en este incremento;
+aceptación visual del cliente por registrar. La variante editorial anterior queda sustituida.
+
 ## Sprint 6 — Aceptación y preparación de operación
 
 Inicio 2026-11-01 desde main f5ecac6 (#25): Sprint 5 técnico integrado con 302 servidor,

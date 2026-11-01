@@ -1,0 +1,60 @@
+{
+  "sourceZip": "rosh-handoff original.zip",
+  "assets": [
+    {
+      "path": "public/media/rosh/landing/bottle.png",
+      "bytes": 323548,
+      "sha256": "d56d09f4675c511f4ebab67367366b5461cd2c334674925bfa59e5fed55eaa44"
+    },
+    {
+      "path": "public/media/rosh/landing/cluster.png",
+      "bytes": 861894,
+      "sha256": "46e6301b5d1401a7354dcfe4b749127f6b0733f449095d51519bce7a89a0478b"
+    },
+    {
+      "path": "public/media/rosh/landing/frame-familia.jpg",
+      "bytes": 37344,
+      "sha256": "62dbd20ada1885ac4fbe019f4d5ccc83392d63fd1b1884645c7484ce154c1a4c"
+    },
+    {
+      "path": "public/media/rosh/landing/frame-servir.jpg",
+      "bytes": 47362,
+      "sha256": "c3e66f66c878a62aa056ca3ddb65bdf12909e087da321fe22fbdb96428f1a9f6"
+    },
+    {
+      "path": "public/media/rosh/landing/frame-vinedo.jpg",
+      "bytes": 44277,
+      "sha256": "1a2b9106190af0247470d92aecb26cbe886e7fc1c1c4d990efe85a715405a2bb"
+    },
+    {
+      "path": "public/media/rosh/landing/grape-mask.png",
+      "bytes": 26769,
+      "sha256": "a8e0724d0cd8dd8994caa4ac5c27c4a38a6db33e2296e209d4bac1b41e9efee4"
+    },
+    {
+      "path": "public/media/rosh/landing/grape-shade.png",
+      "bytes": 531176,
+      "sha256": "cfd4bb9b51c21266df39cb69a7f5145a4aa337095cc7b4e92aba0fa0ba8d0adb"
+    },
+    {
+      "path": "public/media/rosh/landing/grape-spec.png",
+      "bytes": 36709,
+      "sha256": "2c175187585a894dfc8d6014b7594e6c0eea912f98bf53c2e3e3a903285a1128"
+    },
+    {
+      "path": "public/media/rosh/landing/logo.png",
+      "bytes": 136100,
+      "sha256": "f9c44b4ccace4422f099c1eb96e0a3d0ee1b02b428a20f2beb4a151097319ea2"
+    },
+    {
+      "path": "public/media/rosh/landing/stem-leaf.svg",
+      "bytes": 9225,
+      "sha256": "87fc44466a942dd153ef707984f5cada2443db60e2f081f09d45c1b95a0a1904"
+    },
+    {
+      "path": "public/media/rosh/landing/sueno.mp4",
+      "bytes": 1068516,
+      "sha256": "b45daf7c45917ef753c3617e791a2ce1b7f8d540ab18287a202353b3ac4558d5"
+    }
+  ]
+}

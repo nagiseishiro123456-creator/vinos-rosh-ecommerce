@@ -11,6 +11,12 @@ del rediseño visual. No se comprometen puntos, fechas ni capacidad.
 | S5-03 | Evitar la lectura duplicada de producto durante un mismo render. | React cache por petición, con regresión de metadatos/stock entre peticiones. |
 | S5-04 | Canonical, compartir productos, indexación y sitemap coherentes. | Implementados; producción/preview cubiertos por políticas y comprobaciones HTTP. |
 | S5-05 | Comparar resultados, integrar y presentar el incremento. | 302 servidor locales; CI completa y comparación productiva por registrar en el PR. |
+| S5-06 | Mejorar la landing con el diseño original y un solo producto. | Retomado 2026-11-01; solo Inicio, botella sin enlace, recursos del cliente y regresión de navegación. |
+
+Actualización 2026-11-01: el propietario retoma exclusivamente la landing con los
+archivos originales definitivos. Se sustituye la alternativa editorial local anterior;
+la empresa vende un único producto y la botella no redirige. El resto del sitio conserva
+sus módulos. [Referencia y límites](../diseno/landing-original/README.md) · [Guía](../guia-landing-rosh.md).
 
 ## Hallazgos y objetivo
 
