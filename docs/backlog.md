@@ -125,6 +125,22 @@ publicar con jose-israel en main. Se mantiene la pausa del rediseño visual.
 [Plan y límites](sprints/fase-2-sprint-05.md) · [Guía](guia-prueba-sprint-05.md)
 · [QA](testing/sprint-05-rendimiento-seo.md).
 
+## Sprint 6 — Aceptación y preparación de operación
+
+Inicio 2026-11-01 desde main f5ecac6 (#25): Sprint 5 técnico integrado con 302 servidor,
+98 navegador y comparación productiva aprobados. Diseño/Motion, medición real y aceptación
+siguen pendientes. El propietario autoriza avanzar con la preparación de lanzamiento.
+
+| ID | Historia | Estado del incremento |
+| --- | --- | --- |
+| S6-01 | Diagnóstico de preparación y siguientes pasos. | Panel con siete comprobaciones locales, estados desconocidos, proveedores y revisión del negocio separados. |
+| S6-02 | Compra de aceptación con ROSH. | Recorrido guiado y formato de registro preparados; ejecución y aceptación del cliente pendientes. |
+| S6-03 | Operación, respaldo y publicación. | Guía diaria y responsabilidades; validación del entorno definitivo y lanzamiento pendientes. |
+| S6-04 | Comprobar e integrar. | Nueve unitarias nuevas y dos escenarios de navegador en escritorio/móvil; CI final en el PR. |
+
+[Plan](sprints/fase-2-sprint-06.md) · [Guía](guia-prueba-sprint-06.md)
+· [QA](testing/sprint-06-preparacion-lanzamiento.md).
+
 ## Secuencia posterior, sujeta a refinamiento
 
 | Sprint | Objetivo | Documentación antes / durante / al cerrar |

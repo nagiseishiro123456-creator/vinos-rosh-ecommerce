@@ -1,179 +1,67 @@
-import type { Route } from "next";
 import Link from "next/link";
-
-import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/modules/admin/auth";
 import { runMaintenanceFromAdmin } from "@/modules/admin/maintenance/actions";
 import { getManualPaymentHoldMinutes } from "@/modules/orders/hold";
-import { getCommerceSettings } from "@/modules/settings/queries";
+import { getLaunchSnapshot } from "@/modules/admin/launch/queries";
+import { buildLaunchReport, launchStatusCopy, type LaunchCheck } from "@/modules/admin/launch/readiness";
 
 export const dynamic = "force-dynamic";
 
-type Check = {
-  title: string;
-  description: string;
-  ready: boolean;
-  href?: Route;
-  blocking?: boolean;
-};
+function Checklist({ checks }: { checks: LaunchCheck[] }) {
+  return <div className="launchChecklist">{checks.map((check) => (
+    <article className={`launchCheck ${check.status}`} key={check.id} aria-label={check.title}>
+      <div className="launchCheckIcon" aria-hidden="true">{check.status === "ready" ? "✓" : check.status === "unavailable" ? "?" : "!"}</div>
+      <div>
+        <div className="launchCheckTitleRow"><h3>{check.title}</h3><span className={`launchStatus ${check.status}`}>{launchStatusCopy[check.status]}</span></div>
+        <p>{check.description}</p>
+        <p className="launchNextStep"><strong>Siguiente paso:</strong> {check.nextStep}</p>
+        <Link href={check.href}>{check.linkLabel} →</Link>
+      </div>
+    </article>
+  ))}</div>;
+}
 
 export default async function LaunchReadinessPage() {
   await requireAdmin("/admin/lanzamiento");
-
-  const [activeProducts, inStockProducts, shippingZones, settings] = await Promise.all([
-    prisma.product.count({ where: { active: true } }),
-    prisma.product.count({ where: { active: true, stock: { gt: 0 } } }),
-    prisma.shippingZone.count({ where: { active: true } }),
-    getCommerceSettings(),
-  ]);
-
-  const publicUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() ?? "";
-  const productionUrlReady = publicUrl.startsWith("https://") && !publicUrl.includes("localhost");
-  const paymentReady = settings.yape.ready || settings.transfer.ready;
+  const report = buildLaunchReport(await getLaunchSnapshot(), process.env);
   const holdMinutes = getManualPaymentHoldMinutes();
 
-  const checks: Check[] = [
-    {
-      title: "Catálogo publicado",
-      description: `${activeProducts} producto(s) visible(s); ${inStockProducts} con stock disponible.`,
-      ready: activeProducts > 0 && inStockProducts > 0,
-      href: "/admin/productos",
-      blocking: true,
-    },
-    {
-      title: "Cobertura de envío",
-      description: `${shippingZones} zona(s) activa(s) con tarifa configurada.`,
-      ready: shippingZones > 0,
-      href: "/admin/envios",
-      blocking: true,
-    },
-    {
-      title: "Medio de pago operativo",
-      description: paymentReady
-        ? "Existe al menos un medio manual listo para el checkout."
-        : "Configura Yape o transferencia antes de recibir pedidos.",
-      ready: paymentReady,
-      href: "/admin/configuracion",
-      blocking: true,
-    },
-    {
-      title: "Canal de atención",
-      description: settings.whatsappPhone
-        ? "WhatsApp público configurado."
-        : "Falta configurar un número de WhatsApp para atención y consultas.",
-      ready: Boolean(settings.whatsappPhone),
-      href: "/admin/configuracion",
-      blocking: true,
-    },
-    {
-      title: "Correo comercial",
-      description: settings.contactEmail
-        ? "Correo público configurado."
-        : "Conviene registrar un correo comercial antes del lanzamiento.",
-      ready: Boolean(settings.contactEmail),
-      href: "/admin/configuracion",
-    },
-    {
-      title: "URL HTTPS de producción",
-      description: productionUrlReady
-        ? publicUrl
-        : "NEXT_PUBLIC_APP_URL todavía no apunta a una URL HTTPS pública de producción.",
-      ready: productionUrlReady,
-      blocking: true,
-    },
-    {
-      title: "Boleta / factura electrónica",
-      description: "Pendiente confirmar cómo el negocio emitirá los comprobantes electrónicos y quién será responsable del flujo SUNAT.",
-      ready: false,
-      blocking: true,
-    },
-    {
-      title: "Textos legales y Libro de Reclamaciones",
-      description: "Pendiente validar con el responsable adulto del negocio los datos legales, privacidad, términos y mecanismo oficial de reclamaciones antes de publicar.",
-      ready: false,
-      blocking: true,
-    },
-    {
-      title: "Clasificación comercial del producto",
-      description: "Pendiente validar la denominación comercial/legal definitiva de la bebida sin alcohol antes de fijar etiquetas y afirmaciones públicas.",
-      ready: false,
-      blocking: true,
-    },
-  ];
+  return <main className="shell adminPage launchReadinessPage">
+    <div className="adminTopbar">
+      <div><p className="eyebrow wine">PREPARACIÓN DE LA TIENDA</p><h1>Preparación para lanzamiento</h1>
+        <p className="adminIntro">Revisa la configuración actual y los pasos que faltan con ROSH. Las comprobaciones locales no sustituyen la compra de prueba ni la validación de los servicios externos.</p></div>
+      <div className="adminTopbarActions"><a className="button buttonGhostLight" href="/admin/lanzamiento">Actualizar comprobaciones</a><Link className="button buttonGhostLight" href="/admin">← Panel</Link></div>
+    </div>
+    <section className="launchSummary" aria-label="Resumen de comprobaciones locales">
+      <div><span>Configuración local</span><strong>{report.readyCount}/{report.total}</strong></div>
+      <div className={report.requiredPending > 0 ? "attention" : ""}><span>Requisitos locales por resolver</span><strong>{report.requiredPending}</strong></div>
+      <div><span>Revisiones con ROSH</span><strong>{report.reviews.length}</strong></div>
+    </section>
+    <div className="launchProgress" role="progressbar" aria-label="Configuración local completa" aria-valuenow={report.readyCount} aria-valuemin={0} aria-valuemax={report.total} aria-valuetext={`${report.readyCount} de ${report.total} comprobaciones locales configuradas`}><span style={{ width: `${report.progress}%` }} /></div>
+    <p className="launchScope">Este avance describe solo la configuración local. Los servicios externos y las revisiones del negocio se muestran por separado y permanecen pendientes hasta validarlos.</p>
+    {report.unavailableCount > 0 ? <p className="adminAlert error" role="status">Hay {report.unavailableCount} comprobación(es) sin resultado. Actualiza la página; si continúa, solicita al responsable técnico revisar la conexión y las consultas.</p> : null}
 
-  const readyCount = checks.filter((check) => check.ready).length;
-  const blockingPending = checks.filter((check) => check.blocking && !check.ready).length;
-  const progress = Math.round((readyCount / checks.length) * 100);
+    <section className="launchSection" aria-labelledby="comprobaciones-locales"><h2 id="comprobaciones-locales">Comprobaciones automáticas</h2><Checklist checks={report.checks} /></section>
+    <section className="launchSection" aria-labelledby="servicios-externos"><h2 id="servicios-externos">Servicios externos</h2><p>Abrir este panel no consulta proveedores, envía correos ni realiza cobros. Izipay se prepara por separado de los medios manuales del checkout.</p><Checklist checks={report.integrations} /></section>
+    <section className="launchSection" aria-labelledby="revision-rosh"><h2 id="revision-rosh">Revisión con ROSH</h2><p>Estos puntos necesitan evidencia y acuerdo del negocio. Este panel todavía no guarda su aceptación.</p><Checklist checks={report.reviews} /></section>
 
-  return (
-    <main className="shell adminPage launchReadinessPage">
-      <div className="adminTopbar">
-        <div>
-          <p className="eyebrow wine">PREPRODUCCIÓN</p>
-          <h1>Preparación para lanzamiento</h1>
-          <p className="adminIntro">
-            Esta pantalla separa lo que el software ya puede comprobar de las decisiones comerciales o legales que todavía requieren datos reales del negocio.
-          </p>
-        </div>
-        <div className="adminTopbarActions">
-          <Link className="button buttonGhostLight" href="/admin">← Panel</Link>
-        </div>
-      </div>
-
-      <section className="launchSummary">
-        <div>
-          <span>Avance verificable</span>
-          <strong>{progress}%</strong>
-        </div>
-        <div>
-          <span>Listos</span>
-          <strong>{readyCount}/{checks.length}</strong>
-        </div>
-        <div className={blockingPending > 0 ? "attention" : ""}>
-          <span>Bloqueos de lanzamiento</span>
-          <strong>{blockingPending}</strong>
-        </div>
-      </section>
-
-      <div className="launchProgress" aria-label={`Preparación ${progress}%`}>
-        <span style={{ width: `${progress}%` }} />
-      </div>
-
-      <section className="adminCard">
-        <p className="eyebrow wine">MANTENIMIENTO</p>
-        <h2>Reservas de pago manual</h2>
-        <p>
-          Las nuevas reservas sin pago comunicado duran {holdMinutes} minutos; cada pedido conserva su vencimiento original. El mantenimiento libera solo reservas pendientes vencidas. Los pagos en revisión conservan su stock y requieren conciliación. También se eliminan tokens expirados y límites antiguos. Ejecuta este mantenimiento para liberar reservas de clientes que no regresan a la tienda.
-        </p>
-        <form action={runMaintenanceFromAdmin}>
-          <button className="button buttonPrimary" type="submit">
-            Ejecutar mantenimiento ahora
-          </button>
-        </form>
-      </section>
-
-      <section className="launchChecklist">
-        {checks.map((check) => (
-          <article className={`launchCheck ${check.ready ? "ready" : "pending"}`} key={check.title}>
-            <div className="launchCheckIcon" aria-hidden="true">{check.ready ? "✓" : "!"}</div>
-            <div>
-              <div className="launchCheckTitleRow">
-                <strong>{check.title}</strong>
-                {check.blocking && !check.ready ? <span>Bloquea producción</span> : null}
-              </div>
-              <p>{check.description}</p>
-              {check.href ? <Link href={check.href}>Resolver / revisar →</Link> : null}
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <div className="launchNotice">
-        <strong>No se publicará automáticamente.</strong>
-        <span>
-          Que el código compile no significa que el negocio esté listo para operar. Los puntos comerciales, legales y de comprobantes se mantendrán visibles hasta que el cliente entregue información definitiva.
-        </span>
-      </div>
-    </main>
-  );
+    <section className="adminCard launchSection" id="prueba-cliente" aria-labelledby="prueba-cliente-titulo">
+      <p className="eyebrow wine">RECORRIDO GUIADO</p><h2 id="prueba-cliente-titulo">Compra de prueba con el cliente</h2>
+      <p>Usa un entorno de prueba y datos ficticios. Mantén abierta la administración y realiza la compra con una cuenta de prueba en otra ventana privada. El recorrido puede reservar stock de prueba; no hagas transferencias reales.</p>
+      <ol className="launchSteps">
+        <li><strong>Preparar:</strong> revisa un <Link href="/admin/productos">producto de prueba</Link>, su stock y una <Link href="/admin/envios">zona de entrega</Link> configurada.</li>
+        <li><strong>Comprar:</strong> abre el <Link href="/productos">catálogo</Link>, añade al carrito y entra con la cuenta de prueba.</li>
+        <li><strong>Revisar y reservar:</strong> comprueba dirección, indicaciones, envío y total antes de confirmar. Conserva el número de pedido.</li>
+        <li><strong>Gestionar:</strong> revisa el pedido en <Link href="/admin/pedidos">Pedidos</Link> y el estado en <Link href="/admin/pagos">Pagos</Link>. En una prueba aislada puedes simular la revisión; un pago real solo se aprueba después de comprobar el ingreso.</li>
+        <li><strong>Comunicar:</strong> revisa la <Link href="/admin/notificaciones">vista previa del aviso</Link>. Comprueba recuperación de contraseña y entrega de correo cuando el servicio esté preparado y el destinatario autorizado.</li>
+        <li><strong>Registrar:</strong> anota fecha, entorno, participantes, pedido de prueba, resultado y problemas encontrados. Acuerda con ROSH qué corregir y qué acepta.</li>
+      </ol>
+    </section>
+    <section className="adminCard launchSection" id="revision-publicacion"><h2>Preparación de publicación</h2><p>El responsable técnico debe revisar el dominio HTTPS definitivo y el modo de vista previa, comprobar disponibilidad y recuperación, y acordar la publicación con ROSH. Esta pantalla muestra la configuración; no publica ni cambia el entorno.</p></section>
+    <section className="adminCard launchSection" id="revision-proveedores"><h2>Preparación de Izipay</h2><p>ROSH debe obtener acceso al comercio y confirmar el producto contratado. Después, el responsable técnico completa las credenciales de prueba, el formulario, retorno e IPN y comprueba el recorrido de sandbox. Las claves se guardan en el entorno privado del servidor. La configuración local no acredita una integración productiva.</p></section>
+    <section className="adminCard launchSection" id="revision-negocio"><h2>Información que debe validar ROSH</h2><p>Reúne con el responsable del negocio la denominación comercial del producto, los documentos públicos, datos de contacto y el proceso de emisión de comprobantes. Registra quién revisó cada punto y dónde se conserva la evidencia; después revisa el recorrido de compra con esos datos definitivos.</p></section>
+    <section className="adminCard launchSection"><p className="eyebrow wine">MANTENIMIENTO</p><h2>Reservas de pago manual</h2><p>Las nuevas reservas sin pago comunicado duran {holdMinutes} minutos; cada pedido conserva su vencimiento original. El mantenimiento libera reservas pendientes vencidas, elimina tokens expirados y límites antiguos. Los pagos en revisión conservan su stock y requieren conciliación.</p>
+      <form action={runMaintenanceFromAdmin}><button className="button buttonPrimary" type="submit">Ejecutar mantenimiento ahora</button></form>
+    </section>
+  </main>;
 }
