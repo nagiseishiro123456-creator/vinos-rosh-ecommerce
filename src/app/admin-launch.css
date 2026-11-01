@@ -104,6 +104,22 @@
   font-size: 1rem;
 }
 
+.launchCheckTitleRow h3 { margin: 0; color: var(--wine-dark); font-size: 1rem; }
+.launchCheck > div:last-child { min-width: 0; }
+.launchCheck p, .launchCheck a { overflow-wrap: anywhere; }
+.launchCheck .launchStatus.ready { color: #1d5b3b; background: rgba(35,109,70,.1); }
+.launchCheck .launchStatus.review { color: #76500b; background: #fff3d5; }
+.launchCheck .launchStatus.unavailable { color: #84212b; background: #fff0f1; }
+.launchCheck.review .launchCheckIcon { color: #76500b; background: #fff3d5; }
+.launchCheck.unavailable .launchCheckIcon { color: #84212b; background: #fff0f1; }
+.launchScope, .launchSection > p { color: var(--muted); line-height: 1.6; }
+.launchSection { margin-block: 28px; scroll-margin-top: 28px; }
+.launchSection > h2 { margin-bottom: 12px; }
+.launchCheck .launchNextStep { color: var(--ink); }
+.launchSteps { padding-left: 22px; line-height: 1.7; }
+.launchSteps li + li { margin-top: 14px; }
+.launchSteps a { color: var(--wine); text-decoration: underline; text-underline-offset: 3px; }
+
 .launchCheckTitleRow > span {
   padding: 4px 8px;
   border-radius: 999px;

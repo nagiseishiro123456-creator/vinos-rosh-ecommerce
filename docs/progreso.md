@@ -1,5 +1,22 @@
 # Punto de avance
 
+## Sprint 6 — Preparación de lanzamiento (2026-11-01, America/Lima)
+
+- Base main f5ecac6: PR #25 integrado con jose-israel. CI #373 aprobada, 302 servidor
+  y 98 navegador; Public assets #3 aprobada. CSS inicial de inicio/catálogo/producto:
+  90 589 → 77 735 bytes (14,2 % menos); transferencia CSS 18 630 → 16 481 bytes.
+- El propietario autoriza continuar con el panel existente de lanzamiento. Se conserva
+  la pausa de diseño/Motion y los pendientes externos de Izipay/Resend.
+- Diagnóstico con siete comprobaciones locales, siguientes pasos y destinos. Publicación
+  comparte política de SEO; las consultas fallidas no se acreditan como configuradas.
+- Proveedores y revisión de ROSH quedan fuera del porcentaje local. Recorrido de prueba,
+  registro de aceptación y rutina del operador preparados; la aplicación no guarda todavía
+  aprobación comercial ni publica automáticamente.
+- 311/311 servidor locales, tipos y lint aprobados; se esperan 102 ejecuciones de navegador. Resultados
+  finales del candidato en el PR. Sin migraciones, dependencias ni activación de servicios.
+- [Plan](sprints/fase-2-sprint-06.md) · [Guía](guia-prueba-sprint-06.md)
+  · [Contrato](integraciones/preparacion-lanzamiento.md) · [QA](testing/sprint-06-preparacion-lanzamiento.md).
+
 ## Sprint 5 — Rendimiento y SEO técnico (2026-10-31, America/Lima)
 
 - Base main 6bf021d: #24 integrado con jose-israel, CI #369 aprobada (294 servidor,
