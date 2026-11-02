@@ -93,3 +93,12 @@ contenido de la marca. Las cifras vienen de los pedidos reales del sistema.»
    cantidades y permitir seguir navegando después de cerrarlo.
 4. Entra a tu cuenta y comprueba perfil, direcciones y cierre de sesión. En móvil,
    Cerrar sesión está dentro del menú; en escritorio está en el navbar.
+
+## Animación de entrada — ajuste S5-12
+
+1. Abre Inicio o recárgalo: el logo aparece centrado, viaja al navbar y después se
+   revelan la botella y la navegación. La secuencia dura unos siete segundos.
+2. Entra a Historia y vuelve con el logo: la navegación interna muestra el estado
+   final. Comprar sigue abriendo directamente la sección del producto.
+3. Escape o Saltar animación terminan la presentación. Con movimiento reducido
+   activado en el dispositivo, se respeta la versión estática.

@@ -46,8 +46,12 @@ sin crear paneles, endpoints de carga o borradores fuera del alcance de esta ent
   la navegación, evitando una corrección artificial de 12 px.
 - 0–3 s aparición/pausa; 3 s viaje; 4,3 s botella; 5,4 s header; 6,8 s libera documento.
   El fundido del racimo comienza 0,5 s después del header y termina después del desbloqueo.
-- La entrada se recuerda por sesión. Storage bloqueado y movimiento reducido muestran
-  directamente el estado final. Escape o el enlace de salto permiten terminarla.
+- Ajuste del 2026-11-02 por revisión del propietario: la entrada vuelve a reproducirse
+  al abrir o recargar Inicio. Una marca antigua de sessionStorage no la oculta; no se
+  necesita almacenamiento para reproducirla. La navegación interna de ida y vuelta
+  mantiene el estado final para no interrumpir la compra. El HANDOFF original conserva
+  su indicación histórica de una vez por sesión. Movimiento reducido y `#comprar`
+  siguen mostrando el estado final. Escape o el enlace de salto permiten terminarla.
 - El bloqueo usa selectores limitados a esta landing: nunca sobrescribe body.style
   ni el bloqueo del carrito. Los temporizadores, frames, observadores y eventos se retiran.
 - CSS y tipografía limitados a la landing; no se cambian los tokens de otras pantallas.
