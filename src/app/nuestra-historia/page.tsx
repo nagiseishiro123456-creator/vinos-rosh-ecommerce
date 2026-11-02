@@ -1,154 +1,56 @@
-import { BookOpen, Grape, Heart, Leaf, Sprout, UsersRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Metadata } from "next";
 import { publicPageMetadata } from "@/lib/seo";
-
 import { StoreHeader } from "@/components/store-header";
-import { WhatsAppFab } from "@/components/whatsapp-fab";
-import { siteConfig } from "@/lib/site";
+import { RoshFooter } from "@/components/landing/rosh-footer";
+import { getHistory } from "@/modules/history/queries";
+import type { HistoryPhoto } from "@/modules/history/content";
+import styles from "./story.module.css";
 
-export const metadata: Metadata = publicPageMetadata({
-  path: "/nuestra-historia",
-  title: "Nuestra historia",
-  description:
-    "El legado de Víctor Rosh: del colportaje y los caminos rurales al cultivo familiar de la uva.",
-});
-
-export default function HistoryPage() {
-  return (
-    <main className="historyPage">
-      <section className="historyHero">
-        <Image
-          src={`${siteConfig.prototypeAssetsBase}/story.jpg`}
-          alt="Uvas y viñedo vinculados al legado de Víctor Rosh"
-          fill
-          priority
-          sizes="100vw"
-        />
-        <div className="historyHeroOverlay" aria-hidden="true" />
-        <StoreHeader />
-        <div className="historyHeroCopy shell">
-          <p className="eyebrow">EL LEGADO DE VÍCTOR ROSH</p>
-          <h1>De los caminos de tierra al fruto de la vid.</h1>
-          <p>
-            Toda gran historia comienza con paciencia. El origen de ROSH se encuentra en los
-            caminos rurales recorridos por Víctor Rosh, en el trabajo familiar y en una forma
-            de mirar la tierra con perseverancia y propósito.
-          </p>
-        </div>
-      </section>
-
-      <section className="historyIntro shell">
-        <div>
-          <p className="eyebrow wine">1968 — 1975</p>
-          <h2>Los años de colportaje.</h2>
-        </div>
-        <div className="historyIntroCopy">
-          <p>
-            A finales de la década de 1960, Víctor trabajaba como colportor. Viajaba de pueblo
-            en pueblo llevando libros, enciclopedias y textos de formación a comunidades alejadas.
-          </p>
-          <p>
-            Aquellos años fortalecieron tres valores que la familia asocia hoy con ROSH:
-            perseverancia, escucha y respeto por los ciclos de la naturaleza.
-          </p>
-        </div>
-      </section>
-
-      <section className="historyValuesSection">
-        <div className="shell">
-          <div className="historyValuesHeading">
-            <p className="eyebrow wine">1974</p>
-            <h2>El intercambio que cambió el rumbo.</h2>
-            <p>
-              Durante una travesía por el valle, Víctor llegó a una pequeña finca. Según el relato
-              familiar, un agricultor le ofreció alimento, cobijo y un terreno pedregoso a cambio
-              de uno de sus libros. Allí nació la idea de cultivar uva y convertir la tierra en un
-              legado para la familia.
-            </p>
-          </div>
-
-          <div className="historyValueGrid">
-            <article>
-              <span><UsersRound size={22} /></span>
-              <strong>Familia</strong>
-              <p>El proyecto se construyó desde una historia cercana, transmitida entre generaciones.</p>
-            </article>
-            <article>
-              <span><BookOpen size={22} /></span>
-              <strong>Colportaje</strong>
-              <p>El servicio, la lectura y la constancia forman parte del relato que precede al viñedo.</p>
-            </article>
-            <article>
-              <span><Sprout size={22} /></span>
-              <strong>Tierra</strong>
-              <p>Un terreno difícil se convirtió en símbolo de paciencia, aprendizaje y trabajo manual.</p>
-            </article>
-            <article>
-              <span><Heart size={22} /></span>
-              <strong>Propósito</strong>
-              <p>ROSH busca conservar la historia detrás de cada presentación y compartirla en familia.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="historyProcess shell">
-        <div className="historyProcessVisual">
-          <Image
-            src={`${siteConfig.prototypeAssetsBase}/hero.jpg`}
-            alt="Viñedo asociado a la historia familiar ROSH"
-            fill
-            sizes="(max-width: 900px) 92vw, 48vw"
-          />
-        </div>
-
-        <div className="historyProcessCopy">
-          <p className="eyebrow wine">1978</p>
-          <h2>La primera cosecha.</h2>
-          <p>
-            Cuatro años después del encuentro que marcó el origen del proyecto, la familia sitúa
-            en 1978 la primera cosecha del viñedo. Víctor limpió la tierra, seleccionó sarmientos
-            y aplicó al cultivo la misma disciplina que había desarrollado durante sus años de
-            colportaje.
-          </p>
-          <div className="historySteps">
-            <article>
-              <span><Grape size={20} /></span>
-              <div><strong>1. Cultivar</strong><p>Trabajar la uva desde una relación paciente con la tierra.</p></div>
-            </article>
-            <article>
-              <span><Leaf size={20} /></span>
-              <div><strong>2. Conservar</strong><p>Mantener vivo el vínculo entre producto, familia e historia.</p></div>
-            </article>
-            <article>
-              <span><Heart size={20} /></span>
-              <div><strong>3. Compartir</strong><p>Hoy ROSH presenta bebidas de uva sin alcohol pensadas para acompañar momentos especiales.</p></div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="historyClosing">
-        <div className="shell historyClosingInner">
-          <div>
-            <p className="eyebrow">ROSH HOY</p>
-            <h2>Historias que se comparten con el alma.</h2>
-            <p>
-              Décadas después, ROSH mantiene como inspiración la paciencia, el trabajo manual y
-              el coraje de sembrar en terrenos difíciles. La propuesta actual es una línea de
-              bebidas de uva sin alcohol, creada para compartir esa historia en nuevos momentos.
-            </p>
-          </div>
-          <div className="historyClosingActions">
-            <Link className="button buttonLight" href="/#comprar">Comprar ROSH</Link>
-            <Link className="button buttonGhost" href="/contacto">Contactar</Link>
-          </div>
-        </div>
-      </section>
-
-      <WhatsAppFab />
+export const dynamic = "force-dynamic";
+export async function generateMetadata() {
+  const { content: { texts: t, images } } = await getHistory();
+  return publicPageMetadata({ path: "/nuestra-historia", title: t.title, description: t.lead.slice(0, 280), image: images.cover.src, imageAlt: images.cover.alt });
+}
+function Photo({ photo, shape, cover = false }: { photo: HistoryPhoto; shape: string; cover?: boolean }) {
+  return <figure className={`${styles.photo} ${shape}`}><div className={styles.photoFrame}>
+    <Image src={photo.src} alt={photo.alt} fill sizes={cover ? "(max-width: 820px) 200px, 270px" : "(max-width: 820px) 68vw, 300px"}
+      preload={cover} unoptimized={photo.src.startsWith("/api/story-images/")} style={{ objectFit: "cover", objectPosition: `${photo.x}% ${photo.y}%` }} />
+  </div></figure>;
+}
+export default async function HistoryPage() {
+  const { content: { texts: t, images } } = await getHistory();
+  const facts = [[t.fact1Value, t.fact1Label], [t.fact2Value, t.fact2Label], [t.fact3Value, t.fact3Label], [t.fact4Value, t.fact4Label]];
+  const occasions = [[t.occasion1Title, t.occasion1Text], [t.occasion2Title, t.occasion2Text], [t.occasion3Title, t.occasion3Text]];
+  return <div className={styles.page}>
+    <div className={styles.headerSpace}><StoreHeader /></div>
+    <main id="story-content">
+      <header className={styles.top}><div className={styles.wrap}>
+        <div className={styles.read}><span className={styles.kicker}>{t.eyebrow}</span><h1>{t.title}</h1><p className={styles.lead}>{t.lead}</p>
+          <ul className={styles.facts} aria-label="Datos de la botella">{facts.map(([value, label], i) => <li key={i}><b>{value}</b><span>{label}</span></li>)}</ul>
+        </div><Photo photo={images.cover} shape={styles.cover} cover />
+      </div></header>
+      <article>
+        <section className={styles.chapter} aria-labelledby="grape-title"><div className={styles.wrap}>
+          <div className={styles.read}><p className={styles.number}>{t.grapeLabel}</p><h2 id="grape-title">{t.grapeTitle}</h2>
+            <p>{t.grapeBody1}</p><p>{t.grapeBody2}</p>{t.grapeNote && <p className={styles.note}>{t.grapeNote}</p>}
+          </div><Photo photo={images.grape} shape={styles.arch} />
+        </div></section>
+        <section className={`${styles.chapter} ${styles.reverse}`} aria-labelledby="juice-title"><div className={styles.wrap}>
+          <div className={styles.read}><p className={styles.number}>{t.juiceLabel}</p><h2 id="juice-title">{t.juiceTitle}</h2>
+            <p>{t.juiceBody}</p><blockquote className={styles.quote}>{t.quote}</blockquote>{t.juiceNote && <p className={styles.note}>{t.juiceNote}</p>}
+          </div><Photo photo={images.juice} shape={styles.round} />
+        </div></section>
+        <section className={styles.chapter} aria-labelledby="table-title"><div className={styles.wrap}>
+          <div className={styles.read}><p className={styles.number}>{t.tableLabel}</p><h2 id="table-title">{t.tableTitle}</h2><p>{t.tableBody}</p>
+            <ul className={styles.occasions}>{occasions.map(([title, body], i) => <li key={i}><b>{title}</b> {body}</li>)}</ul>
+          </div><Photo photo={images.table} shape={styles.leaf} />
+        </div></section>
+      </article>
+      <section className={styles.end}><div className={styles.read}><p>{t.closing}</p><nav className={styles.links} aria-label="Seguir">
+        <Link href="/#comprar">{t.buyLabel}</Link><Link href="/contacto">{t.contactLabel}</Link>
+      </nav></div></section>
     </main>
-  );
+    <div className={styles.footerSurface}><RoshFooter text={t.footer} className={styles.footer} /></div>
+  </div>;
 }

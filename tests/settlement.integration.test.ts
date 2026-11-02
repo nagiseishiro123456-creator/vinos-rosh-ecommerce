@@ -38,7 +38,7 @@ test("paid manual payments start without invented costs or deposits; a saved fee
   const notices = await prisma.$queryRaw<Array<{ attempts: number }>>`SELECT "attempts" FROM "PaymentConfirmationOutbox" WHERE "orderId"=${f.order.id}`;
   assert.deepEqual(notices, [{ attempts: 0 }]);
   const backup = await buildBusinessBackup();
-  assert.equal(backup.meta.version, 3);
+  assert.equal(backup.meta.version, 4);
   const evidence = backup.paymentSettlements.find((item) => item.paymentId === f.payment.id);
   assert.equal(evidence?.grossAmount, "98.20"); assert.equal(evidence?.commissionAmount, "2.50");
   assert.equal(evidence?.depositedAmount, null); assert.equal(evidence?.revision, 1);

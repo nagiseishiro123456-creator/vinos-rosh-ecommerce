@@ -54,7 +54,7 @@ export default async function BackupPage() {
             El archivo incluye catálogo, imágenes referenciadas, zonas, pedidos, pagos,
             reseñas, movimientos de inventario, historial de pedidos, conciliaciones,
             comisiones y abonos registrados,
-            configuración pública y mensajes de contacto.
+            configuración pública, mensajes de contacto y los textos y fotos de Nuestra historia.
           </p>
           <p>
             Por seguridad no exportamos contraseñas, tokens de recuperación, límites de acceso

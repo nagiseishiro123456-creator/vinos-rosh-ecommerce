@@ -69,3 +69,12 @@ La compra requiere precio positivo confirmado, publicación y stock. Cantidad nu
 con botones y límites según existencias y selección actual, usando el carrito existente.
 Migración aditiva: Product.landingContent JSONB nullable; los datos previos se conservan
 y reciben textos predeterminados hasta guardar cambios.
+
+## S5-09 — Nuestra historia editable (2026-11-02)
+
+Se reemplaza Nuestra historia con el ZIP y el PDF entregados por el cliente:
+lectura por capítulos, fotografías con formas editoriales y modo claro/oscuro.
+Panel → Nuestra historia permite editar todos los textos, reemplazar las cuatro
+imágenes y ajustar su encuadre. Se confirma el guardado y se protegen ediciones
+simultáneas; las fotos se conservan en la base y en los respaldos.
+[Diseño, datos y validación](../diseno/nuestra-historia/README.md).
