@@ -50,3 +50,9 @@ y los límites del día. El navegador recorre los módulos existentes, los filtr
 búsqueda, cierre de sesión y restauración del scroll móvil. La batería existente
 continúa verificando los guardados y los procesos de pedidos, pagos e inventario.
 Las capturas locales con datos del negocio son evidencia privada y no se publican.
+
+Los reintentos de conflictos de serialización de los límites de uso incorporan una
+pausa progresiva con variación y un máximo de cinco intentos. Carrito y confirmación
+pueden coincidir sin repetir inmediatamente el mismo conflicto; se conservan la
+transacción serializable, las ventanas y los cupos. Una prueba concurrente comprueba
+que doce peticiones compartiendo un cupo de tres solo acepten tres operaciones.

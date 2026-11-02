@@ -50,5 +50,5 @@ test("admin workspace connects existing modules, real period/search controls and
   await page.getByRole("button", { name: "Cerrar sesión", exact: true }).click();
   await expect(page).toHaveURL(url => url.pathname === "/");
   expect(await page.evaluate(() => document.body.style.overflow)).not.toBe("hidden");
-  expect((await page.request.get("/api/admin/backup")).status()).toBe(403);
+  expect((await page.request.get("/api/admin/backup")).status()).toBe(401);
 });
