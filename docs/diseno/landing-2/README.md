@@ -45,3 +45,9 @@ La prueba SEO designa explícitamente el producto QA durante su escenario y rest
 su SKU. Baseline adaptado al catálogo singular. El presupuesto CSS de Inicio pasa de
 92.000 a 102.000 bytes para incorporar esta segunda sección; otras rutas conservan
 el margen anterior. La CI productiva completa debe verificar el candidato antes de main.
+
+La CI inicial detectó dos regresiones de la adaptación: se mantenían dos columnas
+dentro de una tarjeta de ancho máximo 380px, y la etiqueta implícita de un textarea
+incorporaba su valor al nombre accesible. Se fija una sola columna y se separa
+la etiqueta de Origen con htmlFor/id explícitos; se conservan las comprobaciones
+de imagen responsive y edición real con stock auditado.

@@ -1,5 +1,6 @@
 import {expect,test} from "@playwright/test";
 import {prisma,resetCheckoutFixture,loginCustomer} from "./checkout-fixture";
+test.use({actionTimeout:15000});
 test.afterAll(()=>prisma.$disconnect());
 test("single ROSH product: editable origin, price, traced stock and guest/account purchase",async({page,browser})=>{
  test.setTimeout(120000);const {product}=await resetCheckoutFixture();const original=await prisma.product.findUniqueOrThrow({where:{id:product.id}});

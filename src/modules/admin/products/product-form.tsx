@@ -54,10 +54,10 @@ export function ProductForm({ action, submitLabel, values = {} }: ProductFormPro
           <input name="shortDescription" maxLength={220} defaultValue={values.shortDescription ?? ""} placeholder="Texto breve para las tarjetas del catálogo" />
         </label>
 
-        <label className="adminField adminFieldWide">
-          <span>Descripción y origen *</span>
-          <textarea name="description" required minLength={10} maxLength={6000} rows={7} defaultValue={values.description ?? ""} placeholder="Describe el producto, origen, características y presentación." />
-        </label>
+        <div className="adminField adminFieldWide">
+          <label htmlFor="product-description">Descripción y origen *</label>
+          <textarea id="product-description" name="description" required minLength={10} maxLength={6000} rows={7} defaultValue={values.description ?? ""} placeholder="Describe el producto, origen, características y presentación." />
+        </div>
 
         <label className="adminField adminFieldWide">
           <span>Imagen principal</span>
