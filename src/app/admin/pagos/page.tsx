@@ -67,6 +67,7 @@ export default async function PaymentsAdminPage({ searchParams }: { searchParams
         <Link className="textLink" href="/admin">← Panel principal</Link>
       </div>
 
+      <nav aria-label="Secciones de pagos"><Link className="button buttonGhostLight" href="/admin/notificaciones">Confirmaciones de pago</Link></nav>
       {result && Object.hasOwn(operationMessages, result) ? <p role="status" className="adminCard">{operationMessages[result]}</p> : null}
 
       {payments.length === 0 ? (

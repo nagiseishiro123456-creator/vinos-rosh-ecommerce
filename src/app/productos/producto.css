@@ -1,0 +1,2 @@
+.productGrid.singleRoshProduct{grid-template-columns:minmax(0,1fr)}
+.singleRoshProduct .productImage{object-fit:contain}

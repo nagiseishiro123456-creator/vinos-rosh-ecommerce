@@ -9,7 +9,7 @@ test("S1-01: storefront baseline with a connected database", async ({ page, requ
 
   const screens = [
     { path: "/", heading: "ROSH · Vino de uvas sin alcohol", name: "01-home" },
-    { path: "/productos", heading: "Productos", name: "02-catalogo" },
+    { path: "/productos", heading: "Producto ROSH", name: "02-catalogo" },
     { path: "/productos/rosh-qa-botella-de-prueba", heading: "ROSH QA — Botella de prueba", name: "03-producto-qa" },
     { path: "/iniciar-sesion", heading: "Iniciar sesión", name: "04-acceso" },
   ];
@@ -20,9 +20,6 @@ test("S1-01: storefront baseline with a connected database", async ({ page, requ
       expect(response?.status()).toBe(200);
       await expect(page.getByRole("heading", { name: screen.heading, exact: true })).toBeVisible();
       if (screen.path === "/") await expect(page.locator(".roshLanding")).toHaveAttribute("data-phase", "final", { timeout: 10_000 });
-      if (screen.name === "02-catalogo") {
-        await expect(page.getByRole("heading", { name: "ROSH QA — Botella de prueba", exact: true })).toBeVisible();
-      }
       if (screen.name === "03-producto-qa") {
         await expect(page.locator(".productMainImage img")).toBeVisible();
         await expect.poll(() => page.locator(".productMainImage img").evaluate(

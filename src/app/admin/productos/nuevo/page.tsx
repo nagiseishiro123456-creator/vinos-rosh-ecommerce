@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getRoshProduct } from "@/modules/products/single-product";
 
 import { requireAdmin } from "@/modules/admin/auth";
 import { createProduct } from "@/modules/admin/products/actions";
@@ -17,6 +19,7 @@ function statusMessage(status?: string) {
 
 export default async function NewProductPage({ searchParams }: NewProductPageProps) {
   await requireAdmin("/admin/productos/nuevo");
+  if (await getRoshProduct()) redirect("/admin/producto");
   const { status } = await searchParams;
   const message = statusMessage(status);
 
@@ -34,7 +37,7 @@ export default async function NewProductPage({ searchParams }: NewProductPagePro
       {message ? <div className="adminAlert error">{message}</div> : null}
 
       <section className="adminPanel">
-        <ProductForm action={createProduct} submitLabel="Crear producto" />
+        <ProductForm action={createProduct} submitLabel="Crear producto ROSH" values={{active:false,imageUrl:"/media/rosh/landing-2/bottle-up.png",sku:"ROSH-750",name:"ROSH · Zumo de uva 750 ml"}} />
       </section>
     </main>
   );

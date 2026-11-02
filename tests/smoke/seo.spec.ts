@@ -16,6 +16,8 @@ test("S5: product and catalog have canonical share metadata and responsive image
   expect(image.requested).toBeGreaterThanOrEqual(image.rendered * image.dpr * .9);
   expect(image.requested).toBeLessThanOrEqual(image.rendered * image.dpr * 1.25);
   // A cold context keeps a previously cached hero from deciding the thumbnail request.
+  const priorSku = (await prisma.product.findUniqueOrThrow({where:{id:product.id}})).sku;
+  await prisma.product.update({where:{id:product.id},data:{sku:"ROSH-750"}});
   const catalogContext = await browser.newContext({ viewport: { width: 700, height: 900 }, isMobile: info.project.use.isMobile, hasTouch: info.project.use.hasTouch });
   try {
     const catalog = await catalogContext.newPage(); await catalog.goto("/productos");
@@ -27,7 +29,7 @@ test("S5: product and catalog have canonical share metadata and responsive image
     await expect(catalog.locator('link[rel="canonical"]')).toHaveAttribute("href", `${origin}/productos`);
     await expect(catalog.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await catalog.screenshot({ path: info.outputPath("s5-catalogo-responsive.png"), fullPage: true });
-  } finally { await catalogContext.close(); }
+  } finally { await catalogContext.close(); await prisma.product.update({where:{id:product.id},data:{sku:priorSku}}); }
 });
 test("S5: request-scoped product reuse does not keep stale metadata or availability across requests", async ({ page }) => {
   const { product } = await resetCheckoutFixture();

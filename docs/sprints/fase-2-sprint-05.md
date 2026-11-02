@@ -51,3 +51,10 @@ aceptación del cliente quedan pendientes. No se activan pagos, correo, trackers
 
 [Contrato](../integraciones/rendimiento-seo.md) · [QA](../testing/sprint-05-rendimiento-seo.md)
 · [Guía de prueba](../guia-prueba-sprint-05.md).
+
+
+## S5-07 — Segunda landing y producto único (2026-11-01)
+
+Scroll de llenado 0–750 ml, compra y detalles; precio y origen editables en Producto.
+Categorías fuera de la navegación; inventario en Producto y confirmaciones desde Pagos.
+[Alcance, configuración y QA](../diseno/landing-2/README.md).

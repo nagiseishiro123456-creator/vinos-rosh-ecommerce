@@ -513,3 +513,10 @@ Los puntos de aceptación funcional y el entorno comercial se refinan con el Pro
   memoria durante la visita; cerrar/recargar recupera el carrito de BD y no reenvía una intención nueva.
 - Los chunks solicitados al abrir el panel se miden en QA; eso no constituye medición de
   Core Web Vitals. Revisión manual con lector de pantalla, zoom y otros motores pendiente.
+
+
+## S5-07 — Segunda landing y producto único (2026-11-01)
+
+Scroll de llenado 0–750 ml, compra y detalles; precio y origen editables en Producto.
+Categorías fuera de la navegación; inventario en Producto y confirmaciones desde Pagos.
+[Alcance, configuración y QA](diseno/landing-2/README.md).

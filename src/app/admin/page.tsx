@@ -10,7 +10,7 @@ export default async function AdminPage() {
   await requireAdmin("/admin");
 
   const [activeProducts, customers, paymentReviewOrders, fulfillmentOrders, pendingReviews, newContacts] = await Promise.all([
-    prisma.product.count({ where: { active: true } }),
+    prisma.product.count({ where: { active: true, sku: "ROSH-750" } }),
     prisma.user.count({ where: { role: UserRole.CUSTOMER } }),
     prisma.order.count({ where: { status: OrderStatus.PAYMENT_REVIEW } }),
     prisma.order.count({ where: { status: { in: [OrderStatus.PAID, OrderStatus.PREPARING, OrderStatus.SHIPPED] } } }),
@@ -19,13 +19,10 @@ export default async function AdminPage() {
   ]);
 
   const modules = [
-    { title: "Productos", description: "Catálogo, precio, imágenes y visibilidad.", href: "/admin/productos" },
-    { title: "Categorías", description: "Organización del catálogo y filtros públicos.", href: "/admin/categorias" },
-    { title: "Inventario", description: "Stock real y alertas de disponibilidad.", href: "/admin/inventario" },
+    { title: "Producto", description: "Producto ROSH, precio, origen e inventario.", href: "/admin/producto" },
     { title: "Pedidos", description: "Preparación, envío y confirmación de entrega.", href: "/admin/pedidos" },
     { title: "Clientes", description: "Cuentas registradas, pedidos, direcciones y reseñas.", href: "/admin/clientes" },
     { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi opcional.", href: "/admin/pagos" },
-    { title: "Confirmaciones", description: "Cola de correos de pagos aprobados, vistas previas y recuperación de envíos.", href: "/admin/notificaciones" },
     { title: "Conciliación", description: "Comisiones, neto esperado, abonos verificados y diferencias de pagos manuales.", href: "/admin/conciliacion" },
     { title: "Envíos", description: "Tarifas administrables por distrito usadas por el checkout.", href: "/admin/envios" },
     { title: "Reseñas", description: "Moderación de opiniones de compras entregadas y verificadas.", href: "/admin/resenas" },
@@ -49,7 +46,7 @@ export default async function AdminPage() {
       </div>
 
       <section className="adminDashboardStats">
-        <article><span>Productos visibles</span><strong>{activeProducts}</strong></article>
+        <article><span>Producto publicado</span><strong>{activeProducts}</strong></article>
         <article><span>Clientes</span><strong>{customers}</strong></article>
         <article className={paymentReviewOrders > 0 ? "attention" : ""}><span>Pagos por revisar</span><strong>{paymentReviewOrders}</strong></article>
         <article className={fulfillmentOrders > 0 ? "attention" : ""}><span>Pedidos en proceso</span><strong>{fulfillmentOrders}</strong></article>

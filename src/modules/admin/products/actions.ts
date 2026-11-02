@@ -23,6 +23,7 @@ const allowedImageHosts = new Set([
 const imageUrlSchema = z.string().trim().refine((value) => {
   if (!value) return true;
   if (/^\/products\/[a-z0-9-]+\.webp$/.test(value)) return true;
+  if (value === "/media/rosh/landing-2/bottle-up.png") return true;
 
   try {
     const url = new URL(value);
