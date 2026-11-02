@@ -20,6 +20,7 @@ export default async function AdminPage() {
 
   const modules = [
     { title: "Producto", description: "Producto ROSH, precio, origen e inventario.", href: "/admin/producto" },
+    { title: "Nuestra historia", description: "Textos, fotografías y encuadres de la página de historia.", href: "/admin/historia" },
     { title: "Pedidos", description: "Preparación, envío y confirmación de entrega.", href: "/admin/pedidos" },
     { title: "Clientes", description: "Cuentas registradas, pedidos, direcciones y reseñas.", href: "/admin/clientes" },
     { title: "Pagos", description: "Revisión manual de Yape/transferencias y, luego, Culqi opcional.", href: "/admin/pagos" },

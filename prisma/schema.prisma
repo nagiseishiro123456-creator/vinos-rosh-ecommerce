@@ -141,6 +141,21 @@ model CommerceSettings {
   updatedAt DateTime @updatedAt
 }
 
+model HistoryPage {
+  id        String   @id
+  content   Json     @db.JsonB
+  revision  Int      @default(1)
+  updatedAt DateTime @default(now()) @db.Timestamp(3)
+}
+
+model StoryImage {
+  id        String   @id @db.Uuid
+  data      Bytes
+  width     Int
+  height    Int
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+}
+
 model Address {
   id           String   @id @default(cuid())
   userId       String

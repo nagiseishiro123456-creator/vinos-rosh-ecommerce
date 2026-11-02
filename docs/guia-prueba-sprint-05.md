@@ -36,3 +36,25 @@ su propia medición una vez exista el entorno definitivo.
 «La tienda conserva su presentación y descarga menos estilos que solo necesita el panel
 administrativo. Los enlaces de los productos llevan su propia información para compartir.
 Las pantallas de cuenta y compra siguen excluidas de indexación.»
+
+## Nuestra historia — mejora S5-09
+
+1. Abre `/nuestra-historia`: revisa cabecera, datos, tres capítulos, cuatro fotos y
+   enlaces finales. Comprueba también móvil y la preferencia claro/oscuro del sistema.
+2. Entra como administrador a Panel → Nuestra historia (`/admin/historia`). Cambia
+   el título y un párrafo, pulsa **Guardar historia e imágenes** y comprueba el
+   mensaje con check. Recarga la página pública para ver los textos publicados.
+3. En Fotografías, elige JPG, PNG o WebP de hasta 6 MB; espera «Foto preparada».
+   Ajusta descripción y encuadre, guarda y comprueba la foto en la página pública.
+   Recarga también el editor: debe conservar texto y foto. «Usar foto original»
+   prepara la restauración; hay que guardar para aplicarla.
+4. Vacía un título obligatorio e intenta guardar: debe enfocar el campo. Los
+   campos de variedad/cosecha y elaboración pueden quedar vacíos; no muestran
+   instrucciones provisionales al visitante.
+5. Para comprobar conflictos, abre el editor en dos pestañas. Guarda en la primera
+   e intenta guardar en la segunda: debe avisar de la edición más reciente.
+   Copia tus cambios antes de volver a abrir la página y aplicarlos sobre esa versión.
+
+Para el cliente: «En Nuestra historia puedes actualizar textos y fotos sin tocar
+el código. Preparas los cambios, guardas y recibes la confirmación; al recargar la
+página pública se ve la nueva versión.»

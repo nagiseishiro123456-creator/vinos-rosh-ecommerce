@@ -19,6 +19,8 @@ export async function buildBusinessBackup() {
     orderEvents,
     paymentReconciliations,
     paymentSettlements,
+    historyPages,
+    storyImages,
   ] = await prisma.$transaction([
     prisma.user.findMany({
       orderBy: { createdAt: "asc" },
@@ -54,12 +56,14 @@ export async function buildBusinessBackup() {
       SELECT "id"::text, "paymentId", "grossAmount"::text, "commissionAmount"::text, "depositedAmount"::text,
         "depositReference", to_char("depositDate", 'YYYY-MM-DD') AS "depositDate", "sourceReference", "revision", "createdAt", "updatedAt"
       FROM "PaymentSettlement" ORDER BY "createdAt", "id"`,
+    prisma.$queryRaw<Array<{ id: string; content: Prisma.JsonValue; revision: number; updatedAt: Date }>>`SELECT "id", "content", "revision", "updatedAt" FROM "HistoryPage" ORDER BY "id"`,
+    prisma.$queryRaw<Array<{ id: string; dataBase64: string; width: number; height: number; createdAt: Date }>>`SELECT "id"::text, encode("data", 'base64') AS "dataBase64", "width", "height", "createdAt" FROM "StoryImage" ORDER BY "createdAt", "id"`,
   ], { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
 
   return {
     meta: {
       format: "vinos-rosh-business-backup",
-      version: 3,
+      version: 4,
       generatedAt: new Date().toISOString(),
       excludes: [
         "passwordHash",
@@ -84,5 +88,7 @@ export async function buildBusinessBackup() {
     orderEvents,
     paymentReconciliations,
     paymentSettlements,
+    historyPages,
+    storyImages,
   };
 }
