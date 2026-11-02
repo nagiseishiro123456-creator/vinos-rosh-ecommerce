@@ -1,35 +1,65 @@
-.adminDashboardStats {
-  margin: 0 0 28px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 12px;
-}
-
-.adminDashboardStats article {
-  padding: 18px;
-  display: grid;
-  gap: 5px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: white;
-  box-shadow: 0 10px 30px rgba(66, 31, 24, .04);
-}
-
-.adminDashboardStats article.attention {
-  border-color: #e4d4a9;
-  background: #fffaf0;
-}
-
-.adminDashboardStats span {
-  color: var(--muted);
-  font-size: .76rem;
-}
-
-.adminDashboardStats strong {
-  font-family: var(--font-display);
-  font-size: 1.85rem;
-}
-
-.adminDashboardStats article.attention strong {
-  color: #78551d;
-}
+.adminOverview .adminOverviewDate { color: #93889f; margin-left: 8px; }
+.adminOverview .adminTopbar .button { gap: 12px; }
+.adminOverviewHeading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 22px 0 16px; }
+.adminOverviewHeading > p { margin: 0; font-size: .85rem; font-weight: 600; }
+.adminOverviewHeading > p > span { color: #958a9f; font-size: .7rem; font-weight: 400; margin-left: 10px; }
+.adminPeriodTabs { display: flex; padding: 3px; border: 1px solid #e4ddea; border-radius: 7px; background: white; }
+.adminPeriodTabs a { min-height: 32px; padding: 7px 13px; font-size: .72rem; line-height: 1.5; border-radius: 5px; color: #8c7c98; white-space: nowrap; }
+.adminPeriodTabs a[aria-current=page] { color: white; background: #4b1c71; box-shadow: 0 2px 4px #4b1c7114; }
+.adminDashboardStats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-bottom: 24px; }
+.adminMetricCard { min-width: 0; padding: 20px 22px; display: flex; flex-direction: column; align-items: flex-start; border: 1px solid #e9e6ee; border-radius: 10px; background: white; box-shadow: 0 2px 8px #24113204; transition: border-color .15s, box-shadow .15s; }
+.adminMetricCard:hover { border-color: #cfb7e1; box-shadow: 0 5px 20px #4b1c7109; }
+.adminMetricCard > div { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 15px; }
+.adminMetricIcon { width: 39px; height: 39px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 8px; }
+.adminMetricIcon.violet { background: #f1e9f8; color: #7946a1; }
+.adminMetricIcon.blue { background: #e9f2fc; color: #4e8bc7; }
+.adminMetricIcon.green { background: #eaf7f0; color: #4e9d75; }
+.adminMetricIcon.amber { background: #fff5e5; color: #ba883e; }
+.adminMetricArrow { color: #b5a9c0; }
+.adminMetricLabel { color: #84798e; font-size: .78rem; }
+.adminMetricCard > strong { color: #3a2d46; font-size: clamp(1.55rem, 2.4vw, 2rem); line-height: 1.3; font-weight: 600; letter-spacing: -.045em; margin-block: 5px 7px; overflow-wrap: anywhere; }
+.adminMetricCard small { font-size: .65rem; line-height: 1.5; color: #93859d; }
+.adminOverviewGrid { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 24px; }
+.adminDashboardCard { min-width: 0; border: 1px solid #e9e6ee; border-radius: 10px; background: white; padding: 24px; box-shadow: 0 2px 8px #24113204; }
+.adminCardHeading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.adminOverview .adminCardHeading h2 { font-size: .98rem; margin: 0 0 5px; font-weight: 600; }
+.adminCardHeading p { margin: 0; color: #9689a1; font-size: .7rem; }
+.adminCardHeading > a { display: inline-flex; align-items: center; gap: 7px; font-size: .72rem; color: #82559d; white-space: nowrap; }
+.adminLegend { display: flex; align-items: center; gap: 6px; padding-top: 4px; color: #93829e; font-size: .6rem; white-space: nowrap; }
+.adminLegend i { width: 6px; height: 6px; border-radius: 50%; background: #75459b; }
+.adminOrderChart { width: 100%; margin: 25px 0 7px; }
+.adminOrderChart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.adminOrderChart text { fill: #a395af; font-family: var(--font-body); font-size: 11px; }
+.adminChartEmpty { min-height: 230px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.adminChartEmpty > span { width: 54px; height: 54px; display: grid; place-items: center; background: #f6f2fa; color: #b69bca; border-radius: 50%; margin-bottom: 16px; }
+.adminChartEmpty strong { color: #776287; font-size: .8rem; font-weight: 500; }
+.adminChartEmpty p { max-width: 320px; color: #a08fab; font-size: .72rem; margin: 8px 0 0; }
+.adminChartData { margin-top: 12px; }
+.adminChartData summary { color: #8d729f; font-size: .68rem; cursor: pointer; padding-block: 5px; }
+.adminChartData .adminTableWrap { max-height: 270px; overflow: auto; margin-top: 12px; }
+.adminMetricFootnote { margin: 10px 0 0; font-size: .63rem; line-height: 1.7; color: #a18eae; }
+.adminProductSummary { display: flex; flex-direction: column; }
+.adminProductSummary .adminCardHeading { align-items: center; }
+.adminProductSummary .adminBadge { margin: 0; }
+.adminProductVisual { position: relative; display: flex; align-items: center; justify-content: center; min-height: 160px; margin: 14px 0 6px; background: radial-gradient(ellipse at center, #f5eefb 0%, white 65%); }
+.adminProductVisual img { width: 78px; height: 160px; object-fit: contain; }
+.adminOverview .adminProductSummary h3 { margin: 8px 0 14px; font-size: .88rem; font-weight: 600; text-align: center; }
+.adminProductFacts { display: flex; justify-content: space-around; text-align: center; border-top: 1px solid #f0ebf5; padding-top: 14px; gap: 16px; }
+.adminProductFacts span { color: #a190ac; font-size: .65rem; }.adminProductFacts strong { display: block; color: #6b537e; font-size: .8rem; font-weight: 600; margin-top: 5px; }
+.adminProductSummary .button { width: 100%; gap: 10px; margin-top: 18px; }
+.adminPendingGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+.adminPendingCard { display: flex; align-items: center; gap: 12px; padding: 18px 15px; min-width: 0; border: 1px solid #e9e6ee; background: white; border-radius: 9px; }
+.adminPendingCard:hover { border-color: #cfb7e1; }.adminPendingCard > div { min-width: 0; }.adminPendingCard > svg { color: #b9adbf; margin-left: auto; flex: 0 0 auto; }
+.adminPendingCard strong { font-size: .87rem; font-weight: 600; color: #685278; }.adminPendingCard strong span { font-size: .71rem; font-weight: 400; }.adminPendingCard small { display: block; font-size: .61rem; color: #a090ac; margin-top: 4px; }
+.adminRecentOrders { padding: 0; overflow: hidden; }
+.adminRecentOrders .adminCardHeading { padding: 24px; }
+.adminRecentOrders .adminTableWrap { margin: 0; max-width: 100%; border: 0; border-top: 1px solid #e9e6ee; border-radius: 0; }
+.adminOverview .adminRecentOrders .adminTable td { font-size: .73rem; }.adminRecentOrders td:last-child a { display: inline-flex; align-items: center; gap: 5px; }
+.adminOverviewEmpty { display: grid; justify-items: center; gap: 8px; text-align: center; padding: 38px 20px; color: #aa92bb; }.adminOverviewEmpty strong { font-size: .88rem; font-weight: 500; color: #7f6591; }.adminOverviewEmpty p { margin: 0; color: #a593b0; font-size: .75rem; }.adminOverviewEmpty a { display: inline-flex; align-items: center; gap: 8px; color: #7d509a; font-size: .73rem; margin-top: 8px; }
+.adminQuickLinks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
+.adminQuickLinks > a { display: flex; align-items: center; gap: 12px; padding: 20px; color: #8c6ca1; border: 1px solid #e9e6ee; border-radius: 9px; background: white; }
+.adminQuickLinks > a:hover { border-color: #cfb7e1; }.adminQuickLinks > a > svg { flex: 0 0 auto; }.adminQuickLinks > a > svg:last-child { margin-left: auto; color: #b0a0bc; }
+.adminQuickLinks span { font-size: .74rem; color: #766080; }.adminQuickLinks small { display: block; margin-top: 4px; font-size: .64rem; color: #ab99b6; }
+@media (max-width: 1279px) { .adminDashboardStats { gap: 15px; }.adminMetricCard { padding: 18px; }.adminPendingGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.adminQuickLinks { gap: 16px; }.adminQuickLinks > a { padding: 16px; }.adminLegend { display: none; } }
+@media (max-width: 767px) { .adminDashboardStats { grid-template-columns: repeat(2, minmax(0, 1fr)); }.adminOverviewGrid { grid-template-columns: 1fr; gap: 20px; }.adminProductSummary { display: grid; grid-template-columns: 100px minmax(0, 1fr); column-gap: 18px; }.adminProductSummary .adminCardHeading { grid-column: 1 / -1; margin-bottom: 12px; }.adminProductVisual { grid-row: span 3; min-height: 140px; margin: 0; }.adminProductVisual img { height: 150px; width: 74px; }.adminOverview .adminProductSummary h3 { text-align: left; }.adminProductFacts { justify-content: space-between; text-align: left; }.adminProductSummary .button { margin-top: 12px; }.adminQuickLinks { grid-template-columns: 1fr; gap: 12px; }.adminOverviewHeading > p > span { display: none; }.adminOverview .adminOverviewDate { display: block; margin: 4px 0 0; } }
+@media (max-width: 639px) { .adminDashboardCard { padding: 18px; }.adminRecentOrders { padding-bottom: 0; }.adminRecentOrders .adminTableWrap { margin-inline: -18px; }.adminMetricCard { padding: 16px; }.adminMetricCard small { font-size: .63rem; }.adminOverviewHeading { gap: 10px; }.adminOverviewHeading > p { font-size: .78rem; }.adminPeriodTabs a { padding-inline: 10px; font-size: .68rem; }.adminPendingCard { padding: 14px; gap: 10px; }.adminPendingCard > svg { display: none; }.adminPendingCard .adminMetricIcon { width: 32px; height: 32px; }.adminPendingCard strong { display: block; line-height: 1.5; }.adminPendingCard strong span { display: block; font-size: .67rem; }.adminPendingCard small { display: none; }.adminChartEmpty { min-height: 200px; }.adminOrderChart { margin-top: 24px; }.adminOrderChart svg { min-height: 150px; }.adminProductSummary { grid-template-columns: 78px minmax(0, 1fr); column-gap: 13px; }.adminProductSummary .adminCardHeading h2 { font-size: .94rem; }.adminProductSummary .adminCardHeading p { font-size: .64rem; }.adminProductVisual img { width: 67px; height: 145px; }.adminProductFacts { gap: 8px; }.adminProductSummary .button { font-size: .73rem; padding-inline: 10px; }.adminOverview .adminCardHeading h2 { font-size: .94rem; } }
