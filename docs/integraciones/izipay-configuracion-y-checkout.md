@@ -65,8 +65,9 @@ QR depende de lo que Izipay habilite en Smart Form; no se fabrica un QR propio d
 ## Resultados, concurrencia y dinero de prueba
 
 `POST /api/payment/webhook` recibe formulario URL-encoded, sin cookie/Origin del comercio,
-y exige `kr-answer`, `kr-hash`, `kr-hash-algorithm=sha256_hmac`,
-`kr-hash-key=password` y `kr-answer-type=V4/Payment`, sin duplicados de esos campos.
+y exige un único `kr-answer` y `kr-hash`. Los metadatos, si se incluyen, deben ser
+`kr-hash-algorithm=sha256_hmac`, `kr-hash-key=password` y `kr-answer-type=V4/Payment`,
+sin duplicados. La ausencia de metadatos no cambia el algoritmo ni la clave fijados por el servidor.
 Verifica el texto recibido con la contraseña REST de la versión del intento. La entrada
 tiene límite de bytes/plazo y presupuesto; los fallos no reproducen datos privados.
 

@@ -49,8 +49,11 @@ export function createIzipayNotificationHandler(source: "browser" | "ipn", optio
         ({ rawClientAnswer: raw, hash, orderId } = parsed.data);
       } else {
         const params = new URLSearchParams(text);
-        for (const key of ["kr-answer", "kr-hash", "kr-hash-algorithm", "kr-hash-key", "kr-answer-type"]) if (params.getAll(key).length !== 1) return respond(400);
-        if (params.get("kr-hash-algorithm") !== "sha256_hmac" || params.get("kr-hash-key") !== "password" || params.get("kr-answer-type") !== "V4/Payment") return respond(400);
+        for (const key of ["kr-answer", "kr-hash"]) if (params.getAll(key).length !== 1) return respond(400);
+        // The route fixes HMAC-SHA256 + REST password. Optional metadata can never select another algorithm/key.
+        for (const [key, expected] of [["kr-hash-algorithm", "sha256_hmac"], ["kr-hash-key", "password"], ["kr-answer-type", "V4/Payment"]]) {
+          if (params.getAll(key).length > 1 || (params.has(key) && params.get(key) !== expected)) return respond(400);
+        }
         raw = params.get("kr-answer")!; hash = params.get("kr-hash")!;
       }
       if (request.signal.aborted) return respond(408);

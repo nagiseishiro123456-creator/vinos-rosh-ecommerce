@@ -28,7 +28,9 @@ test('Izipay IPN accepts no cookie requirement but rejects duplicated fields or 
   const post=(params:URLSearchParams)=>handler(new Request('https://rosh.example.test/api/payment/webhook',{method:'POST',body:params}));
   assert.equal((await post(body)).status,200);body.append('kr-answer','another');assert.equal((await post(body)).status,400);
   body.delete('kr-answer');body.set('kr-answer','one');body.set('kr-hash-key','sha256_hmac');assert.equal((await post(body)).status,400);
-  assert.equal(calls,1);
+  body.delete('kr-hash-key');body.delete('kr-hash-algorithm');body.delete('kr-answer-type');
+  assert.equal((await post(body)).status,200); // The official minimal answer/hash contract does not change the server-selected key.
+  assert.equal(calls,2);
 });
 test('Izipay notifications enforce byte limits and never expose sensitive exception messages',async()=>{
   let calls=0;
