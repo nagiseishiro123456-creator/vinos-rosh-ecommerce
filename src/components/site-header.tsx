@@ -79,14 +79,14 @@ export function SiteHeader({
 
           <nav className="desktopNav" aria-label="Navegación principal">
             <Link href="/#inicio">Inicio</Link>
-            <Link href="/productos">Productos</Link>
+            <Link href="/productos">Producto</Link>
             <Link href="/envios">Envíos</Link>
             <Link href="/nuestra-historia">Nuestra historia</Link>
             <Link href="/contacto">Contacto</Link>
           </nav>
 
           <div className="headerActions">
-            <Link className="iconButton desktopOnly" href="/productos" aria-label="Buscar productos">
+            <Link className="iconButton desktopOnly" href="/productos" aria-label="Ver producto">
               <Search size={19} aria-hidden="true" />
             </Link>
             <Link className="iconButton desktopOnly" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
@@ -117,7 +117,7 @@ export function SiteHeader({
         {menuOpen ? (
           <nav id="mobile-navigation" className="mobileNav" aria-label="Navegación móvil">
             <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
-            <Link href="/productos" onClick={() => setMenuOpen(false)}>Buscar y ver productos</Link>
+            <Link href="/productos" onClick={() => setMenuOpen(false)}>Ver producto</Link>
             <Link href="/envios" onClick={() => setMenuOpen(false)}>Cobertura y tarifas de envío</Link>
             <Link href="/nuestra-historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
             <Link href="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
@@ -135,7 +135,7 @@ export function SiteHeader({
         </Link>
         <Link href="/productos">
           <Grape size={20} aria-hidden="true" />
-          <span>Productos</span>
+          <span>Producto</span>
         </Link>
         <Link className="mobileBottomCart" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart}>
           <span className="mobileBottomCartIcon">

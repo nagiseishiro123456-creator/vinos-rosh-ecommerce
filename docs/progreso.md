@@ -1,5 +1,13 @@
 # Punto de avance
 
+## S5-08 — Ficha única, stock y textos editables
+
+Admin → Producto funciona sin crear otro registro por separado. Guarda stock, precio
+y textos de la landing; la compra se habilita con precio positivo y publicación.
+Cantidad visible y limitada por stock/selección, usando el carrito compartido.
+Migración aditiva de contenido opcional, aplicada en desarrollo.
+
+
 ## Sprint 5 — Mejoras de la landing original (2026-11-01, America/Lima)
 
 - Base main 12d4f4e: #26 integrado con jose-israel, 311 servidor y 102 navegador.

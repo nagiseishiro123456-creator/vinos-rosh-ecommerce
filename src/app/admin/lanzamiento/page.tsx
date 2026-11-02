@@ -49,7 +49,7 @@ export default async function LaunchReadinessPage() {
       <p className="eyebrow wine">RECORRIDO GUIADO</p><h2 id="prueba-cliente-titulo">Compra de prueba con el cliente</h2>
       <p>Usa un entorno de prueba y datos ficticios. Mantén abierta la administración y realiza la compra con una cuenta de prueba en otra ventana privada. El recorrido puede reservar stock de prueba; no hagas transferencias reales.</p>
       <ol className="launchSteps">
-        <li><strong>Preparar:</strong> revisa un <Link href="/admin/productos">producto de prueba</Link>, su stock y una <Link href="/admin/envios">zona de entrega</Link> configurada.</li>
+        <li><strong>Preparar:</strong> revisa un <Link href="/admin/producto">producto de prueba</Link>, su stock y una <Link href="/admin/envios">zona de entrega</Link> configurada.</li>
         <li><strong>Comprar:</strong> abre el <Link href="/productos">catálogo</Link>, añade al carrito y entra con la cuenta de prueba.</li>
         <li><strong>Revisar y reservar:</strong> comprueba dirección, indicaciones, envío y total antes de confirmar. Conserva el número de pedido.</li>
         <li><strong>Gestionar:</strong> revisa el pedido en <Link href="/admin/pedidos">Pedidos</Link> y el estado en <Link href="/admin/pagos">Pagos</Link>. En una prueba aislada puedes simular la revisión; un pago real solo se aprueba después de comprobar el ingreso.</li>

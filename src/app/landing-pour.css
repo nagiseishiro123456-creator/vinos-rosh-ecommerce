@@ -96,3 +96,8 @@
 @media(max-width:390px){.roshPour .qty button{width:44px}.roshPour .qty output{min-width:24px}.roshPour .row{gap:10px}.roshPour .buybtn{font-size:.78rem;letter-spacing:.14em;white-space:nowrap;min-height:54px}.roshPour .price.pendingPrice{font-size:1.9rem}}
 
 .roshLanding[data-night="true"] .landingLogin:hover{background:#f3e8fb}
+
+.roshPour .qty input{width:40px;height:54px;border:0;background:transparent;color:var(--ink);text-align:center;font:500 1.05rem var(--ui);appearance:textfield}.roshPour .qty input::-webkit-inner-spin-button{appearance:none}
+
+.roshPour #pbuy{max-height:calc(100svh - 116px);overflow-y:auto;scrollbar-width:thin}.roshPour .buybtn{overflow-wrap:anywhere;white-space:normal}
+@media(max-width:820px){.roshPour #pbuy{max-height:calc(100svh - 380px)}}

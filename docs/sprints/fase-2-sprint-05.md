@@ -58,3 +58,14 @@ aceptación del cliente quedan pendientes. No se activan pagos, correo, trackers
 Scroll de llenado 0–750 ml, compra y detalles; precio y origen editables en Producto.
 Categorías fuera de la navegación; inventario en Producto y confirmaciones desde Pagos.
 [Alcance, configuración y QA](../diseno/landing-2/README.md).
+
+
+## S5-08 — Producto único operativo y textos editables
+
+Se elimina la creación/edición separada de productos en el administrador: sus rutas
+antiguas redirigen a Producto. Una sola ficha permite guardar un borrador sin precio,
+stock auditado, habilitación de compra y todos los textos de la segunda landing.
+La compra requiere precio positivo confirmado, publicación y stock. Cantidad numérica
+con botones y límites según existencias y selección actual, usando el carrito existente.
+Migración aditiva: Product.landingContent JSONB nullable; los datos previos se conservan
+y reciben textos predeterminados hasta guardar cambios.

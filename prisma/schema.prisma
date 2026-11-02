@@ -179,6 +179,7 @@ model Category {
 }
 
 model Product {
+  landingContent   Json?
   id               String   @id @default(cuid())
   categoryId       String?
   name             String

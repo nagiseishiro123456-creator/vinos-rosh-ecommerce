@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccountCart, useCartPanel } from "@/components/cart-provider";
 import { useGuestCart } from "@/components/guest-cart-provider";
+import type { LandingCopy } from "@/modules/products/landing-content";
 import { formatPrice } from "@/lib/money";
 
 export type PourProduct = {id:string;price:string;stock:number;origin:string};
 const clamp=(v:number)=>Math.min(1,Math.max(0,v));
 const ease=(v:number)=>.5-.5*Math.cos(Math.PI*clamp(v));
-export function PourLanding({product,userId}:{product:PourProduct|null;userId:string|null}){
+export function PourLanding({product,userId,copy}:{product:PourProduct|null;userId:string|null;copy:LandingCopy}){
  const section=useRef<HTMLDivElement>(null);const [quantity,setQuantity]=useState(1);const [busy,setBusy]=useState(false);
  const lock=useRef(false);const guest=useGuestCart();const account=useAccountCart();const panel=useCartPanel();const router=useRouter();
  useEffect(()=>{
@@ -38,13 +39,16 @@ export function PourLanding({product,userId}:{product:PourProduct|null;userId:st
   page?.addEventListener("rosh:scroll",paint);window.addEventListener("resize",paint);reduced.addEventListener("change",paint);paint();
   return ()=>{page?.removeEventListener("rosh:scroll",paint);window.removeEventListener("resize",paint);reduced.removeEventListener("change",paint);delete page?.dataset.night;};
  },[]);
+ const selected=product?(userId?account.data?.items:guest.items)?.find(item=>item.productId===product.id)?.quantity??0:0;
+ const limit=product?Math.max(0,Math.min(12,product.stock-selected)):12;
+ const amount=Math.min(quantity,Math.max(1,limit));
  async function add(trigger:HTMLButtonElement){
-  if(!product||lock.current)return;
+  if(!product||lock.current||!limit)return;
   if(panel.userId!==userId){router.refresh();return;}
   if(userId&&(guest.items.length||guest.pending)){router.push("/carrito");return;}
   lock.current=true;setBusy(true);
   try{
-   for(let i=0;i<quantity;i++){
+   for(let i=0;i<amount;i++){
     if(userId){if(!await account.command({action:"add",productId:product.id}))break;}
     else await guest.add(product.id);
    }
@@ -62,16 +66,17 @@ export function PourLanding({product,userId}:{product:PourProduct|null;userId:st
  {/* eslint-disable-next-line @next/next/no-img-element */}
  <img className="full" src="/media/rosh/landing-2/bottle-up.png" alt="" width="304" height="1247" loading="lazy"/><div className="surf"/>
  </div>
- <div id="pvol" aria-hidden="true"><span className="eyebrow">Sirviendo</span><b><span id="pml">0</span><small>ml</small></b></div>
- <div id="pbuy"><span className="eyebrow">Fina selección familiar</span><h2>Una sola botella.<br/>Un solo vino.</h2><div className="sub">Zumo de uva sin alcohol · 750 ml</div>
- <ul className="chips"><li>100% natural</li><li>750 ml</li><li>0% alcohol</li></ul>
+ <div id="pvol" aria-hidden="true"><span className="eyebrow">{copy.pourLabel}</span><b><span id="pml">0</span><small>ml</small></b></div>
+ <div id="pbuy"><span className="eyebrow">{copy.eyebrow}</span><h2 style={{whiteSpace:"pre-line"}}>{copy.headline}</h2><div className="sub">{copy.subtitle}</div>
+ <ul className="chips">{copy.features.split("\n").filter(Boolean).map((text,i)=><li key={i}>{text}</li>)}</ul>
  <div className={product?"price":"price pendingPrice"}>{product?formatPrice(product.price):"Próximamente"}</div>
- <div className="row"><div className="qty"><button type="button" aria-label="Quitar una unidad" disabled={busy||quantity<=1} onClick={()=>setQuantity(q=>Math.max(1,q-1))}>−</button><output aria-label="Cantidad">{quantity}</output><button type="button" aria-label="Agregar una unidad" disabled={busy||quantity>=Math.min(12,product?.stock??12)} onClick={()=>setQuantity(q=>Math.min(12,q+1))}>+</button></div>
- <button className="buybtn" type="button" disabled={!product||product.stock<1||busy||Boolean(account.pending)||(!userId&&!guest.ready)} onClick={e=>void add(e.currentTarget)}>{busy?"Agregando…":product?.stock===0?"Agotado":"Comprar ahora"}</button></div>
+ <p className="sub">Cantidad de botellas</p><div className="row"><div className="qty"><button type="button" aria-label="Quitar una unidad" disabled={busy||amount<=1} onClick={()=>setQuantity(q=>Math.max(1,q-1))}>−</button><input disabled={busy||!limit} aria-label="Cantidad de botellas" type="number" min="1" max={Math.max(1,limit)} value={amount} onChange={e=>setQuantity(Math.max(1,Math.min(Math.max(1,limit),Math.trunc(Number(e.target.value)||1))))}/><button type="button" aria-label="Agregar una unidad" disabled={busy||amount>=limit} onClick={()=>setQuantity(q=>Math.min(Math.max(1,limit),q+1))}>+</button></div>
+ <button className="buybtn" type="button" disabled={!product||!limit||busy||Boolean(account.pending)||(!userId&&!guest.ready)} onClick={e=>void add(e.currentTarget)}>{busy?"Agregando…":product?.stock===0?"Agotado":copy.buyLabel}</button></div>
+ {product&&<p className="sub" role="status">{product.stock} botellas disponibles · {selected} en tu carrito</p>}
  <p className="toast" role="status">{!product?"Disponible cuando se publique el producto ROSH.":account.error}</p>
- <a className="more" href="#historia2">Ver detalles →</a></div></div></section>
- <section className="night story" id="historia2" aria-label="Detalles de ROSH"><div className="inner"><span className="eyebrow">Cata · Maridaje · Origen</span><h2>Una botella, una sola historia</h2><div className="cols"><div><h3>Cata</h3><p>Frutos rojos maduros, especias suaves y un final largo y elegante.</p></div><div><h3>Maridaje</h3><p>Carnes rojas, quesos curados y cenas que se alargan.</p></div><div><h3>Origen</h3><p>{product?.origin||"Pronto compartiremos el origen de ROSH."}</p></div></div><footer>
+ <a className="more" href="#historia2">{copy.detailsLabel}</a></div></div></section>
+ <section className="night story" id="historia2" aria-label="Detalles de ROSH"><div className="inner"><span className="eyebrow">{copy.storyEyebrow}</span><h2>{copy.storyTitle}</h2><div className="cols"><div><h3>{copy.cataTitle}</h3><p>{copy.cata}</p></div><div><h3>{copy.maridajeTitle}</h3><p>{copy.maridaje}</p></div><div><h3>{copy.originTitle}</h3><p>{copy.origin}</p></div></div><footer>
  {/* eslint-disable-next-line @next/next/no-img-element */}
- <img src="/media/rosh/landing/logo.png" alt="ROSH" width="110" height="44"/><p>Zumo de uva · 100% natural · 0% alcohol</p></footer></div></section>
+ <img src="/media/rosh/landing/logo.png" alt="ROSH" width="110" height="44"/><p>{copy.footer}</p></footer></div></section>
  </div>;
 }
