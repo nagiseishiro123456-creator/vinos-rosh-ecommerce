@@ -44,7 +44,7 @@ export function ProductSaveControls({ status }: Props) {
       : status === "price-required" ? "Datos guardados en borrador. Confirma un precio mayor que cero para habilitar la compra."
       : status === "invalid" ? "No se guardó. Revisa el precio, el stock y los textos del formulario." : "");
 
-  return <div ref={root}>
+  return <div ref={root} style={{display:"grid"}}>
     <button className="button buttonPrimary" type="submit" disabled={pending} aria-busy={pending}>
       {pending ? <><LoaderCircle size={18} aria-hidden="true" /> Guardando…</> : "Guardar producto, stock y textos"}
     </button>
@@ -57,3 +57,4 @@ export function ProductSaveControls({ status }: Props) {
     </div>
   </div>;
 }
+
