@@ -142,7 +142,7 @@ export default function HistoryPage() {
             </p>
           </div>
           <div className="historyClosingActions">
-            <Link className="button buttonLight" href="/productos">Ver productos</Link>
+            <Link className="button buttonLight" href="/#comprar">Comprar ROSH</Link>
             <Link className="button buttonGhost" href="/contacto">Contactar</Link>
           </div>
         </div>

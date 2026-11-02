@@ -115,13 +115,13 @@ export default async function AccountPage() {
                 <p className="eyebrow wine">HISTORIAL</p>
                 <h2>Mis pedidos</h2>
               </div>
-              <Link className="textLink" href="/productos">Seguir comprando</Link>
+              <Link className="textLink" href="/#comprar">Seguir comprando</Link>
             </div>
 
             {orders.length === 0 ? (
               <div className="adminEmptyState compact">
                 <strong>Aún no realizaste pedidos.</strong>
-                <Link className="button buttonDark" href="/productos">Ver productos</Link>
+                <Link className="button buttonDark" href="/#comprar">Comprar ROSH</Link>
               </div>
             ) : (
               <div className="accountOrderList">

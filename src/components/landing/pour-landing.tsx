@@ -36,8 +36,9 @@ export function PourLanding({product,userId,copy}:{product:PourProduct|null;user
    buy.classList.toggle("on",move>.6);buy.inert=move<=.6;
   }
   // The intro owns the page's one scroll listener and dispatches this event from its RAF.
+  const purchaseFrame=location.hash==="#comprar"?requestAnimationFrame(()=>{root.querySelector("#comprar")?.scrollIntoView({block:"start",behavior:"instant"});paint();}):0;
   page?.addEventListener("rosh:scroll",paint);window.addEventListener("resize",paint);reduced.addEventListener("change",paint);paint();
-  return ()=>{page?.removeEventListener("rosh:scroll",paint);window.removeEventListener("resize",paint);reduced.removeEventListener("change",paint);delete page?.dataset.night;};
+  return ()=>{cancelAnimationFrame(purchaseFrame);page?.removeEventListener("rosh:scroll",paint);window.removeEventListener("resize",paint);reduced.removeEventListener("change",paint);delete page?.dataset.night;};
  },[]);
  const selected=product?(userId?account.data?.items:guest.items)?.find(item=>item.productId===product.id)?.quantity??0:0;
  const limit=product?Math.max(0,Math.min(12,product.stock-selected)):12;
@@ -57,6 +58,7 @@ export function PourLanding({product,userId,copy}:{product:PourProduct|null;user
  }
  return <div ref={section} className="roshPour">
  <section className="night pour2" id="pour" aria-label="ROSH, una sola botella">
+ <span id="comprar" className="landingPurchaseAnchor" aria-hidden="true" />
  <div className="st2">
  <div id="plogo" aria-hidden="true"><i className="pa"/><i className="pb2"/></div><div id="pstream" aria-hidden="true"/>
  <div id="pb" role="img" aria-label="Botella ROSH, zumo de uva sin alcohol, 750 mililitros">

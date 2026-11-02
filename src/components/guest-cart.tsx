@@ -51,14 +51,14 @@ export function GuestCart({ variant = "page" }: { variant?: "page" | "drawer" })
         </div> : null}
         <noscript>
           <style>{".guestCart .guestLoading, .guestCart .cartSummary { display: none; }"}</style>
-          <p className="checkoutError">El carrito invitado necesita JavaScript. Puedes <Link href="/productos">explorar el catálogo</Link> o <Link href="/iniciar-sesion?callbackUrl=/carrito">ir al ingreso de tu cuenta</Link>.</p>
+          <p className="checkoutError">El carrito invitado necesita JavaScript. Puedes <Link href="/#comprar">ver ROSH en el inicio</Link> o <Link href="/iniciar-sesion?callbackUrl=/carrito">ir al ingreso de tu cuenta</Link>.</p>
         </noscript>
         {!ready ? <p className="guestLoading" role="status">Recuperando tu selección…</p> : null}
         {error ? <div className="checkoutError" role="alert"><p>{error}</p>
           <button className="button buttonDark" type="button" onClick={refresh}>Reintentar verificación</button></div> : null}
         {ready && !items.length && !pendingImport ? (
-          <div className="emptyPanel"><strong>Tu carrito está vacío.</strong><p>Explora el catálogo y añade tus productos favoritos.</p>
-            <Link className="button buttonDark" href="/productos">Ver productos</Link></div>
+          <div className="emptyPanel"><strong>Tu carrito está vacío.</strong><p>Elige cuántas botellas ROSH quieres añadir.</p>
+            <Link className="button buttonDark" href="/#comprar">Comprar ROSH</Link></div>
         ) : <div className="cartItems">
           {items.map((item, index) => {
             const product = metadata.get(item.productId);
@@ -80,7 +80,7 @@ export function GuestCart({ variant = "page" }: { variant?: "page" | "drawer" })
             </article>;
           })}
         </div>}
-        {items.length ? <Link className="textLink" href="/productos">Agregar más productos →</Link> : null}
+        {items.length ? <Link className="textLink" href="/#comprar">Añadir más botellas →</Link> : null}
       </div>
       <aside className="cartSummary" aria-label="Resumen de tu selección">
         <p className="eyebrow wine">RESUMEN</p>

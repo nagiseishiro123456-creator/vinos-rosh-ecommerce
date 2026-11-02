@@ -40,3 +40,12 @@ Manifest, icono y color del navegador usan la misma identidad.
 
 Capturas locales de referencia (no versionadas): `docs/evidencias/brand-violet/admin-1440.png` y
 `docs/evidencias/brand-violet/admin-390.png`.
+
+## Navegación de un único vino
+
+Se retira Producto de la cabecera pública, su acceso de búsqueda y los menús
+móviles. Los accesos de compra de carrito, Mi cuenta, pedidos, historia y envíos
+apuntan a `/#comprar`. Ese enlace abre directamente los controles de cantidad y
+compra de la landing, incluso al recargar o con movimiento reducido; no obliga
+a recorrer la animación. Producto se mantiene en administración para gestionar
+precio, stock y textos. Las rutas previas conservan compatibilidad.
