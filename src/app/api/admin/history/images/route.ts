@@ -1,17 +1,14 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isCurrentAdmin } from "@/modules/admin/auth";
-import { prepareStoryImage, readStoryUpload, StoryImageError } from "@/modules/history/images";
+import { prepareStoryImage, readStoryUpload, isStoryUploadOrigin, StoryImageError } from "@/modules/history/images";
 import { storeStoryImage, HistoryError } from "@/modules/history/store";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id || !await isCurrentAdmin(session)) return Response.json({ message: "Ingresa con una cuenta administradora." }, { status: 403 });
-  const origin = request.headers.get("origin");
-  let sameOrigin = false;
-  try { sameOrigin = Boolean(origin && new URL(origin).origin === new URL(request.url).origin); } catch { /* Reject malformed origins. */ }
-  if (!sameOrigin) return Response.json({ message: "Recarga la página e inténtalo de nuevo." }, { status: 403 });
+  if (!isStoryUploadOrigin(request)) return Response.json({ message: "Recarga la página e inténtalo de nuevo." }, { status: 403 });
   try {
     const form = await readStoryUpload(request);
     const file = form.get("image");

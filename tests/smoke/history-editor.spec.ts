@@ -15,9 +15,13 @@ test("history admin publishes texts and uploaded photos, confirms repeated saves
     await page.getByLabel("Correo electrónico").fill(process.env.ADMIN_EMAIL!); await page.getByLabel("Contraseña", { exact: true }).fill(process.env.ADMIN_PASSWORD!);
     await page.getByRole("button", { name: "Iniciar sesión", exact: true }).click();
     await expect(page.getByRole("heading", { name: "Nuestra historia", exact: true })).toBeVisible();
+    expect((await page.request.post("/api/admin/history/images", { headers: { origin: "https://other.example" } })).status()).toBe(403);
     await page.getByLabel("Título de la página", { exact: true }).fill("Historia editable QA");
     const png = await sharp({ create: { width: 96, height: 120, channels: 3, background: "#4b1c71" } }).png().toBuffer();
+    const preparedResponse = page.waitForResponse(r => r.url().endsWith("/api/admin/history/images") && r.request().method() === "POST");
     await page.getByLabel("Reemplazar foto: Cabecera · arco", { exact: true }).setInputFiles({ name: "foto-qa.png", mimeType: "image/png", buffer: png });
+    const uploaded = await preparedResponse, result = await uploaded.json();
+    expect(uploaded.status(), JSON.stringify(result)).toBe(201); imageId = result.src.slice(18);
     await expect(page.getByText("Foto preparada. Guarda la página para publicarla.", { exact: true })).toBeVisible();
     await page.getByLabel("Descripción de la cabecera", { exact: true }).fill("Foto editada desde administración QA");
     await page.getByRole("button", { name: "Guardar historia e imágenes", exact: true }).click();

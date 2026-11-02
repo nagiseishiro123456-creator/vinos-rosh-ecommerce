@@ -52,7 +52,7 @@ Fotos originales del ZIP, convertidas sin ampliación:
 
 ## Verificación
 
-TypeScript, ESLint y seis pruebas de contenido/preparación de imágenes pasan en
+TypeScript, ESLint y siete pruebas de contenido/preparación de imágenes pasan en
 local. Revisión pública en 320, 390, 820 y 1440 px, claro/oscuro, sin desbordamiento;
 FAQ y pie de la landing conservados. El editor real se revisa en 320, 390 y 1440 px
 con guardado simulado, sin alterar contenido local. La CI usa una base aislada para

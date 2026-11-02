@@ -3,7 +3,16 @@ import test from "node:test";
 import sharp from "sharp";
 import { DEFAULT_HISTORY } from "../src/modules/history/content";
 import { parseHistory, isHistoryImageSource } from "../src/modules/history/schema";
-import { prepareStoryImage, readStoryUpload, MAX_STORY_FILE_BYTES, StoryImageError } from "../src/modules/history/images";
+import { prepareStoryImage, readStoryUpload, isStoryUploadOrigin, MAX_STORY_FILE_BYTES, StoryImageError } from "../src/modules/history/images";
+
+test("upload origin uses the browser host after NextURL loopback normalization and rejects foreign origins", () => {
+  const check = (origin: string, host = "127.0.0.1:3000", url = "http://localhost:3000/api/admin/history/images") => isStoryUploadOrigin(new Request(url, { headers: { origin, host } }));
+  assert.equal(check("http://127.0.0.1:3000"), true);
+  assert.equal(check("https://rosh.example", "rosh.example", "https://internal.example/api/admin/history/images"), true);
+  for (const origin of ["https://other.example", "http://127.0.0.1:3001", "https://127.0.0.1:3000", "null", "not a URL", "http://127.0.0.1:3000/path"]) assert.equal(check(origin), false);
+  assert.equal(check("http://localhost:3000", "localhost:3000@other.example"), false);
+  assert.equal(isStoryUploadOrigin(new Request("http://localhost:3000")), false);
+});
 
 test("history content keeps Spanish, optional pending fields and literal text", () => {
   const value = structuredClone(DEFAULT_HISTORY); value.texts.title = "Historia, uva y tradición ñ";

@@ -2,6 +2,19 @@ import sharp from "sharp";
 
 export class StoryImageError extends Error {}
 
+/** NextURL normalizes loopback names; HTTP Host retains the browser's destination. */
+export function isStoryUploadOrigin(request: Request) {
+  try {
+    const origin = request.headers.get("origin");
+    if (!origin) return false;
+    const source = new URL(origin), target = new URL(request.url);
+    const host = request.headers.get("host") ?? target.host;
+    if (/[/\\@?#\s]/.test(host)) return false;
+    const destination = new URL(`${target.protocol}//${host}`);
+    return ["http:", "https:"].includes(source.protocol) && source.origin === origin && source.origin === destination.origin;
+  } catch { return false; }
+}
+
 export const MAX_STORY_FILE_BYTES = 6 * 1024 * 1024;
 export async function prepareStoryImage(bytes: Buffer, declaredType: string) {
   if (!bytes.length || bytes.length > MAX_STORY_FILE_BYTES) throw new StoryImageError("La foto debe pesar hasta 6 MB.");
