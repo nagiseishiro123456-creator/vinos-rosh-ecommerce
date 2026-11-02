@@ -34,7 +34,7 @@ export function ProductForm({ action, submitLabel, values = {} }: ProductFormPro
 
         <label className="adminField">
           <span>SKU</span>
-          <input name="sku" maxLength={60} defaultValue={values.sku ?? ""} placeholder="Ej. ROSH-001" />
+          <input name="sku" readOnly={values.sku === "ROSH-750"} maxLength={60} defaultValue={values.sku ?? ""} placeholder="Ej. ROSH-001" />
         </label>
 
         <label className="adminField">
@@ -47,11 +47,7 @@ export function ProductForm({ action, submitLabel, values = {} }: ProductFormPro
           <input name="stock" type="number" min="0" step="1" required defaultValue={values.stock ?? 0} />
         </label>
 
-        <label className="adminField adminFieldWide">
-          <span>Categoría</span>
-          <input name="categoryName" maxLength={100} defaultValue={values.categoryName ?? ""} placeholder="Ej. Bebidas de uva" />
-          <small>Si la categoría no existe, el sistema la crea automáticamente.</small>
-        </label>
+        <input type="hidden" name="categoryName" value={values.categoryName ?? ""} />
 
         <label className="adminField adminFieldWide">
           <span>Descripción corta</span>
@@ -59,7 +55,7 @@ export function ProductForm({ action, submitLabel, values = {} }: ProductFormPro
         </label>
 
         <label className="adminField adminFieldWide">
-          <span>Descripción completa *</span>
+          <span>Descripción y origen *</span>
           <textarea name="description" required minLength={10} maxLength={6000} rows={7} defaultValue={values.description ?? ""} placeholder="Describe el producto, origen, características y presentación." />
         </label>
 

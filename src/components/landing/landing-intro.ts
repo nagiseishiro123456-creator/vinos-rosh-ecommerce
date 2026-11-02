@@ -45,7 +45,7 @@ export function useLandingIntro(rootRef: RefObject<HTMLElement | null>, slotRef:
     }
     const schedulePlace = () => {
       cancelAnimationFrame(layoutFrame);
-      layoutFrame = requestAnimationFrame(place);
+      layoutFrame = requestAnimationFrame(() => { place(); root?.dispatchEvent(new Event("rosh:scroll")); });
     };
     const resize = () => {
       if (root.dataset.intro === "playing") finish();

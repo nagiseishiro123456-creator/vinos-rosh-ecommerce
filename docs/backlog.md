@@ -183,3 +183,10 @@ S2-01–S2-06 suman 26 SP revisados e integrados mediante PR #9–#14, sin atrib
 [Revisión final](testing/revision-integracion-sprint-02.md): 117/117 servidor, 66/66 navegador y
 restauración PostgreSQL aprobados; [cierre](sprints/cierre-sprint-02.md). Siguiente: refinar Sprint 3.
 Ver [diagnóstico](ux/sprint-02-recorrido-compra.md) y [plan actual](sprints/fase-2-sprint-02.md).
+
+
+## S5-07 — Segunda landing y producto único (2026-11-01)
+
+Scroll de llenado 0–750 ml, compra y detalles; precio y origen editables en Producto.
+Categorías fuera de la navegación; inventario en Producto y confirmaciones desde Pagos.
+[Alcance, configuración y QA](diseno/landing-2/README.md).

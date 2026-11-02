@@ -1,0 +1,47 @@
+# S5-07 — Segunda parte de la landing
+
+2026-11-01, America/Lima. Continúa la portada de #27. Fuente: el PDF de segunda parte
+(siete páginas revisadas visualmente) y rosh-landing-2.zip. HANDOFF.md conserva las
+instrucciones del cliente; no autoriza publicar condiciones provisionales.
+
+## Composición
+
+Primera landing, degradado de 24vh y segunda sección sticky de 480vh. El logo decorativo
+se vacía mientras una única botella compuesta se llena hasta 750 ml. La botella se mueve
+al costado y aparece la compra; en móvil sube hasta 78px y reduce su tamaño al 74%.
+Los elementos ocultos de compra son inert. Scroll reversible, un listener de scroll
+compartido con la primera parte y RAF. Movimiento reducido: estado final sin altura
+extendida. PNG original sin alteración; Jost y Lora locales con sus licencias.
+
+## Configuración del único producto
+
+En **Admin → Producto → Crear producto ROSH**, completar precio, descripción y origen,
+stock e imagen; publicar únicamente cuando el cliente confirme esos datos. El SKU
+reservado y único es **ROSH-750**. No se selecciona el primer registro ni se muestran
+los ejemplos como producto oficial. El formulario nuevo comienza oculto. Si existe un
+producto ROSH, la creación redirige a su edición. Los registros anteriores no se borran.
+La descripción se presenta como Origen; precio y stock proceden del mismo registro.
+Las modificaciones de stock mantienen la trazabilidad de updateProduct.
+
+Sin producto oficial publicado: Próximamente, compra deshabilitada y origen pendiente;
+no se usa S/189. No se publica la promesa provisional de envío nacional o pago seguro.
+Comprar ahora añade de 1 a 12 unidades mediante los proveedores existentes y abre el
+carrito; las verificaciones de disponibilidad y precio siguen siendo del servidor.
+
+## Simplificación
+
+El panel ofrece Producto (incluido inventario), sin tarjetas Categorías o Inventario.
+Confirmaciones se abre desde Pagos e incluye retorno a Pagos. Las rutas anteriores de
+categorías, productos e inventario administrativo llevan a Producto, previa autorización.
+La pantalla pública de productos muestra solo ROSH, sin filtros o categorías. Las URLs
+históricas de detalle y confirmaciones se conservan para pedidos y enlaces existentes.
+Este incremento no rediseña visualmente todo el administrador ni borra datos históricos.
+
+## Validación
+
+Tipos y ESLint; dos nuevos casos de scroll reversible y seis anchos de referencia,
+con capturas revisadas. Se corrige el tamaño de Próximamente y los botones a 320px.
+La prueba SEO designa explícitamente el producto QA durante su escenario y restaura
+su SKU. Baseline adaptado al catálogo singular. El presupuesto CSS de Inicio pasa de
+92.000 a 102.000 bytes para incorporar esta segunda sección; otras rutas conservan
+el margen anterior. La CI productiva completa debe verificar el candidato antes de main.

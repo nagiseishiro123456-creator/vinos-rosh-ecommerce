@@ -144,7 +144,7 @@ try {
     else {
       // S5 original landing: bounded, route-specific design budget. Other routes keep
       // the existing growth guard; this does not authorize admin CSS in public pages.
-      const limit = current.path === "/" ? Math.max(92_000, old.cssDecoded + 1024) : old.cssDecoded + 1024;
+      const limit = current.path === "/" ? Math.max(102_000, old.cssDecoded + 1024) : old.cssDecoded + 1024;
       assert.ok(current.cssDecoded <= limit, `Review CSS growth on ${current.path}: ${old.cssDecoded} -> ${current.cssDecoded}, limit ${limit}`);
     }
   }
