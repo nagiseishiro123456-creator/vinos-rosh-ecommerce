@@ -58,6 +58,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
     select: {
       id: true,
       paymentIntegration: true,
+      paymentMode: true,
       paidAt: true,
       paymentAttempt: { select: { state: true, integration: true, mode: true, amountMinor: true, currency: true } },
       number: true,

@@ -41,6 +41,7 @@ export default async function AdminConfigurationPage({ searchParams }: Props) {
           </p>
         </div>
         <div className="adminTopbarActions">
+          <Link className="button" href="/admin/configuracion/izipay">Pagos Izipay</Link>
           <Link className="button buttonGhostLight" href="/admin">← Panel</Link>
         </div>
       </div>

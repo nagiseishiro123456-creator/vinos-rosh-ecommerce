@@ -27,7 +27,10 @@ Sprint 3 en refinamiento: [plan e historias](docs/sprints/fase-2-sprint-03.md) y
 [comparación Yape/Izipay](docs/investigacion/pagos-yape-izipay.md).
 La integración automática sigue parcial; Izipay es el proveedor solicitado para evaluar,
 con producto web y habilitación comercial pendientes.
-Izipay se evalúa para sandbox: [guía técnica y base aislada de pruebas](docs/integraciones/izipay-sandbox.md).
+Izipay: [configuración cifrada, formulario y resultados](docs/integraciones/izipay-configuracion-y-checkout.md)
+y [guía para ROSH](docs/guia-izipay-cliente.md). La aceptación externa sigue pendiente;
+el ejemplo DEMO fue rechazado con INT_905. Las [notas iniciales](docs/integraciones/izipay-sandbox.md)
+conservan el alcance histórico de la preparación.
 Ese código preparatorio está desactivado y no se conecta todavía al checkout.
 [Intentos persistentes y límites](docs/integraciones/intentos-izipay.md) ·
 [Estado verificado y actualización pendiente de Render](docs/render-free-preview.md).

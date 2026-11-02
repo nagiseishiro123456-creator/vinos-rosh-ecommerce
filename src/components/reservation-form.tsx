@@ -7,6 +7,7 @@ import { unstable_rethrow } from "next/navigation";
 import { SubmitButton } from "@/components/submit-button";
 
 import { reserveOrder } from "@/modules/orders/actions";
+import { reserveIzipayFormOrder } from "@/modules/payments/izipay/reserve-action";
 
 type Props = {
   addressId: string;
@@ -15,16 +16,20 @@ type Props = {
   checkoutKey: string;
   yapeEnabled: boolean;
   transferEnabled: boolean;
+  izipayTestEnabled?: boolean;
+  izipayMode?: "TEST" | "PRODUCTION";
+  expectedUserId?: string;
 };
 
 
-export function ReservationForm({ addressId, total, checkoutQuote, checkoutKey, yapeEnabled, transferEnabled }: Props) {
-  const firstProvider = yapeEnabled ? "YAPE_MANUAL" : transferEnabled ? "TRANSFER_MANUAL" : "";
+export function ReservationForm({ addressId, total, checkoutQuote, checkoutKey, yapeEnabled, transferEnabled, izipayTestEnabled = false, izipayMode = "TEST", expectedUserId }: Props) {
+  const firstProvider = yapeEnabled ? "YAPE_MANUAL" : transferEnabled ? "TRANSFER_MANUAL" : izipayTestEnabled ? "IZIPAY_TEST" : "";
   const [provider, setProvider] = useState(firstProvider);
   const [receiptType, setReceiptType] = useState("BOLETA");
   const hasProvider = Boolean(firstProvider);
   const [pending, startTransition] = useTransition();
   const [networkError, setNetworkError] = useState(false);
+  const action = provider === "IZIPAY_TEST" ? reserveIzipayFormOrder : reserveOrder;
 
   function submit(event: FormEvent<HTMLFormElement>) {
     // Hydrated submission preserves inputs on a lost response. The native action remains a no-JS fallback.
@@ -33,13 +38,14 @@ export function ReservationForm({ addressId, total, checkoutQuote, checkoutKey, 
     const data = new FormData(event.currentTarget);
     setNetworkError(false);
     startTransition(async () => {
-      try { await reserveOrder(data); }
+      try { await action(data); }
       catch (error) { unstable_rethrow(error); setNetworkError(true); }
     });
   }
 
   return (
-    <form className="paymentForm" action={reserveOrder} onSubmit={submit}>
+    <form className="paymentForm" action={action} onSubmit={submit}>
+      {expectedUserId ? <input type="hidden" name="expectedUserId" value={expectedUserId} /> : null}
       <input type="hidden" name="addressId" value={addressId} />
       <input type="hidden" name="checkoutQuote" value={checkoutQuote} />
       <input type="hidden" name="checkoutKey" value={checkoutKey} />
@@ -52,6 +58,10 @@ export function ReservationForm({ addressId, total, checkoutQuote, checkoutKey, 
         <h2>¿Cómo deseas pagar?</h2>
 
         <div className="paymentOptions">
+          {izipayTestEnabled ? <label className={`paymentOption${provider === "IZIPAY_TEST" ? " active" : ""}`}>
+            <input type="radio" name="provider" value="IZIPAY_TEST" checked={provider === "IZIPAY_TEST"} onChange={() => setProvider("IZIPAY_TEST")} />
+            <span><strong>{izipayMode === "TEST" ? "Izipay · prueba" : "Izipay"}</strong><small>{izipayMode === "TEST" ? "Tarjetas y QR habilitados por el proveedor. No es una venta ni habilita despacho." : "Tarjetas y QR disponibles para el comercio. Confirmación desde el servidor."}</small></span>
+          </label> : null}
           {yapeEnabled ? (
             <label className={`paymentOption${provider === "YAPE_MANUAL" ? " active" : ""}`}>
               <input

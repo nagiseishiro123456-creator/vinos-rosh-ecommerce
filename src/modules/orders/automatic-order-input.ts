@@ -8,10 +8,10 @@ export const automaticOrderSchema = z.object({
 export type AutomaticOrderInput = z.infer<typeof automaticOrderSchema>;
 
 // Same checkout identity slot, distinct method fingerprint: changing method is a conflict.
-export function automaticOrderRequestHash(userId: string, input: AutomaticOrderInput) {
+export function automaticOrderRequestHash(userId: string, input: AutomaticOrderInput, mode = "TEST") {
   return createHash("sha256").update(JSON.stringify([
     "reserve-micuentaweb-test-order:v1", userId, input.checkoutQuote, input.addressId,
-    "MICUENTAWEB_V4", "TEST", input.receiptType, input.documentNumber ?? null,
+    "MICUENTAWEB_V4", mode, input.receiptType, input.documentNumber ?? null,
     input.businessName ?? null, input.taxAddress ?? null, input.customerNotes ?? null,
   ])).digest("hex");
 }

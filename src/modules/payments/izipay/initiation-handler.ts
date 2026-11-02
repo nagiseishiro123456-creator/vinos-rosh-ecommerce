@@ -47,7 +47,7 @@ async function readBody(request: Request, timeoutMs: number) {
 
 type Options = {
   authenticate: () => Promise<string | null>;
-  environment?: () => SandboxEnvironment;
+  environment?: () => SandboxEnvironment | Promise<SandboxEnvironment>;
   consume?: typeof consumeRateLimit;
   initiate?: typeof initiateMicuentawebSandboxPayment;
   bodyTimeoutMs?: number;
@@ -58,7 +58,9 @@ export function createMicuentawebInitiationHandler(options: Options) {
   const timeoutMs = options.bodyTimeoutMs ?? 5_000;
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 5_000) throw new Error("INVALID_BODY_TIMEOUT");
   return async (request: Request) => {
-    const environment = { ...(options.environment?.() ?? process.env) };
+    let environment: SandboxEnvironment;
+    try { environment = { ...await (options.environment?.() ?? process.env) }; }
+    catch { return json({ message: "Inicio de pago no disponible." }, 503); }
     if (environment.PAYMENTS_IZIPAY_ENABLED !== "true" || environment.IZIPAY_MCW_INITIATE_ENABLED !== "true") {
       return json({ message: "Recurso no disponible." }, 404);
     }

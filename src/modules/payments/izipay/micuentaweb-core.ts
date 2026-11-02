@@ -26,7 +26,13 @@ const credentialsSchema = z.object({
 export function readMicuentawebSandboxConfig(environment: SandboxEnvironment) {
   if (environment.PAYMENTS_IZIPAY_ENABLED !== "true") throw new IzipayPreparationError("DISABLED");
   if (environment.IZIPAY_INTEGRATION !== "MICUENTAWEB_V4") throw new IzipayPreparationError("PRODUCT_UNCONFIRMED");
-  if (environment.IZIPAY_MODE !== "TEST") throw new IzipayPreparationError("TEST_CONFIG_REQUIRED");
+  const live = environment.IZIPAY_MODE === "PRODUCTION" && environment.IZIPAY_PRODUCTION_ENABLED === "true";
+  if (environment.IZIPAY_MODE !== "TEST" && !live) throw new IzipayPreparationError("TEST_CONFIG_REQUIRED");
+  if (live) {
+    try {
+      if (environment.NODE_ENV !== "production" || new URL(environment.NEXT_PUBLIC_APP_URL ?? environment.NEXTAUTH_URL ?? "").protocol !== "https:") throw new Error();
+    } catch { throw new IzipayPreparationError("TEST_CONFIG_REQUIRED"); }
+  }
   const parsed = credentialsSchema.safeParse({
     merchantId: environment.IZIPAY_MCW_MERCHANT_ID,
     restTestPassword: environment.IZIPAY_MCW_REST_TEST_PASSWORD,
@@ -34,6 +40,10 @@ export function readMicuentawebSandboxConfig(environment: SandboxEnvironment) {
   });
   // Never propagate a Zod error with a credential's input or any provider response body.
   if (!parsed.success) throw new IzipayPreparationError("TEST_CONFIG_REQUIRED");
+  if (live && (parsed.data.merchantId === "69876357" || !parsed.data.restTestPassword.startsWith("prodpassword_")
+    || ![`${parsed.data.merchantId}:publickey_`, `${parsed.data.merchantId}:prodpublickey_`].some(prefix => parsed.data.publicTestKey.startsWith(prefix)))) {
+    throw new IzipayPreparationError("TEST_CONFIG_REQUIRED");
+  }
   return parsed.data;
 }
 

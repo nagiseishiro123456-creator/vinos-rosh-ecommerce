@@ -7,7 +7,7 @@ const time = (value: string) => new Date(value).toLocaleString("es-PE", {
 });
 
 export function PaymentProgressPanel({ snapshot }: { snapshot: PaymentStatusSnapshot }) {
-  const copy = paymentProgressCopy[snapshot.state];
+  const copy = snapshot.testResult === "APPROVED" ? { tone: "neutral", title: "Prueba aprobada", message: "Resultado de sandbox verificado. No acredita dinero recibido ni habilita despacho." } : paymentProgressCopy[snapshot.state];
   const Icon = copy.tone === "success" ? CheckCircle2 : copy.tone === "warning" ? AlertCircle : copy.tone === "waiting" ? Clock3 : Package;
   const step = snapshot.state === "confirmed" ? 2 : ["reserved", "expired", "closed"].includes(snapshot.state) ? 0 : 1;
   return (

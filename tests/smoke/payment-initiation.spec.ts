@@ -9,4 +9,11 @@ test("S3-02: sandbox initiation stays disabled on the built application and neve
   expect(response.headers()["cache-control"]).toBe("private, no-store");
   expect(await response.json()).not.toHaveProperty("formToken");
   expect((await request.get("/api/payment/initiate")).status()).toBe(405);
+  for (const path of ["/pedidos/ROSH-QA/tarjeta", "/desarrollo/izipay"]) {
+    const page = await request.get(path);
+    expect(page.status()).toBe(404);
+    if (path === "/desarrollo/izipay") expect(page.headers()["content-security-policy"]).not.toContain("micuentaweb.pe");
+    expect(await page.text()).not.toContain("kr-payment-form.min.js");
+  }
+  expect((await request.get("/contacto")).headers()["content-security-policy"]).not.toContain("micuentaweb.pe");
 });
