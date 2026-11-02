@@ -17,27 +17,12 @@ textarea {
 }
 
 button,
-.button,
-.iconButton,
-.cartButton,
-.mobileMenuButton,
-.headerLogin {
+.button {
   touch-action: manipulation;
-}
-
-.siteHeader {
-  padding-top: env(safe-area-inset-top);
 }
 
 .catalogHeaderWrap.compact {
   min-height: calc(92px + env(safe-area-inset-top));
-}
-
-.mobileNav {
-  max-height: calc(100dvh - 76px - env(safe-area-inset-top));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-bottom: max(18px, env(safe-area-inset-bottom));
 }
 
 .whatsappFab {
@@ -48,25 +33,6 @@ button,
 @media (max-width: 619px) {
   .shell {
     width: min(100% - 28px, 1180px);
-  }
-
-  .siteHeaderInner {
-    min-height: 68px;
-    gap: 12px;
-  }
-
-  .siteBrand .brandLogo {
-    width: 124px;
-  }
-
-  .headerActions {
-    gap: 6px;
-  }
-
-  .cartButton,
-  .mobileMenuButton {
-    min-width: 46px;
-    min-height: 46px;
   }
 
   .homeHero {
@@ -244,87 +210,11 @@ button,
     padding-bottom: calc(72px + env(safe-area-inset-bottom));
   }
 
-  .mobileBottomNav {
-    position: fixed;
-    inset: auto 10px max(10px, env(safe-area-inset-bottom)) 10px;
-    z-index: 58;
-    min-height: 62px;
-    padding: 7px 8px;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 4px;
-    border: 1px solid rgba(255, 255, 255, .12);
-    border-radius: 20px;
-    color: white;
-    background: rgba(var(--brand-rgb), .94);
-    box-shadow: 0 16px 42px rgba(25, 5, 8, .3);
-    backdrop-filter: blur(18px);
-  }
-
-  .mobileBottomNav > a {
-    min-width: 0;
-    min-height: 48px;
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 3px;
-    border-radius: 14px;
-    font-size: .64rem;
-    font-weight: 750;
-    letter-spacing: .01em;
-  }
-
-  .mobileBottomNav > a:active {
-    background: rgba(255, 255, 255, .09);
-  }
-
-  .mobileBottomCartIcon {
-    position: relative;
-    display: grid;
-    place-items: center;
-  }
-
-  .mobileBottomCartIcon small {
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    color: var(--wine-dark);
-    background: var(--gold);
-    font-size: .6rem;
-    font-weight: 900;
-  }
-
   .whatsappFab {
     bottom: calc(88px + env(safe-area-inset-bottom));
   }
 
   .siteFooter {
     padding-bottom: calc(104px + env(safe-area-inset-bottom));
-  }
-}
-
-@media (min-width: 620px) {
-  .mobileBottomNav {
-    display: none;
-  }
-}
-
-@media (min-width: 850px) and (max-width: 1099px) {
-  .siteBrand .brandLogo {
-    width: 124px;
-  }
-
-  .siteHeaderInner {
-    gap: 18px;
-  }
-
-  .desktopNav {
-    gap: 20px;
   }
 }

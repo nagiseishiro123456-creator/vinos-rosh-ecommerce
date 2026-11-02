@@ -27,6 +27,7 @@ import "./guest-cart.css";
 import "./cart-drawer.css";
 import "./automatic-payment.css";
 import "./brand-theme.css";
+import "./public-header.css";
 
 const seo = readSeoConfig();
 

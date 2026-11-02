@@ -1,0 +1,58 @@
+/* The landing's navbar is the single visual contract for every customer route. */
+:root { --public-header-height: 84px; }
+.siteHeader.publicHeader {
+  --header-ink: var(--brand); --header-soft: var(--brand-soft); --header-surface: #fdfcfe;
+  position: fixed; inset: 0 0 auto; z-index: 60; height: calc(var(--public-header-height) + env(safe-area-inset-top));
+  display: flex; align-items: center; justify-content: space-between; gap: 22px;
+  padding: env(safe-area-inset-top) clamp(16px, 5vw, 80px) 0;
+  box-sizing: border-box; color: var(--header-ink); background: #fdfcfeF5; touch-action: manipulation;
+  border: 0; border-bottom: 1px solid rgba(var(--brand-rgb), .1); box-shadow: none; backdrop-filter: blur(16px);
+  font: 500 16px/1.55 var(--font-rosh-landing), Cambria, Georgia, serif;
+}
+.publicHeader[data-landing=true] { background: transparent; backdrop-filter: none; }
+.publicHeader .landingHeaderLeft, .publicHeader .landingHeaderRight, .publicHeader .landingDesktopNav { display: flex; align-items: center; gap: 22px; }
+.publicHeader .landingLogoSlot { width: 140px; height: 55px; flex: 0 0 140px; }
+.publicHeader .publicHeaderBrand { display: flex; align-items: center; }
+.publicHeaderBrand .brandLogo { display: block; width: 140px; height: auto; filter: none; }
+.publicHeader .landingSeparator { display: block; width: 1px; height: 42px; flex: 0 0 1px; background: var(--header-ink); opacity: .5; }
+.publicHeader .landingHistory { color: var(--header-ink); font: 600 18.4px/1.55 var(--font-rosh-landing), Cambria, Georgia, serif; white-space: nowrap; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.publicHeader .landingHistory:is(:hover, [aria-current=page]) { text-decoration-line: underline; }
+.publicHeader .landingIcon {
+  position: relative; display: grid; place-items: center; flex: 0 0 52px; width: 52px; height: 52px; min-height: 0; padding: 0;
+  border: 1.5px solid var(--header-ink); border-radius: 50%; color: var(--header-ink); background: transparent; box-shadow: none; transform: none;
+  transition: background-color .2s, box-shadow .2s, border-color .2s;
+}
+.publicHeader .landingIcon:hover { background: var(--header-soft); }
+.publicHeader .landingIcon:is(:hover, :focus-visible), .publicHeader .landingLogin:is(:hover, :focus-visible) { border-color: #a374c9; box-shadow: 0 0 18px rgba(var(--brand-rgb), .2); }
+.publicHeader .landingCartBadge { position: absolute; top: -8px; right: -6px; min-width: 24px; width: 24px; min-height: 24px; height: 24px; padding: 0; display: grid; place-items: center; border-radius: 50%; background: var(--header-ink); color: var(--header-surface); font: 600 12.8px/1 var(--font-rosh-landing), Cambria, Georgia, serif; }
+.publicHeader .landingLogin { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 22px; border: 1px solid var(--header-ink); border-radius: 30px; background: transparent; color: var(--header-ink); font: 600 16.8px/1.3 var(--font-rosh-landing), Cambria, Georgia, serif; white-space: nowrap; cursor: pointer; transition: box-shadow .2s, border-color .2s; }
+.publicHeader .landingLogin svg { flex: 0 0 22px; width: 22px; height: 22px; }
+.publicHeader .landingMobileAccount, .publicHeader .landingMenuButton { display: none; }
+.publicHeader .landingMobileMenu { position: absolute; left: 16px; right: 16px; top: calc(100% + 8px); max-height: calc(100dvh - var(--public-header-height) - env(safe-area-inset-top) - 24px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid #ddc9ee; border-radius: 18px; background: var(--header-surface); box-shadow: 0 18px 45px #5a1a7820; }
+.publicHeader .landingMobileMenu nav { display: grid; gap: 4px; padding: 10px; }
+.publicHeader .landingMobileMenu a, .publicHeader .publicMenuSignOut { min-height: 44px; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border: 0; border-radius: 12px; background: transparent; color: var(--header-ink); font: 600 16px/1.55 var(--font-rosh-landing), Cambria, Georgia, serif; text-align: left; }
+.publicHeader .landingMobileMenu :is(a, button):hover { background: var(--header-soft); }
+.publicHeader :focus-visible { outline: 2px solid #a374c9; outline-offset: 3px; }
+.roshLanding[data-night=true] .publicHeader { --header-ink: #f5edfc; --header-soft: #ffffff0d; --header-surface: var(--brand-dark); background: rgba(var(--brand-rgb), .92); border-color: #ffffff24; backdrop-filter: blur(16px); }
+.roshLanding[data-night=true] .publicHeader :is(.landingIcon, .landingLogin) { border-color: #e6d5f580; }
+.roshLanding[data-night=true] .publicHeader :is(.landingIcon, .landingLogin):is(:hover, :focus-visible) { box-shadow: 0 0 18px #d3a9f14d; }
+.purchaseFlow .siteHeader.publicHeader { position: relative; }
+.catalogHeaderWrap.compact:has(.publicHeader) { min-height: calc(var(--public-header-height) + env(safe-area-inset-top)); background: transparent; }
+body:has(.publicHeader) { padding-bottom: env(safe-area-inset-bottom); }
+body:has(.publicHeader) .whatsappFab { bottom: max(18px, env(safe-area-inset-bottom)); }
+body:has(.analyticsConsent) .siteHeader.publicHeader { position: relative; }
+body:has(.analyticsConsent) .authRoute { padding-top: 0; }
+html:has(.publicHeader) { scroll-padding-top: calc(var(--public-header-height) + env(safe-area-inset-top) + 12px); }
+@media (max-width: 1100px) {
+  :root { --public-header-height: 64px; }
+  .siteHeader.publicHeader { padding-inline: 16px; gap: 10px; }
+  .publicHeader .landingHeaderLeft, .publicHeader .landingHeaderRight { gap: 10px; }
+  .publicHeader .landingLogoSlot { width: 100px; height: 40px; flex-basis: 100px; }
+  .publicHeaderBrand .brandLogo { width: 100px; }
+  .publicHeader :is(.landingDesktopNav, .landingDesktopIcon, .landingLoginSeparator, .landingDesktopSignOut) { display: none; }
+  .publicHeader .landingIcon, .publicHeader .landingLogin { width: 44px; height: 44px; min-height: 44px; flex: 0 0 44px; padding: 0; }
+  .publicHeader .landingLogin span { display: none; }
+  .publicHeader .landingMobileAccount { display: inline-flex; }
+  .publicHeader .landingMenuButton { display: grid; }
+}
+@media (prefers-reduced-motion: reduce) { .publicHeader *, .publicHeader *::before, .publicHeader *::after { transition: none !important; animation: none !important; } }
