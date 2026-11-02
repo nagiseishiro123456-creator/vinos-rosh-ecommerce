@@ -176,7 +176,7 @@
 }
 
 .accountStats strong {
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.75rem;
 }
 
@@ -281,7 +281,7 @@
 }
 
 .productReviewsScore strong {
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   font-size: 2rem;
 }
 

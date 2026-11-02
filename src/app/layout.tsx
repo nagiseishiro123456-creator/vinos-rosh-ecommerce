@@ -9,6 +9,7 @@ import type { AccountCartSnapshot } from "@/modules/cart/account-contract";
 import { AnalyticsConsent } from "@/components/analytics-consent";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, readSeoConfig, publicPageMetadata } from "@/lib/seo";
 import { GuestCartProvider } from "@/components/guest-cart-provider";
+import { cambria, jane } from "./fonts/brand-fonts";
 
 import "./globals.css";
 import "./checkout.css";
@@ -55,7 +56,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     catch (error) { console.error("ROOT_CART_ERROR", error); }
   }
   return (
-    <html lang="es" data-scroll-behavior="smooth">
+    <html lang="es" className={`${cambria.variable} ${jane.variable}`} data-scroll-behavior="smooth">
       <body>
         <AnalyticsConsent />
         <GuestCartProvider><GuestCartQuoteProvider>

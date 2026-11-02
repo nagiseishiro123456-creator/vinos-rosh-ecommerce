@@ -49,3 +49,14 @@ apuntan a `/#comprar`. Ese enlace abre directamente los controles de cantidad y
 compra de la landing, incluso al recargar o con movimiento reducido; no obliga
 a recorrer la animación. Producto se mantiene en administración para gestionar
 precio, stock y textos. Las rutas previas conservan compatibilidad.
+
+## Tipografía de la empresa y redes
+
+Se usan Cambria (títulos y texto editorial) y Jane Regular (texto de interfaz,
+navegación y controles), entregadas por el cliente. Se cargan localmente mediante
+next/font y se guardan en `src/app/fonts/brand`, en WOFF2 con soporte para español.
+La preparación reproducible y los archivos de origen se describen en esa carpeta.
+
+El footer de la landing muestra únicamente los iconos de Instagram, Facebook y
+TikTok. Tienen nombres accesibles y no simulan enlaces a perfiles todavía no
+proporcionados. No se añaden textos, rastreadores ni widgets de terceros.
