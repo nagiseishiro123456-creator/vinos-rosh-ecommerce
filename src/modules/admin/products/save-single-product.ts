@@ -1,4 +1,5 @@
 "use server";
+import { randomUUID } from "node:crypto";
 import { Prisma, InventoryMovementType } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -8,12 +9,13 @@ import { requireAdmin } from "@/modules/admin/auth";
 import { moneyInputSchema } from "@/modules/checkout/pricing";
 import { ROSH_PRODUCT_SKU } from "@/modules/products/single-product";
 import { LANDING_FIELDS, landingCopySchema } from "@/modules/products/landing-content";
+function feedback(status:string):never { redirect(`/admin/producto?status=${status}&receipt=${randomUUID()}#product-save-feedback`); }
 const schema=z.object({name:z.string().trim().min(2).max(120),stock:z.coerce.number().int().min(0).max(999999),price:moneyInputSchema({min:"0.00",max:"999999.00"})});
 export async function saveSingleProduct(form:FormData){
  const session=await requireAdmin("/admin/producto");
  const input=schema.safeParse({name:form.get("name"),stock:form.get("stock"),price:form.get("price")||"0.00"});
  const content=landingCopySchema.safeParse(Object.fromEntries(LANDING_FIELDS.map(([key])=>[key,form.get(key)])));
- if(!input.success||!content.success)redirect("/admin/producto?status=invalid");
+ if(!input.success||!content.success)feedback("invalid");
  const publishRequested=form.get("active")==="on";
  const active=publishRequested&&Number(input.data.price)>0;
  const {name,stock,price}=input.data;
@@ -30,5 +32,5 @@ export async function saveSingleProduct(form:FormData){
   }catch(error){if(error instanceof Prisma.PrismaClientKnownRequestError&&["P2034","P2002"].includes(error.code)&&attempt<2)continue;throw error;}
  }
  for(const path of ["/","/admin","/admin/producto","/productos"])revalidatePath(path);
- redirect(publishRequested&&!active?"/admin/producto?status=price-required":"/admin/producto?status=updated");
+ feedback(publishRequested&&!active?"price-required":"updated");
 }
