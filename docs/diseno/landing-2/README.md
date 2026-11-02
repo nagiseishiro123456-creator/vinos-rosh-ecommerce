@@ -70,3 +70,13 @@ reservas. Los textos guardados se reflejan al recargar la landing.
 Migración aditiva 20261101210000_single_product_landing_content: JSONB opcional en
 Product; los productos previos conservan su descripción/origen. Los respaldos de datos
 y SQL incluyen el nuevo campo. No se inventa un precio ni se borra el historial.
+
+
+## Confirmación de guardado
+
+El aviso se muestra junto al botón al final del formulario. Mientras se procesa,
+aparece Guardando y el botón queda deshabilitado. Tras confirmar el servidor se
+muestra una marca de verificación con el resultado (guardado o borrador). Un recibo
+por respuesta permite confirmar también guardados consecutivos. Al editar se oculta
+la confirmación anterior; la validación nativa informa el campo que debe corregirse.
+No se cambia la lógica de precio, publicación o inventario.
