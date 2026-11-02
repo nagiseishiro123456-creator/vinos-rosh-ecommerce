@@ -25,36 +25,6 @@ body:has(.roshLanding) { background: #fdfcfe; padding-bottom: 0; }
 }
 .landingSkip { position: fixed; top: 12px; left: 16px; z-index: 300; transform: translateY(-180%); padding: 10px 16px; border-radius: 24px; background: var(--purple-900); color: white; }
 .landingSkip:focus-visible { transform: none; }
-.roshLanding .landingHeader {
-  position: fixed; inset: 0 0 auto; z-index: 60; height: 84px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 clamp(16px, 5vw, 80px);
-  color: var(--purple-900); background: transparent; border: 0; box-shadow: none;
-  backdrop-filter: none; font-family: inherit;
-}
-.landingHeaderLeft, .landingHeaderRight, .landingDesktopNav { display: flex; align-items: center; gap: 22px; }
-.landingLogoSlot { width: 140px; height: 55px; flex: 0 0 140px; }
-.landingSeparator { display: block; flex: 0 0 1px; width: 1px; height: 42px; background: var(--purple-900); opacity: .5; }
-.landingHistory { color: var(--purple-900); font-size: 18.4px; font-weight: 600; white-space: nowrap; text-decoration-thickness: 2px; text-underline-offset: 6px; }
-.landingHistory:hover { text-decoration-line: underline; }
-.roshLanding .landingIcon {
-  position: relative; display: grid; place-items: center; flex: 0 0 52px;
-  width: 52px; height: 52px; min-height: 0; padding: 0;
-  border: 1.5px solid var(--purple-900); border-radius: 50%;
-  color: var(--purple-900); background: transparent; box-shadow: none;
-  transition: background-color .2s; transform: none;
-}
-.roshLanding .landingIcon:hover { background: var(--lilac-100); }
-.roshLanding .landingIcon:active { background: #e3d0f1; }
-.landingCartBadge { position: absolute; top: -8px; right: -6px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--purple-900); color: white; font: 600 12.8px var(--font-rosh-landing), Georgia, serif; animation: landingBadgePulse .3s ease; }
-.landingLogin { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 22px; border: 0; border-radius: 30px; background: var(--purple-900); color: white; font-size: 16.8px; font-weight: 600; line-height: 1.3; white-space: nowrap; transition: background-color .2s; }
-.landingLogin:hover { background: var(--brand-hover); }
-.landingLogin:active { background: var(--brand-dark); }
-.landingMenuButton { display: none !important; }
-.landingMobileMenu { position: absolute; left: 16px; right: 16px; top: calc(100% + 8px); border: 1px solid #ddc9ee; border-radius: 18px; background: var(--bg); box-shadow: 0 18px 45px #5a1a7820; }
-.landingMobileMenu nav { display: grid; gap: 4px; padding: 10px; }
-.landingMobileMenu a { min-height: 44px; display: flex; align-items: center; padding: 8px 14px; border-radius: 12px; font-weight: 600; }
-.landingMobileMenu a:hover { background: var(--lilac-100); }
 .landingLogo {
   position: fixed; z-index: 61; display: block; line-height: 0;
   left: var(--logo-left, clamp(16px, 5vw, 80px)); top: var(--logo-top, 14.328px);
@@ -104,15 +74,8 @@ body:has(.roshLanding) { background: #fdfcfe; padding-bottom: 0; }
   .roshLanding[data-animate='false'] *, .roshLanding[data-animate='false'] .landingLogo { transition-duration: 0s !important; transition-delay: 0s !important; }
 }
 @media (max-width: 820px) {
-  .roshLanding .landingHeader { height: 64px; padding-inline: 16px; }
-  .landingHeaderLeft, .landingHeaderRight { gap: 10px; }
-  .landingLogoSlot { width: 100px; height: 40px; flex-basis: 100px; }
   .landingLogo { --logo-mobile-top: 12.234px; }
   .roshLanding:not([style]) .landingLogo { left: 16px; top: var(--logo-mobile-top); width: 100px; }
-  .landingDesktopNav, .landingDesktopIcon, .landingLoginSeparator { display: none !important; }
-  .roshLanding .landingIcon, .landingLogin { width: 44px; height: 44px; flex-basis: 44px; padding: 0; }
-  .landingLogin span { display: none; }
-  .landingMenuButton { display: grid !important; }
   .landingScene { grid-template-columns: minmax(0, 1fr); gap: 10px; height: auto; min-height: 620px; padding: 76px 16px 30px; }
   .landingBottle { height: min(46svh, 400px); max-width: 100%; }
   .landingStage { align-self: auto; }
@@ -125,21 +88,6 @@ body:has(.roshLanding) { background: #fdfcfe; padding-bottom: 0; }
 
 /* Shared Azul-Violeta identity. */
 .roshLanding { --purple-900: var(--brand); --purple-500: var(--brand-hover); --lilac-100: var(--brand-soft); --bg: #fdfcfe; }
-.roshLanding .landingHeader { border-bottom: 1px solid rgba(var(--brand-rgb), .1); }
-.roshLanding .landingIcon { border-color: var(--brand); color: var(--brand); }
-.roshLanding .landingIcon:is(:hover, :focus-visible), .roshLanding .landingLogin:is(:hover, :focus-visible) {
-  background: transparent; border-color: #a374c9; box-shadow: 0 0 18px rgba(var(--brand-rgb), .2);
-}
-.roshLanding .landingLogin { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
-.roshLanding[data-night="true"] .landingHeader {
-  background: rgba(var(--brand-rgb), .92); --purple-900: #f5edfc;
-  border-color: #ffffff24; box-shadow: none; backdrop-filter: blur(16px);
-}
-.roshLanding[data-night="true"] :is(.landingIcon, .landingLogin) { color: #f5edfc; border-color: #e6d5f580; background: transparent; }
-.roshLanding[data-night="true"] :is(.landingIcon, .landingLogin):is(:hover, :focus-visible) { background: #ffffff0d; box-shadow: 0 0 18px #d3a9f14d; }
-.roshLanding[data-night="true"] .landingHistory { color: #f5edfc; }
-.roshLanding[data-night="true"] .landingMobileMenu { background: var(--brand-dark); }
-.roshLanding .landingMobileMenu { border-color: var(--line); }
 .roshPour { --night0: var(--brand-deep); --night1: var(--brand-dark); --vio: #a878d3; }
 .landingNightTransition { background: linear-gradient(#fdfcfe, var(--brand-deep)); }
 .roshPour .buybtn { border: 1px solid #e6d5f599; background: transparent; color: #f5edfc; transition: box-shadow .2s, border-color .2s; }

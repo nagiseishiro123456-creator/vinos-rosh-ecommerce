@@ -82,3 +82,14 @@ página pública se ve la nueva versión.»
 Para el cliente: «El resumen te muestra cómo va la tienda y qué necesita atención.
 Desde el menú administras el único producto, sus existencias, los pedidos y el
 contenido de la marca. Las cifras vienen de los pedidos reales del sistema.»
+
+## Navbar público — mejora S5-11
+
+1. Compara Inicio con Historia, Envíos, Contacto, Carrito, ingreso y Mi cuenta:
+   fuente, tamaño de letras, logo y botones deben coincidir a igual ancho de pantalla.
+2. En móvil abre el menú: Inicio vuelve arriba de la landing y Comprar abre su
+   sección de compra; Historia, Envíos y Contacto abren sus páginas reales.
+3. Prueba el carrito desde distintas páginas. Debe abrir el mismo panel, conservar
+   cantidades y permitir seguir navegando después de cerrarlo.
+4. Entra a tu cuenta y comprueba perfil, direcciones y cierre de sesión. En móvil,
+   Cerrar sesión está dentro del menú; en escritorio está en el navbar.

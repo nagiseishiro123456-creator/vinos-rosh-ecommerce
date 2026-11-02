@@ -145,10 +145,10 @@ test("S2-05: guest panel contains keyboard focus, restores scroll and shares sel
   await expect(panel(page)).toBeHidden(); await expect(page.locator(".guestCart").getByText("Tu carrito está vacío.", { exact: true })).toBeVisible();
   if (page.viewportSize()!.width < 768) {
     await page.goto("/productos");
-    const bottom = page.locator(".mobileBottomCart");
-    await expect(bottom).toBeVisible(); await bottom.click(); await expect(panel(page)).toBeVisible();
+    const headerCart = page.locator(".siteHeader .landingCart");
+    await expect(headerCart).toBeVisible(); await headerCart.click(); await expect(panel(page)).toBeVisible();
     await expect(panel(page).getByRole("heading", { name: "Tu carrito", exact: true })).toBeFocused();
-    await page.keyboard.press("Escape"); await expect(panel(page)).toBeHidden(); await expect(bottom).toBeFocused();
+    await page.keyboard.press("Escape"); await expect(panel(page)).toBeHidden(); await expect(headerCart).toBeFocused();
   }
   expect(errors).toEqual([]);
 });

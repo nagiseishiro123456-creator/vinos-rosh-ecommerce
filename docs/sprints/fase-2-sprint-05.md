@@ -88,3 +88,11 @@ El resumen consulta ventas confirmadas, pedidos, clientes y stock reales, con pe
 7/30/90 días, gráfico por día y enlaces a los pendientes operativos. Se unifican las
 pantallas de administración y su uso en móvil, manteniendo permisos y acciones.
 [Alcance y definición de indicadores](../diseno/admin-workspace/README.md).
+
+## S5-11 — Navbar público unificado (2026-11-02)
+
+Se usa el navbar de la landing en todas las vistas de usuario, con un único
+componente y una sola hoja de estilos. Se igualan fuente, tamaño, logo y controles;
+se conectan inicio, compra, historia, envíos, contacto, carrito y sesión.
+Se conserva la animación del logo y se ajustan los espacios de las páginas internas.
+[Diseño y rutas](../diseno/public-header/README.md).

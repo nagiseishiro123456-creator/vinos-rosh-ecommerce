@@ -71,63 +71,11 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
 .fullButton { width: 100%; }
 .textLink { color: var(--wine); font-weight: 800; font-size: .92rem; }
 
-/* Header */
-.siteHeader {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 50;
-  color: white;
-  transition: background .28s ease, box-shadow .28s ease, backdrop-filter .28s ease;
-}
-.siteHeaderInner { min-height: 76px; display: flex; align-items: center; gap: 26px; }
-.siteBrand { display: inline-flex; align-items: center; flex-shrink: 0; }
+/* Brand mark and sign-out controls are also used in administration. */
 .brandLogo { display: block; width: 144px; max-width: 100%; height: auto; object-fit: contain; }
 .brandLogoLight { filter: brightness(0) invert(1); }
-.desktopNav { display: none; margin-left: auto; align-items: center; gap: 28px; font-size: .85rem; font-weight: 650; }
-.desktopNav a { opacity: .9; transition: opacity .2s ease; }
-.desktopNav a:hover { opacity: 1; }
-.headerActions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.iconButton, .cartButton, .mobileMenuButton {
-  min-width: 42px;
-  min-height: 42px;
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 999px;
-  background: rgba(255,255,255,.06);
-  color: white;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.cartButton { position: relative; }
-.cartCount {
-  position: absolute;
-  top: -4px;
-  right: -3px;
-  min-width: 19px;
-  height: 19px;
-  padding: 0 4px;
-  border-radius: 20px;
-  display: grid;
-  place-items: center;
-  background: var(--gold);
-  color: var(--wine-dark);
-  font-size: .66rem;
-  font-weight: 900;
-}
-.headerLogin { min-height: 42px; padding: 0 17px; display: inline-flex; align-items: center; border-radius: 999px; background: white; color: var(--wine-dark); font-weight: 800; font-size: .82rem; }
 .signOutButton { gap: 8px; white-space: nowrap; }
 .signOutButton:disabled { opacity: .65; cursor: wait; }
-.headerLogin.signOutButton { border: 0; }
-.desktopOnly { display: none; }
-.mobileMenuButton { border: 0; }
-.mobileNav {
-  display: grid;
-  padding: 10px 16px 18px;
-  background: rgba(var(--brand-rgb),.98);
-  border-top: 1px solid rgba(255,255,255,.1);
-}
-.mobileNav a { padding: 13px 8px; border-bottom: 1px solid rgba(255,255,255,.08); font-weight: 700; }
-.mobileSignOut { min-height: 48px; display: flex; align-items: center; padding: 13px 8px; border: 0; border-bottom: 1px solid rgba(255,255,255,.08); background: transparent; color: inherit; font-weight: 700; text-align: left; }
 
 /* Store / product cards */
 .storeSection { padding: 94px 0; }
@@ -270,8 +218,4 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   color: var(--wine-dark);
   background: var(--paper);
   box-shadow: 0 12px 30px rgba(22, 7, 8, .16);
-}
-
-.mobileBottomNav {
-  display: none;
 }

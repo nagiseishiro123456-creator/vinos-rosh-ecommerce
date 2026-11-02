@@ -89,9 +89,9 @@ test("S5 landing: four reference widths, reduced motion, aligned logo and access
     await page.setViewportSize({ width, height: 844 });
     await alignedLogo(page);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    expect((await page.locator(".landingLogoSlot").boundingBox())!.width).toBe(width <= 820 ? 100 : 140);
+    expect((await page.locator(".landingLogoSlot").boundingBox())!.width).toBe(width <= 1100 ? 100 : 140);
     const menu = page.getByRole("button", { name: "Abrir menú", exact: true });
-    if (width <= 820) {
+    if (width <= 1100) {
       await expect(menu).toBeVisible(); expect((await menu.boundingBox())!.width).toBeGreaterThanOrEqual(44);
       await menu.click();
       const navigation = page.getByRole("navigation", { name: "Navegación móvil", exact: true });

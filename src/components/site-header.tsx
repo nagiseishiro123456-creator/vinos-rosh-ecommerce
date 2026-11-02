@@ -1,144 +1,74 @@
 "use client";
 
-import {
-  Home,
-  Menu,
-  ShoppingBag,
-  UserRound,
-  X,
-} from "lucide-react";
+import { LogIn, Menu, Phone, ShoppingCart, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent, type RefObject } from "react";
 import { useAccountCart, useCartPanel } from "./cart-provider";
-
-import { BrandLogo } from "@/components/brand-logo";
-import { useGuestCart } from "@/components/guest-cart-provider";
-import { SignOutButton } from "@/components/sign-out-button";
+import { BrandLogo } from "./brand-logo";
+import { useGuestCart } from "./guest-cart-provider";
+import { SignOutButton } from "./sign-out-button";
+import { PUBLIC_DESKTOP_NAVIGATION, PUBLIC_NAVIGATION } from "@/lib/public-navigation";
 
 type SiteHeaderProps = {
   userId: string | null;
   isAuthenticated?: boolean;
   isAdmin?: boolean;
+  phone?: string | null;
+  logoSlotRef?: RefObject<HTMLDivElement | null>;
 };
 
-export function SiteHeader({
-  userId,
-  isAuthenticated = false,
-  isAdmin = false,
-}: SiteHeaderProps) {
-  const guest = useGuestCart();
-  const pathname = usePathname();
-  const menuButton = useRef<HTMLButtonElement>(null);
-  const account = useAccountCart(); const panel = useCartPanel(); const router = useRouter();
-  const ownerMismatch = userId !== panel.userId;
-  useEffect(() => { if (ownerMismatch) router.refresh(); }, [ownerMismatch, router]);
-  const count = isAuthenticated ? ownerMismatch ? 0 : account.data?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0
+export function SiteHeader({ userId, isAuthenticated = false, isAdmin = false, phone = null, logoSlotRef }: SiteHeaderProps) {
+  const guest = useGuestCart(), account = useAccountCart(), panel = useCartPanel();
+  const pathname = usePathname(), router = useRouter();
+  const menu = useRef<HTMLDivElement>(null), menuButton = useRef<HTMLButtonElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false), [scrolled, setScrolled] = useState(false);
+  const mismatch = userId !== panel.userId;
+  useEffect(() => { if (mismatch) router.refresh(); }, [mismatch, router]);
+  useEffect(() => {
+    if (logoSlotRef) return; // The landing intro owns its scroll listener and adaptive surface.
+    const onScroll = () => setScrolled(window.scrollY > 32);
+    onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [logoSlotRef]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const dismiss = (event: PointerEvent) => { if (!menu.current?.contains(event.target as Node) && !menuButton.current?.contains(event.target as Node)) setMenuOpen(false); };
+    const key = (event: KeyboardEvent) => { if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); } };
+    const resize = () => { if (window.innerWidth > 1100) setMenuOpen(false); };
+    window.addEventListener("pointerdown", dismiss); window.addEventListener("keydown", key); window.addEventListener("resize", resize);
+    return () => { window.removeEventListener("pointerdown", dismiss); window.removeEventListener("keydown", key); window.removeEventListener("resize", resize); };
+  }, [menuOpen]);
+  const count = isAuthenticated ? mismatch ? 0 : account.data?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0
     : [...guest.items, ...(guest.pending?.items ?? [])].reduce((sum, item) => sum + item.quantity, 0);
+  const accountHref = isAdmin ? "/admin" : "/mi-cuenta";
+  const validPhone = /^\+?\d{9,15}$/.test(phone ?? "");
+  const callHref = validPhone ? `tel:${phone}` : "/contacto";
+  const loginHref = isAuthenticated ? accountHref : "/iniciar-sesion";
+  const loginLabel = isAuthenticated ? isAdmin ? "Administración" : "Mi cuenta" : "Iniciar sesión";
   function openCart(event: MouseEvent<HTMLAnchorElement>) {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault(); setMenuOpen(false);
-    if (ownerMismatch) { router.refresh(); return; }
+    if (mismatch) { router.refresh(); return; }
     panel.openCart(event.currentTarget);
   }
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [menuOpen]);
-
-  const accountHref = isAdmin ? "/admin" : "/mi-cuenta";
-
-  return (
-    <>
-      <header className={`siteHeader${scrolled ? " siteHeaderScrolled" : ""}`}>
-        <div className="siteHeaderInner shell">
-          <Link className="siteBrand" href="/" aria-label="Ir al inicio de Vinos ROSH">
-            <BrandLogo light />
-          </Link>
-
-          <nav className="desktopNav" aria-label="Navegación principal">
-            <Link href="/#inicio" aria-current={pathname === "/" ? "page" : undefined}>Inicio</Link>
-            <Link href="/envios" aria-current={pathname === "/envios" ? "page" : undefined}>Envíos</Link>
-            <Link href="/nuestra-historia" aria-current={pathname === "/nuestra-historia" ? "page" : undefined}>Nuestra historia</Link>
-            <Link href="/contacto" aria-current={pathname === "/contacto" ? "page" : undefined}>Contacto</Link>
-          </nav>
-
-          <div className="headerActions">
-            <Link className="iconButton desktopOnly" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
-              <UserRound size={19} aria-hidden="true" />
-            </Link>
-            <Link className="cartButton" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart} aria-label={`Carrito de compras: ${count} unidades`}>
-              <ShoppingBag size={19} aria-hidden="true" />
-              {count > 0 ? <span className="cartCount" aria-hidden="true">{count}</span> : null}
-            </Link>
-            {isAuthenticated ? (
-              <SignOutButton className="headerLogin desktopOnly" />
-            ) : (
-              <Link className="headerLogin desktopOnly" href="/iniciar-sesion">Iniciar sesión</Link>
-            )}
-            <button
-              ref={menuButton}
-              className="mobileMenuButton"
-              type="button"
-              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-              aria-expanded={menuOpen}
-              aria-controls="mobile-navigation"
-              onClick={() => setMenuOpen((value) => !value)}
-            >
-              {menuOpen ? <X size={23} aria-hidden="true" /> : <Menu size={23} aria-hidden="true" />}
-            </button>
-          </div>
-        </div>
-
-        {menuOpen ? (
-          <nav id="mobile-navigation" className="mobileNav" aria-label="Navegación móvil">
-            <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
-            <Link href="/envios" onClick={() => setMenuOpen(false)}>Cobertura y tarifas de envío</Link>
-            <Link href="/nuestra-historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
-            <Link href="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
-            {isAdmin ? <Link href="/admin" onClick={() => setMenuOpen(false)}>Administración</Link> : null}
-            <Link href="/mi-cuenta" onClick={() => setMenuOpen(false)}>Mi cuenta</Link>
-            {isAuthenticated ? <SignOutButton className="mobileSignOut" /> : <Link href="/iniciar-sesion" onClick={() => setMenuOpen(false)}>Iniciar sesión</Link>}
-          </nav>
-        ) : null}
-      </header>
-
-      <nav className="mobileBottomNav" aria-label="Accesos rápidos">
-        <Link href="/">
-          <Home size={20} aria-hidden="true" />
-          <span>Inicio</span>
-        </Link>
-        <Link className="mobileBottomCart" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart}>
-          <span className="mobileBottomCartIcon">
-            <ShoppingBag size={21} aria-hidden="true" />
-            {count > 0 ? <small>{count}</small> : null}
-          </span>
-          <span>Carrito</span>
-        </Link>
-        <Link href={isAuthenticated ? accountHref : "/iniciar-sesion"}>
-          <UserRound size={20} aria-hidden="true" />
-          <span>{isAuthenticated ? (isAdmin ? "Admin" : "Cuenta") : "Ingresar"}</span>
-        </Link>
-      </nav>
-    </>
-  );
+  return <>
+    <header className={`siteHeader landingHeader publicHeader${scrolled ? " siteHeaderScrolled" : ""}`} data-landing={logoSlotRef ? "true" : "false"}>
+      <div className="landingHeaderLeft">
+        {logoSlotRef ? <div ref={logoSlotRef} className="landingLogoSlot" aria-hidden="true" /> : <Link className="landingLogoSlot publicHeaderBrand" href="/#inicio" aria-label="Ir al inicio de Vinos ROSH"><BrandLogo /></Link>}
+        <nav className="landingHeaderReveal landingDesktopNav" aria-label="Navegación principal"><span className="landingSeparator" aria-hidden="true" />{PUBLIC_DESKTOP_NAVIGATION.map(item => <Link key={item.href} className="landingHistory" href={item.href} aria-current={pathname === item.path ? "page" : undefined}>{item.label}</Link>)}</nav>
+      </div>
+      <div className="landingHeaderReveal landingHeaderRight">
+        <a className="landingIcon landingDesktopIcon" href={callHref} aria-label={validPhone ? "Llamar a ROSH" : "Contactar a ROSH"}><Phone size={22} strokeWidth={1.8} aria-hidden="true" /></a>
+        <Link className="landingIcon landingDesktopIcon" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}><UserRound size={22} strokeWidth={1.8} aria-hidden="true" /></Link>
+        <Link className="cartButton landingIcon landingCart" href="/carrito" aria-label={`Carrito de compras: ${count} unidades`} aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart}><ShoppingCart size={22} strokeWidth={1.8} aria-hidden="true" />{count > 0 && <span className="cartCount landingCartBadge" key={count} aria-hidden="true">{count > 9 ? "9+" : count}</span>}</Link>
+        <span className="landingSeparator landingLoginSeparator" aria-hidden="true" />
+        {isAuthenticated && <SignOutButton className="landingLogin landingDesktopSignOut" />}
+        <Link className={`landingLogin${isAuthenticated ? " landingMobileAccount" : ""}`} href={loginHref} aria-label={loginLabel}><LogIn size={22} strokeWidth={1.8} aria-hidden="true" /><span>{loginLabel}</span></Link>
+        <button ref={menuButton} className="landingIcon landingMenuButton" type="button" aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={menuOpen} aria-controls="public-mobile-navigation" onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}</button>
+      </div>
+      {menuOpen && <div ref={menu} className="landingMobileMenu" id="public-mobile-navigation"><nav aria-label="Navegación móvil">{PUBLIC_NAVIGATION.map(item => <Link key={item.href} href={item.href} aria-current={pathname === item.path ? "page" : undefined} onClick={() => setMenuOpen(false)}>{item.label}</Link>)}{validPhone && <a href={callHref} onClick={() => setMenuOpen(false)}>Llamar a ROSH</a>}<Link href={loginHref} onClick={() => setMenuOpen(false)}>{loginLabel}</Link>{isAuthenticated && <SignOutButton className="publicMenuSignOut" />}</nav></div>}
+    </header>
+    <span className="sr-only" role="status" aria-live="polite">Carrito, {count} {count === 1 ? "unidad" : "unidades"}</span>
+  </>;
 }
