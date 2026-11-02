@@ -1,39 +1,148 @@
-/* Administration uses the same identity with calmer white working surfaces. */
-.adminWorkspace { min-height: 100svh; background: var(--cream); }
-.adminHeader { color: white; background: var(--brand); padding-top: env(safe-area-inset-top); }
-.adminHeaderInner { min-height: 84px; display: flex; align-items: center; gap: 28px; }
-.adminBrand { display: flex; align-items: center; gap: 18px; flex-shrink: 0; }
-.adminBrand .brandLogo { width: 124px; }
-.adminBrand > span { border-left: 1px solid #ffffff4d; padding-left: 18px; font-size: .76rem; letter-spacing: .06em; }
-.adminHeaderNav, .adminHeaderActions { display: flex; align-items: center; gap: 8px; }
-.adminHeaderNav { margin-left: auto; }
-.adminHeaderNav a, .adminHeaderActions :is(a, button) { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; border-radius: 999px; font-size: .82rem; font-weight: 600; white-space: nowrap; }
-.adminHeaderNav a:hover { background: #ffffff12; }
-.adminHeaderActions :is(a, button) { border: 1px solid #ffffff66; color: white; background: transparent; }
-.adminHeaderActions :is(a, button):is(:hover, :focus-visible) { border-color: var(--brand-light); box-shadow: 0 0 18px #d3a9f14d; }
-.adminHeaderSignOut { gap: 8px; }
-.adminWorkspace .adminPage { min-height: calc(100svh - 84px); padding-top: 36px; }
-.adminWorkspace :is(h1, h2, h3) { font-family: inherit; font-weight: 650; }
-.adminWorkspace .adminPage h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; }
-.adminWorkspace .adminPage h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.25; }
-.adminWorkspace .adminModuleCard strong { font-family: inherit; font-size: 1.15rem; color: var(--brand); }
-.adminWorkspace .adminModuleCard.active:hover { border-color: #b698cc; box-shadow: 0 10px 26px rgba(var(--brand-rgb), .08); }
-.adminWorkspace :is(.adminPanel, .adminCard) { box-shadow: 0 8px 28px rgba(var(--brand-rgb), .04); }
-.adminWorkspace .adminTopbar > a { color: var(--brand); font-weight: 600; }
-.adminHeader :focus-visible { outline-color: var(--brand-light); }
-@media (max-width: 1100px) {
-  .adminHeaderInner { flex-wrap: wrap; gap: 12px; padding-block: 16px 0; }
-  .adminHeaderActions { margin-left: auto; }
-  .adminHeaderNav { order: 3; width: 100%; margin: 0; border-top: 1px solid #ffffff24; padding-block: 6px; } }
-@media (max-width: 619px) {
-  .adminHeaderInner { column-gap: 8px; }
-  .adminBrand .brandLogo { width: 96px; }
-  .adminBrand > span { display: none; }
-  .adminHeaderActions { gap: 6px; }
-  .adminHeaderActions :is(a, button) { font-size: .75rem; padding-inline: 10px; }
-  .adminHeaderSignOut svg { display: none; }
-  .adminHeaderNav { justify-content: space-between; gap: 0; }
-  .adminHeaderNav a { padding-inline: 10px; }
-  .adminWorkspace .adminPage { padding-top: 28px; } }
-@media (prefers-reduced-motion: reduce) {
-  .adminHeader * { transition: none; } }
+/* Private workspace; these styles stay scoped to administration. */
+.adminWorkspace {
+  --admin-sidebar-width: 248px; --admin-accent: #4b1c71; --admin-ink: #302b40;
+  --admin-muted: #777285; --admin-line: #e9e6ee; --admin-bg: #f5f5fa;
+  --cream: var(--admin-bg); --ink: var(--admin-ink); --muted: var(--admin-muted); --line: var(--admin-line);
+  min-height: 100svh; color: var(--admin-ink); background: var(--admin-bg); font: 400 .9rem/1.55 var(--font-body);
+}
+.adminWorkspace *, .adminWorkspace *::before, .adminWorkspace *::after { box-sizing: border-box; }
+.adminWorkspace :focus-visible { outline: 2px solid #8756ae; outline-offset: 3px; }
+.adminSkipLink { position: fixed; top: 10px; left: 12px; z-index: 200; padding: 12px 18px; background: white; border-radius: 8px; transform: translateY(-150%); }
+.adminSkipLink:focus { transform: none; }
+.adminSidebar { position: fixed; inset: 0 auto 0 0; z-index: 40; width: var(--admin-sidebar-width); display: flex; flex-direction: column; background: white; border-right: 1px solid var(--admin-line); }
+.adminSidebarBrand { flex: 0 0 auto; min-height: 100px; padding: 23px 26px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.adminSidebarBrand a { display: grid; gap: 7px; }
+.adminSidebarBrand .brandLogo { width: 116px; }
+.adminSidebarBrand span { font-size: .61rem; letter-spacing: .17em; text-transform: uppercase; color: var(--admin-muted); }
+.adminSidebarNav { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 8px 14px 18px; scrollbar-width: thin; }
+.adminNavGroup + .adminNavGroup { margin-top: 22px; }
+.adminNavGroup > p { margin: 0 12px 9px; font-size: .63rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #91899f; }
+.adminNavItem { min-height: 42px; display: flex; align-items: center; gap: 12px; padding: 9px 12px; margin-block: 3px; border-radius: 7px; color: #696174; font-size: .85rem; transition: color .16s, background .16s; }
+.adminNavItem svg { flex: 0 0 auto; }
+.adminNavItem:hover { background: #f7f4fa; color: var(--admin-accent); }
+.adminNavItem[aria-current=page] { background: #f0e8f7; color: var(--admin-accent); font-weight: 700; box-shadow: inset 3px 0 var(--admin-accent); }
+.adminNavChild { min-height: 35px; margin-left: 23px; padding-block: 7px; font-size: .76rem; }
+.adminNavChild svg { width: 15px; height: 15px; }
+.adminNavDot { width: 6px; height: 6px; margin-left: auto; background: currentColor; border-radius: 50%; }
+.adminSidebarBottom { flex: 0 0 auto; border-top: 1px solid var(--admin-line); padding: 16px 25px max(16px, env(safe-area-inset-bottom)); }
+.adminSidebarNote { display: block; color: #8d8499; font-size: .66rem; margin-bottom: 9px; }
+.adminExitButton { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0; border: 0; background: transparent; color: #6c6079; font: inherit; font-size: .8rem; cursor: pointer; }
+.adminExitButton:hover { color: var(--admin-accent); }
+.adminMainColumn { min-height: 100svh; margin-left: var(--admin-sidebar-width); display: flex; flex-direction: column; min-width: 0; }
+.adminHeader { position: sticky; top: 0; z-index: 30; padding-top: env(safe-area-inset-top); background: #ffffffed; border-bottom: 1px solid var(--admin-line); backdrop-filter: blur(14px); }
+.adminHeaderInner { min-height: 77px; padding: 14px 32px; display: flex; align-items: center; gap: 24px; max-width: 1500px; margin-inline: auto; }
+.adminBreadcrumb { display: flex; align-items: center; gap: 10px; white-space: nowrap; font-size: .77rem; color: var(--admin-muted); }
+.adminBreadcrumb strong { font-weight: 600; color: var(--admin-ink); }
+.adminHeaderSearch { min-width: 100px; max-width: 380px; margin-left: auto; display: flex; align-items: center; gap: 9px; color: #938a9e; }
+.adminHeaderSearch input { width: 100%; min-width: 0; min-height: 40px; border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--admin-ink); font: inherit; font-size: .82rem; outline: none; }
+.adminHeaderSearch:focus-within input { border-color: #c7afd9; }
+.adminHeaderSearch > svg { flex: 0 0 auto; }
+.adminHeaderSearch button { display: inline-flex; align-items: center; min-height: 38px; border: 0; border-radius: 6px; padding: 7px; background: #f4eef9; color: var(--admin-accent); cursor: pointer; }
+.adminHeaderSearch button span { display: none; }
+.adminStoreLink { display: inline-flex; align-items: center; gap: 6px; color: var(--admin-accent); font-size: .77rem; white-space: nowrap; }
+.adminProfile { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.adminAvatar { flex: 0 0 36px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: #efe6f6; color: var(--admin-accent); font-size: .72rem; font-weight: 700; }
+.adminProfile > span:last-child { max-width: 135px; min-width: 0; }
+.adminProfile strong, .adminProfile small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adminProfile strong { font-size: .74rem; font-weight: 600; }
+.adminProfile small { font-size: .64rem; color: var(--admin-muted); }
+.adminIconButton { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; border: 1px solid var(--admin-line); border-radius: 7px; background: white; color: var(--admin-accent); cursor: pointer; }
+.adminMenuToggle { display: none; }
+.adminMobileDialog { padding: 0; margin: 0; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; border: 0; background: transparent; color: var(--admin-ink); }
+.adminMobileDialog::backdrop { background: #20142f73; backdrop-filter: blur(2px); }
+.adminMobilePanel { width: min(290px, calc(100% - 32px)); height: 100%; display: flex; flex-direction: column; background: white; box-shadow: 20px 0 60px #1f112f26; }
+.adminMobilePanel .adminSidebarBrand { padding-top: max(23px, env(safe-area-inset-top)); }
+.adminWorkspace #admin-content { flex: 1; min-width: 0; outline: none; scroll-margin-top: 110px; }
+.adminWorkspace .shell { width: 100%; max-width: 1500px; padding-inline: 32px; margin-inline: auto; }
+.adminWorkspace .adminPage { min-height: 0; padding-top: 30px; padding-bottom: 44px; }
+.adminWorkspace :is(h1, h2, h3) { font-family: var(--font-body); font-weight: 650; letter-spacing: -.025em; }
+.adminWorkspace .adminPage h1 { margin: 5px 0 9px; font-size: clamp(1.5rem, 2.5vw, 1.9rem); line-height: 1.25; }
+.adminWorkspace .adminPage h2 { font-size: 1.12rem; line-height: 1.4; }
+.adminWorkspace .adminPage h3 { font-size: .98rem; line-height: 1.4; }
+.adminWorkspace .eyebrow { font-size: .62rem; color: #8e819b; letter-spacing: .14em; }
+.adminWorkspace .adminIntro, .adminWorkspace .adminTopbar p:not(.eyebrow) { font-size: .82rem; line-height: 1.7; }
+.adminWorkspace .adminTopbar { margin-bottom: 24px; align-items: center; gap: 20px; }
+.adminWorkspace .adminTopbar > div { min-width: 0; }
+.adminWorkspace .adminTopbar > a:not(.button) { color: var(--admin-accent); font-size: .8rem; white-space: nowrap; }
+.adminWorkspace :is(.button, .primaryButton, .secondaryButton) { min-height: 42px; padding: 10px 17px; border-radius: 7px; font-size: .8rem; font-weight: 600; box-shadow: none; line-height: 1.35; }
+.adminWorkspace .button:hover { transform: none; }
+.adminWorkspace :is(.buttonPrimary, .buttonDark) { background: var(--admin-accent); color: white; }
+.adminWorkspace :is(.buttonPrimary, .buttonDark):hover { background: #612a8e; }
+.adminWorkspace .buttonGhostLight { background: white; border-color: #ded7e7; color: #675779; }
+.adminWorkspace :is(.adminPanel, .adminCard, .paymentReviewCard, .adminSettingsCard, .adminInventoryCard, .backupCard, .launchCard, .adminEmptyState, .adminOrderStatusBar, .adminStatsGrid article, .backupSummaryGrid article) { border: 1px solid var(--admin-line); border-radius: 10px; background: white; box-shadow: 0 2px 8px #24113204; }
+.adminWorkspace :is(.adminPanel, .adminCard, .paymentReviewCard, .adminSettingsCard, .adminEmptyState, .backupCard) { padding: 24px; }
+.adminWorkspace fieldset.adminPanel { min-width: 0; }
+.adminWorkspace fieldset legend { padding-inline: 8px; color: var(--admin-accent); font-size: .83rem; font-weight: 600; }
+.adminWorkspace .adminStatsGrid { gap: 16px; }
+.adminWorkspace .adminStatsGrid article { padding: 18px 20px; }
+.adminWorkspace .adminStatsGrid strong { font-family: var(--font-body); font-size: 1.65rem; letter-spacing: -.04em; }
+.adminWorkspace .adminStatsGrid span { font-size: .74rem; }
+.adminWorkspace :is(.adminField input, .adminField textarea, .adminField select, .adminSearchBar input, .settlementForm input:not([type=checkbox]), .settlementForm textarea) { min-width: 0; max-width: 100%; border-radius: 6px; border: 1px solid #dfd9e7; background: white; color: var(--admin-ink); font: inherit; font-size: .85rem; }
+.adminWorkspace :is(.adminField input, .adminSearchBar input) { min-height: 42px; }
+.adminWorkspace :is(.adminField textarea, .adminField input) { scroll-margin-block: 140px 40px; }
+.adminWorkspace .adminField :is(input, textarea):focus { border-color: #a77ec5; box-shadow: 0 0 0 3px #4b1c710a; }
+.adminWorkspace .adminField :is(small, label), .adminWorkspace label.adminField { font-size: .8rem; }
+.adminWorkspace input[type=checkbox] { accent-color: var(--admin-accent); }
+.adminWorkspace input[type=file] { padding: 8px; min-height: 44px; }
+.adminWorkspace input[type=file]::file-selector-button { border: 0; border-radius: 5px; padding: 7px 10px; margin-right: 9px; background: #f0e8f7; color: var(--admin-accent); font: inherit; font-size: .75rem; cursor: pointer; }
+.adminWorkspace .adminTableWrap { position: relative; max-width: 100%; border: 1px solid var(--admin-line); border-radius: 10px; background: white; overflow-x: auto; overscroll-behavior-x: contain; }
+.adminWorkspace .adminTable { font-size: .78rem; }
+.adminWorkspace .adminTable :is(th, td) { padding: 16px 19px; vertical-align: middle; }
+.adminWorkspace .adminTable th { font-size: .62rem; letter-spacing: .09em; background: #faf9fc; color: #81758f; font-weight: 600; }
+.adminWorkspace .adminTable tbody tr:hover { background: #fbf9fd; }
+.adminWorkspace .adminTable tbody tr:last-child td { border-bottom: 0; }
+.adminWorkspace .adminTable td strong, .adminWorkspace .adminTable td small { display: block; }
+.adminWorkspace .adminTable td small { font-size: .7rem; margin-top: 3px; }
+.adminWorkspace .adminTable td:first-child { display: table-cell; }
+.adminWorkspace .adminTextButton { color: var(--admin-accent); font-weight: 600; }
+.adminWorkspace .adminBadge { border-radius: 5px; padding: 5px 8px; font-size: .63rem; font-weight: 600; }
+.adminWorkspace .adminBadge.muted { color: #70627d; background: #f2eef7; }
+.adminWorkspace .adminAlert { display: flex; align-items: center; gap: 10px; font-size: .83rem; border-radius: 8px; }
+.adminWorkspace .adminAlert svg { flex: 0 0 auto; }
+.adminWorkspace :is(.adminForm, .adminFormGrid, .adminOrderGrid, .adminSplit, .settlementGrid, .notificationDetailGrid) > * { min-width: 0; }
+.adminWorkspace .adminPanel li { overflow-wrap: anywhere; }
+.adminWorkspace .adminPanel ul { padding-left: 20px; }
+.adminWorkspace .adminBackLink { font-size: .8rem; }
+.adminWorkspace .adminOrderNote { background: #f5f0fa; color: #6a567e; }
+.adminWorkspace .adminReadiness.pending { background: #f2ebf8; color: var(--admin-accent); }
+.adminWorkspace .notificationNotice, .adminWorkspace .settlementNotice { border-color: #e1d5ed; background: #f5f0fa; color: #6e5482; font-size: .84rem; }
+.adminWorkspace .settlementSummary dd { font-weight: 600; }
+.adminWorkspace .adminSettingsTitleRow { flex-wrap: wrap; }
+.adminWorkspaceFooter { width: 100%; max-width: 1500px; margin-inline: auto; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-top: 1px solid var(--admin-line); color: #91879c; font-size: .67rem; }
+.adminWorkspaceFooter a { display: inline-flex; align-items: center; gap: 6px; color: #756381; }
+/* Jane has small letterforms: keep operational captions readable. */
+.adminWorkspace .adminNavItem { font-size: .9rem; }
+.adminWorkspace .adminNavChild { font-size: .8rem; }
+.adminWorkspace .adminNavGroup > p, .adminWorkspace .adminSidebarNote { font-size: .7rem; color: #81738c; }
+.adminWorkspace .adminProfile strong { font-size: .8rem; }
+.adminWorkspace .adminProfile small, .adminWorkspaceFooter { font-size: .72rem; }
+.adminWorkspace .adminHeaderSearch input, .adminWorkspace .adminBreadcrumb { font-size: .85rem; }
+.adminWorkspace .adminOverview :is(.adminMetricCard small, .adminCardHeading p, .adminChartEmpty p, .adminChartData summary, .adminMetricFootnote, .adminProductFacts span, .adminPendingCard small, .adminQuickLinks small) { font-size: .75rem; color: #83708f; }
+.adminWorkspace .adminOverview .adminMetricLabel { font-size: .85rem; }
+.adminWorkspace .adminOverview .adminTable td { font-size: .83rem; }
+.adminWorkspace .adminTable th { font-size: .7rem; }
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .adminHeaderInner { gap: 16px; }.adminBreadcrumb > span { display: none; }.adminProfile > span:last-child { display: none; }
+  .adminWorkspace :is(.settlementGrid, .notificationDetailGrid) { grid-template-columns: 1fr; }
+}
+@media (max-width: 1023px) {
+  .adminSidebar { display: none; }.adminMainColumn { margin-left: 0; }.adminMenuToggle { display: inline-flex; }
+  .adminHeaderInner { gap: 14px; }.adminBreadcrumb > span { display: none; }.adminHeaderSearch { margin-left: auto; }.adminProfile > span:last-child { display: none; }
+}
+@media (max-width: 639px) {
+  .adminHeaderInner { min-height: 66px; padding: 12px 18px; gap: 12px; flex-wrap: wrap; }
+  .adminHeaderSearch { order: 5; flex: 1 0 100%; max-width: none; background: #f7f5fa; border-radius: 7px; padding-inline: 11px 5px; }
+  .adminHeaderSearch input { min-height: 36px; }.adminHeaderSearch button { min-height: 32px; }
+  .adminStoreLink { margin-left: auto; font-size: .72rem; }.adminBreadcrumb { max-width: 115px; overflow: hidden; }.adminBreadcrumb strong { overflow: hidden; text-overflow: ellipsis; }
+  .adminAvatar { width: 30px; height: 30px; flex-basis: 30px; font-size: .65rem; }.adminIconButton { width: 34px; height: 34px; }
+  .adminWorkspace .shell { padding-inline: 18px; }.adminWorkspace .adminPage { padding-top: 24px; padding-bottom: 32px; }
+  .adminWorkspace .adminTopbar { align-items: stretch; flex-direction: column; gap: 14px; }
+  .adminWorkspace :is(.adminCard, .adminPanel, .adminEmptyState, .paymentReviewCard, .adminSettingsCard, .backupCard) { padding: 18px; }
+  .adminWorkspace .adminFormGrid { grid-template-columns: minmax(0, 1fr); }.adminWorkspace .adminFieldWide { grid-column: auto; }
+  .adminWorkspace .adminTable :is(th, td) { padding: 14px; }
+  .adminWorkspace .adminRecentOrders { padding: 0; }
+  .adminWorkspace .adminRecentOrders .adminCardHeading { padding: 18px; }
+  .adminWorkspace .adminRecentOrders .adminTableWrap { margin: 0; }
+  .adminWorkspaceFooter { padding: 16px 18px; flex-direction: column; align-items: flex-start; gap: 5px; }
+}
+@media (prefers-reduced-motion: reduce) { .adminWorkspace *, .adminWorkspace *::before, .adminWorkspace *::after { transition: none !important; scroll-behavior: auto !important; } }

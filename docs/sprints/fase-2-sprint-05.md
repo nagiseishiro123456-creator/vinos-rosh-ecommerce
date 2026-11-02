@@ -78,3 +78,13 @@ Panel → Nuestra historia permite editar todos los textos, reemplazar las cuatr
 imágenes y ajustar su encuadre. Se confirma el guardado y se protegen ediciones
 simultáneas; las fotos se conservan en la base y en los respaldos.
 [Diseño, datos y validación](../diseno/nuestra-historia/README.md).
+
+## S5-10 — Renovación del administrador (2026-11-02)
+
+Se adapta el panel a las referencias del cliente: menú lateral, barra superior,
+tarjetas y tablas con la identidad ROSH. Solo incluye los módulos existentes;
+Producto conserva la ficha única, y Confirmaciones/Conciliación quedan dentro de Pagos.
+El resumen consulta ventas confirmadas, pedidos, clientes y stock reales, con períodos
+7/30/90 días, gráfico por día y enlaces a los pendientes operativos. Se unifican las
+pantallas de administración y su uso en móvil, manteniendo permisos y acciones.
+[Alcance y definición de indicadores](../diseno/admin-workspace/README.md).

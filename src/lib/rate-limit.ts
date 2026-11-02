@@ -67,7 +67,7 @@ export async function consumeRateLimit({
 
   const key = rateLimitKey(scope, identifier || "unknown");
 
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 5; attempt += 1) {
     try {
       return await prisma.$transaction(
         async (tx) => {
@@ -130,7 +130,12 @@ export async function consumeRateLimit({
         { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
       );
     } catch (error) {
-      if (attempt < 2 && isRetryableTransactionError(error)) continue;
+      if (attempt < 4 && isRetryableTransactionError(error)) {
+        // Concurrent cart/checkout requests otherwise repeat their conflicts in lockstep.
+        // Failed serializable transactions roll back; the same limits still apply.
+        await new Promise(resolve => setTimeout(resolve, 10 * 2 ** attempt + Math.floor(Math.random() * 16)));
+        continue;
+      }
       throw error;
     }
   }

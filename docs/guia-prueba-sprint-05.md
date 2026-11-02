@@ -58,3 +58,27 @@ Las pantallas de cuenta y compra siguen excluidas de indexación.»
 Para el cliente: «En Nuestra historia puedes actualizar textos y fotos sin tocar
 el código. Preparas los cambios, guardas y recibes la confirmación; al recargar la
 página pública se ve la nueva versión.»
+
+## Administrador renovado — mejora S5-10
+
+1. Entra a `/admin` con una cuenta administradora. Revisa el resumen y cambia entre
+   7, 30 y 90 días. Ventas, pedidos, clientes nuevos y el gráfico deben corresponder
+   al período; el stock y las tareas pendientes reflejan el estado actual.
+2. Abre Ver datos por día. Sin ventas confirmadas, el estado vacío y las filas con
+   cero son correctos; no se cargan ventas de ejemplo. Un pedido cancelado o
+   reembolsado no cuenta como venta confirmada.
+3. Recorre el menú: Producto, Pedidos, Clientes, Pagos, Envíos, Nuestra historia,
+   Reseñas, Contactos, Configuración, Lanzamiento y Respaldo. Confirmaciones y
+   Conciliación están debajo de Pagos. Comprueba también las fichas de pedido/cliente.
+4. Busca un cliente desde la barra superior: abre el directorio con el filtro aplicado.
+   Las tarjetas del resumen y Por atender deben abrir el módulo correspondiente.
+5. En móvil, abre el menú y ciérralo con X, Escape o el fondo; también debe cerrarse al
+   elegir una sección. Luego comprueba que puedes seguir desplazando la página.
+   Las tablas anchas se desplazan dentro de su propio recuadro.
+6. Comprueba los guardados de Producto y Nuestra historia, la edición de una tarifa
+   y su confirmación. Para pagos/pedidos, usa únicamente operaciones de prueba.
+   Cerrar sesión debe volver a la tienda y retirar el acceso a la administración.
+
+Para el cliente: «El resumen te muestra cómo va la tienda y qué necesita atención.
+Desde el menú administras el único producto, sus existencias, los pedidos y el
+contenido de la marca. Las cifras vienen de los pedidos reales del sistema.»
