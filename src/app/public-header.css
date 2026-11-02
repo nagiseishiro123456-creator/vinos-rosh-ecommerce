@@ -5,7 +5,7 @@
   position: fixed; inset: 0 0 auto; z-index: 60; height: calc(var(--public-header-height) + env(safe-area-inset-top));
   display: flex; align-items: center; justify-content: space-between; gap: 22px;
   padding: env(safe-area-inset-top) clamp(16px, 5vw, 80px) 0;
-  box-sizing: border-box; color: var(--header-ink); background: #fdfcfeF5;
+  box-sizing: border-box; color: var(--header-ink); background: #fdfcfeF5; touch-action: manipulation;
   border: 0; border-bottom: 1px solid rgba(var(--brand-rgb), .1); box-shadow: none; backdrop-filter: blur(16px);
   font: 500 16px/1.55 var(--font-rosh-landing), Cambria, Georgia, serif;
 }
@@ -40,7 +40,8 @@
 .catalogHeaderWrap.compact:has(.publicHeader) { min-height: calc(var(--public-header-height) + env(safe-area-inset-top)); background: transparent; }
 body:has(.publicHeader) { padding-bottom: env(safe-area-inset-bottom); }
 body:has(.publicHeader) .whatsappFab { bottom: max(18px, env(safe-area-inset-bottom)); }
-body:has(.publicHeader):not(:has(.purchaseFlow)) .analyticsConsent { margin-top: calc(var(--public-header-height) + env(safe-area-inset-top) + 14px); }
+body:has(.analyticsConsent) .siteHeader.publicHeader { position: relative; }
+body:has(.analyticsConsent) .authRoute { padding-top: 0; }
 html:has(.publicHeader) { scroll-padding-top: calc(var(--public-header-height) + env(safe-area-inset-top) + 12px); }
 @media (max-width: 1100px) {
   :root { --public-header-height: 64px; }

@@ -47,7 +47,7 @@ test("one public navbar keeps landing typography, dimensions, cart and routes ac
   expect(await signature(page)).toEqual(reference);
   await loginCustomer(page);
   for (const path of ["/mi-cuenta", "/mi-cuenta/perfil", "/mi-cuenta/direcciones"]) {
-    await page.goto(path); expect(await signature(page), path).toEqual(reference);
+    await page.goto(path); await expect(page).toHaveURL(url => url.pathname === path); expect(await signature(page), path).toEqual(reference);
     await expect(page.locator(".publicHeader a[href='/mi-cuenta']").first()).toHaveAttribute("href", "/mi-cuenta");
   }
   await capture(page, info, "navbar-unificado-cuenta");

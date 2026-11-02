@@ -198,8 +198,6 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
 
 @media (min-width: 850px) {
   .shell { width: min(1180px, calc(100% - 64px)); }
-  .desktopNav, .desktopOnly { display: flex; }
-  .mobileMenuButton, .mobileNav { display: none; }
   .productGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .footerGrid { grid-template-columns: 1.6fr repeat(3, 1fr); }
   .productDetail { grid-template-columns: 1.05fr .95fr; gap: 70px; }
@@ -208,11 +206,6 @@ h2 { font-size: clamp(2.15rem, 5vw, 4rem); line-height: 1.03; }
   .authVisual { min-height: 100vh; padding: 54px; }
   .authPanel { padding: 48px 28px; }
   .authCard { padding: 34px; }
-}
-
-@media (min-width: 1100px) {
-  .headerActions { margin-left: 8px; }
-  .desktopNav { margin-left: auto; }
 }
 .buttonLight {
   color: var(--wine-dark);

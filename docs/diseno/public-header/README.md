@@ -34,6 +34,9 @@ su estado, cantidades y devolución del foco al botón que lo abrió.
 
 Se adaptan los espacios de autenticación/historia y el aviso de analítica a las
 alturas compartidas. Las preferencias de consentimiento mantienen su función.
+Mientras el aviso esté pendiente, el navbar sigue al aviso en el flujo, conservando
+el orden de lectura y sin superponer sus controles. Al resolverlo, recupera la
+posición habitual de cada contexto con las mismas medidas y tipografía.
 
 ## Verificación
 

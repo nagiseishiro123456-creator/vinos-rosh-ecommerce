@@ -17,27 +17,12 @@ textarea {
 }
 
 button,
-.button,
-.iconButton,
-.cartButton,
-.mobileMenuButton,
-.headerLogin {
+.button {
   touch-action: manipulation;
-}
-
-.siteHeader {
-  padding-top: env(safe-area-inset-top);
 }
 
 .catalogHeaderWrap.compact {
   min-height: calc(92px + env(safe-area-inset-top));
-}
-
-.mobileNav {
-  max-height: calc(100dvh - 76px - env(safe-area-inset-top));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-bottom: max(18px, env(safe-area-inset-bottom));
 }
 
 .whatsappFab {
@@ -48,25 +33,6 @@ button,
 @media (max-width: 619px) {
   .shell {
     width: min(100% - 28px, 1180px);
-  }
-
-  .siteHeaderInner {
-    min-height: 68px;
-    gap: 12px;
-  }
-
-  .siteBrand .brandLogo {
-    width: 124px;
-  }
-
-  .headerActions {
-    gap: 6px;
-  }
-
-  .cartButton,
-  .mobileMenuButton {
-    min-width: 46px;
-    min-height: 46px;
   }
 
   .homeHero {
@@ -250,19 +216,5 @@ button,
 
   .siteFooter {
     padding-bottom: calc(104px + env(safe-area-inset-bottom));
-  }
-}
-
-@media (min-width: 850px) and (max-width: 1099px) {
-  .siteBrand .brandLogo {
-    width: 124px;
-  }
-
-  .siteHeaderInner {
-    gap: 18px;
-  }
-
-  .desktopNav {
-    gap: 20px;
   }
 }
