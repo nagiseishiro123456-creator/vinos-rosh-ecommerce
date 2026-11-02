@@ -104,7 +104,7 @@
 
 .adminBadge.muted {
   color: #706760;
-  background: #eee9e5;
+  background: var(--ivory);
 }
 
 .adminFormPage {
@@ -197,13 +197,13 @@
   padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #fffdfb;
+  background: var(--paper);
   outline: none;
 }
 
 .inventoryForm input:focus {
   border-color: var(--wine);
-  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), .08);
 }
 
 .adminOrderDetailPage {
@@ -376,7 +376,7 @@
 }
 
 .adminRefundForm input:not([type="checkbox"]):focus {
-  outline: 2px solid rgba(107, 15, 26, 0.18);
+  outline: 2px solid rgba(var(--brand-rgb), 0.18);
   border-color: var(--wine);
 }
 

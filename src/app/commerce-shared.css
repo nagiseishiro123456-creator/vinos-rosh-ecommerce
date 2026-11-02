@@ -68,7 +68,7 @@
   border: 1px solid var(--line);
   border-radius: 11px;
   color: var(--ink);
-  background: #fffdfb;
+  background: var(--paper);
   outline: none;
 }
 
@@ -86,7 +86,7 @@
 .adminField input:focus,
 .adminField textarea:focus {
   border-color: var(--wine);
-  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), .08);
 }
 
 .adminField small {

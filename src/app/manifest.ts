@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Bebidas de uva sin alcohol de producción propia.",
     start_url: "/",
     display: "standalone",
-    background_color: "#FCF7F1",
-    theme_color: "#3E0A0F",
+    background_color: "#F8F7FB",
+    theme_color: "#4B1C71",
     lang: "es-PE",
     icons: [
       {

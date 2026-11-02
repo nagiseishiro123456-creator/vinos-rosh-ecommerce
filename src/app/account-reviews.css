@@ -131,7 +131,7 @@
 
 .adminReviewCard > p {
   margin: 18px 0;
-  color: #594e48;
+  color: var(--muted);
   line-height: 1.65;
 }
 
@@ -239,7 +239,7 @@
   gap: 4px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #fffdfb;
+  background: var(--paper);
 }
 
 .accountProfileInfo {
@@ -325,7 +325,7 @@
 .publicReviewCard > p {
   min-height: 48px;
   margin: 18px 0;
-  color: #594e48;
+  color: var(--muted);
   line-height: 1.65;
 }
 

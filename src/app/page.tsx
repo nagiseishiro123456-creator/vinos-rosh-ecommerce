@@ -15,7 +15,7 @@ const lora = localFont({
 });
 const jost = localFont({src:"./fonts/Jost-Variable.ttf",weight:"400 500",display:"swap",variable:"--font-rosh-ui"});
 export const dynamic = "force-dynamic";
-export const viewport = { themeColor: "#fdfcfe" };
+export const viewport = { themeColor: "#4b1c71" };
 export const metadata = publicPageMetadata({
   path: "/", title: "ROSH | Vino de uvas sin alcohol", absoluteTitle: true,
   description: "ROSH, vino de uvas sin alcohol. Un único producto para compartir momentos especiales.",

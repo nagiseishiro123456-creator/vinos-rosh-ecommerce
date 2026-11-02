@@ -112,7 +112,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--ink);
-  background: #fffdfb;
+  background: var(--paper);
   outline: none;
 }
 
@@ -131,7 +131,7 @@
 .contactForm input:focus,
 .contactForm textarea:focus {
   border-color: var(--wine);
-  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), .08);
 }
 
 .contactHoneypot {
@@ -213,7 +213,7 @@
   padding: 5px 8px;
   border-radius: 999px;
   color: var(--wine);
-  background: #f7e9eb;
+  background: var(--brand-soft);
   font-size: .66rem;
   font-weight: 900;
   letter-spacing: .06em;
@@ -231,7 +231,7 @@
 .contactAdminCard > p {
   margin: 16px 0 18px;
   white-space: pre-wrap;
-  color: #574c47;
+  color: var(--muted);
   line-height: 1.65;
 }
 

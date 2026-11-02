@@ -1,0 +1,39 @@
+/* Administration uses the same identity with calmer white working surfaces. */
+.adminWorkspace { min-height: 100svh; background: var(--cream); }
+.adminHeader { color: white; background: var(--brand); padding-top: env(safe-area-inset-top); }
+.adminHeaderInner { min-height: 84px; display: flex; align-items: center; gap: 28px; }
+.adminBrand { display: flex; align-items: center; gap: 18px; flex-shrink: 0; }
+.adminBrand .brandLogo { width: 124px; }
+.adminBrand > span { border-left: 1px solid #ffffff4d; padding-left: 18px; font-size: .76rem; letter-spacing: .06em; }
+.adminHeaderNav, .adminHeaderActions { display: flex; align-items: center; gap: 8px; }
+.adminHeaderNav { margin-left: auto; }
+.adminHeaderNav a, .adminHeaderActions :is(a, button) { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; border-radius: 999px; font-size: .82rem; font-weight: 600; white-space: nowrap; }
+.adminHeaderNav a:hover { background: #ffffff12; }
+.adminHeaderActions :is(a, button) { border: 1px solid #ffffff66; color: white; background: transparent; }
+.adminHeaderActions :is(a, button):is(:hover, :focus-visible) { border-color: var(--brand-light); box-shadow: 0 0 18px #d3a9f14d; }
+.adminHeaderSignOut { gap: 8px; }
+.adminWorkspace .adminPage { min-height: calc(100svh - 84px); padding-top: 36px; }
+.adminWorkspace :is(h1, h2, h3) { font-family: inherit; font-weight: 650; }
+.adminWorkspace .adminPage h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; }
+.adminWorkspace .adminPage h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.25; }
+.adminWorkspace .adminModuleCard strong { font-family: inherit; font-size: 1.15rem; color: var(--brand); }
+.adminWorkspace .adminModuleCard.active:hover { border-color: #b698cc; box-shadow: 0 10px 26px rgba(var(--brand-rgb), .08); }
+.adminWorkspace :is(.adminPanel, .adminCard) { box-shadow: 0 8px 28px rgba(var(--brand-rgb), .04); }
+.adminWorkspace .adminTopbar > a { color: var(--brand); font-weight: 600; }
+.adminHeader :focus-visible { outline-color: var(--brand-light); }
+@media (max-width: 1100px) {
+  .adminHeaderInner { flex-wrap: wrap; gap: 12px; padding-block: 16px 0; }
+  .adminHeaderActions { margin-left: auto; }
+  .adminHeaderNav { order: 3; width: 100%; margin: 0; border-top: 1px solid #ffffff24; padding-block: 6px; } }
+@media (max-width: 619px) {
+  .adminHeaderInner { column-gap: 8px; }
+  .adminBrand .brandLogo { width: 96px; }
+  .adminBrand > span { display: none; }
+  .adminHeaderActions { gap: 6px; }
+  .adminHeaderActions :is(a, button) { font-size: .75rem; padding-inline: 10px; }
+  .adminHeaderSignOut svg { display: none; }
+  .adminHeaderNav { justify-content: space-between; gap: 0; }
+  .adminHeaderNav a { padding-inline: 10px; }
+  .adminWorkspace .adminPage { padding-top: 28px; } }
+@media (prefers-reduced-motion: reduce) {
+  .adminHeader * { transition: none; } }
