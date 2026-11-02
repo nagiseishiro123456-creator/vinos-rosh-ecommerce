@@ -21,6 +21,15 @@
 - El probe DEMO autorizado fue una solicitud de token con 100 céntimos y correo sintético:
   HTTP 200, status ERROR, INT_905, sin token. No se completó una transacción.
 
-Pendientes al preparar esta nota: revisión local de pantallas y contrato de navegador
-con transporte simulado, regresión de CI/build y comparación de recursos del commit.
-Registrar resultados finales antes de integrar. No habilitar producción para obtener evidencia.
+Revisión local de pantallas aprobada en 1440/390 px: formulario, espera, respuesta
+perdida, cambio de sesión y vencimiento sin solicitudes de pago. Admin autenticado con
+sesión temporal, campos privados vacíos y pasarela deshabilitada; no se guardó configuración.
+
+Contrato real del adaptador en Chrome con SDK/API interceptados: una solicitud pese
+a doble clic, dos scripts de orígenes/rutas fijos, cuerpo sin importe, retorno limitado a
+sus cuatro campos, respuesta rechazada no aprobada y fallo de SDK sin reintento.
+No se descargó ni ejecutó el SDK real en esas pruebas. Capturas privadas fuera de Git.
+
+Pendientes al preparar esta nota: regresión de CI/build y comparación de recursos del
+commit. Registrar resultados finales en el PR antes de integrar. No habilitar producción
+para obtener evidencia.

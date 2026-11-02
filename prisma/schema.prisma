@@ -438,6 +438,8 @@ model PaymentAttempt {
   amountMinor       BigInt
   currency          String              @db.Char(3)
   gatewayVersionId  String?             @db.Uuid
+  gatewayVersion    IzipayGatewayVersion? @relation(fields: [gatewayVersionId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  providerEvents    IzipayPaymentEvent[]
   state             PaymentAttemptState @default(INITIATING)
   tokenHash         String?             @db.Char(64)
   tokenReadyAt      DateTime?
@@ -458,6 +460,8 @@ model IzipayGatewayVersion {
   secretBox   String
   fingerprint String   @unique @db.Char(64)
   createdAt   DateTime @default(now()) @db.Timestamp(3)
+  configurations IzipayGatewayConfiguration[]
+  attempts PaymentAttempt[]
 }
 
 model IzipayGatewayConfiguration {
@@ -467,6 +471,7 @@ model IzipayGatewayConfiguration {
   revision   Int      @default(1)
   updatedBy  String
   updatedAt  DateTime @default(now()) @db.Timestamp(3)
+  version IzipayGatewayVersion @relation(fields: [versionId], references: [id], onDelete: Restrict, onUpdate: NoAction)
 }
 
 model IzipayConfigurationAudit {
@@ -487,6 +492,7 @@ model IzipayPaymentEvent {
   amountMinor     BigInt
   currency        String   @db.Char(3)
   createdAt       DateTime @default(now()) @db.Timestamp(3)
+  attempt PaymentAttempt @relation(fields: [attemptId], references: [id], onDelete: Restrict, onUpdate: NoAction)
 
   @@index([attemptId, createdAt])
 }

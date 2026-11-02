@@ -58,6 +58,7 @@ export function IzipayTestForm({ initial, expectedUserId, portsFactory, mode = "
     <div role="status" aria-live="polite"><h2>{title}</h2><p>{description}</p></div>
     <div ref={host} className="izipayTestHost" hidden={view.phase !== "starting" && view.phase !== "form"} />
     <div className="izipayTestActions">
+      {unavailable && initial.state === "reserved" ? <button type="button" className="button" onClick={() => window.location.reload()}>Recargar pantalla y consultar el pedido</button> : null}
       {view.phase === "idle" && !unavailable ? <button type="button" className="button buttonDark" onClick={() => {
         if (session.current) void session.current.start(); else setUnavailable(true);
       }}>{mode === "TEST" ? "Abrir formulario de prueba" : "Abrir formulario de pago"}</button> : null}

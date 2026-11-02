@@ -23,6 +23,9 @@ clave maestra en este incremento.
 La base tiene prioridad como conjunto completo. Solo la ausencia de configuración
 permite usar variables de entorno. Un fallo de BD, descifrado o modo no provoca fallback
 a otra cuenta. La configuración deshabilitada de BD tampoco activa las variables.
+Los nombres históricos de variables que contienen `_TEST_` se mantienen por compatibilidad;
+el modo y los prefijos de las claves se validan. Producción por entorno requiere además
+`IZIPAY_PRODUCTION_ENABLED=true`; los ejemplos DEMO nunca permiten ese modo.
 Las versiones cifradas son inmutables y cada intento conserva su ID: cambiar claves no
 invalida la verificación de notificaciones anteriores. El historial no guarda secretos.
 
