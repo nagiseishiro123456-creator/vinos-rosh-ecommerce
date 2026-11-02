@@ -1,5 +1,16 @@
 # Sprint 3 — Pago automático y comunicación
 
+## Incremento Izipay del 2026-11-02
+
+Se retoma S3-02/S3-03: configuración cifrada desde admin, prioridad BD/entorno, modo
+fijado en la reserva, formulario bajo demanda, recuperación sin reinicio y verificación
+de retorno TEST/IPN con registro transaccional e idempotente. Las pruebas no habilitan
+ventas ni despacho. 364 servidor aprobadas en QA; aceptación externa sigue pendiente.
+El ejemplo DEMO recibió INT_905, sin token. [Contrato y límites](../integraciones/izipay-configuracion-y-checkout.md),
+[guía de ROSH](../guia-izipay-cliente.md) y [QA](../testing/s3-02-izipay-formulario.md).
+La tabla histórica de abajo conserva el estado de los incrementos originales; este
+avance no cierra la recuperación externa, la cuenta del comercio ni S3-06.
+
 Refinamiento iniciado por instrucción del propietario, 2026-10-21 (America/Lima).
 Base: `main` `83c8e5774af42d8b7c90dfd3135385faf3c8d0d9`, cierre técnico del Sprint 2.
 Estado: propuesta; investigación documentada, proveedor/producto por confirmar.

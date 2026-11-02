@@ -34,7 +34,7 @@ function replayOrder(order: { id: string; number: string; checkoutRequestHash: s
 // Shared ACID path: no payment-provider network I/O is allowed inside this transaction.
 export async function reserveOrder(userId: string, input: ReservationInput, environment: SandboxEnvironment = process.env) {
   const integration = input.kind === "manual" ? null : "MICUENTAWEB_V4";
-  const requestHash = input.kind === "manual" ? checkoutRequestHash(userId, input) : automaticOrderRequestHash(userId, input);
+  const requestHash = input.kind === "manual" ? checkoutRequestHash(userId, input) : automaticOrderRequestHash(userId, input, environment.IZIPAY_MODE);
   const identity = { userId_checkoutKey: { userId, checkoutKey: input.checkoutKey } };
   const replaySelect = { id: true, number: true, checkoutRequestHash: true, paymentIntegration: true } as const;
   const now = new Date();
@@ -69,6 +69,7 @@ export async function reserveOrder(userId: string, input: ReservationInput, envi
         const order = await tx.order.create({
           data: {
             checkoutKey: input.checkoutKey, checkoutRequestHash: requestHash, paymentIntegration: integration,
+            paymentMode: integration ? environment.IZIPAY_MODE : null,
             number, userId, addressId: address.id, status: OrderStatus.PENDING_PAYMENT,
             stockReservedAt: reservedAt, reservationExpiresAt: input.kind === "manual" ? getReservationExpiresAt(reservedAt) : getReservationExpiresAt(reservedAt, 15),
             subtotal: amounts.subtotal, shippingAmount: amounts.shippingAmount, total: amounts.total,
@@ -91,8 +92,8 @@ export async function reserveOrder(userId: string, input: ReservationInput, envi
               amount: amounts.total, currency: "PEN",
             } } : undefined,
             events: input.kind === "micuentaweb-test" ? { create: {
-              kind: "AUTOMATIC_SANDBOX_RESERVED", actorUserId: userId,
-              note: "Reserva de pruebas Mi Cuenta Web; inicio y confirmación de pago pendientes.",
+                kind: environment.IZIPAY_MODE === "PRODUCTION" ? "AUTOMATIC_PAYMENT_RESERVED" : "AUTOMATIC_SANDBOX_RESERVED", actorUserId: userId,
+                note: environment.IZIPAY_MODE === "PRODUCTION" ? "Reserva Mi Cuenta Web; no acredita un pago recibido." : "Reserva de pruebas Mi Cuenta Web; inicio y confirmación de pago pendientes.",
             } } : undefined,
           },
           select: { id: true, number: true },

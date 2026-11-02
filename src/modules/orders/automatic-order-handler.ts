@@ -17,7 +17,7 @@ const json = (body: unknown, status: number, headers: Record<string, string> = {
 
 type Options = {
   authenticate: () => Promise<string | null>;
-  environment?: () => SandboxEnvironment;
+  environment?: () => SandboxEnvironment | Promise<SandboxEnvironment>;
   consume?: typeof consumeRateLimit;
   reserve?: typeof reserveMicuentawebSandboxOrder;
   bodyTimeoutMs?: number;
@@ -36,7 +36,9 @@ export function createAutomaticOrderReservationHandler(options: Options) {
   const bodyTimeoutMs = options.bodyTimeoutMs ?? 5_000;
   if (!Number.isInteger(bodyTimeoutMs) || bodyTimeoutMs < 1 || bodyTimeoutMs > 5_000) throw new Error("INVALID_BODY_TIMEOUT");
   return async (request: Request) => {
-    const environment = { ...(options.environment?.() ?? process.env) };
+    let environment: SandboxEnvironment;
+    try { environment = { ...await (options.environment?.() ?? process.env) }; }
+    catch { return json({ message: "La reserva de pruebas no está disponible." }, 503); }
     if (environment.PAYMENTS_IZIPAY_ENABLED !== "true" || environment.IZIPAY_MCW_RESERVE_ENABLED !== "true") {
       return json({ message: "Recurso no disponible." }, 404);
     }

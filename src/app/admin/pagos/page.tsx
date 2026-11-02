@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 
 function providerLabel(provider: string) {
+  if (provider === "IZIPAY") return "Izipay";
   if (provider === "YAPE_MANUAL") return "Yape";
   if (provider === "TRANSFER_MANUAL") return "Transferencia";
   return provider;
@@ -110,7 +111,7 @@ export default async function PaymentsAdminPage({ searchParams }: { searchParams
                   </div>
                 </div>
 
-                <div className="paymentReviewActions">
+                {String(payment.provider) === "IZIPAY" ? <p className="checkoutWarningPanel">Este resultado de Izipay requiere conciliación con el proveedor. No se confirma ni se rechaza como una operación manual; revisa la trazabilidad del pedido.</p> : <div className="paymentReviewActions">
                   <form action={rejectAction} className="adminRefundForm">
                     <label>Motivo del rechazo<input name="reason" required minLength={4} maxLength={500} /></label>
                     <label className="adminConfirmCheck"><input type="checkbox" name="confirm" value="yes" required />Confirmo el rechazo y la liberación del stock.</label>
@@ -120,7 +121,7 @@ export default async function PaymentsAdminPage({ searchParams }: { searchParams
                     <label className="adminConfirmCheck"><input type="checkbox" name="confirm" value="yes" required />Verifiqué la operación y el monto en la cuenta del negocio.</label>
                     <button className="button buttonDark" type="submit">Confirmar pago</button>
                   </form>
-                </div>
+                </div>}
               </article>
             );
           })}

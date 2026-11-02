@@ -1,5 +1,17 @@
 # Punto de avance
 
+## Izipay — configuración, formulario y resultados (2026-11-02)
+
+- Se retoma Sprint 3 por instrucción del propietario. Sin cuenta propia del comercio.
+- Admin de claves cifradas, versiones para callbacks, fallback BD → entorno, modo fijo
+  del pedido, formulario oficial bajo demanda y retorno TEST/IPN transaccional.
+- Pruebas de dinero separadas de venta: TEST nunca marca Order PAID ni encola correo.
+- Producción requiere activación explícita con contraseña; no se activa en esta entrega.
+- El ejemplo DEMO del handoff recibió INT_905 al solicitar token; no funciona como cuenta ROSH.
+- 364/364 servidor en QA, tipos y lint aprobados. Navegador/CI por registrar al publicar.
+- [Contrato](integraciones/izipay-configuracion-y-checkout.md) · [Guía](guia-izipay-cliente.md)
+  · [QA](testing/s3-02-izipay-formulario.md). Pruebas externas, QR/3DS, cuenta e IPN HTTPS pendientes.
+
 ## S5-08 — Ficha única, stock y textos editables
 
 Admin → Producto funciona sin crear otro registro por separado. Guarda stock, precio

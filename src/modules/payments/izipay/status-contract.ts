@@ -11,6 +11,7 @@ export const paymentStatusSchema = z.object({
   reservationExpiresAt: z.string().datetime().nullable(),
   confirmedAt: z.string().datetime().nullable(),
   observedAt: z.string().datetime(),
+  testResult: z.literal("APPROVED").optional(),
 }).strict().superRefine((value, context) => {
   const paid = ["PAID", "PREPARING", "SHIPPED", "DELIVERED"].includes(value.orderStatus);
   if (value.state === "confirmed" && (!paid || !value.confirmedAt)) {

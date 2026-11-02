@@ -34,6 +34,7 @@ enum PaymentStatus {
 }
 
 enum PaymentProvider {
+  IZIPAY
   CULQI
   YAPE_MANUAL
   TRANSFER_MANUAL
@@ -329,6 +330,7 @@ model Order {
   checkoutKey          String? @db.VarChar(68)
   checkoutRequestHash  String? @db.Char(64)
   paymentIntegration   String? @db.VarChar(32)
+  paymentMode          String? @db.VarChar(10)
 
   paidAt      DateTime?
   shippedAt   DateTime?
@@ -432,9 +434,10 @@ model PaymentAttempt {
   orderId           String              @unique
   providerReference String              @unique @db.VarChar(64)
   integration       String              @db.VarChar(32)
-  mode              String              @db.VarChar(4)
+  mode              String              @db.VarChar(10)
   amountMinor       BigInt
   currency          String              @db.Char(3)
+  gatewayVersionId  String?             @db.Uuid
   state             PaymentAttemptState @default(INITIATING)
   tokenHash         String?             @db.Char(64)
   tokenReadyAt      DateTime?
@@ -445,6 +448,47 @@ model PaymentAttempt {
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([state, createdAt])
+}
+
+// Immutable encrypted versions keep callbacks verifiable after credentials are changed.
+model IzipayGatewayVersion {
+  id          String   @id @db.Uuid
+  mode        String   @db.VarChar(10)
+  merchantId  String   @db.VarChar(64)
+  secretBox   String
+  fingerprint String   @unique @db.Char(64)
+  createdAt   DateTime @default(now()) @db.Timestamp(3)
+}
+
+model IzipayGatewayConfiguration {
+  id         String   @id @default("izipay")
+  versionId  String   @db.Uuid
+  enabled    Boolean  @default(false)
+  revision   Int      @default(1)
+  updatedBy  String
+  updatedAt  DateTime @default(now()) @db.Timestamp(3)
+}
+
+model IzipayConfigurationAudit {
+  id         String   @id @db.Uuid
+  actorId    String
+  revision   Int
+  mode       String   @db.VarChar(10)
+  createdAt  DateTime @default(now()) @db.Timestamp(3)
+}
+
+model IzipayPaymentEvent {
+  id              String   @id @db.Uuid
+  attemptId       String
+  transactionUuid String   @db.VarChar(64)
+  eventHash       String   @unique @db.Char(64)
+  outcome         String   @db.VarChar(24)
+  mode            String   @db.VarChar(10)
+  amountMinor     BigInt
+  currency        String   @db.Char(3)
+  createdAt       DateTime @default(now()) @db.Timestamp(3)
+
+  @@index([attemptId, createdAt])
 }
 
 model OrderEvent {

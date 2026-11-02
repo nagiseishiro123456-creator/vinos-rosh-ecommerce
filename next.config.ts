@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { micuentawebLabCsp } from "./src/modules/payments/izipay/form-csp";
 
 const isProduction = process.env.NODE_ENV === "production";
 const scriptSources = [
@@ -54,6 +55,10 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
+      ...[{
+        source: "/pedidos/:number/tarjeta",
+        headers: [{ key: "Content-Security-Policy", value: micuentawebLabCsp(contentSecurityPolicy) }],
+      }],
     ];
   },
   images: {

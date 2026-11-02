@@ -24,6 +24,8 @@ export async function checkoutFixture(t: TestContext) {
   const product = await prisma.product.create({ data: { name: "Botella QA", slug: `money-${stamp}`, description: "Producto de prueba", price: "29.90", stock: 10 } });
   const cart = await prisma.cart.create({ data: { userId: user.id, items: { create: { productId: product.id, quantity: 3 } } } });
   t.after(async () => {
+    await prisma.$executeRaw`DELETE FROM "IzipayPaymentEvent" WHERE "attemptId" IN (
+      SELECT a."id" FROM "PaymentAttempt" a JOIN "Order" o ON o."id"=a."orderId" WHERE o."userId"=${user.id})`;
     await prisma.inventoryMovement.deleteMany({ where: { actorUserId: user.id } });
     await prisma.order.deleteMany({ where: { userId: user.id } });
     await prisma.user.delete({ where: { id: user.id } });

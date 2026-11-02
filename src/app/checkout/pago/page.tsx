@@ -17,6 +17,8 @@ import { createCheckoutQuote } from "@/modules/checkout/quote";
 import { createCheckoutKey } from "@/modules/checkout/idempotency";
 import { loadCheckoutSnapshot, CheckoutUnavailableError } from "@/modules/checkout/snapshot";
 import { getCommerceSettings } from "@/modules/settings/queries";
+import { resolveGatewayEnvironment } from "@/modules/payments/izipay/gateway-settings";
+import { isMicuentawebFormEnabled } from "@/modules/payments/izipay/form-policy";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +80,9 @@ export default async function PaymentPage({ searchParams }: Props) {
   const subtotal = amounts.subtotal.toFixed(2);
   const shippingAmount = amounts.shippingAmount.toFixed(2);
   const total = amounts.total.toFixed(2);
+  let izipayTestEnabled = false;
+  let izipayMode: "TEST" | "PRODUCTION" = "TEST";
+  try { const environment = await resolveGatewayEnvironment(); izipayTestEnabled = isMicuentawebFormEnabled(environment); izipayMode = environment.IZIPAY_MODE === "PRODUCTION" ? "PRODUCTION" : "TEST"; } catch { /* Closed on missing migration/configuration. */ }
 
   return (
     <main className="checkoutPage purchaseFlow">
@@ -129,6 +134,9 @@ export default async function PaymentPage({ searchParams }: Props) {
 
         <div className="paymentMain">
           <ReservationForm
+            izipayTestEnabled={izipayTestEnabled}
+            izipayMode={izipayMode}
+            expectedUserId={session.user.id}
             addressId={address.id}
             total={total}
             checkoutQuote={checkoutQuote}

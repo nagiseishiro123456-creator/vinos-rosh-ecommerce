@@ -1,0 +1,16 @@
+.izipayTestPage { max-width: 860px; padding-block: 36px 70px; }
+.izipayTestCard { margin-block: 24px; padding: clamp(18px, 4vw, 32px); border: 1px solid var(--line); border-radius: 18px; background: white; color: var(--ink); }
+.izipayTestCard h2 { font-size: clamp(1.5rem, 4vw, 2rem); margin: 24px 0 12px; }
+.izipayTestCard p { line-height: 1.7; }
+.izipayTestBadge { font-size: .75rem; font-weight: 700; letter-spacing: .06em; color: var(--brand); }
+.izipayTestFacts { display: flex; flex-wrap: wrap; gap: 20px 44px; padding-block: 18px; border-block: 1px solid var(--line); }
+.izipayTestFacts dt { font-size: .85rem; color: var(--muted); }
+.izipayTestFacts dd { margin: 6px 0 0; font-weight: 700; overflow-wrap: anywhere; }
+.izipayTestHost { margin-block: 20px; min-width: 0; }
+.izipayTestHost[hidden] { display: none; }
+.izipayTestActions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 24px; }
+.izipayTestActions .button { min-height: 44px; white-space: normal; }
+.izipayTestNote { font-size: .85rem; color: var(--muted); }
+.izipayTestScenarios { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 24px; }
+.izipayTestScenarios button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; }
+.izipayTestScenarios button[aria-pressed=true] { background: var(--brand); color: white; }

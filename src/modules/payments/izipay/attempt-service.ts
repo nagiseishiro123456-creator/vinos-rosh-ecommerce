@@ -24,7 +24,7 @@ function view(attempt: PaymentAttempt) {
 }
 
 const eligibilitySelect = {
-  userId: true, status: true, total: true, paymentIntegration: true, stockReservedAt: true, reservationExpiresAt: true,
+  userId: true, status: true, total: true, paymentIntegration: true, paymentMode: true, stockReservedAt: true, reservationExpiresAt: true,
   stockReleasedAt: true, reservationExpiredAt: true, paidAt: true,
   payments: { select: { id: true } },
 } as const;
@@ -36,7 +36,7 @@ function eligible(order: EligibleOrder, now = new Date()) {
 }
 function current(attempt: PaymentAttempt & { order: EligibleOrder }) {
   if (attempt.state !== PaymentAttemptState.INITIATING || attempt.integration !== "MICUENTAWEB_V4"
-    || attempt.mode !== "TEST" || attempt.currency !== "PEN" || !eligible(attempt.order)) return false;
+    || !["TEST","PRODUCTION"].includes(attempt.mode) || (attempt.order.paymentMode ?? "TEST") !== attempt.mode || attempt.currency !== "PEN" || !eligible(attempt.order)) return false;
   return BigInt(toMicuentawebMinorUnits(attempt.order.total.toFixed(2))) === attempt.amountMinor;
 }
 
@@ -70,7 +70,7 @@ export async function beginMicuentawebSandboxAttempt(
       const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, select: {
         ...eligibilitySelect, user: { select: { email: true } },
       } });
-      if (!eligible(order)) {
+      if (!eligible(order) || (order.paymentMode ?? "TEST") !== environment.IZIPAY_MODE) {
         // Manual/Culqi orders retain their existing flow; no automatic method conversion.
         throw new PaymentAttemptError("ORDER_UNAVAILABLE");
       }
@@ -80,9 +80,12 @@ export async function beginMicuentawebSandboxAttempt(
       };
       const payload = buildMicuentawebPayment(snapshot);
       const attempt = await tx.paymentAttempt.create({ data: {
-        orderId, providerReference: snapshot.orderReference, integration: "MICUENTAWEB_V4", mode: "TEST",
+        orderId, providerReference: snapshot.orderReference, integration: "MICUENTAWEB_V4", mode: environment.IZIPAY_MODE!,
         amountMinor: BigInt(payload.amount), currency: payload.currency,
       } });
+      if (environment.IZIPAY_CONFIG_VERSION_ID) {
+        await tx.$executeRaw`UPDATE "PaymentAttempt" SET "gatewayVersionId"=${environment.IZIPAY_CONFIG_VERSION_ID}::uuid WHERE "id"=${attempt.id}`;
+      }
       return { created: true as const, attempt: view(attempt), snapshot };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted, maxWait: 3_000, timeout: 5_000 });
   } catch (error) {
