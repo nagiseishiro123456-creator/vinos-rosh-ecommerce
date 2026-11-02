@@ -37,7 +37,7 @@ export default async function NewProductPage({ searchParams }: NewProductPagePro
       {message ? <div className="adminAlert error">{message}</div> : null}
 
       <section className="adminPanel">
-        <ProductForm action={createProduct} submitLabel="Crear producto ROSH" values={{active:false,sku:"ROSH-750",name:"ROSH · Zumo de uva 750 ml"}} />
+        <ProductForm action={createProduct} submitLabel="Crear producto ROSH" values={{active:false,imageUrl:"/media/rosh/landing-2/bottle-up.png",sku:"ROSH-750",name:"ROSH · Zumo de uva 750 ml"}} />
       </section>
     </main>
   );
