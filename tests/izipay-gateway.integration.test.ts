@@ -14,14 +14,15 @@ import { cancelUnpaidReservation } from "../src/modules/orders/reservation-servi
 process.env.GATEWAY_ENCRYPTION_KEY=randomBytes(32).toString("base64");
 test.after(()=>prisma.$disconnect());
 async function paymentFixture(t: TestContext, live=false) {
-  const f=await automaticCheckoutFixture(t);
-  const attempt=await beginMicuentawebSandboxAttempt(f.user.id,f.order.id,automaticSandbox);
   const credentials={merchantId:"12345678",mode:live?"PRODUCTION" as const:"SANDBOX" as const,apiPassword:live?"prodpassword_fake":"testpassword_fake",publicKey:`12345678:${live?"publickey_":"testpublickey_"}fake`,hmacKey:"fake-browser-hmac"};
+  const environment={...automaticSandbox,NODE_ENV:live?'production':'development',IZIPAY_MODE:live?'PRODUCTION':'TEST',IZIPAY_PRODUCTION_ENABLED:live?'true':'false',IZIPAY_MCW_MERCHANT_ID:credentials.merchantId,IZIPAY_MCW_REST_TEST_PASSWORD:credentials.apiPassword,IZIPAY_MCW_PUBLIC_TEST_KEY:credentials.publicKey};
+  const f=await automaticCheckoutFixture(t,environment);
+  const attempt=await beginMicuentawebSandboxAttempt(f.user.id,f.order.id,environment);
   const sealed=sealGatewayCredentials(credentials,process.env.GATEWAY_ENCRYPTION_KEY),versionId=randomUUID();
   await prisma.$executeRaw`INSERT INTO "IzipayGatewayVersion" ("id","mode","merchantId","secretBox","fingerprint") VALUES
     (${versionId}::uuid,${credentials.mode},${credentials.merchantId},${sealed.secretBox},${createHmac('sha256',versionId).update(sealed.fingerprint).digest('hex')})`;
-  await prisma.$executeRaw`UPDATE "PaymentAttempt" SET "gatewayVersionId"=${versionId}::uuid,"mode"=${live?"PRODUCTION":"TEST"} WHERE "id"=${attempt.attempt.id}`;
-  if(live) await prisma.order.update({where:{id:f.order.id},data:{paymentMode:'PRODUCTION'}});
+  await prisma.$executeRaw`UPDATE "PaymentAttempt" SET "gatewayVersionId"=${versionId}::uuid WHERE "id"=${attempt.attempt.id}`;
+  assert.equal((await prisma.order.findUniqueOrThrow({where:{id:f.order.id}})).paymentMode,live?'PRODUCTION':'TEST');
   t.after(async()=>{await prisma.$executeRaw`DELETE FROM "IzipayGatewayVersion" WHERE "id"=${versionId}::uuid`;});
   const body={shopId:credentials.merchantId,orderStatus:"PAID",orderDetails:{orderId:attempt.attempt.providerReference,mode:live?"PRODUCTION":"TEST",orderCurrency:"PEN",orderTotalAmount:9820,orderEffectiveAmount:9820},transactions:[{uuid:randomUUID().replaceAll('-',''),shopId:credentials.merchantId,status:"PAID",amount:9820,currency:"PEN",operationType:"DEBIT"}]};
   const submit=(value=body,source:"ipn"|"browser"="ipn",owner=f.user.id)=>{const raw=JSON.stringify(value),signature=createHmac('sha256',source==='ipn'?credentials.apiPassword:credentials.hmacKey).update(raw).digest('hex');return acceptIzipayNotification(raw,signature,source,owner,f.order.id);};

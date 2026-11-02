@@ -30,8 +30,9 @@ aceptada por Izipay ni presentar TEST como dinero recibido.
   consultar antes de repetir. La aplicación no lo reinicia automáticamente.
 - Revisar resultados recientes y trazabilidad desde la configuración/pedido.
 
-Producción solo se habilita tras las pruebas y el acceso real del comercio. Seleccionar
-el modo no basta: requiere marcar habilitar, introducir las claves correctas, confirmar
+Producción solo se habilita tras las pruebas y el acceso real del comercio. Elegir
+el modo en localhost no permite cobrar: el servidor debe estar en producción con HTTPS.
+También requiere marcar habilitar, introducir las claves correctas, confirmar
 `ACTIVAR PRODUCCION` y la contraseña del administrador. Durante esta entrega permanece
 sin activar. Un pedido TEST no puede convertirse en producción cambiando esa opción.
 

@@ -1,6 +1,7 @@
 import type { TestContext } from "node:test";
 import { checkoutFixture } from "./checkout";
 import { reserveMicuentawebSandboxOrder } from "../../src/modules/orders/automatic-order-service";
+import type { SandboxEnvironment } from "../../src/modules/payments/izipay/micuentaweb-core";
 
 // Fake test configuration. Reserving an order never contacts the payment provider.
 export const automaticSandbox = {
@@ -12,9 +13,9 @@ export function automaticInputFor(f: Awaited<ReturnType<typeof checkoutFixture>>
   return { addressId: f.input.addressId, checkoutQuote: f.input.checkoutQuote, checkoutKey: f.input.checkoutKey,
     receiptType: f.input.receiptType, expectedUserId: f.user.id };
 }
-export async function automaticCheckoutFixture(t: TestContext) {
+export async function automaticCheckoutFixture(t: TestContext, environment: SandboxEnvironment = automaticSandbox) {
   const f = await checkoutFixture(t);
   const automaticInput = automaticInputFor(f);
-  const order = await reserveMicuentawebSandboxOrder(f.user.id, automaticInput, automaticSandbox);
+  const order = await reserveMicuentawebSandboxOrder(f.user.id, automaticInput, environment);
   return { ...f, automaticInput, order };
 }

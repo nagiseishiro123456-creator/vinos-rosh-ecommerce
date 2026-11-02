@@ -26,6 +26,8 @@ a otra cuenta. La configuración deshabilitada de BD tampoco activa las variable
 Los nombres históricos de variables que contienen `_TEST_` se mantienen por compatibilidad;
 el modo y los prefijos de las claves se validan. Producción por entorno requiere además
 `IZIPAY_PRODUCTION_ENABLED=true`; los ejemplos DEMO nunca permiten ese modo.
+El inicio de un cobro real también requiere NODE_ENV de producción y un origen HTTPS.
+Seleccionar producción desde localhost no permite emitir un token de cobro real.
 Las versiones cifradas son inmutables y cada intento conserva su ID: cambiar claves no
 invalida la verificación de notificaciones anteriores. El historial no guarda secretos.
 

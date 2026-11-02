@@ -129,9 +129,12 @@ test("Izipay laboratory CSP keeps existing protections and limits frames to exac
 });
 test("Izipay live form needs separate activation and never accepts the shared demo merchant", () => {
   const env={NODE_ENV:'production',PAYMENTS_IZIPAY_ENABLED:'true',IZIPAY_MCW_FORM_ENABLED:'true',IZIPAY_MCW_INITIATE_ENABLED:'true',
+    NEXT_PUBLIC_APP_URL:'https://rosh.example.test',
     IZIPAY_INTEGRATION:'MICUENTAWEB_V4',IZIPAY_MODE:'PRODUCTION',IZIPAY_PRODUCTION_ENABLED:'true',IZIPAY_MCW_MERCHANT_ID:'12345678',
     IZIPAY_MCW_REST_TEST_PASSWORD:'prodpassword_fake',IZIPAY_MCW_PUBLIC_TEST_KEY:'12345678:publickey_fake'};
   assert.equal(isMicuentawebFormEnabled(env),true);
   assert.equal(isMicuentawebFormEnabled({...env,IZIPAY_PRODUCTION_ENABLED:'false'}),false);
+  assert.equal(isMicuentawebFormEnabled({...env,NODE_ENV:'development'}),false);
+  assert.equal(isMicuentawebFormEnabled({...env,NEXT_PUBLIC_APP_URL:'http://rosh.example.test'}),false);
   assert.equal(isMicuentawebFormEnabled({...env,IZIPAY_MCW_MERCHANT_ID:'69876357',IZIPAY_MCW_PUBLIC_TEST_KEY:'69876357:publickey_fake'}),false);
 });
