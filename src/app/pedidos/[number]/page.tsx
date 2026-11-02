@@ -260,7 +260,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
 
         <div className="orderStatusActions">
           {canContinuePayment ? <Link className="button buttonPrimary" href={`/pedidos/${order.number}/pagar`}>Continuar al pago del pedido</Link> : null}
-          <Link className="button buttonDark" href="/productos">Seguir comprando</Link>
+          <Link className="button buttonDark" href="/#comprar">Seguir comprando</Link>
           <Link className="button" href="/mi-cuenta">Ir a mi cuenta</Link>
         </div>
       </section>

@@ -58,7 +58,7 @@ export function useLandingIntro(rootRef: RefObject<HTMLElement | null>, slotRef:
     try { seen = sessionStorage.getItem(LANDING_INTRO_KEY) === "seen"; }
     catch { seen = true; }
     place();
-    if (seen || reduced.matches) finish();
+    if (seen || reduced.matches || window.location.hash === "#comprar") finish();
     else {
       root.dataset.animate = "true";
       root.dataset.intro = "playing";

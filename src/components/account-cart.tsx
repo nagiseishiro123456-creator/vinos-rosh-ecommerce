@@ -44,7 +44,7 @@ export function AccountCart({ initial, actions = {}, variant = "page", continuat
           : <button className="button buttonDark" type="button" onClick={() => { void cart.retry(); }}>{cart.pending ? "Reintentar cambio" : "Actualizar carrito"}</button>}
       </div> : null}
       {items.length === 0 && !loading && cart.status !== "expired" ? <div className="emptyPanel"><strong>Tu carrito está vacío.</strong>
-        <p>Explora el catálogo y agrega los productos que quieras revisar antes de comprar.</p><Link className="button buttonDark" href="/productos">Ver productos</Link></div>
+        <p>Elige cuántas botellas ROSH quieres añadir a tu carrito.</p><Link className="button buttonDark" href="/#comprar">Comprar ROSH</Link></div>
         : <div className="cartItems">{items.map((item) => <article className="cartItem" key={item.id}>
           <Link className="cartItemImage" href={("/productos/" + item.slug) as Route}><Image src={item.imageUrl ?? siteConfig.prototypeAssetsBase + "/products.jpg"}
             alt={item.imageAlt ?? item.name} fill sizes="110px" /></Link>
@@ -62,7 +62,7 @@ export function AccountCart({ initial, actions = {}, variant = "page", continuat
             }}><button className="removeButton" type="submit" disabled={disabled}>Eliminar</button></form>
           </div>
         </article>)}</div>}
-      {items.length ? <Link className="textLink" href="/productos">Agregar más productos →</Link> : null}
+      {items.length ? <Link className="textLink" href="/#comprar">Añadir más botellas →</Link> : null}
     </div>
     <aside className="cartSummary" aria-label="Resumen de compra">
       <p className="eyebrow wine">RESUMEN</p>

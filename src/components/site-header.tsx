@@ -1,10 +1,8 @@
 "use client";
 
 import {
-  Grape,
   Home,
   Menu,
-  Search,
   ShoppingBag,
   UserRound,
   X,
@@ -79,20 +77,16 @@ export function SiteHeader({
 
           <nav className="desktopNav" aria-label="Navegación principal">
             <Link href="/#inicio" aria-current={pathname === "/" ? "page" : undefined}>Inicio</Link>
-            <Link href="/productos" aria-current={pathname.startsWith("/productos") ? "page" : undefined}>Producto</Link>
             <Link href="/envios" aria-current={pathname === "/envios" ? "page" : undefined}>Envíos</Link>
             <Link href="/nuestra-historia" aria-current={pathname === "/nuestra-historia" ? "page" : undefined}>Nuestra historia</Link>
             <Link href="/contacto" aria-current={pathname === "/contacto" ? "page" : undefined}>Contacto</Link>
           </nav>
 
           <div className="headerActions">
-            <Link className="iconButton desktopOnly" href="/productos" aria-label="Ver producto">
-              <Search size={19} aria-hidden="true" />
-            </Link>
             <Link className="iconButton desktopOnly" href={accountHref} aria-label={isAdmin ? "Administración" : "Mi cuenta"}>
               <UserRound size={19} aria-hidden="true" />
             </Link>
-            <Link className="cartButton" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart} aria-label={`Carrito de compras: ${count} productos`}>
+            <Link className="cartButton" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart} aria-label={`Carrito de compras: ${count} unidades`}>
               <ShoppingBag size={19} aria-hidden="true" />
               {count > 0 ? <span className="cartCount" aria-hidden="true">{count}</span> : null}
             </Link>
@@ -118,7 +112,6 @@ export function SiteHeader({
         {menuOpen ? (
           <nav id="mobile-navigation" className="mobileNav" aria-label="Navegación móvil">
             <Link href="/#inicio" onClick={() => setMenuOpen(false)}>Inicio</Link>
-            <Link href="/productos" onClick={() => setMenuOpen(false)}>Ver producto</Link>
             <Link href="/envios" onClick={() => setMenuOpen(false)}>Cobertura y tarifas de envío</Link>
             <Link href="/nuestra-historia" onClick={() => setMenuOpen(false)}>Nuestra historia</Link>
             <Link href="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
@@ -133,10 +126,6 @@ export function SiteHeader({
         <Link href="/">
           <Home size={20} aria-hidden="true" />
           <span>Inicio</span>
-        </Link>
-        <Link href="/productos">
-          <Grape size={20} aria-hidden="true" />
-          <span>Producto</span>
         </Link>
         <Link className="mobileBottomCart" href="/carrito" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded={panel.isOpen} onClick={openCart}>
           <span className="mobileBottomCartIcon">

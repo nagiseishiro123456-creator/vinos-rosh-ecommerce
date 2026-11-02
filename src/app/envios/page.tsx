@@ -10,5 +10,5 @@ export const metadata: Metadata = publicPageMetadata({ path: "/envios", title: "
 export default async function ShippingCoveragePage() {
   const coverage = await getPublicShippingCoverage();
   return <main className="orderPage"><div className="catalogHeaderWrap compact"><StoreHeader /></div><section className="shell shippingCoveragePage"><p className="eyebrow wine">ENTREGA ROSH</p><h1>Cobertura y tarifas de envío</h1><p>Consulta si tu zona tiene una tarifa habilitada antes de continuar con la compra. Los importes provienen de la configuración actual de la tienda.</p>
-    <ShippingCoverageExplorer {...coverage} /><p><Link className="textLink" href="/productos">Ver productos →</Link></p></section></main>;
+    <ShippingCoverageExplorer {...coverage} /><p><Link className="textLink" href="/#comprar">Comprar ROSH →</Link></p></section></main>;
 }

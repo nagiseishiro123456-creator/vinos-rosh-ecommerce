@@ -12,6 +12,35 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("rosh-analytics-consent-v1", "rejected"));
 });
 
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`single-product navigation goes directly to landing purchase (${reducedMotion})`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/envios");
+    await expect(page.locator(".siteHeader a[href^='/productos'], .mobileBottomNav a[href^='/productos']")).toHaveCount(0);
+    const menu = page.getByRole("button", { name: "Abrir menú", exact: true });
+    if (await menu.isVisible()) {
+      await menu.click();
+      await expect(page.getByRole("navigation", { name: "Navegación móvil", exact: true }).getByRole("link", { name: /producto/i })).toHaveCount(0);
+      await page.keyboard.press("Escape");
+    }
+    await page.getByRole("link", { name: "Comprar ROSH →", exact: true }).click();
+    await expect(page).toHaveURL(/\/#comprar$/);
+    await expect(page.locator(".roshLanding")).toHaveAttribute("data-phase", "final");
+    await expect(page.locator("#pbuy")).toBeInViewport();
+    await expect(page.locator("#pbuy")).toHaveClass("on");
+    await expect(page.locator("#pbuy")).not.toHaveAttribute("inert", "");
+    await page.getByRole("link", { name: /Carrito de compras:/ }).click();
+    const drawer = page.getByRole("dialog", { name: "Tu carrito", exact: true });
+    await drawer.getByRole("link", { name: "Comprar ROSH", exact: true }).click();
+    await expect(drawer).not.toBeVisible();
+    await expect(page.locator("#pbuy")).toBeInViewport();
+    await page.reload();
+    await expect(page.locator("#pbuy")).toHaveClass("on");
+    await expect(page.locator("#pbuy")).toBeInViewport();
+    expect(await page.evaluate(() => document.body.style.overflow)).not.toBe("hidden");
+  });
+}
+
 test("S5 landing: one logo appears, travels, reveals the single bottle and finishes once per session", async ({ page }, info) => {
   const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message));
   await page.emulateMedia({ reducedMotion: "no-preference" });
