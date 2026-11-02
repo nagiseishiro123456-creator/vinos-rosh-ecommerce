@@ -51,7 +51,7 @@ export function AdminShell({ name, children }: { name: string; children: React.R
   return <div className="adminWorkspace">
     <a className="adminSkipLink" href="#admin-content">Saltar al contenido</a>
     <aside className="adminSidebar">{sidebar()}</aside>
-    <dialog ref={dialog} id="admin-mobile-menu" className="adminMobileDialog" aria-label="Menú administrativo" onClose={() => { restoreScroll(); setMenuOpen(false); }} onClick={e => { if (e.target === e.currentTarget) closeMenu(); }}><div className="adminMobilePanel">{sidebar(true)}</div></dialog>
+    <dialog ref={dialog} id="admin-mobile-menu" className="adminMobileDialog" aria-label="Menú administrativo" onCancel={event => { event.preventDefault(); closeMenu(); }} onClose={() => { if (dialog.current?.open) return; restoreScroll(); setMenuOpen(false); }} onClick={e => { if (e.target === e.currentTarget) closeMenu(); }}><div className="adminMobilePanel">{sidebar(true)}</div></dialog>
     <div className="adminMainColumn">
       <header className="adminHeader"><div className="adminHeaderInner">
         <button className="adminIconButton adminMenuToggle" type="button" aria-label="Abrir menú administrativo" aria-controls="admin-mobile-menu" aria-expanded={menuOpen} onClick={openMenu}><Menu size={22} /></button>
