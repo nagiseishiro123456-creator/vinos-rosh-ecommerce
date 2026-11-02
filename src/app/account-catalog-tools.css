@@ -93,7 +93,7 @@
   place-items: center;
   border-radius: 999px;
   color: var(--wine);
-  background: #f7e9eb;
+  background: var(--brand-soft);
   font-weight: 800;
 }
 
@@ -125,7 +125,7 @@
   border: 1px solid var(--line);
   border-radius: 11px;
   color: var(--ink);
-  background: #fffdfb;
+  background: var(--paper);
   outline: none;
 }
 
@@ -145,7 +145,7 @@
 .accountToolField select:focus,
 .accountToolField textarea:focus {
   border-color: var(--wine);
-  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), .08);
 }
 
 .accountToolField input[readonly] {
@@ -216,7 +216,7 @@
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #fffdfb;
+  background: var(--paper);
 }
 
 .accountAddressManagerTop {
@@ -326,14 +326,14 @@
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--ink);
-  background: #fffdfb;
+  background: var(--paper);
   outline: none;
 }
 
 .catalogSearchField input:focus,
 .catalogSelectField select:focus {
   border-color: var(--wine);
-  box-shadow: 0 0 0 3px rgba(107, 15, 26, .08);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), .08);
 }
 
 .catalogStockToggle {
@@ -345,7 +345,7 @@
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--muted);
-  background: #fffdfb;
+  background: var(--paper);
   white-space: nowrap;
   font-size: .82rem;
 }
@@ -370,7 +370,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--ink);
-  background: #fffdfb;
+  background: var(--paper);
   font-size: .82rem;
   font-weight: 750;
 }
@@ -466,7 +466,7 @@
   background:
     radial-gradient(circle at 100% 0%, rgba(184, 148, 93, .12), transparent 32%),
     #fff;
-  box-shadow: 0 18px 54px rgba(62, 10, 15, .07);
+  box-shadow: 0 18px 54px rgba(var(--brand-rgb), .07);
 }
 
 .catalogPreviewHeading {
@@ -493,9 +493,9 @@
 
 .catalogPreviewGrid article {
   overflow: hidden;
-  border: 1px solid rgba(107, 15, 26, .08);
+  border: 1px solid rgba(var(--brand-rgb), .08);
   border-radius: 18px;
-  background: #fffdf9;
+  background: var(--paper);
 }
 
 .catalogPreviewMedia {
@@ -505,7 +505,7 @@
   color: rgba(255,255,255,.78);
   background:
     radial-gradient(circle at 35% 20%, rgba(184,148,93,.5), transparent 26%),
-    linear-gradient(145deg, #3e0a0f, #6b0f1a 58%, #b35a3c);
+    linear-gradient(145deg, var(--brand-dark), var(--brand) 58%, #9162b6);
 }
 
 .catalogPreviewMedia span {

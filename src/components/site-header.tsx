@@ -10,8 +10,8 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, type MouseEvent } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useAccountCart, useCartPanel } from "./cart-provider";
 
 import { BrandLogo } from "@/components/brand-logo";
@@ -30,6 +30,8 @@ export function SiteHeader({
   isAdmin = false,
 }: SiteHeaderProps) {
   const guest = useGuestCart();
+  const pathname = usePathname();
+  const menuButton = useRef<HTMLButtonElement>(null);
   const account = useAccountCart(); const panel = useCartPanel(); const router = useRouter();
   const ownerMismatch = userId !== panel.userId;
   useEffect(() => { if (ownerMismatch) router.refresh(); }, [ownerMismatch, router]);
@@ -55,14 +57,12 @@ export function SiteHeader({
     if (!menuOpen) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
+      if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); }
     };
 
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [menuOpen]);
@@ -78,11 +78,11 @@ export function SiteHeader({
           </Link>
 
           <nav className="desktopNav" aria-label="Navegación principal">
-            <Link href="/#inicio">Inicio</Link>
-            <Link href="/productos">Producto</Link>
-            <Link href="/envios">Envíos</Link>
-            <Link href="/nuestra-historia">Nuestra historia</Link>
-            <Link href="/contacto">Contacto</Link>
+            <Link href="/#inicio" aria-current={pathname === "/" ? "page" : undefined}>Inicio</Link>
+            <Link href="/productos" aria-current={pathname.startsWith("/productos") ? "page" : undefined}>Producto</Link>
+            <Link href="/envios" aria-current={pathname === "/envios" ? "page" : undefined}>Envíos</Link>
+            <Link href="/nuestra-historia" aria-current={pathname === "/nuestra-historia" ? "page" : undefined}>Nuestra historia</Link>
+            <Link href="/contacto" aria-current={pathname === "/contacto" ? "page" : undefined}>Contacto</Link>
           </nav>
 
           <div className="headerActions">
@@ -102,6 +102,7 @@ export function SiteHeader({
               <Link className="headerLogin desktopOnly" href="/iniciar-sesion">Iniciar sesión</Link>
             )}
             <button
+              ref={menuButton}
               className="mobileMenuButton"
               type="button"
               aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}

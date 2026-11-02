@@ -38,7 +38,7 @@
   border: 1px solid var(--line);
   border-radius: 22px;
   background: white;
-  box-shadow: 0 14px 44px rgba(62,10,15,.06);
+  box-shadow: 0 14px 44px rgba(var(--brand-rgb),.06);
 }
 
 .backupCard > div {

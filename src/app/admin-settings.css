@@ -117,8 +117,8 @@
 }
 
 .adminReadiness.pending {
-  background: #f7f1e8;
-  color: #6a5847;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
 }
 
 .adminSettingsActions {

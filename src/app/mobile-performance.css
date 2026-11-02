@@ -256,7 +256,7 @@ button,
     border: 1px solid rgba(255, 255, 255, .12);
     border-radius: 20px;
     color: white;
-    background: rgba(45, 7, 12, .94);
+    background: rgba(var(--brand-rgb), .94);
     box-shadow: 0 16px 42px rgba(25, 5, 8, .3);
     backdrop-filter: blur(18px);
   }

@@ -4,10 +4,10 @@ export function BrandLogo({ light = false }: { light?: boolean }) {
   return (
     <Image
       className={`brandLogo${light ? " brandLogoLight" : ""}`}
-      src="/brand/logo-rosh.webp"
+      src="/media/rosh/landing/logo.png"
       alt="Vinos ROSH"
       width={640}
-      height={285}
+      height={253}
       unoptimized
     />
   );

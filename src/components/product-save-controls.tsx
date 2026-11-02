@@ -51,7 +51,7 @@ export function ProductSaveControls({ status }: Props) {
     <div id="product-save-feedback" data-testid="product-save-feedback" role={error ? "alert" : "status"}
       aria-live={error ? "assertive" : "polite"} aria-atomic="true" hidden={!message}
       style={{ display: message ? "flex" : "none", gap: 10, alignItems: "flex-start", marginTop: 14, padding: 14, borderRadius: 12,
-        background: saved ? "#eaf6ed" : error ? "#fff0ee" : "#f5efe6", color: saved ? "#21613b" : error ? "#8b2424" : "#594a39" }}>
+        background: saved ? "#eaf6ed" : error ? "#fff0ee" : "var(--brand-soft)", color: saved ? "#21613b" : error ? "#8b2424" : "var(--brand-dark)" }}>
       {saved ? <CheckCircle2 size={22} aria-hidden="true" style={{flexShrink:0}} /> : error ? <AlertCircle size={22} aria-hidden="true" style={{flexShrink:0}} /> : null}
       <span>{message}</span>
     </div>

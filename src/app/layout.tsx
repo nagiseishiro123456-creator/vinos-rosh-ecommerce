@@ -25,6 +25,7 @@ import "./purchase-flow.css";
 import "./guest-cart.css";
 import "./cart-drawer.css";
 import "./automatic-payment.css";
+import "./brand-theme.css";
 
 const seo = readSeoConfig();
 
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#3e0a0f",
+  themeColor: "#4b1c71",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

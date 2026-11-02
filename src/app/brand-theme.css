@@ -1,0 +1,54 @@
+/* Shared brand surfaces: the client reference is Azul-Violeta #4B1C71. */
+::selection { background: rgba(var(--brand-rgb), .18); }
+:focus-visible { outline-color: #9463bd; }
+input, select, textarea { accent-color: var(--brand); }
+
+.buttonPrimary, .primaryButton, .authSubmit {
+  background: var(--brand);
+  box-shadow: 0 8px 22px rgba(var(--brand-rgb), .16);
+}
+.buttonPrimary:hover, .primaryButton:hover, .authSubmit:hover { background: var(--brand-hover); }
+.button:disabled, .primaryButton:disabled { cursor: not-allowed; transform: none; opacity: .6; box-shadow: none; }
+.catalogHeaderWrap {
+  background: radial-gradient(ellipse at 85% 15%, #6a388e66, transparent 55%), linear-gradient(120deg, var(--brand-deep), var(--brand));
+}
+.siteFooter { background: var(--brand-deep); }
+.footerGrid :is(p, span, a), .footerBottom { color: #ddd0e9; }
+
+/* A translucent violet surface stays readable above every internal page. */
+.siteHeaderInner { min-height: 84px; gap: 20px; }
+.siteBrand .brandLogo { width: 140px; }
+.desktopNav { gap: 20px; }
+.desktopNav a { position: relative; padding-block: 12px; white-space: nowrap; }
+.desktopNav a::after {
+  content: ""; position: absolute; inset: auto 0 4px; height: 1px;
+  background: var(--brand-light); transform: scaleX(0); transition: transform .2s ease;
+}
+.desktopNav a:is(:hover, :focus-visible, [aria-current="page"])::after { transform: scaleX(1); }
+.siteHeader :is(.iconButton, .cartButton, .mobileMenuButton, .headerLogin) {
+  min-height: 44px; border: 1px solid #ffffff66; background: transparent; color: white;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.siteHeader :is(.iconButton, .cartButton, .mobileMenuButton, .headerLogin):is(:hover, :focus-visible) {
+  background: #ffffff0d; border-color: #e6d5f5; box-shadow: 0 0 18px #d3a9f14d;
+}
+.desktopNav a:is(:hover, :focus-visible) { text-shadow: 0 0 16px #e6d5f5aa; }
+.cartCount { background: var(--brand-light); color: var(--brand-dark); }
+.mobileNav { background: var(--brand-dark); }
+.mobileNav a:is(:hover, :focus-visible) { background: #ffffff0d; }
+@media (max-width: 619px) {
+  .siteHeaderInner { min-height: 68px; }
+}
+
+.siteHeader:not(.landingHeader) {
+  background: rgba(var(--brand-rgb), .96);
+  border-bottom: 1px solid #ffffff24;
+  backdrop-filter: blur(16px);
+}
+.siteHeader.siteHeaderScrolled:not(.landingHeader) { box-shadow: 0 8px 28px #1b0c2926; }
+@media (max-width: 1100px) {
+  .siteHeader:not(.landingHeader) :is(.desktopNav, .desktopOnly) { display: none; }
+  .siteHeader:not(.landingHeader) .mobileMenuButton { display: inline-flex; }
+  .siteHeader:not(.landingHeader) .mobileNav { display: grid; } }
+.siteHeader :focus-visible { outline-color: var(--brand-light); }
+@media (prefers-reduced-motion: reduce) { .siteHeader * { transition: none; } }

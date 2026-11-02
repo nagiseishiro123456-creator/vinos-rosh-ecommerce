@@ -1,6 +1,6 @@
 .cartDialog { position: fixed; inset: 0; width: 100%; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: var(--ink); overflow: hidden; }
 .cartDialog[open] { display: flex; justify-content: flex-end; }
-.cartDialog::backdrop { background: rgb(37 7 10 / .5); }
+.cartDialog::backdrop { background: rgb(27 12 41 / .5); }
 .cartDrawerPanel { min-width: 0; overflow: hidden; }
 .cartDrawerHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 20px 18px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
 .cartDrawerHeader h2 { margin: 7px 0 0; font-size: 2rem; line-height: 1.1; }
@@ -25,7 +25,7 @@
 .drawerCart .quantityForm > div { display: flex; flex-wrap: wrap; gap: 6px; }
 .drawerCart .quantityForm input { width: 64px; min-width: 0; min-height: 44px; }
 .drawerCart .quantityForm button, .drawerCart .removeButton { min-width: 44px; min-height: 44px; }
-.drawerCart .cartItemTotal { grid-column: 2; grid-row: 3; min-width: 0; align-self: auto; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0 0; border-top: 1px solid #f0e8e3; border-left: 0; }
+.drawerCart .cartItemTotal { grid-column: 2; grid-row: 3; min-width: 0; align-self: auto; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0 0; border-top: 1px solid var(--line); border-left: 0; }
 .drawerCart .emptyPanel { padding: 20px 0; background: transparent; border: 0; }
 .drawerCart .checkoutError .button { white-space: normal; }
 .accountCartStatus:empty { display: none; }

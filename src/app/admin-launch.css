@@ -150,8 +150,8 @@
   display: grid;
   gap: 6px;
   border-radius: 16px;
-  color: #6a5847;
-  background: #f7f1e8;
+  color: var(--brand-dark);
+  background: var(--brand-soft);
 }
 
 .launchNotice span {
