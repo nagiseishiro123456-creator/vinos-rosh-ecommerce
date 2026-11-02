@@ -12,9 +12,10 @@ import { LANDING_ASSETS, type LandingMediaItem } from "./landing-media";
 import { PourLanding, type PourProduct } from "./pour-landing";
 import { useLandingIntro } from "./landing-intro";
 
-type Props = { product?: PourProduct | null; userId: string | null; isAuthenticated: boolean; isAdmin: boolean; phone: string | null; media?: readonly LandingMediaItem[] };
+import type { LandingCopy } from "@/modules/products/landing-content";
+type Props = { copy: LandingCopy; product?: PourProduct | null; userId: string | null; isAuthenticated: boolean; isAdmin: boolean; phone: string | null; media?: readonly LandingMediaItem[] };
 
-export function RoshLanding({ userId, isAuthenticated, isAdmin, phone, media, product }: Props) {
+export function RoshLanding({ userId, isAuthenticated, isAdmin, phone, media, product, copy }: Props) {
   const root = useRef<HTMLElement>(null);
   const slot = useRef<HTMLDivElement>(null);
   const menu = useRef<HTMLDivElement>(null);
@@ -79,7 +80,7 @@ export function RoshLanding({ userId, isAuthenticated, isAdmin, phone, media, pr
       <Image className="landingBottle" src={`${LANDING_ASSETS}/bottle.png`} alt="Botella Rosh, vino de uvas sin alcohol" width={570} height={810} sizes="(max-width: 820px) 80vw, 50vw" unoptimized preload />
       <div className="landingStage"><GrapeMedia media={media} /></div>
     </section>
-    <div className="landingNightTransition" aria-hidden="true" /><PourLanding product={product ?? null} userId={userId} />
+    <div className="landingNightTransition" aria-hidden="true" /><PourLanding copy={copy} product={product ?? null} userId={userId} />
     <span className="landingSrOnly" role="status" aria-live="polite">Carrito, {count} {count === 1 ? "unidad" : "unidades"}</span>
   </main>;
 }

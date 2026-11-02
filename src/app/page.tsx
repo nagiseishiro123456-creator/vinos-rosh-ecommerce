@@ -6,6 +6,7 @@ import { publicPageMetadata } from "@/lib/seo";
 import { getCommerceSettings } from "@/modules/settings/queries";
 import "./landing-original.css";
 import "./landing-pour.css";
+import { resolveLandingCopy } from "@/modules/products/landing-content";
 import { getRoshProduct } from "@/modules/products/single-product";
 
 const lora = localFont({
@@ -24,7 +25,8 @@ export const metadata = publicPageMetadata({
 export default async function HomePage() {
   const [session, commerce, product] = await Promise.all([getServerSession(authOptions), getCommerceSettings(), getRoshProduct()]);
   return <div className={`${lora.variable} ${jost.variable}`}><RoshLanding
-    product={product?.active ? {id:product.id,price:product.price.toFixed(2),stock:product.stock,origin:product.description} : null}
+    copy={resolveLandingCopy(product?.landingContent,product??undefined)}
+    product={product?.active && product.price.toNumber()>0 ? {id:product.id,price:product.price.toFixed(2),stock:product.stock,origin:product.description} : null}
     userId={session?.user?.id ?? null} isAuthenticated={Boolean(session?.user)}
     isAdmin={session?.user?.role === "ADMIN"} phone={commerce.whatsappPhone}
   /></div>;

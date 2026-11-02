@@ -51,3 +51,22 @@ dentro de una tarjeta de ancho máximo 380px, y la etiqueta implícita de un tex
 incorporaba su valor al nombre accesible. Se fija una sola columna y se separa
 la etiqueta de Origen con htmlFor/id explícitos; se conservan las comprobaciones
 de imagen responsive y edición real con stock auditado.
+
+
+## S5-08: configuración única y textos editables
+
+Admin → Producto presenta directamente la ficha, sin pasos de crear o editar otros
+productos. Guarda stock, precio y textos de la landing (título, subtítulo, etiquetas,
+botones, cata, maridaje, origen y pie). Las rutas administrativas antiguas redirigen
+a la misma ficha. Se conservan los registros históricos sin mostrarlos como opciones.
+
+Se puede guardar sin precio; se conserva como borrador y la compra permanece cerrada.
+Para habilitar Comprar ahora hay que confirmar un precio positivo y activar Publicar
+producto y habilitar compra. El stock cero muestra Agotado. La cantidad numérica admite
+1–12 con botones y limita según existencias y lo que ya hay en el carrito. La operación
+usa los proveedores existentes de invitado y cuenta; el servidor verifica precios y
+reservas. Los textos guardados se reflejan al recargar la landing.
+
+Migración aditiva 20261101210000_single_product_landing_content: JSONB opcional en
+Product; los productos previos conservan su descripción/origen. Los respaldos de datos
+y SQL incluyen el nuevo campo. No se inventa un precio ni se borra el historial.
