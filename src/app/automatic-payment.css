@@ -8,7 +8,7 @@
 .automaticPaymentState { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; }
 .automaticPaymentIcon { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: #eef2f5; color: #3b5e73; }
 .automaticPaymentEyebrow { margin: 0 0 8px; font-size: .65rem; font-weight: 800; letter-spacing: .14em; color: #687381; }
-.automaticPaymentState h2 { font-family: Georgia, serif; color: #25303b; font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.12; margin: 0 0 14px; }
+.automaticPaymentState h2 { font-family: var(--font-display); color: #25303b; font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.12; margin: 0 0 14px; }
 .automaticPaymentState p:not(.automaticPaymentEyebrow) { color: #596676; font-size: .88rem; line-height: 1.8; margin: 0; max-width: 610px; }
 .paymentTone-success .automaticPaymentIcon { color: #216b49; background: #eaf5ee; }
 .paymentTone-success { border-color: #bdddc9; }

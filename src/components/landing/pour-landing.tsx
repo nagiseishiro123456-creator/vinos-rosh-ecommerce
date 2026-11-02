@@ -6,6 +6,7 @@ import { useAccountCart, useCartPanel } from "@/components/cart-provider";
 import { useGuestCart } from "@/components/guest-cart-provider";
 import type { LandingCopy } from "@/modules/products/landing-content";
 import { formatPrice } from "@/lib/money";
+import { SocialIcons } from "./social-icons";
 
 export type PourProduct = {id:string;price:string;stock:number;origin:string};
 const clamp=(v:number)=>Math.min(1,Math.max(0,v));
@@ -79,6 +80,6 @@ export function PourLanding({product,userId,copy}:{product:PourProduct|null;user
  <a className="more" href="#historia2">{copy.detailsLabel}</a></div></div></section>
  <section className="night story" id="historia2" aria-label="Detalles de ROSH"><div className="inner"><span className="eyebrow">{copy.storyEyebrow}</span><h2>{copy.storyTitle}</h2><div className="cols"><div><h3>{copy.cataTitle}</h3><p>{copy.cata}</p></div><div><h3>{copy.maridajeTitle}</h3><p>{copy.maridaje}</p></div><div><h3>{copy.originTitle}</h3><p>{copy.origin}</p></div></div><footer>
  {/* eslint-disable-next-line @next/next/no-img-element */}
- <img src="/media/rosh/landing/logo.png" alt="ROSH" width="110" height="44"/><p>{copy.footer}</p></footer></div></section>
+ <img src="/media/rosh/landing/logo.png" alt="ROSH" width="110" height="44"/><p>{copy.footer}</p><SocialIcons /></footer></div></section>
  </div>;
 }

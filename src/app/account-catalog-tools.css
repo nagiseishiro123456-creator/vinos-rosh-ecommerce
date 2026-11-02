@@ -17,7 +17,7 @@
 
 .accountToolHeading h1 {
   margin: 8px 0 12px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: clamp(2.6rem, 6vw, 4.7rem);
   line-height: .98;
 }
@@ -55,7 +55,7 @@
 }
 
 .accountSecurityCard > strong {
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
 }
 
@@ -509,7 +509,7 @@
 }
 
 .catalogPreviewMedia span {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 3.8rem;
   font-weight: 700;
   opacity: .7;
@@ -533,7 +533,7 @@
 .catalogPreviewGrid article > strong {
   margin-top: 8px;
   display: block;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 1.35rem;
 }
 
