@@ -96,3 +96,11 @@ componente y una sola hoja de estilos. Se igualan fuente, tamaño, logo y contro
 se conectan inicio, compra, historia, envíos, contacto, carrito y sesión.
 Se conserva la animación del logo y se ajustan los espacios de las páginas internas.
 [Diseño y rutas](../diseno/public-header/README.md).
+
+## S5-12 — Presentación al entrar a Inicio (2026-11-02)
+
+El propietario reporta que ya no ve la animación al entrar. La marca persistente por
+sesión la omitía después de la primera visita. Se sustituye por memoria del documento:
+entrada/recarga reproduce el logo, viaje, botella y navegación; un regreso interno
+no interrumpe la compra. Se mantienen movimiento reducido, salto y #comprar.
+12 pruebas locales aprobadas; [reproducción y QA](../testing/s5-06-landing-original.md).

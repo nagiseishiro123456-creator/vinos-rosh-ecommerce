@@ -2,7 +2,9 @@
 
 import { useLayoutEffect, type RefObject } from "react";
 
-export const LANDING_INTRO_KEY = "rosh-landing-original-intro-v1";
+// A full entry/reload gets its presentation. Client navigation within this document does not.
+// Older sessionStorage markers must not hide the intro on later visits in the same tab.
+const presentedDocuments = new WeakSet<Document>();
 
 /** Own only this scene's data attributes. Never overwrite the cart's body scroll lock. */
 export function useLandingIntro(rootRef: RefObject<HTMLElement | null>, slotRef: RefObject<HTMLDivElement | null>) {
@@ -31,7 +33,7 @@ export function useLandingIntro(rootRef: RefObject<HTMLElement | null>, slotRef:
       root.style.setProperty("--logo-scale", `${scale}`);
     }
     function remember() {
-      try { sessionStorage.setItem(LANDING_INTRO_KEY, "seen"); } catch { /* Storage is optional. */ }
+      presentedDocuments.add(root!.ownerDocument);
     }
     function finish(immediate = true) {
       if (!root || disposed) return;
@@ -54,9 +56,7 @@ export function useLandingIntro(rootRef: RefObject<HTMLElement | null>, slotRef:
     const preference = () => { if (reduced.matches) finish(); };
     const key = (event: KeyboardEvent) => { if (event.key === "Escape" && root.dataset.intro === "playing") finish(); };
     const skip = () => finish();
-    let seen = false;
-    try { seen = sessionStorage.getItem(LANDING_INTRO_KEY) === "seen"; }
-    catch { seen = true; }
+    const seen = presentedDocuments.has(root.ownerDocument);
     place();
     if (seen || reduced.matches || window.location.hash === "#comprar") finish();
     else {

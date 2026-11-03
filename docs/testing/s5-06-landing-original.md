@@ -1,5 +1,23 @@
 # QA S5-06 — Landing original, un solo producto
 
+## Ajuste S5-12 — Reaparición al entrar (2026-11-02)
+
+Se reproduce el reporte del propietario: con la marca heredada de sessionStorage,
+Inicio pasaba directamente a `final`; una sesión limpia sí reproducía la secuencia.
+La presentación ahora se recuerda en memoria por documento. Una nueva entrada o
+recarga reproduce la secuencia, incluso con la marca anterior; volver por navegación
+interna conserva el estado final. No se modifica el HANDOFF original.
+
+12/12 pruebas locales de escritorio/móvil aprobadas sobre la página real: cinco fases,
+alineación, recarga, vuelta desde Historia con el mismo documento, Escape, #comprar,
+movimiento reducido, almacenamiento bloqueado, ahorro de datos y ausencia de JS.
+También pasan 4/4 pruebas del vertido/scroll tras saltar la entrada con Escape;
+ya no dependen de la marca de sesión eliminada.
+TypeScript y ESLint aprobados. No se modifican pagos, datos ni estilos del diseño.
+La regresión de producción y comparación de recursos se registran en el PR del ajuste.
+
+## Evidencia histórica de la entrega original
+
 2026-11-01. Base main 12d4f4e (#26, CI #376: 311 servidor y 102 navegador).
 El propietario descarta la primera pareja de archivos y autoriza exclusivamente los
 originales inventariados en docs/diseno/landing-original/README.md. Después confirma

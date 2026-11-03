@@ -41,9 +41,10 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
   });
 }
 
-test("S5 landing: one logo appears, travels, reveals the single bottle and finishes once per session", async ({ page }, info) => {
+test("S5 landing: presentation replays on entry/reload despite a legacy session marker, without repeating on client navigation", async ({ page }, info) => {
   const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message));
   await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => sessionStorage.setItem("rosh-landing-original-intro-v1", "seen"));
   await page.goto("/", { waitUntil: "domcontentloaded" });
   const root = page.locator(".roshLanding"); const logo = page.locator(".landingLogo");
   await expect(root).toHaveAttribute("data-phase", "logo");
@@ -76,8 +77,26 @@ test("S5 landing: one logo appears, travels, reveals the single bottle and finis
   await expect(page.locator(".productCard, .roshProductSlide")).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("s5-landing-05-final.png"), fullPage: true, animations: "disabled" });
   await page.reload();
+  await expect(root).toHaveAttribute("data-phase", "logo");
+  await expect(root).toHaveAttribute("data-intro", "playing");
+  await expect(root).toHaveAttribute("data-animate", "true");
+  await page.keyboard.press("Escape");
   await expect(root).toHaveAttribute("data-phase", "final");
   await expect(root).toHaveAttribute("data-animate", "false");
+  await alignedLogo(page);
+  await page.evaluate(() => { (window as Window & { landingDocument?: string }).landingDocument = "same-document"; });
+  const menu = page.getByRole("button", { name: "Abrir menú", exact: true });
+  if (await menu.isVisible()) {
+    await menu.click();
+    await page.getByRole("navigation", { name: "Navegación móvil", exact: true }).getByRole("link", { name: "Nuestra historia", exact: true }).click();
+  } else await page.getByRole("navigation", { name: "Navegación principal", exact: true }).getByRole("link", { name: "Nuestra historia", exact: true }).click();
+  await expect(page).toHaveURL(url => url.pathname === "/nuestra-historia");
+  await page.getByRole("link", { name: "Ir al inicio de Vinos ROSH", exact: true }).click();
+  await expect(page).toHaveURL(url => url.pathname === "/");
+  expect(await page.evaluate(() => (window as Window & { landingDocument?: string }).landingDocument)).toBe("same-document");
+  await expect(root).toHaveAttribute("data-phase", "final");
+  await expect(root).toHaveAttribute("data-animate", "false");
+  expect(await page.evaluate(() => getComputedStyle(document.body).overflowY)).not.toBe("hidden");
   expect(errors).toEqual([]);
 });
 
@@ -104,7 +123,7 @@ test("S5 landing: four reference widths, reduced motion, aligned logo and access
   await expect(page.locator("video")).toHaveCount(0);
 });
 
-test("S5 landing: data saving and unavailable session storage keep a usable static page without video requests", async ({ page }) => {
+test("S5 landing: entry works without session storage and data saving avoids video requests", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.addInitScript(() => {
     Object.defineProperty(window, "sessionStorage", { configurable: true, get: () => { throw new DOMException("Blocked for QA", "SecurityError"); } });
@@ -113,6 +132,8 @@ test("S5 landing: data saving and unavailable session storage keep a usable stat
   });
   const videoRequests: string[] = []; page.on("request", (request) => { if (request.url().includes("sueno.mp4")) videoRequests.push(request.url()); });
   await page.goto("/");
+  await expect(page.locator(".roshLanding")).toHaveAttribute("data-intro", "playing");
+  await page.keyboard.press("Escape");
   await expect(page.locator(".roshLanding")).toHaveAttribute("data-phase", "final");
   await expect(page.locator(".landingDream")).toHaveAttribute("data-motion", "off");
   await expect(page.locator(".landingMediaPoster")).toBeVisible();
