@@ -2,6 +2,15 @@
 
 ## Lo que se puede ver ahora
 
+Para ensayar como cliente, abre `/desarrollo/izipay/compra`: botella → cantidad →
+carrito → entrega → pago → resultado. Permite aprobación, rechazo o respuesta pendiente
+simulados. Es una demostración separada, solo en desarrollo, sin SDK ni solicitudes de
+pago, escrituras en BD, stock, carrito real, correo o almacenamiento del navegador.
+No necesita iniciar sesión; la identidad y dirección son ejemplos que no se guardan.
+Precio S/ 29.90, envío S/ 8.50 y límite de 12 botellas son ilustrativos, no condiciones
+publicadas. Recargar o reiniciar borra el recorrido; no recupera un pedido persistido.
+Este recorrido no acredita el funcionamiento del checkout real ni aceptación externa.
+
 1. En desarrollo abre `/desarrollo/izipay`. Es una simulación sin tarjetas, dinero,
    pedidos ni cambios de stock. Prueba Formulario y espera, Respuesta perdida,
    Formulario cerrado, Cambio de sesión y Reserva vencida.

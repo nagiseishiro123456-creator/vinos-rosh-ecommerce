@@ -153,6 +153,13 @@ Para cerrar el sprint: S3-01–S3-06 del alcance comprometido completas, CI de l
 integrada aprobada, límites/incidencias registrados y demostración al propietario.
 La emisión fiscal y el lanzamiento requieren sus propios criterios.
 
+### UAT local adicional: compra simulada como cliente (2026-11-02)
+
+Se incorpora `/desarrollo/izipay/compra`, solo en desarrollo, para recorrer un único
+producto, cantidades, carrito, entrega, pago y tres resultados ficticios sin claves,
+escrituras ni llamadas al proveedor. Complementa S3-06; no cierra la aceptación
+externa de S3-02/S3-03. La guía y QA identifican los límites y precios de ejemplo.
+
 ## Cuándo documentar
 
 | Momento | Entregable | Qué debe quedar antes de continuar |

@@ -1,5 +1,26 @@
 # QA: formulario, configuración y notificaciones Izipay
 
+## Recorrido completo de cliente simulado · 2026-11-02
+
+`/desarrollo/izipay/compra` permite probar botella, cantidad, carrito, entrega,
+resumen, aprobación/rechazo/respuesta pendiente y reinicio. Estado solo en memoria;
+los importes y la zona son ejemplos explícitos, no reglas comerciales. No usa el
+checkout real, SDK, credenciales ni APIs de reserva/pago y no simula una firma válida.
+
+6/6 recorridos locales aprobados en Chrome, escritorio 1440×1000 y móvil 390×844.
+Se verifican totales, validación de teléfono de 9 dígitos, eliminación del carrito,
+bloqueo de carrito vacío, tres resultados, consultas con confirmación visible,
+reinicio/recarga, ausencia de desbordamiento, errores JS, solicitudes de escritura
+y contactos al proveedor. El primer caso agotó el tiempo durante la compilación
+inicial de la ruta nueva; se repitió tras compilar y pasó. TypeScript y ESLint aprobados.
+La comprobación 404 en producción forma parte de las pruebas de CI; los seis
+recorridos interactivos se limitan al servidor local de desarrollo.
+
+No acredita sandbox externo, comprobantes, envío de correo, inventario ni permisos
+del checkout real. Los controles productivos de Izipay no se modifican.
+
+## Evidencia de integración previa
+
 2026-11-02. Base main 05cc450. Incremento S3-02/S3-03; aceptación externa pendiente.
 
 - 364/364 pruebas del servidor en PostgreSQL `vinos_rosh_test`, sin solicitudes de pago.
