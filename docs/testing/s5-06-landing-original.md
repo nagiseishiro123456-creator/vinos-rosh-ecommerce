@@ -11,6 +11,8 @@ interna conserva el estado final. No se modifica el HANDOFF original.
 12/12 pruebas locales de escritorio/móvil aprobadas sobre la página real: cinco fases,
 alineación, recarga, vuelta desde Historia con el mismo documento, Escape, #comprar,
 movimiento reducido, almacenamiento bloqueado, ahorro de datos y ausencia de JS.
+También pasan 4/4 pruebas del vertido/scroll tras saltar la entrada con Escape;
+ya no dependen de la marca de sesión eliminada.
 TypeScript y ESLint aprobados. No se modifican pagos, datos ni estilos del diseño.
 La regresión de producción y comparación de recursos se registran en el PR del ajuste.
 

@@ -1,7 +1,8 @@
 import { expect,test } from "@playwright/test";
-test.beforeEach(async({page})=>{await page.addInitScript(()=>{sessionStorage.setItem("rosh-landing-original-intro-v1","seen");localStorage.setItem("rosh-analytics-consent-v1","rejected");});});
+test.beforeEach(async({page})=>{await page.addInitScript(()=>{localStorage.setItem("rosh-analytics-consent-v1","rejected");});});
 test("second landing fills to 750 ml, hides unfocusable purchase and reverses with scroll",async({page},info)=>{
  await page.emulateMedia({reducedMotion:"no-preference"});await page.goto("/");await expect(page.locator(".roshPour")).toHaveAttribute("data-ready","true");
+ await page.keyboard.press("Escape");await expect(page.locator(".roshLanding")).toHaveAttribute("data-intro","done");
  async function at(p:number){await page.evaluate(p=>{const r=document.querySelector("#pour")!.getBoundingClientRect();window.scrollTo({top:scrollY+r.top+p*(r.height-innerHeight),behavior:"instant"});},p);await expect.poll(async()=>Number(await page.locator(".roshPour").getAttribute("data-progress"))).toBeCloseTo(p,2);}
  await at(.3);expect(Number(await page.locator("#pml").textContent())).toBeGreaterThan(400);await expect(page.locator("#pbuy")).toHaveAttribute("inert","");
  await page.screenshot({path:info.outputPath("pour-filling.png")});
